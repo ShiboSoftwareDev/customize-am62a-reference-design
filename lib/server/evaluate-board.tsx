@@ -2,7 +2,7 @@ import { Circuit } from "@tscircuit/core"
 import type { AnyCircuitElement } from "circuit-json"
 import type { BoardRenderRequest, BoardRenderResponse } from "../api-types"
 import { deriveModuleFlags, getSelectionCacheKey } from "../module-config"
-import { AM62ABoard } from "lib/generated/am62a-board"
+import { AM62ABoard } from "../generated/am62a-board.runtime.js"
 
 const maximumServerCacheEntries = 8
 const renderCache = new Map<string, Promise<BoardRenderResponse>>()
