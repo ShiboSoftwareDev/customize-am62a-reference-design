@@ -21,6 +21,7 @@
     "@tscircuit/pcb-viewer": "1.11.409",
     "@tscircuit/schematic-viewer": "2.0.98",
     "circuit-json": "0.0.506",
+    "fflate": "0.8.3",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   },

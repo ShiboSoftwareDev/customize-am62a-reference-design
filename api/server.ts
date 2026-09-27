@@ -1,3 +1,4 @@
+import "fflate"
 import { evaluateBoard } from "../lib/server/evaluate-board"
 import { getBoardSource } from "../lib/server/get-board-source"
 import { normalizeRenderRequest } from "../lib/server/normalize-render-request"
