@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "paths": {
+      "app/*": ["./app/*"],
+      "lib/*": ["./lib/*"],
+      "tests/*": ["./tests/*"],
+      "@tscircuit/core": ["./types/tscircuit-core.d.ts"],
+      "@tscircuit/pcb-viewer": ["./types/tscircuit-pcb-viewer.d.ts"],
+      "@tscircuit/schematic-viewer": ["./types/tscircuit-schematic-viewer.d.ts"],
+      "circuit-json": ["./types/circuit-json.d.ts"]
+    }
+  },
+  "include": ["app", "api", "lib", "tests", "types", "vite.config.ts"]
+}

@@ -1,0 +1,16 @@
+{
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "functions": {
+    "api/evaluate.ts": {
+      "maxDuration": 300,
+      "memory": 3009,
+      "includeFiles": "lib/generated/am62a-board.tsx"
+    },
+    "api/source.ts": {
+      "maxDuration": 30,
+      "includeFiles": "lib/generated/am62a-board.tsx"
+    }
+  }
+}
