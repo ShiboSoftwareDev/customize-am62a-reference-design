@@ -12,7 +12,7 @@
     }
   },
   "rewrites": [
-    { "source": "/api/evaluate", "destination": "/api/server/evaluate" },
-    { "source": "/api/source", "destination": "/api/server/source" }
+    { "source": "/api/evaluate", "destination": "/api/server?route=evaluate" },
+    { "source": "/api/source", "destination": "/api/server?route=source" }
   ]
 }

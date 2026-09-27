@@ -14,12 +14,13 @@ Bun.serve({
 
     try {
       const renderRequest = normalizeRenderRequest(await request.json())
+      const route = url.searchParams.get("route")
 
-      if (url.pathname === "/api/server/evaluate") {
+      if (route === "evaluate") {
         return Response.json(await evaluateBoard(renderRequest))
       }
 
-      if (url.pathname === "/api/server/source") {
+      if (route === "source") {
         return new Response(await getBoardSource(renderRequest), {
           headers: { "Content-Type": "text/plain; charset=utf-8" },
         })
