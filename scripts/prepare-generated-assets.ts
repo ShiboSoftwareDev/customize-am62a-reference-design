@@ -3,6 +3,7 @@ const boardSource = new URL("am62a-board.tsx", generatedDirectory)
 const boardSourceCopy = new URL("am62a-board-source.txt", generatedDirectory)
 
 const buildResult = await Bun.build({
+  define: { "process.env.NODE_ENV": JSON.stringify("production") },
   entrypoints: [boardSource.pathname],
   external: ["react", "react/jsx-runtime"],
   format: "esm",
@@ -10,6 +11,7 @@ const buildResult = await Bun.build({
   naming: "am62a-board.runtime.js",
   outdir: generatedDirectory.pathname,
   target: "bun",
+  tsconfig: new URL("../tsconfig.json", import.meta.url).pathname,
 })
 
 if (!buildResult.success) {
