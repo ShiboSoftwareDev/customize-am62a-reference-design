@@ -1,7 +1,7 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useEffect, useRef, useState } from "react"
-import type { BoardRenderResponse } from "lib/api-types"
 import { getSelectionCacheKey, type OptionalModuleSelection } from "lib/module-config"
+import { parseBoardRenderResponse } from "app/parse-board-render-response"
 import { readCachedRender, writeCachedRender } from "app/render-cache"
 
 type BoardRenderState = {
@@ -53,10 +53,7 @@ export function useBoardRender(params: {
           body: JSON.stringify({ selection: params.selection, addPours: params.addPours }),
           signal: abortController.signal,
         })
-        const responseBody = (await response.json()) as BoardRenderResponse | { error: string }
-        if (!response.ok || "error" in responseBody) {
-          throw new Error("error" in responseBody ? responseBody.error : "Board render failed")
-        }
+        const responseBody = await parseBoardRenderResponse(response)
         if (requestIndex !== requestIndexRef.current) return
         setCircuitJson(responseBody.circuitJson)
         await writeCachedRender({ key: cacheKey, circuitJson: responseBody.circuitJson })

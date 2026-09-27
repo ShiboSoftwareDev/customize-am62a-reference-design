@@ -17,10 +17,10 @@ bun run dev
 ```
 
 Open the printed local URL. On a typical development machine, an uncached minimal
-render takes roughly 10–20 seconds and the all-modules render plus 12-layer DRC
-takes roughly 60–90 seconds. Rendered Circuit JSON is cached in IndexedDB, and the
-server keeps a small in-memory cache for repeated configurations. The last
-successful board remains visible while a new selection renders.
+render takes roughly 10–20 seconds and the all-modules interactive render roughly
+20–30 seconds. Rendered Circuit JSON is cached in IndexedDB, and the server keeps a
+small in-memory cache for repeated configurations. The last successful board
+remains visible while a new selection renders.
 
 ## Verify
 
@@ -39,7 +39,7 @@ bun run build
 - `lib/module-config.ts` maps the ten user-facing feature groups to the underlying
   board modules and their shared dependencies.
 - `lib/server/evaluate-board.tsx` renders selected TSX with `@tscircuit/core`.
-- `api/evaluate.ts` and `api/source.ts` provide Vercel-compatible endpoints.
+- `api/server.ts` provides the Vercel-compatible evaluate and source endpoints.
 - `app/components/DesignViewer.tsx` intentionally bypasses runframe so trace-hover
   focus is enabled.
 
@@ -56,13 +56,15 @@ asserts that a minimal configuration retains its imported PCB traces and
 schematic groups without source-render failures, while running design-rule checks
 across the full stack. The source design currently reports two 0.089 mm pad
 clearance findings at U90; those findings are preserved rather than hidden.
+The interactive render path skips the expensive full-board DRC pass so every
+configuration fits within the deployment timeout; DRC remains enabled in the
+dedicated validation test.
 
 ## Deployment
 
 The repository includes `vercel.json`; importing the repository into Vercel is
-enough to build the Vite frontend and the two Node functions. The render function
-requests an extended timeout and 3 GB memory because the full 12-layer design is
-large.
+enough to build the Vite frontend and Bun server function. The render function
+requests Vercel's maximum duration because the full 12-layer design is large.
 
 ## Reference-design notice
 

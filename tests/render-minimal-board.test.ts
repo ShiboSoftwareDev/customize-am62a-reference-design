@@ -3,10 +3,13 @@ import { minimalOptionalModules } from "lib/module-config"
 import { evaluateBoard } from "lib/server/evaluate-board"
 
 test("renders and validates the minimal 12-layer board", async () => {
-  const result = await evaluateBoard({
-    selection: minimalOptionalModules,
-    addPours: false,
-  })
+  const result = await evaluateBoard(
+    {
+      selection: minimalOptionalModules,
+      addPours: false,
+    },
+    { runDrcChecks: true },
+  )
 
   expect(
     result.circuitJson.some(

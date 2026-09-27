@@ -7,15 +7,23 @@ import { AM62ABoard } from "../generated/am62a-board.runtime.js"
 const maximumServerCacheEntries = 8
 const renderCache = new Map<string, Promise<BoardRenderResponse>>()
 
-export async function evaluateBoard(request: BoardRenderRequest): Promise<BoardRenderResponse> {
-  const cacheKey = getSelectionCacheKey(request)
+type EvaluateBoardOptions = {
+  runDrcChecks?: boolean
+}
+
+export async function evaluateBoard(
+  request: BoardRenderRequest,
+  options: EvaluateBoardOptions = {},
+): Promise<BoardRenderResponse> {
+  const runDrcChecks = options.runDrcChecks ?? false
+  const cacheKey = `${getSelectionCacheKey(request)}:${runDrcChecks ? "drc" : "interactive"}`
   const cachedRender = renderCache.get(cacheKey)
   if (cachedRender) {
     const response = await cachedRender
     return { ...response, cacheStatus: "hit" }
   }
 
-  const renderPromise = renderBoard(request)
+  const renderPromise = renderBoard(request, { runDrcChecks })
   renderCache.set(cacheKey, renderPromise)
   while (renderCache.size > maximumServerCacheEntries) {
     const oldestCacheKey = renderCache.keys().next().value
@@ -30,13 +38,18 @@ export async function evaluateBoard(request: BoardRenderRequest): Promise<BoardR
   }
 }
 
-async function renderBoard(request: BoardRenderRequest): Promise<BoardRenderResponse> {
+async function renderBoard(
+  request: BoardRenderRequest,
+  options: Required<EvaluateBoardOptions>,
+): Promise<BoardRenderResponse> {
   const startedAt = performance.now()
   const flags = deriveModuleFlags(request.selection)
   flags.addPours = request.addPours
   flags.renderSchematic = true
 
-  const circuit = new Circuit()
+  const circuit = new Circuit({
+    platform: { drcChecksDisabled: !options.runDrcChecks },
+  })
   circuit._featureMspSchematicTraceRouting = false
   circuit.add(<AM62ABoard flags={flags} />)
   await circuit.renderUntilSettled()
