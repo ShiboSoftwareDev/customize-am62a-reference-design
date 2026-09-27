@@ -5,7 +5,7 @@
   "functions": {
     "api/evaluate.ts": {
       "maxDuration": 300,
-      "memory": 3009,
+      "memory": 2048,
       "includeFiles": "lib/generated/am62a-board.tsx"
     },
     "api/source.ts": {
