@@ -3,16 +3,5 @@
   "bunVersion": "1.4.x",
   "buildCommand": "bun run build",
   "outputDirectory": "dist",
-  "framework": "vite",
-  "functions": {
-    "api/server.ts": {
-      "maxDuration": 300,
-      "memory": 2048,
-      "includeFiles": "lib/generated/am62a-board-source.txt"
-    }
-  },
-  "rewrites": [
-    { "source": "/api/evaluate", "destination": "/api/server?route=evaluate" },
-    { "source": "/api/source", "destination": "/api/server?route=source" }
-  ]
+  "framework": "vite"
 }

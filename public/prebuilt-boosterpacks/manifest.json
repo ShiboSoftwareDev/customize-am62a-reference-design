@@ -1,0 +1,65 @@
+{
+  "sourceCommit": "4b8b330cf06cee8109edab00d8bba5973925da76",
+  "configurations": [
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_full",
+      "circuitElementCount": 2154,
+      "compressedBytes": 101167
+    },
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_sensor_lab",
+      "circuitElementCount": 763,
+      "compressedBytes": 35288
+    },
+    {
+      "boardId": "boost_drv8848",
+      "configurationId": "boost_drv8848_full",
+      "circuitElementCount": 862,
+      "compressedBytes": 51995
+    },
+    {
+      "boardId": "boost_drv8848",
+      "configurationId": "boost_drv8848_no_indicators",
+      "circuitElementCount": 761,
+      "compressedBytes": 48485
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_full",
+      "circuitElementCount": 1241,
+      "compressedBytes": 54018
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_environmental",
+      "circuitElementCount": 993,
+      "compressedBytes": 43228
+    },
+    {
+      "boardId": "boostxl_audio",
+      "configurationId": "boostxl_audio_full",
+      "circuitElementCount": 2435,
+      "compressedBytes": 108038
+    },
+    {
+      "boardId": "boostxl_audio",
+      "configurationId": "boostxl_audio_playback",
+      "circuitElementCount": 1959,
+      "compressedBytes": 82316
+    },
+    {
+      "boardId": "boostxl_cc2650ma",
+      "configurationId": "boostxl_cc2650ma_full",
+      "circuitElementCount": 1555,
+      "compressedBytes": 105362
+    },
+    {
+      "boardId": "boostxl_cc2650ma",
+      "configurationId": "boostxl_cc2650ma_radio_only",
+      "circuitElementCount": 1206,
+      "compressedBytes": 78483
+    }
+  ]
+}

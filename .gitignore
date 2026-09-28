@@ -4,5 +4,3 @@ dist
 .DS_Store
 *.log
 .env.local
-lib/generated/am62a-board.runtime.js
-lib/generated/am62a-board-source.txt
