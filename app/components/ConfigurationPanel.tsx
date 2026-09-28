@@ -21,11 +21,9 @@ type ConfigurationPanelProps = {
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
-  const includedFeatures = props.board.removableFeatures.filter(
-    ({ id }) => !props.configuration.removedFeatureIds.includes(id),
-  )
   const isFullBoard = props.configuration.removedFeatureIds.length === 0
-  const isMinimalBoard = includedFeatures.length === 0
+  const isMinimalBoard =
+    props.configuration.removedFeatureIds.length === props.board.removableFeatures.length
 
   return (
     <aside className="configuration-panel">
@@ -57,9 +55,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
       </fieldset>
 
       <fieldset className="configuration-options">
-        <legend>
-          Remove optional blocks ({props.board.configurations.length} prebuilt combinations)
-        </legend>
+        <legend>Remove optional blocks</legend>
         <div className="configuration-quick-actions">
           <button disabled={isFullBoard} onClick={props.onSelectFullBoard} type="button">
             Full board
@@ -86,14 +82,6 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
             </label>
           )
         })}
-        <div className="configuration-summary">
-          <strong>Current configuration has</strong>
-          <small>
-            {includedFeatures.length > 0
-              ? includedFeatures.map(({ label }) => label).join(", ")
-              : "Required interface, power path, and board mechanics only"}
-          </small>
-        </div>
       </fieldset>
 
       <div className="source-links">
