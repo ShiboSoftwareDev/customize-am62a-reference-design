@@ -2,34 +2,33 @@
 
 An instant configurator for real boards from the
 [`tscircuit/boosters`](https://github.com/tscircuit/boosters) repository. The app
-offers five BoosterPacks and a board-specific set of meaningful circuit configurations.
-Both the PCB and schematic viewers consume the selected configuration's complete
-Circuit JSON.
+offers five BoosterPacks with removable-subsystem checkboxes. Every possible checkbox
+combination is prebuilt, including the full board and the minimal board containing
+only required circuitry. Both viewers consume the selected build's complete Circuit JSON.
 
 ## Included boards
 
-- BOOSTXL-EDUMKII: 8 learning, sensing, interface, audio, output, and robotics builds
-- BOOST-DRV8848: 4 useful power/fault-indicator combinations
-- BOOSTXL-BASSENSORS: all 15 non-empty combinations of its 4 independent sensors
-- BOOSTXL-AUDIO: 4 full, playback, and headset signal-path builds
-- BOOSTXL-CC2650MA: 6 development, debug, flash, status, and production builds
+- BOOSTXL-EDUMKII: 7 removable blocks, 128 combinations
+- BOOST-DRV8848: 2 removable indicators, 4 combinations
+- BOOSTXL-BASSENSORS: 4 removable sensors, 16 combinations
+- BOOSTXL-AUDIO: 5 removable audio blocks, 32 combinations
+- BOOSTXL-CC2650MA: 5 removable debug, flash, routing, status, and test blocks, 32 combinations
 
 The app links every board to its upstream TSX and links the complete BoosterPack
 source repository. It does not present a separate catalog or gallery.
 
 ## Prebuilt configurations
 
-The 37 configurations are rendered from a pinned `tscircuit/boosters` commit by
+The 212 configurations are generated from a pinned `tscircuit/boosters` commit by
 [`scripts/prebuild-boosterpack-configurations.tsx`](./scripts/prebuild-boosterpack-configurations.tsx).
-The script filters optional blocks from the React circuit tree before
-`@tscircuit/core` performs schematic layout and PCB autorouting. It then stores
-gzip-compressed Circuit JSON in `public/prebuilt-boosterpacks`.
+The script renders each complete TSX board once, then removes each selected block and
+all of its source-linked schematic, PCB, trace, and CAD elements for every powerset
+combination. It stores the results as gzip-compressed Circuit JSON in
+`public/prebuilt-boosterpacks`.
 
-There is no fixed per-board quota: configurations follow the independent functional
-blocks and valid signal paths of each design. Local Vite and the Vercel deployment
-serve exactly the same static files, so switching boards or configurations requires
-no cloud function and no runtime circuit render. To regenerate them after changing
-the pinned source or configuration definitions:
+Local Vite and the Vercel deployment serve exactly the same static files, so checking
+or unchecking a block requires no cloud function and no runtime circuit render. To
+regenerate every combination after changing the pinned source or feature definitions:
 
 ```sh
 bun run prebuild:boosters

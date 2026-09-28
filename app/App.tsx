@@ -7,6 +7,7 @@ import {
   boosterPackBoards,
   getBoosterPackBoard,
   getBoosterPackConfiguration,
+  getConfigurationForRemovedFeatures,
   type BoosterPackConfigurationId,
   type BoosterPackId,
 } from "lib/boosterpack-configurations"
@@ -33,6 +34,17 @@ export function App() {
     setConfigurationId(nextBoard.configurations[0].id)
   }
 
+  const setFeatureRemoved = (featureId: string, removed: boolean) => {
+    const removedFeatureIds = new Set(configuration.removedFeatureIds)
+    if (removed) removedFeatureIds.add(featureId)
+    else removedFeatureIds.delete(featureId)
+    const nextConfiguration = getConfigurationForRemovedFeatures({
+      board,
+      removedFeatureIds: [...removedFeatureIds],
+    })
+    setConfigurationId(nextConfiguration.id)
+  }
+
   const exportCircuitJson = () => {
     if (!render.circuitJson) return
     downloadCircuitJson(render.circuitJson)
@@ -46,7 +58,7 @@ export function App() {
         statusText={statusText}
         error={render.error}
         onBoardChange={selectBoard}
-        onConfigurationChange={setConfigurationId}
+        onFeatureRemovalChange={setFeatureRemoved}
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
         canExportCircuitJson={Boolean(render.circuitJson) && !render.isRendering}

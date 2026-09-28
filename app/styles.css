@@ -161,7 +161,7 @@ button:disabled {
   height: 12px;
   margin-top: 2px;
   border: 1px solid #aebbb4;
-  border-radius: 50%;
+  border-radius: 3px;
   content: "";
 }
 .configuration-choice[data-selected="true"] {
@@ -169,7 +169,14 @@ button:disabled {
   background: #f0f7f3;
 }
 .configuration-choice[data-selected="true"]::before {
-  border: 4px solid #2d7553;
+  border-color: #2d7553;
+  color: #fff;
+  background: #2d7553;
+  content: "✓";
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 10px;
+  text-align: center;
 }
 .configuration-choice > span {
   display: grid;
@@ -181,6 +188,23 @@ button:disabled {
 }
 .configuration-choice small {
   color: #6d7973;
+  font-size: 9px;
+  line-height: 1.4;
+}
+.configuration-summary {
+  display: grid;
+  gap: 3px;
+  margin-top: 3px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  color: #285840;
+  background: #edf6f1;
+}
+.configuration-summary strong {
+  font-size: 11px;
+}
+.configuration-summary small {
+  color: #5f7067;
   font-size: 9px;
   line-height: 1.4;
 }

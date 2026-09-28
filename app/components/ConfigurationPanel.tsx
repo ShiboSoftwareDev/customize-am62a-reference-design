@@ -3,7 +3,6 @@ import {
   boosterPackSourceRepositoryUrl,
   type BoosterPackBoard,
   type BoosterPackConfiguration,
-  type BoosterPackConfigurationId,
   type BoosterPackId,
 } from "lib/boosterpack-configurations"
 
@@ -13,7 +12,7 @@ type ConfigurationPanelProps = {
   statusText: string
   error: string
   onBoardChange: (boardId: BoosterPackId) => void
-  onConfigurationChange: (configurationId: BoosterPackConfigurationId) => void
+  onFeatureRemovalChange: (featureId: string, removed: boolean) => void
   onRetry: () => void
   onExportCircuitJson: () => void
   canExportCircuitJson: boolean
@@ -26,8 +25,8 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         <span className="eyebrow">Source-backed board configurator</span>
         <h1>TI BoosterPacks</h1>
         <p>
-          Select a real tscircuit board and one of its meaningful prebuilt configurations. Each
-          board exposes the options supported by its functional blocks.
+          Select a real tscircuit board, then remove any combination of optional subsystems. Every
+          combination is prebuilt; remove them all to see the minimal required board.
         </p>
       </header>
 
@@ -55,25 +54,31 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
       </fieldset>
 
       <fieldset className="configuration-options">
-        <legend>Configuration ({props.board.configurations.length})</legend>
-        {props.board.configurations.map((configuration) => (
-          <label
-            className="configuration-choice"
-            data-selected={configuration.id === props.configuration.id}
-            key={configuration.id}
-          >
-            <input
-              checked={configuration.id === props.configuration.id}
-              name="board-configuration"
-              onChange={() => props.onConfigurationChange(configuration.id)}
-              type="radio"
-            />
-            <span>
-              <strong>{configuration.label}</strong>
-              <small>{configuration.description}</small>
-            </span>
-          </label>
-        ))}
+        <legend>
+          Remove optional blocks ({props.board.configurations.length} prebuilt combinations)
+        </legend>
+        {props.board.removableFeatures.map((feature) => {
+          const isRemoved = props.configuration.removedFeatureIds.includes(feature.id)
+          return (
+            <label className="configuration-choice" data-selected={isRemoved} key={feature.id}>
+              <input
+                checked={isRemoved}
+                onChange={(event) =>
+                  props.onFeatureRemovalChange(feature.id, event.currentTarget.checked)
+                }
+                type="checkbox"
+              />
+              <span>
+                <strong>Remove {feature.label}</strong>
+                <small>{feature.description}</small>
+              </span>
+            </label>
+          )
+        })}
+        <div className="configuration-summary">
+          <strong>{props.configuration.label}</strong>
+          <small>{props.configuration.description}</small>
+        </div>
       </fieldset>
 
       <div className="source-links">

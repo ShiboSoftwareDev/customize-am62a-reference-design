@@ -10,11 +10,19 @@ export type BoosterPackId =
 
 export type BoosterPackConfigurationId = `${BoosterPackId}_${string}`
 
+export type BoosterPackRemovableFeature = {
+  id: string
+  label: string
+  description: string
+  excludedElementNames: string[]
+}
+
 export type BoosterPackConfiguration = {
   id: BoosterPackConfigurationId
   label: string
   description: string
   circuitJsonUrl: string
+  removedFeatureIds: string[]
   excludedElementNames: string[]
 }
 
@@ -26,302 +34,251 @@ export type BoosterPackBoard = {
   description: string
   sourceUrl: string
   thumbnailUrl: string
+  removableFeatures: BoosterPackRemovableFeature[]
   configurations: BoosterPackConfiguration[]
 }
 
-function createConfiguration(params: {
-  id: BoosterPackConfigurationId
-  label: string
-  description: string
-  excludedElementNames?: string[]
-}): BoosterPackConfiguration {
+type BoosterPackBoardDefinition = Omit<BoosterPackBoard, "configurations" | "sourceUrl">
+
+function createBoard(definition: BoosterPackBoardDefinition): BoosterPackBoard {
   return {
-    ...params,
-    circuitJsonUrl: `/prebuilt-boosterpacks/${params.id}.circuit.json.gz`,
-    excludedElementNames: params.excludedElementNames ?? [],
+    ...definition,
+    sourceUrl: `${boosterPackSourceRepositoryUrl}/tree/${boosterPackSourceCommit}/${definition.slug}`,
+    configurations: createAllConfigurations({
+      boardId: definition.id,
+      removableFeatures: definition.removableFeatures,
+    }),
   }
 }
 
-const educationBlocks = {
-  display: ["DisplaySchematic"],
-  controls: ["ControlsSchematic"],
-  sensors: ["SensorsSchematic"],
-  microphone: ["AudioSchematic"],
-  outputs: ["OutputsSchematic"],
-  expansion: ["ExpansionSchematic"],
-  powerIndicators: ["PowerSchematic"],
-} as const
+function createAllConfigurations(params: {
+  boardId: BoosterPackId
+  removableFeatures: BoosterPackRemovableFeature[]
+}): BoosterPackConfiguration[] {
+  const combinationCount = 1 << params.removableFeatures.length
 
-type EducationBlock = keyof typeof educationBlocks
+  return Array.from({ length: combinationCount }, (_, mask) => {
+    const removedFeatures = params.removableFeatures.filter((_, index) => mask & (1 << index))
+    const isFullBoard = mask === 0
+    const isMinimalBoard = mask === combinationCount - 1
+    const suffix = isFullBoard
+      ? "full"
+      : isMinimalBoard
+        ? "minimal"
+        : `remove_${removedFeatures.map(({ id }) => id).join("_")}`
+    const id = `${params.boardId}_${suffix}` as BoosterPackConfigurationId
+    const removedLabels = removedFeatures.map(({ label }) => label)
 
-function excludeEducationBlocks(includedBlocks: EducationBlock[]): string[] {
-  const includedBlockSet = new Set<EducationBlock>(includedBlocks)
-  return Object.entries(educationBlocks).flatMap(([block, elementNames]) =>
-    includedBlockSet.has(block as EducationBlock) ? [] : elementNames,
-  )
+    return {
+      id,
+      label: isFullBoard
+        ? "Full board"
+        : isMinimalBoard
+          ? "Minimal required board"
+          : `Removed: ${removedLabels.join(", ")}`,
+      description: isFullBoard
+        ? "No optional subsystems removed."
+        : isMinimalBoard
+          ? "Only the required interface, power path, and board mechanics remain."
+          : `${removedLabels.join(", ")} ${removedLabels.length === 1 ? "is" : "are"} removed.`,
+      circuitJsonUrl: `/prebuilt-boosterpacks/${id}.circuit.json.gz`,
+      removedFeatureIds: removedFeatures.map(({ id }) => id),
+      excludedElementNames: removedFeatures.flatMap(
+        ({ excludedElementNames }) => excludedElementNames,
+      ),
+    }
+  })
 }
-
-const educationalConfigurations: BoosterPackConfiguration[] = [
-  createConfiguration({
-    id: "boostxl_edumkii_full",
-    label: "Complete learning kit",
-    description: "All display, controls, sensors, audio, lighting, and expansion circuits.",
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_sensor_lab",
-    label: "Sensor lab",
-    description: "Environmental and motion sensors with the LaunchPad interface.",
-    excludedElementNames: excludeEducationBlocks(["sensors"]),
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_user_interface",
-    label: "User-interface lab",
-    description: "TFT display, joystick, and push buttons.",
-    excludedElementNames: excludeEducationBlocks(["display", "controls"]),
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_audio_input",
-    label: "Audio-input lab",
-    description: "Electret microphone and preamplifier input path.",
-    excludedElementNames: excludeEducationBlocks(["microphone"]),
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_output_lab",
-    label: "Output lab",
-    description: "RGB LED and buzzer driver outputs.",
-    excludedElementNames: excludeEducationBlocks(["outputs"]),
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_robotics_lab",
-    label: "Robotics lab",
-    description: "Controls, sensing, RGB/buzzer outputs, and servo expansion.",
-    excludedElementNames: excludeEducationBlocks(["controls", "sensors", "outputs", "expansion"]),
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_servo_controls",
-    label: "Servo controls",
-    description: "Joystick, buttons, and the servo/clip expansion interface.",
-    excludedElementNames: excludeEducationBlocks(["controls", "expansion"]),
-  }),
-  createConfiguration({
-    id: "boostxl_edumkii_minimal_interface",
-    label: "Minimal interface",
-    description: "LaunchPad headers and board mechanics without optional learning blocks.",
-    excludedElementNames: excludeEducationBlocks([]),
-  }),
-]
-
-const motorDriverConfigurations: BoosterPackConfiguration[] = [
-  createConfiguration({
-    id: "boost_drv8848_full",
-    label: "Dual motor reference",
-    description: "Complete TI reference circuit with power and fault indicators.",
-  }),
-  createConfiguration({
-    id: "boost_drv8848_power_indicator",
-    label: "Power indicator only",
-    description: "Dual motor circuit with the VM power LED and no fault LED.",
-    excludedElementNames: ["D1", "R2"],
-  }),
-  createConfiguration({
-    id: "boost_drv8848_fault_indicator",
-    label: "Fault indicator only",
-    description: "Dual motor circuit with the fault LED and no VM power LED.",
-    excludedElementNames: ["D2", "R6"],
-  }),
-  createConfiguration({
-    id: "boost_drv8848_no_indicators",
-    label: "No indicators",
-    description: "Dual motor circuit without the optional power and fault LEDs.",
-    excludedElementNames: ["D1", "D2", "R2", "R6"],
-  }),
-]
-
-const sensorBlocks = [
-  {
-    key: "temperature",
-    label: "Temperature",
-    elementNames: [
-      "TMP116_CONNECTOR_BLOCK",
-      "TMP116_SENSOR_COUPON_BLOCK",
-      "02 - TMP116 Temperature",
-    ],
-  },
-  {
-    key: "humidity",
-    label: "Humidity",
-    elementNames: ["HDC2010_BLOCK", "04 - HDC2010 Humidity"],
-  },
-  {
-    key: "hall",
-    label: "Hall effect",
-    elementNames: ["DRV5055_BLOCK", "03 - DRV5055 Hall Sensor"],
-  },
-  {
-    key: "light",
-    label: "Ambient light",
-    elementNames: ["OPT3001_BLOCK", "05 - OPT3001 Ambient Light"],
-  },
-] as const
-
-function createSensorConfigurations(): BoosterPackConfiguration[] {
-  const configurations: BoosterPackConfiguration[] = []
-  const allSensorsMask = (1 << sensorBlocks.length) - 1
-
-  for (let mask = allSensorsMask; mask >= 1; mask -= 1) {
-    const includedSensors = sensorBlocks.filter((_, index) => mask & (1 << index))
-    const excludedSensors = sensorBlocks.filter((_, index) => !(mask & (1 << index)))
-    const sensorKey = includedSensors.map(({ key }) => key).join("_")
-    const sensorLabels = includedSensors.map(({ label }) => label)
-    const isFullSuite = mask === allSensorsMask
-
-    configurations.push(
-      createConfiguration({
-        id: isFullSuite
-          ? "boostxl_bassensors_full"
-          : (`boostxl_bassensors_${sensorKey}` as BoosterPackConfigurationId),
-        label: isFullSuite ? "Complete sensor suite" : sensorLabels.join(" + "),
-        description: isFullSuite
-          ? "Temperature, humidity, Hall-effect, and ambient-light sensing."
-          : `${sensorLabels.join(", ")} sensing with the BoosterPack interface.`,
-        excludedElementNames: excludedSensors.flatMap(({ elementNames }) => [...elementNames]),
-      }),
-    )
-  }
-
-  return configurations
-}
-
-const audioConfigurations: BoosterPackConfiguration[] = [
-  createConfiguration({
-    id: "boostxl_audio_full",
-    label: "Full audio path",
-    description: "Complete playback, headset, microphone, routing, and speaker circuit.",
-  }),
-  createConfiguration({
-    id: "boostxl_audio_playback",
-    label: "Playback outputs",
-    description: "DAC, headset routing, and speaker playback without the microphone front end.",
-    excludedElementNames: ["MICROPHONE_AMPLIFIER", "Electret Microphone Preamplifier"],
-  }),
-  createConfiguration({
-    id: "boostxl_audio_headset",
-    label: "Headset audio",
-    description: "Headset playback and microphone input without the loudspeaker amplifier.",
-    excludedElementNames: ["LOUDSPEAKER_AMPLIFIER", "Loudspeaker Amplifier and Output"],
-  }),
-  createConfiguration({
-    id: "boostxl_audio_headset_playback",
-    label: "Headset playback",
-    description: "DAC and headset routing without microphone or loudspeaker circuits.",
-    excludedElementNames: [
-      "MICROPHONE_AMPLIFIER",
-      "Electret Microphone Preamplifier",
-      "LOUDSPEAKER_AMPLIFIER",
-      "Loudspeaker Amplifier and Output",
-    ],
-  }),
-]
-
-const statusLedElementNames = ["R5", "CR1", "R6", "CR2", "STATUS_LEDS"]
-const testPointElementNames = ["TP1", "TP2", "TP3", "TEST_POINTS"]
-const flashElementNames = ["DNM_FLASH_OPTIONS", "C1", "OPTIONAL_FLASH"]
-const debugAndFlashElementNames = ["DEBUG_AND_FLASH", "debug-flash"]
-
-const wirelessConfigurations: BoosterPackConfiguration[] = [
-  createConfiguration({
-    id: "boostxl_cc2650ma_full",
-    label: "Wireless development",
-    description: "Radio, JTAG, optional flash, current measurement, status, and test points.",
-  }),
-  createConfiguration({
-    id: "boostxl_cc2650ma_no_flash",
-    label: "Development without flash",
-    description: "Radio and JTAG development circuit without the optional external flash.",
-    excludedElementNames: flashElementNames,
-  }),
-  createConfiguration({
-    id: "boostxl_cc2650ma_no_status_leds",
-    label: "Development without LEDs",
-    description: "Complete radio, debug, flash, and measurement circuit without status LEDs.",
-    excludedElementNames: statusLedElementNames,
-  }),
-  createConfiguration({
-    id: "boostxl_cc2650ma_debug_lean",
-    label: "Lean development",
-    description: "Radio and JTAG with no optional flash or status LEDs.",
-    excludedElementNames: [...flashElementNames, ...statusLedElementNames],
-  }),
-  createConfiguration({
-    id: "boostxl_cc2650ma_radio_only",
-    label: "Radio module",
-    description:
-      "Radio interface, power measurement, status LEDs, and test points without debug or flash.",
-    excludedElementNames: debugAndFlashElementNames,
-  }),
-  createConfiguration({
-    id: "boostxl_cc2650ma_production",
-    label: "Production radio",
-    description: "Minimal radio and power path without debug, flash, status LEDs, or test points.",
-    excludedElementNames: [
-      ...debugAndFlashElementNames,
-      ...statusLedElementNames,
-      ...testPointElementNames,
-    ],
-  }),
-]
 
 export const boosterPackBoards: BoosterPackBoard[] = [
-  {
+  createBoard({
     id: "boostxl_edumkii",
     slug: "boostxl-edumkii",
     name: "BOOSTXL-EDUMKII",
     category: "Education",
     description: "Sensors, controls, display, audio, lighting, and servo expansion.",
-    sourceUrl: `${boosterPackSourceRepositoryUrl}/tree/${boosterPackSourceCommit}/boostxl-edumkii`,
     thumbnailUrl: "https://boosterpacks.tscircuit.com/boards/boostxl-edumkii/thumbnail.png",
-    configurations: educationalConfigurations,
-  },
-  {
+    removableFeatures: [
+      {
+        id: "display",
+        label: "TFT display",
+        description: "SPI display module and its support passives.",
+        excludedElementNames: ["DisplaySchematic"],
+      },
+      {
+        id: "controls",
+        label: "Joystick and buttons",
+        description: "Analog joystick and both push buttons.",
+        excludedElementNames: ["ControlsSchematic"],
+      },
+      {
+        id: "sensors",
+        label: "Sensor suite",
+        description: "Temperature, light, and motion sensors.",
+        excludedElementNames: ["SensorsSchematic"],
+      },
+      {
+        id: "microphone",
+        label: "Microphone input",
+        description: "Electret microphone and preamplifier front end.",
+        excludedElementNames: ["AudioSchematic"],
+      },
+      {
+        id: "outputs",
+        label: "RGB LED and buzzer",
+        description: "Visual and audible output driver blocks.",
+        excludedElementNames: ["OutputsSchematic"],
+      },
+      {
+        id: "expansion",
+        label: "Servo and clip expansion",
+        description: "Servo header and clip expansion connections.",
+        excludedElementNames: ["ExpansionSchematic"],
+      },
+      {
+        id: "power_indicators",
+        label: "Power indicators",
+        description: "3.3 V and 5 V power LEDs.",
+        excludedElementNames: ["PowerSchematic"],
+      },
+    ],
+  }),
+  createBoard({
     id: "boost_drv8848",
     slug: "boost-drv8848",
     name: "BOOST-DRV8848",
     category: "Motor control",
     description: "Dual H-bridge brushed-motor driver with adjustable current regulation.",
-    sourceUrl: `${boosterPackSourceRepositoryUrl}/tree/${boosterPackSourceCommit}/boost-drv8848`,
     thumbnailUrl: "https://boosterpacks.tscircuit.com/boards/boost-drv8848/thumbnail.png",
-    configurations: motorDriverConfigurations,
-  },
-  {
+    removableFeatures: [
+      {
+        id: "fault_indicator",
+        label: "Fault indicator",
+        description: "nFAULT LED and its series resistor.",
+        excludedElementNames: ["D1", "R2"],
+      },
+      {
+        id: "power_indicator",
+        label: "Motor-power indicator",
+        description: "VM power LED and its series resistor.",
+        excludedElementNames: ["D2", "R6"],
+      },
+    ],
+  }),
+  createBoard({
     id: "boostxl_bassensors",
     slug: "boostxl-bassensors",
     name: "BOOSTXL-BASSENSORS",
     category: "Sensors",
     description: "Building-automation temperature, humidity, light, and Hall sensing.",
-    sourceUrl: `${boosterPackSourceRepositoryUrl}/tree/${boosterPackSourceCommit}/boostxl-bassensors`,
     thumbnailUrl: "https://boosterpacks.tscircuit.com/boards/boostxl-bassensors/thumbnail.png",
-    configurations: createSensorConfigurations(),
-  },
-  {
+    removableFeatures: [
+      {
+        id: "temperature",
+        label: "TMP116 temperature sensor",
+        description: "Temperature coupon, connector, and support circuit.",
+        excludedElementNames: ["TMP116_CONNECTOR_BLOCK", "TMP116_SENSOR_COUPON_BLOCK"],
+      },
+      {
+        id: "humidity",
+        label: "HDC2010 humidity sensor",
+        description: "Humidity sensor and its switched supply.",
+        excludedElementNames: ["HDC2010_BLOCK"],
+      },
+      {
+        id: "hall",
+        label: "DRV5055 Hall sensor",
+        description: "Hall-effect sensor and its switched supply.",
+        excludedElementNames: ["DRV5055_BLOCK"],
+      },
+      {
+        id: "light",
+        label: "OPT3001 ambient-light sensor",
+        description: "Ambient-light sensor and support passives.",
+        excludedElementNames: ["OPT3001_BLOCK"],
+      },
+    ],
+  }),
+  createBoard({
     id: "boostxl_audio",
     slug: "boostxl-audio",
     name: "BOOSTXL-AUDIO",
     category: "Audio",
     description: "DAC/PWM audio, headset routing, microphone input, and speaker output.",
-    sourceUrl: `${boosterPackSourceRepositoryUrl}/tree/${boosterPackSourceCommit}/boostxl-audio`,
     thumbnailUrl: "https://boosterpacks.tscircuit.com/boards/boostxl-audio/thumbnail.png",
-    configurations: audioConfigurations,
-  },
-  {
+    removableFeatures: [
+      {
+        id: "dac_source",
+        label: "DAC and PWM source",
+        description: "DAC, PWM filter, and source-selection network.",
+        excludedElementNames: ["DAC_SIGNAL_SOURCE"],
+      },
+      {
+        id: "headset",
+        label: "Headset jack and detection",
+        description: "Headset connector and jack-detection circuit.",
+        excludedElementNames: ["AUDIO_JACK_DETECTION"],
+      },
+      {
+        id: "microphone",
+        label: "Microphone preamplifier",
+        description: "On-board microphone and analog preamplifier.",
+        excludedElementNames: ["MICROPHONE_AMPLIFIER"],
+      },
+      {
+        id: "audio_switch",
+        label: "Analog audio switch",
+        description: "Analog path-selection and routing switch.",
+        excludedElementNames: ["ANALOG_AUDIO_SWITCH"],
+      },
+      {
+        id: "speaker",
+        label: "Loudspeaker amplifier",
+        description: "Power amplifier, gain network, and speaker output.",
+        excludedElementNames: ["LOUDSPEAKER_AMPLIFIER"],
+      },
+    ],
+  }),
+  createBoard({
     id: "boostxl_cc2650ma",
     slug: "boostxl-cc2650ma",
     name: "BOOSTXL-CC2650MA",
     category: "Wireless",
     description: "Bluetooth Low Energy module with debug, status, and optional flash circuitry.",
-    sourceUrl: `${boosterPackSourceRepositoryUrl}/tree/${boosterPackSourceCommit}/boostxl-cc2650ma`,
     thumbnailUrl: "https://boosterpacks.tscircuit.com/boards/boostxl-cc2650ma/thumbnail.png",
-    configurations: wirelessConfigurations,
-  },
+    removableFeatures: [
+      {
+        id: "debug_header",
+        label: "JTAG debug header",
+        description: "Ten-pin JTAG programming and debug connector.",
+        excludedElementNames: ["P20"],
+      },
+      {
+        id: "external_flash",
+        label: "Optional external flash",
+        description: "Unpopulated flash footprint and support passives.",
+        excludedElementNames: ["DNM_FLASH_OPTIONS", "C1"],
+      },
+      {
+        id: "routing_options",
+        label: "Unpopulated routing options",
+        description: "Do-not-mount radio and current-link option resistors.",
+        excludedElementNames: ["DNM_RADIO_OPTIONS", "DNM_CURRENT_LINK"],
+      },
+      {
+        id: "status_leds",
+        label: "Status LEDs",
+        description: "Green and red radio status indicators.",
+        excludedElementNames: ["R5", "CR1", "R6", "CR2"],
+      },
+      {
+        id: "test_points",
+        label: "Reference test points",
+        description: "Ground, 3.3 V, and module-supply test points.",
+        excludedElementNames: ["TP1", "TP2", "TP3"],
+      },
+    ],
+  }),
 ]
 
 export function getBoosterPackBoard(boardId: BoosterPackId): BoosterPackBoard {
@@ -338,4 +295,18 @@ export function getBoosterPackConfiguration(
     if (configuration) return configuration
   }
   throw new Error(`Unknown BoosterPack configuration: ${configurationId}`)
+}
+
+export function getConfigurationForRemovedFeatures(params: {
+  board: BoosterPackBoard
+  removedFeatureIds: string[]
+}): BoosterPackConfiguration {
+  const removedFeatureIdSet = new Set(params.removedFeatureIds)
+  const configuration = params.board.configurations.find(
+    ({ removedFeatureIds }) =>
+      removedFeatureIds.length === removedFeatureIdSet.size &&
+      removedFeatureIds.every((featureId) => removedFeatureIdSet.has(featureId)),
+  )
+  if (!configuration) throw new Error(`Unknown feature combination for ${params.board.id}`)
+  return configuration
 }
