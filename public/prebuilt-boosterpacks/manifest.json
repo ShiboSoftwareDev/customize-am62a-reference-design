@@ -14,16 +14,64 @@
       "compressedBytes": 35288
     },
     {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_user_interface",
+      "circuitElementCount": 849,
+      "compressedBytes": 37891
+    },
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_audio_input",
+      "circuitElementCount": 665,
+      "compressedBytes": 26083
+    },
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_output_lab",
+      "circuitElementCount": 773,
+      "compressedBytes": 27831
+    },
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_robotics_lab",
+      "circuitElementCount": 1554,
+      "compressedBytes": 71560
+    },
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_servo_controls",
+      "circuitElementCount": 761,
+      "compressedBytes": 34419
+    },
+    {
+      "boardId": "boostxl_edumkii",
+      "configurationId": "boostxl_edumkii_minimal_interface",
+      "circuitElementCount": 375,
+      "compressedBytes": 14134
+    },
+    {
       "boardId": "boost_drv8848",
       "configurationId": "boost_drv8848_full",
       "circuitElementCount": 862,
-      "compressedBytes": 51995
+      "compressedBytes": 51993
+    },
+    {
+      "boardId": "boost_drv8848",
+      "configurationId": "boost_drv8848_power_indicator",
+      "circuitElementCount": 814,
+      "compressedBytes": 51931
+    },
+    {
+      "boardId": "boost_drv8848",
+      "configurationId": "boost_drv8848_fault_indicator",
+      "circuitElementCount": 813,
+      "compressedBytes": 49838
     },
     {
       "boardId": "boost_drv8848",
       "configurationId": "boost_drv8848_no_indicators",
       "circuitElementCount": 761,
-      "compressedBytes": 48485
+      "compressedBytes": 48433
     },
     {
       "boardId": "boostxl_bassensors",
@@ -33,21 +81,111 @@
     },
     {
       "boardId": "boostxl_bassensors",
-      "configurationId": "boostxl_bassensors_environmental",
+      "configurationId": "boostxl_bassensors_humidity_hall_light",
+      "circuitElementCount": 965,
+      "compressedBytes": 39081
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature_hall_light",
+      "circuitElementCount": 1088,
+      "compressedBytes": 45044
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_hall_light",
+      "circuitElementCount": 819,
+      "compressedBytes": 34339
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature_humidity_light",
+      "circuitElementCount": 1112,
+      "compressedBytes": 46571
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_humidity_light",
+      "circuitElementCount": 845,
+      "compressedBytes": 36744
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature_light",
+      "circuitElementCount": 962,
+      "compressedBytes": 38230
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_light",
+      "circuitElementCount": 691,
+      "compressedBytes": 26932
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature_humidity_hall",
+      "circuitElementCount": 1111,
+      "compressedBytes": 47996
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_humidity_hall",
+      "circuitElementCount": 837,
+      "compressedBytes": 34585
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature_hall",
+      "circuitElementCount": 956,
+      "compressedBytes": 37994
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_hall",
+      "circuitElementCount": 683,
+      "compressedBytes": 25468
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature_humidity",
       "circuitElementCount": 993,
       "compressedBytes": 43228
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_humidity",
+      "circuitElementCount": 709,
+      "compressedBytes": 27786
+    },
+    {
+      "boardId": "boostxl_bassensors",
+      "configurationId": "boostxl_bassensors_temperature",
+      "circuitElementCount": 826,
+      "compressedBytes": 30743
     },
     {
       "boardId": "boostxl_audio",
       "configurationId": "boostxl_audio_full",
       "circuitElementCount": 2435,
-      "compressedBytes": 108038
+      "compressedBytes": 108035
     },
     {
       "boardId": "boostxl_audio",
       "configurationId": "boostxl_audio_playback",
-      "circuitElementCount": 1959,
-      "compressedBytes": 82316
+      "circuitElementCount": 1958,
+      "compressedBytes": 82262
+    },
+    {
+      "boardId": "boostxl_audio",
+      "configurationId": "boostxl_audio_headset",
+      "circuitElementCount": 2028,
+      "compressedBytes": 87982
+    },
+    {
+      "boardId": "boostxl_audio",
+      "configurationId": "boostxl_audio_headset_playback",
+      "circuitElementCount": 1572,
+      "compressedBytes": 67636
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -57,9 +195,33 @@
     },
     {
       "boardId": "boostxl_cc2650ma",
+      "configurationId": "boostxl_cc2650ma_no_flash",
+      "circuitElementCount": 1348,
+      "compressedBytes": 102343
+    },
+    {
+      "boardId": "boostxl_cc2650ma",
+      "configurationId": "boostxl_cc2650ma_no_status_leds",
+      "circuitElementCount": 1451,
+      "compressedBytes": 90685
+    },
+    {
+      "boardId": "boostxl_cc2650ma",
+      "configurationId": "boostxl_cc2650ma_debug_lean",
+      "circuitElementCount": 1212,
+      "compressedBytes": 80280
+    },
+    {
+      "boardId": "boostxl_cc2650ma",
       "configurationId": "boostxl_cc2650ma_radio_only",
       "circuitElementCount": 1206,
       "compressedBytes": 78483
+    },
+    {
+      "boardId": "boostxl_cc2650ma",
+      "configurationId": "boostxl_cc2650ma_production",
+      "circuitElementCount": 1032,
+      "compressedBytes": 55815
     }
   ]
 }

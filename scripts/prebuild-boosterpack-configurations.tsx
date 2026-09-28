@@ -1,4 +1,4 @@
-import { mkdir } from "node:fs/promises"
+import { mkdir, readdir, unlink } from "node:fs/promises"
 import { resolve } from "node:path"
 import { Circuit } from "@tscircuit/core"
 import AudioBoosterPack from "@tsci/tscircuit.boosters/boostxl-audio/index.circuit.tsx"
@@ -17,12 +17,6 @@ import {
 } from "../lib/boosterpack-configurations"
 import { configureBoosterPackElement } from "../lib/configure-boosterpack-element"
 
-type PrebuiltConfiguration = {
-  boardId: BoosterPackId
-  configurationId: BoosterPackConfigurationId
-  excludedElementNames: string[]
-}
-
 const boardComponents: Record<BoosterPackId, () => ReactNode> = {
   boostxl_edumkii: EducationalBoosterPack,
   boost_drv8848: MotorDriverBoosterPack,
@@ -31,73 +25,17 @@ const boardComponents: Record<BoosterPackId, () => ReactNode> = {
   boostxl_cc2650ma: WirelessBoosterPack,
 }
 
-const prebuiltConfigurations: PrebuiltConfiguration[] = [
-  {
-    boardId: "boostxl_edumkii",
-    configurationId: "boostxl_edumkii_full",
-    excludedElementNames: [],
-  },
-  {
-    boardId: "boostxl_edumkii",
-    configurationId: "boostxl_edumkii_sensor_lab",
-    excludedElementNames: [
-      "DisplaySchematic",
-      "ControlsSchematic",
-      "AudioSchematic",
-      "OutputsSchematic",
-      "ExpansionSchematic",
-      "PowerSchematic",
-    ],
-  },
-  {
-    boardId: "boost_drv8848",
-    configurationId: "boost_drv8848_full",
-    excludedElementNames: [],
-  },
-  {
-    boardId: "boost_drv8848",
-    configurationId: "boost_drv8848_no_indicators",
-    excludedElementNames: ["D1", "D2", "R2", "R6"],
-  },
-  {
-    boardId: "boostxl_bassensors",
-    configurationId: "boostxl_bassensors_full",
-    excludedElementNames: [],
-  },
-  {
-    boardId: "boostxl_bassensors",
-    configurationId: "boostxl_bassensors_environmental",
-    excludedElementNames: [
-      "DRV5055_BLOCK",
-      "OPT3001_BLOCK",
-      "03 - DRV5055 Hall Sensor",
-      "05 - OPT3001 Ambient Light",
-    ],
-  },
-  {
-    boardId: "boostxl_audio",
-    configurationId: "boostxl_audio_full",
-    excludedElementNames: [],
-  },
-  {
-    boardId: "boostxl_audio",
-    configurationId: "boostxl_audio_playback",
-    excludedElementNames: ["MICROPHONE_AMPLIFIER"],
-  },
-  {
-    boardId: "boostxl_cc2650ma",
-    configurationId: "boostxl_cc2650ma_full",
-    excludedElementNames: [],
-  },
-  {
-    boardId: "boostxl_cc2650ma",
-    configurationId: "boostxl_cc2650ma_radio_only",
-    excludedElementNames: ["DEBUG_AND_FLASH", "debug-flash"],
-  },
-]
+const prebuiltConfigurations = boosterPackBoards.flatMap((board) =>
+  board.configurations.map((configuration) => ({ boardId: board.id, configuration })),
+)
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-boosterpacks")
 await mkdir(outputDirectory, { recursive: true })
+for (const fileName of await readdir(outputDirectory)) {
+  if (fileName.endsWith(".circuit.json.gz") || fileName === "manifest.json") {
+    await unlink(resolve(outputDirectory, fileName))
+  }
+}
 
 const manifest: Array<{
   boardId: BoosterPackId
@@ -111,7 +49,7 @@ for (const configuration of prebuiltConfigurations) {
   const boardElement = boardComponents[configuration.boardId]()
   const configuredBoardElement = configureBoosterPackElement({
     element: boardElement,
-    excludedElementNames: configuration.excludedElementNames,
+    excludedElementNames: configuration.configuration.excludedElementNames,
   })
   const circuit = new Circuit({ platform: { drcChecksDisabled: true } })
   circuit._featureMspSchematicTraceRouting = false
@@ -124,23 +62,23 @@ for (const configuration of prebuiltConfigurations) {
   )
   if (sourceErrors.length > 0) {
     throw new Error(
-      `${configuration.configurationId} produced ${sourceErrors.length} source errors`,
+      `${configuration.configuration.id} produced ${sourceErrors.length} source errors`,
     )
   }
 
   const compressedCircuitJson = gzipSync(strToU8(JSON.stringify(circuitJson)), { level: 9 })
   await Bun.write(
-    resolve(outputDirectory, `${configuration.configurationId}.circuit.json.gz`),
+    resolve(outputDirectory, `${configuration.configuration.id}.circuit.json.gz`),
     compressedCircuitJson,
   )
   manifest.push({
     boardId: configuration.boardId,
-    configurationId: configuration.configurationId,
+    configurationId: configuration.configuration.id,
     circuitElementCount: circuitJson.length,
     compressedBytes: compressedCircuitJson.byteLength,
   })
   console.log(
-    `${configuration.configurationId}: ${circuitJson.length} elements in ${(
+    `${configuration.configuration.id}: ${circuitJson.length} elements in ${(
       (performance.now() - startedAt) / 1000
     ).toFixed(1)}s`,
   )

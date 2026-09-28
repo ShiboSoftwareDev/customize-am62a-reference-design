@@ -26,8 +26,8 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         <span className="eyebrow">Source-backed board configurator</span>
         <h1>TI BoosterPacks</h1>
         <p>
-          Select a real tscircuit board and one of its prebuilt circuit configurations. Switching
-          variants loads instantly without rerendering on the server.
+          Select a real tscircuit board and one of its meaningful prebuilt configurations. Each
+          board exposes the options supported by its functional blocks.
         </p>
       </header>
 
@@ -55,7 +55,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
       </fieldset>
 
       <fieldset className="configuration-options">
-        <legend>Configuration</legend>
+        <legend>Configuration ({props.board.configurations.length})</legend>
         {props.board.configurations.map((configuration) => (
           <label
             className="configuration-choice"

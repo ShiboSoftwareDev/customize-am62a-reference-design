@@ -7,6 +7,9 @@ test("loads every prebuilt configuration as valid Circuit JSON", async () => {
     new URL("../public/prebuilt-boosterpacks/manifest.json", import.meta.url),
   ).json()
   expect(manifest.sourceCommit).toBe(boosterPackSourceCommit)
+  expect(manifest.configurations).toHaveLength(
+    boosterPackBoards.flatMap(({ configurations }) => configurations).length,
+  )
 
   for (const configuration of boosterPackBoards.flatMap(({ configurations }) => configurations)) {
     const assetUrl = new URL(`../public${configuration.circuitJsonUrl}`, import.meta.url)
@@ -17,5 +20,13 @@ test("loads every prebuilt configuration as valid Circuit JSON", async () => {
     expect(circuitJson.some(({ type }) => type === "source_failed_to_create_component_error")).toBe(
       false,
     )
+    const renderedElementNames = new Set(
+      circuitJson.flatMap((element) =>
+        "name" in element && typeof element.name === "string" ? [element.name] : [],
+      ),
+    )
+    for (const excludedElementName of configuration.excludedElementNames) {
+      expect(renderedElementNames.has(excludedElementName)).toBe(false)
+    }
   }
 })
