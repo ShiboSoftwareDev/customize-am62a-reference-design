@@ -13,21 +13,24 @@ type ConfigurationPanelProps = {
   error: string
   onBoardChange: (boardId: BoosterPackId) => void
   onFeatureRemovalChange: (featureId: string, removed: boolean) => void
+  onSelectFullBoard: () => void
+  onSelectMinimalBoard: () => void
   onRetry: () => void
   onExportCircuitJson: () => void
   canExportCircuitJson: boolean
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
+  const includedFeatures = props.board.removableFeatures.filter(
+    ({ id }) => !props.configuration.removedFeatureIds.includes(id),
+  )
+  const isFullBoard = props.configuration.removedFeatureIds.length === 0
+  const isMinimalBoard = includedFeatures.length === 0
+
   return (
     <aside className="configuration-panel">
       <header className="board-title">
-        <span className="eyebrow">Source-backed board configurator</span>
         <h1>TI BoosterPacks</h1>
-        <p>
-          Select a real tscircuit board, then remove any combination of optional subsystems. Every
-          combination is prebuilt; remove them all to see the minimal required board.
-        </p>
       </header>
 
       <fieldset className="board-picker">
@@ -57,6 +60,14 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         <legend>
           Remove optional blocks ({props.board.configurations.length} prebuilt combinations)
         </legend>
+        <div className="configuration-quick-actions">
+          <button disabled={isFullBoard} onClick={props.onSelectFullBoard} type="button">
+            Full board
+          </button>
+          <button disabled={isMinimalBoard} onClick={props.onSelectMinimalBoard} type="button">
+            Minimal board
+          </button>
+        </div>
         {props.board.removableFeatures.map((feature) => {
           const isRemoved = props.configuration.removedFeatureIds.includes(feature.id)
           return (
@@ -76,8 +87,12 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
           )
         })}
         <div className="configuration-summary">
-          <strong>{props.configuration.label}</strong>
-          <small>{props.configuration.description}</small>
+          <strong>Current configuration has</strong>
+          <small>
+            {includedFeatures.length > 0
+              ? includedFeatures.map(({ label }) => label).join(", ")
+              : "Required interface, power path, and board mechanics only"}
+          </small>
         </div>
       </fieldset>
 

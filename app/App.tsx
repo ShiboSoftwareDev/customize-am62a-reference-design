@@ -59,6 +59,10 @@ export function App() {
         error={render.error}
         onBoardChange={selectBoard}
         onFeatureRemovalChange={setFeatureRemoved}
+        onSelectFullBoard={() => setConfigurationId(board.configurations[0].id)}
+        onSelectMinimalBoard={() =>
+          setConfigurationId(board.configurations[board.configurations.length - 1].id)
+        }
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
         canExportCircuitJson={Boolean(render.circuitJson) && !render.isRendering}
