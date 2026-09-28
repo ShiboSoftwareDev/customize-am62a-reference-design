@@ -1,5 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useMemo, useState } from "react"
+import { BoosterPackGallery } from "app/components/BoosterPackGallery"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
 import { useBoardRender } from "app/hooks/use-board-render"
@@ -8,6 +9,7 @@ import { allOptionalModules, type OptionalModuleSelection } from "lib/module-con
 export function App() {
   const [selection, setSelection] = useState<OptionalModuleSelection>({ ...allOptionalModules })
   const [addPours, setAddPours] = useState(false)
+  const [isBoosterPackGalleryOpen, setIsBoosterPackGalleryOpen] = useState(false)
   const [retryIndex, setRetryIndex] = useState(0)
   const render = useBoardRender({ selection, addPours, retryIndex })
   const statusText = useMemo(() => {
@@ -33,9 +35,13 @@ export function App() {
         onAddPoursChange={setAddPours}
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
+        onExploreBoosterPacks={() => setIsBoosterPackGalleryOpen(true)}
         canExportCircuitJson={Boolean(render.circuitJson) && !render.isRendering}
       />
       <DesignViewer circuitJson={render.circuitJson} isRendering={render.isRendering} />
+      {isBoosterPackGalleryOpen && (
+        <BoosterPackGallery onClose={() => setIsBoosterPackGalleryOpen(false)} />
+      )}
     </main>
   )
 }

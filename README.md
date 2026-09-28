@@ -5,9 +5,22 @@ conditional tscircuit TSX. Module choices control which components, imported PCB
 routes, and schematic sheets are instantiated. The processor, USB-C input, LPDDR4,
 PMIC, clock, reset, and boot circuitry remain required.
 
+Ten prebuilt configurations cover common evaluation, vision, gateway, camera,
+multimedia, and validation use cases. Individual module switches remain available
+when a preset is only a starting point.
+
 The PCB uses `@tscircuit/pcb-viewer` directly with `focusOnHover` enabled. Hovering
 a pad or trace focuses the connected net; the previous demo's runframe wrapper
 explicitly disabled that behavior.
+
+## BoosterPack examples
+
+The configurator embeds five real TI LaunchPad ecosystem examples from the
+[`tscircuit/boosters`](https://github.com/tscircuit/boosters) repository. Use the
+in-app gallery to inspect each board's generated design page, or browse the
+[complete BoosterPack catalog](https://boosterpacks.tscircuit.com/). These examples
+are presented for design inspiration and are not validated as direct SK-AM62A
+header add-ons.
 
 ## Run locally
 

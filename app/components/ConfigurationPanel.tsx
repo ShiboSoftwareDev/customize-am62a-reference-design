@@ -1,6 +1,5 @@
+import { boardPresets, findMatchingBoardPreset } from "lib/board-presets"
 import {
-  allOptionalModules,
-  minimalOptionalModules,
   optionalModuleGroups,
   type OptionalModuleGroupId,
   type OptionalModuleSelection,
@@ -16,12 +15,14 @@ type ConfigurationPanelProps = {
   onAddPoursChange: (addPours: boolean) => void
   onRetry: () => void
   onExportCircuitJson: () => void
+  onExploreBoosterPacks: () => void
   canExportCircuitJson: boolean
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
   const [isExportingTsx, setIsExportingTsx] = useState(false)
   const [sourceExportError, setSourceExportError] = useState("")
+  const matchingPreset = findMatchingBoardPreset(props.selection)
 
   const setModuleEnabled = (moduleGroupId: OptionalModuleGroupId, enabled: boolean) => {
     props.onSelectionChange({ ...props.selection, [moduleGroupId]: enabled })
@@ -60,17 +61,29 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         </p>
       </header>
 
-      <div className="preset-buttons" aria-label="Configuration presets">
-        <button type="button" onClick={() => props.onSelectionChange({ ...allOptionalModules })}>
-          All modules
-        </button>
-        <button
-          type="button"
-          onClick={() => props.onSelectionChange({ ...minimalOptionalModules })}
+      <label className="preset-picker">
+        <span>Prebuilt configuration</span>
+        <select
+          value={matchingPreset?.id ?? "custom"}
+          onChange={(event) => {
+            const preset = boardPresets.find(({ id }) => id === event.target.value)
+            if (preset) props.onSelectionChange({ ...preset.selection })
+          }}
         >
-          Minimal board
-        </button>
-      </div>
+          {!matchingPreset && <option value="custom">Custom</option>}
+          {boardPresets.map((preset) => (
+            <option key={preset.id} value={preset.id}>
+              {preset.label}
+            </option>
+          ))}
+        </select>
+        <small>{matchingPreset?.description ?? "Custom module mix"}</small>
+      </label>
+
+      <button className="boosterpack-launch" type="button" onClick={props.onExploreBoosterPacks}>
+        Explore BoosterPacks
+        <span aria-hidden="true">↗</span>
+      </button>
 
       <fieldset className="module-list">
         <legend>Modules</legend>
