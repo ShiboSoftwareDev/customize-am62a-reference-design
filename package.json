@@ -2,15 +2,13 @@
   "name": "customize-am62a-reference-design",
   "version": "0.1.0",
   "private": true,
-  "description": "Interactive conditional-TSX configurator for the TI SK-AM62A-LP reference design",
+  "description": "Instant prebuilt configurator for open-source TI BoosterPack designs",
   "type": "module",
   "scripts": {
-    "prepare:generated": "bun scripts/prepare-generated-assets.ts",
-    "dev": "bun run prepare:generated && bun run --parallel 'dev:*'",
-    "dev:api": "bun --watch lib/server/dev-api.ts",
-    "dev:web": "vite",
-    "build": "bun run prepare:generated && vite build",
-    "test": "bun run prepare:generated && bun test",
+    "dev": "vite",
+    "build": "vite build",
+    "prebuild:boosters": "bun scripts/prebuild-boosterpack-configurations.tsx",
+    "test": "bun test",
     "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
     "format": "biome format --write .",
     "format:check": "biome format ."
@@ -27,6 +25,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@tsci/tscircuit.boosters": "github:tscircuit/boosters#4b8b330cf06cee8109edab00d8bba5973925da76",
     "@types/node": "24.5.2",
     "@types/react": "19.1.16",
     "@types/react-dom": "19.1.9",
@@ -34,10 +33,5 @@
     "bun-types": "1.2.22",
     "typescript": "5.9.2",
     "vite": "7.1.7"
-  },
-  "patchedDependencies": {
-    "@tscircuit/props@0.0.668": "patches/@tscircuit%2Fprops@0.0.668.patch",
-    "circuit-json@0.0.506": "patches/circuit-json@0.0.506.patch",
-    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch"
   }
 }

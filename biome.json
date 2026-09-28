@@ -1,7 +1,13 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
   "files": {
-    "includes": ["**", "!.vercel", "!dist", "!node_modules", "!lib/generated/am62a-board.tsx"]
+    "includes": [
+      "**",
+      "!.vercel",
+      "!dist",
+      "!node_modules",
+      "!public/prebuilt-boosterpacks/manifest.json"
+    ]
   },
   "formatter": {
     "enabled": true,

@@ -1,80 +1,62 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useEffect, useRef, useState } from "react"
-import { getSelectionCacheKey, type OptionalModuleSelection } from "lib/module-config"
-import { parseBoardRenderResponse } from "app/parse-board-render-response"
-import { readCachedRender, writeCachedRender } from "app/render-cache"
+import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import type { BoosterPackConfiguration } from "lib/boosterpack-configurations"
 
 type BoardRenderState = {
   circuitJson: AnyCircuitElement[] | null
   error: string
   isRendering: boolean
   elapsedMs: number
-  loadedFromCache: boolean
 }
 
 export function useBoardRender(params: {
-  selection: OptionalModuleSelection
-  addPours: boolean
+  configuration: BoosterPackConfiguration
   retryIndex: number
 }): BoardRenderState {
   const [circuitJson, setCircuitJson] = useState<AnyCircuitElement[] | null>(null)
   const [error, setError] = useState("")
   const [isRendering, setIsRendering] = useState(true)
   const [elapsedMs, setElapsedMs] = useState(0)
-  const [loadedFromCache, setLoadedFromCache] = useState(false)
   const requestIndexRef = useRef(0)
 
   useEffect(() => {
     const requestIndex = ++requestIndexRef.current
     const abortController = new AbortController()
     const startedAt = performance.now()
-    const cacheKey = getSelectionCacheKey(params)
     const interval = window.setInterval(() => setElapsedMs(performance.now() - startedAt), 100)
-    let debounceTimeout = 0
 
     setIsRendering(true)
     setError("")
-    setLoadedFromCache(false)
     setElapsedMs(0)
 
-    debounceTimeout = window.setTimeout(async () => {
+    void (async () => {
       try {
-        const cachedCircuitJson = await readCachedRender(cacheKey)
-        if (abortController.signal.aborted) return
-        if (cachedCircuitJson) {
-          setCircuitJson(cachedCircuitJson)
-          setLoadedFromCache(true)
-          return
-        }
-
-        const response = await fetch("/api/evaluate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ selection: params.selection, addPours: params.addPours }),
+        const response = await fetch(params.configuration.circuitJsonUrl, {
           signal: abortController.signal,
         })
-        const responseBody = await parseBoardRenderResponse(response)
-        if (requestIndex !== requestIndexRef.current) return
-        setCircuitJson(responseBody.circuitJson)
-        await writeCachedRender({ key: cacheKey, circuitJson: responseBody.circuitJson })
-      } catch (renderError) {
+        if (!response.ok) throw new Error(`Prebuilt board failed to load (${response.status})`)
+        const compressedBytes = new Uint8Array(await response.arrayBuffer())
+        const nextCircuitJson = parsePrebuiltCircuitJson(compressedBytes)
+        if (requestIndex === requestIndexRef.current) setCircuitJson(nextCircuitJson)
+      } catch (loadError) {
         if (!abortController.signal.aborted && requestIndex === requestIndexRef.current) {
-          setError(renderError instanceof Error ? renderError.message : String(renderError))
+          setError(loadError instanceof Error ? loadError.message : String(loadError))
         }
       } finally {
         if (!abortController.signal.aborted && requestIndex === requestIndexRef.current) {
+          window.clearInterval(interval)
           setElapsedMs(performance.now() - startedAt)
           setIsRendering(false)
         }
       }
-    }, 250)
+    })()
 
     return () => {
-      window.clearTimeout(debounceTimeout)
       window.clearInterval(interval)
       abortController.abort()
     }
-  }, [params.selection, params.addPours, params.retryIndex])
+  }, [params.configuration, params.retryIndex])
 
-  return { circuitJson, error, isRendering, elapsedMs, loadedFromCache }
+  return { circuitJson, error, isRendering, elapsedMs }
 }
