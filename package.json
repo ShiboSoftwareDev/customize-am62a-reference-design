@@ -12,7 +12,7 @@
     "prebuild:board-details": "bun scripts/prebuild-board-details.ts",
     "dev": "bun run prepare:generated && vite",
     "build": "bun run prepare:generated && vite build",
-    "test": "bun run prepare:generated && bun test",
+    "test": "bun run prepare:generated && bun test --smol",
     "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
     "format": "biome format --write .",
     "format:check": "biome format ."
