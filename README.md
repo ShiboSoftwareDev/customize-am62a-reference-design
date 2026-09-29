@@ -1,48 +1,57 @@
-# TI BoosterPack configurator
+# TI EVM configurator
 
-An instant configurator for real boards from the
-[`tscircuit/boosters`](https://github.com/tscircuit/boosters) repository. The app
-offers five BoosterPacks with removable-subsystem checkboxes. Every possible checkbox
-combination is prebuilt, including the full board and the minimal board containing
-only required circuitry. Both viewers consume the selected build's complete Circuit JSON.
+A source-backed viewer for substantial Texas Instruments evaluation modules. The
+demo uses real TI reference-design files and loads prebuilt Circuit JSON, so board
+and variant changes are immediate and do not depend on a long-running serverless
+render.
 
-## Included boards
+## Included EVMs
 
-- BOOSTXL-EDUMKII: 7 removable blocks, 128 combinations
-- BOOST-DRV8848: 2 removable indicators, 4 combinations
-- BOOSTXL-BASSENSORS: 4 removable sensors, 16 combinations
-- BOOSTXL-AUDIO: 5 removable audio blocks, 32 combinations
-- BOOSTXL-CC2650MA: 5 removable debug, flash, routing, status, and test blocks, 32 combinations
+| EVM | Source | What is prebuilt |
+| --- | --- | --- |
+| SK-AM62A-LP | Parameterized tscircuit TSX reconstructed from TI's 12-layer design | Five curated configurations, from the full kit to minimum bring-up |
+| TMDS62LEVM Rev. B | TI SPRCAL9 Altium project | The 59,234-element PCB and all 57 schematic sheets |
+| AM62L-EVSE-DEV-EVM | TI SLVMEM2 Altium project | Released assembly 001, its 28,753-element PCB, and all 16 schematic sheets |
 
-The app links every board to its upstream TSX and links the complete BoosterPack
-source repository. It does not present a separate catalog or gallery.
+The SK-AM62A-LP choices are explicit system configurations rather than an
+arbitrary powerset. Required processor, memory, power, boot, clock, and reset
+circuits remain present, while each configuration selects coherent optional
+subsystems and their shared dependencies. The other two projects are shown as
+their exact released TI assemblies; the demo does not claim unsupported
+depopulation options for them.
 
-## Prebuilt configurations
-
-The 212 configurations are generated from a pinned `tscircuit/boosters` commit by
-[`scripts/prebuild-boosterpack-configurations.tsx`](./scripts/prebuild-boosterpack-configurations.tsx).
-The script renders each complete TSX board once, then removes each selected block and
-all of its source-linked schematic, PCB, trace, and CAD elements for every powerset
-combination. It stores the results as gzip-compressed Circuit JSON in
-`public/prebuilt-boosterpacks`.
-
-Local Vite and the Vercel deployment serve exactly the same static files, so checking
-or unchecking a block requires no cloud function and no runtime circuit render. To
-regenerate every combination after changing the pinned source or feature definitions:
-
-```sh
-bun run prebuild:boosters
-```
+The variant selector swaps checked-in prebuilt artifacts. Multi-sheet Altium
+projects also expose a schematic-page selector. The PCB viewer has trace and pad
+hover focus enabled.
 
 ## Run locally
 
 ```sh
-bun install
+bun install --no-save
 bun run dev
 ```
 
-Open the printed local URL. Board changes should load from static assets in well
-under a second on a local connection.
+## Rebuild the source artifacts
+
+```sh
+bun run prebuild:ti-evms
+```
+
+The prebuild renders each SK-AM62A-LP TSX configuration, downloads the two
+published TI archives, verifies their SHA-256 checksums, converts the Altium PCB
+and schematic documents, and writes gzip-compressed Circuit JSON under
+`public/prebuilt-ti-evms`.
+
+The exact upstream archive checksums are recorded in
+`public/prebuilt-ti-evms/manifest.json`:
+
+- SPRCAL9 / TMDS62LEVM Rev. B:
+  `40e6c4d0bea5381bf7b4e0ef26ec4ec9adae156be308e4a3838bd344972b7615`
+- SLVMEM2 / AM62L-EVSE-DEV-EVM:
+  `c9b92c2ce9e6262e5118aa0d1a63794866ac56f4a9843197def220d0297751dc`
+
+Downloaded archives live in the ignored `.cache/ti-evm-sources` directory. They
+are not committed.
 
 ## Verify
 
@@ -53,18 +62,35 @@ bun run format:check
 bun run build
 ```
 
-Authored files follow the tscircuit handbook conventions, including named parameter
-objects and focused one-test-per-file coverage.
+Tests use one focused case per file. They cover the EVM catalog, prebuilt artifact
+manifest and files, gzip parsing, module dependency derivation, generated runtime,
+and the full and minimal SK-AM62A-LP renders.
 
-## Deployment
+## Implementation notes
 
-The repository is a static Vite deployment. Vercel publishes the committed
-prebuilt Circuit JSON alongside the frontend; it does not render tscircuit TSX in
-a request-time server function.
+- `lib/ti-evm-catalog.ts` is the single catalog for EVMs, variants, official TI
+  links, and schematic pages.
+- `scripts/prebuild-ti-evm-assets.ts` owns deterministic source acquisition,
+  checksum verification, conversion, validation, and compression.
+- `lib/generated/am62a-board.tsx` is the parameterized SK-AM62A-LP board. It
+  retains imported coordinates, copper routes, component ownership, and
+  schematic-sheet ownership.
+- `app/hooks/use-evm-render.ts` loads the selected prebuilt PCB and schematic in
+  parallel and cancels stale selections.
+- `app/components/DesignViewer.tsx` uses `@tscircuit/pcb-viewer` directly so net
+  focus on hover remains available.
 
-## Design notice
+The SK-AM62A-LP is a 12-layer board. The pinned tscircuit releases validate ten
+layers by default, so the repository carries three narrow Bun patches:
+`@tscircuit/props` accepts `layers={12}`, `circuit-json` validates `inner9` and
+`inner10`, and `@tscircuit/checks` runs design-rule checks across all 12 layers.
+The source design's two 0.089 mm pad-clearance findings at U90 are retained in the
+dedicated validation test rather than hidden.
 
-These boards are open-source tscircuit reconstructions of TI BoosterPack designs.
-Validate the selected circuit, signal integrity, power integrity, thermals,
-manufacturing outputs, and component availability before fabrication. Texas
-Instruments and its marks are the property of Texas Instruments Incorporated.
+## Reference-design notice
+
+The board geometry is derived from public Texas Instruments reference designs and
+is provided for evaluation and visualization. Texas Instruments and its marks are
+the property of Texas Instruments Incorporated. Validate signal integrity, power
+integrity, thermals, manufacturing outputs, and component availability before
+fabrication.

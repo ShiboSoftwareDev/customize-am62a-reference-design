@@ -1,0 +1,18 @@
+diff --git a/dist/index.js b/dist/index.js
+index cd04c9dced7b9a865574207e240cb361072b2128..35b0ebb7cad986912baa1a6706907524263a3899 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1731,8 +1731,8 @@ function getCopperLayers(json, options) {
+         }
+       }
+   }
+-  if (!Number.isInteger(count) || count < 1 || count > 10)
+-    throw new Error("Supported copper layer count is 1\u201310");
++  if (!Number.isInteger(count) || count < 1 || count > 12)
++    throw new Error("Supported copper layer count is 1\u201312");
+   return count === 1 ? ["top"] : [
+     "top",
+     ...Array.from(
+@@ -9724 +9724 @@
+-import { calculateElbow } from "calculate-elbow/lib";
++import { calculateElbow } from "calculate-elbow";

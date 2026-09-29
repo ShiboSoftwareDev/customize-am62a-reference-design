@@ -11,7 +11,5 @@ export default defineConfig({
       tests: fileURLToPath(new URL("./tests", import.meta.url)),
     },
   },
-  server: {
-    host: "127.0.0.1",
-  },
+  server: { host: "127.0.0.1" },
 })

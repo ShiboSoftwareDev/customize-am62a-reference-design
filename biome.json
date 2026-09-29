@@ -6,7 +6,8 @@
       "!.vercel",
       "!dist",
       "!node_modules",
-      "!public/prebuilt-boosterpacks/manifest.json"
+      "!lib/generated/am62a-board.tsx",
+      "!lib/generated/am62a-board.runtime.js"
     ]
   },
   "formatter": {

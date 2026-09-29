@@ -5,16 +5,25 @@ import { useState } from "react"
 import { useElementHeight } from "app/hooks/use-element-height"
 
 type DesignViewerProps = {
-  circuitJson: AnyCircuitElement[] | null
-  isRendering: boolean
+  pcbKey: string
+  schematicKey: string
+  pcbCircuitJson: AnyCircuitElement[] | null
+  schematicCircuitJson: AnyCircuitElement[] | null
+  isLoading: boolean
 }
 
-export function DesignViewer({ circuitJson, isRendering }: DesignViewerProps) {
+export function DesignViewer({
+  pcbKey,
+  schematicKey,
+  pcbCircuitJson,
+  schematicCircuitJson,
+  isLoading,
+}: DesignViewerProps) {
   const [activeView, setActiveView] = useState<"pcb" | "schematic">("pcb")
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
 
   return (
-    <section className="design-viewer" aria-label="Design viewer" aria-busy={isRendering}>
+    <section className="design-viewer" aria-label="Design viewer" aria-busy={isLoading}>
       <header className="viewer-toolbar">
         <div className="view-tabs" role="tablist" aria-label="Design view">
           <button
@@ -29,13 +38,13 @@ export function DesignViewer({ circuitJson, isRendering }: DesignViewerProps) {
             type="button"
             role="tab"
             aria-selected={activeView === "schematic"}
-            disabled={!circuitJson}
+            disabled={!schematicCircuitJson}
             onClick={() => setActiveView("schematic")}
           >
             <span className="tab-dot schematic-dot" /> Schematic
           </button>
         </div>
-        {activeView === "pcb" && circuitJson && (
+        {activeView === "pcb" && pcbCircuitJson && (
           <p className="hover-hint">
             <span /> Hover a pad or trace to focus its net
           </p>
@@ -43,18 +52,21 @@ export function DesignViewer({ circuitJson, isRendering }: DesignViewerProps) {
       </header>
 
       <div className="viewer-canvas" ref={elementRef}>
-        {circuitJson ? (
-          activeView === "pcb" ? (
-            <PCBViewer
-              circuitJson={circuitJson}
-              height={height}
-              renderer="webgpu"
-              allowEditing={false}
-              focusOnHover
-            />
-          ) : (
-            <SchematicViewer circuitJson={circuitJson} containerStyle={{ height: "100%" }} />
-          )
+        {activeView === "pcb" && pcbCircuitJson ? (
+          <PCBViewer
+            key={pcbKey}
+            circuitJson={pcbCircuitJson}
+            height={height}
+            renderer="canvas"
+            allowEditing={false}
+            focusOnHover
+          />
+        ) : activeView === "schematic" && schematicCircuitJson ? (
+          <SchematicViewer
+            key={schematicKey}
+            circuitJson={schematicCircuitJson}
+            containerStyle={{ height: "100%" }}
+          />
         ) : (
           <div className="viewer-empty">
             <div className="board-skeleton" aria-hidden="true">
@@ -62,12 +74,12 @@ export function DesignViewer({ circuitJson, isRendering }: DesignViewerProps) {
                 <span key={index} />
               ))}
             </div>
-            <p>Rendering the reference design…</p>
+            <p>Loading the reference design…</p>
           </div>
         )}
-        {isRendering && circuitJson && (
+        {isLoading && (pcbCircuitJson || schematicCircuitJson) && (
           <div className="rendering-badge">
-            <span /> Updating configuration
+            <span /> Loading design
           </div>
         )}
       </div>

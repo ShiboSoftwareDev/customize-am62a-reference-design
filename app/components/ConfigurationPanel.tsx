@@ -1,95 +1,82 @@
-import {
-  boosterPackBoards,
-  boosterPackSourceRepositoryUrl,
-  type BoosterPackBoard,
-  type BoosterPackConfiguration,
-  type BoosterPackId,
-} from "lib/boosterpack-configurations"
+import { tiEvms, type TiEvm, type TiEvmId, type TiEvmVariant } from "lib/ti-evm-catalog"
 
 type ConfigurationPanelProps = {
-  board: BoosterPackBoard
-  configuration: BoosterPackConfiguration
+  evm: TiEvm
+  variant: TiEvmVariant
+  schematicPageId: string
   statusText: string
   error: string
-  onBoardChange: (boardId: BoosterPackId) => void
-  onFeatureRemovalChange: (featureId: string, removed: boolean) => void
-  onSelectFullBoard: () => void
-  onSelectMinimalBoard: () => void
+  onEvmChange: (evmId: TiEvmId) => void
+  onVariantChange: (variantId: string) => void
+  onSchematicPageChange: (pageId: string) => void
   onRetry: () => void
   onExportCircuitJson: () => void
   canExportCircuitJson: boolean
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
-  const isFullBoard = props.configuration.removedFeatureIds.length === 0
-  const isMinimalBoard =
-    props.configuration.removedFeatureIds.length === props.board.removableFeatures.length
-
   return (
     <aside className="configuration-panel">
       <header className="board-title">
-        <h1>TI BoosterPacks</h1>
+        <span className="eyebrow">Source-backed board configurator</span>
+        <h1>TI evaluation modules</h1>
       </header>
 
-      <fieldset className="board-picker">
-        <legend>Board</legend>
-        {boosterPackBoards.map((boosterPack) => (
-          <label
-            className="board-choice"
-            data-selected={boosterPack.id === props.board.id}
-            key={boosterPack.id}
-          >
-            <input
-              checked={boosterPack.id === props.board.id}
-              name="boosterpack-board"
-              onChange={() => props.onBoardChange(boosterPack.id)}
-              type="radio"
-            />
-            <img alt="" src={boosterPack.thumbnailUrl} />
-            <span>
-              <small>{boosterPack.category}</small>
-              <strong>{boosterPack.name}</strong>
-            </span>
-          </label>
-        ))}
-      </fieldset>
+      <label className="select-field">
+        <span>Evaluation module</span>
+        <select
+          value={props.evm.id}
+          onChange={(event) => props.onEvmChange(event.currentTarget.value as TiEvmId)}
+        >
+          {tiEvms.map((evm) => (
+            <option key={evm.id} value={evm.id}>
+              {evm.name}
+            </option>
+          ))}
+        </select>
+      </label>
 
-      <fieldset className="configuration-options">
-        <legend>Remove optional blocks</legend>
-        <div className="configuration-quick-actions">
-          <button disabled={isFullBoard} onClick={props.onSelectFullBoard} type="button">
-            Full board
-          </button>
-          <button disabled={isMinimalBoard} onClick={props.onSelectMinimalBoard} type="button">
-            Minimal board
-          </button>
-        </div>
-        {props.board.removableFeatures.map((feature) => {
-          const isRemoved = props.configuration.removedFeatureIds.includes(feature.id)
-          return (
-            <label className="configuration-choice" data-selected={isRemoved} key={feature.id}>
-              <input
-                checked={isRemoved}
-                onChange={(event) =>
-                  props.onFeatureRemovalChange(feature.id, event.currentTarget.checked)
-                }
-                type="checkbox"
-              />
-              <span>
-                <strong>Remove {feature.label}</strong>
-                <small>{feature.description}</small>
-              </span>
-            </label>
-          )
-        })}
-      </fieldset>
+      <div className="evm-summary">
+        <small>{props.evm.category}</small>
+        <strong>{props.evm.name}</strong>
+        <p>{props.evm.description}</p>
+      </div>
+
+      <label className="select-field">
+        <span>Variant</span>
+        <select
+          value={props.variant.id}
+          onChange={(event) => props.onVariantChange(event.currentTarget.value)}
+        >
+          {props.evm.variants.map((variant) => (
+            <option key={variant.id} value={variant.id}>
+              {variant.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <p className="variant-description">{props.variant.description}</p>
+
+      {props.variant.schematicPages && (
+        <label className="select-field">
+          <span>Schematic page</span>
+          <select
+            value={props.schematicPageId}
+            onChange={(event) => props.onSchematicPageChange(event.currentTarget.value)}
+          >
+            {props.variant.schematicPages.map((page) => (
+              <option key={page.id} value={page.id}>
+                {page.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
 
       <div className="source-links">
-        <a href={props.board.sourceUrl} rel="noreferrer" target="_blank">
-          View this board’s TSX ↗
-        </a>
-        <a href={boosterPackSourceRepositoryUrl} rel="noreferrer" target="_blank">
-          All BoosterPacks ↗
+        <a href={props.evm.sourceUrl} rel="noreferrer" target="_blank">
+          {props.evm.sourceLabel} ↗
         </a>
       </div>
 
@@ -99,7 +86,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         disabled={!props.canExportCircuitJson}
         onClick={props.onExportCircuitJson}
       >
-        Export selected Circuit JSON
+        Export PCB Circuit JSON
       </button>
 
       <p className="render-status" role="status">
