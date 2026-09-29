@@ -8,13 +8,13 @@ The application does not remove elements from static Circuit JSON and does not u
 
 | Board | Purpose | Prebuilt variants | TI reference |
 | --- | --- | ---: | --- |
-| SK-AM62A-LP | Vision AI processor starter kit | 5 | [SK-AM62A-LP](https://www.ti.com/tool/SK-AM62A-LP) |
+| SK-AM62A-LP | Vision AI processor starter kit | 8 | [SK-AM62A-LP](https://www.ti.com/tool/SK-AM62A-LP) |
 | BQ25731EVM | 1-to-5-cell buck-boost battery charger | 4 | [BQ25731EVM](https://www.ti.com/tool/BQ25731EVM) |
 | DRV8210EVM | Low-voltage H-bridge motor driver | 4 | [DRV8210EVM](https://www.ti.com/tool/DRV8210EVM) |
 | LMK1C1104EVM | Four-output low-jitter clock buffer | 4 | [LMK1C1104EVM](https://www.ti.com/tool/LMK1C1104EVM) |
 | TPS62933PEVM | 3-A synchronous buck converter | 4 | [TPS62933PEVM](https://www.ti.com/tool/TPS62933PEVM) |
 
-The SK-AM62A-LP choices select application-oriented feature populations. The other EVMs expose full, application, bench-validation, and minimum-core populations. These options conditionally add the relevant connectors, controls, and measurement hardware around the required application circuit. There are 21 prebuilt board/variant combinations in total.
+Each board exposes removable-feature checkboxes plus **Full board** and **Minimal board** shortcuts. SK-AM62A-LP has three independent subsystem groups and the other EVMs independently configure their evaluation controls and measurement points while retaining required application connectors. Every possible checkbox combination is prebuilt, for 24 board/configuration artifacts in total.
 
 ## Run locally
 
@@ -49,7 +49,7 @@ Tests use one focused case per file. They verify catalog provenance, unique opti
 - The TI application circuits are pinned to an immutable `tscircuit/ti` commit.
 - A one-line package patch maps the BQ25731 exposed thermal pad to pin 33 so the reference circuit can be autorouted instead of silently producing no copper.
 - `lib/ti-evm-catalog.ts` owns the five-board catalog and all selectable variants.
-- `scripts/prebuild-ti-evm-assets.ts` evaluates all 21 combinations from TSX.
+- `scripts/prebuild-ti-evm-assets.ts` evaluates all 24 combinations from TSX.
 - `app/hooks/use-evm-render.ts` loads the selected prebuilt result and cancels stale requests.
 
 The SK-AM62A-LP is a 12-layer design. The pinned tscircuit releases validate ten layers by default, so the repository carries three narrow Bun patches: `@tscircuit/props` accepts `layers={12}`, `circuit-json` validates `inner9` and `inner10`, and `@tscircuit/checks` runs design-rule checks across all 12 layers. The reference design's two 0.089 mm pad-clearance findings at U90 remain visible in the validation test rather than being hidden.

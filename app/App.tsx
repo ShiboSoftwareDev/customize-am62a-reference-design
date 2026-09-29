@@ -3,7 +3,13 @@ import { useMemo, useState } from "react"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
 import { useEvmRender } from "app/hooks/use-evm-render"
-import { getTiEvm, getTiEvmVariant, tiEvms, type TiEvmId } from "lib/ti-evm-catalog"
+import {
+  getTiEvm,
+  getTiEvmVariant,
+  getTiEvmVariantForRemovedFeatures,
+  tiEvms,
+  type TiEvmId,
+} from "lib/ti-evm-catalog"
 
 export function App() {
   const [evmId, setEvmId] = useState<TiEvmId>(tiEvms[0].id)
@@ -30,6 +36,13 @@ export function App() {
     setVariantId(nextEvm.variants[0].id)
   }
 
+  const setFeatureRemoved = (featureId: string, removed: boolean) => {
+    const removedFeatureIds = new Set(variant.removedFeatureIds)
+    if (removed) removedFeatureIds.add(featureId)
+    else removedFeatureIds.delete(featureId)
+    setVariantId(getTiEvmVariantForRemovedFeatures(evm, [...removedFeatureIds]).id)
+  }
+
   return (
     <main className="app-shell">
       <ConfigurationPanel
@@ -39,7 +52,9 @@ export function App() {
         statusText={statusText}
         error={render.error}
         onEvmChange={changeEvm}
-        onVariantChange={setVariantId}
+        onFeatureRemovalChange={setFeatureRemoved}
+        onSelectFullBoard={() => setVariantId(evm.variants[0].id)}
+        onSelectMinimalBoard={() => setVariantId(evm.variants[evm.variants.length - 1].id)}
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
         canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}

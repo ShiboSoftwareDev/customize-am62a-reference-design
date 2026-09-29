@@ -30,7 +30,7 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
     "lmk1c1104evm",
     "tps62933pevm",
   ])
-  expect(manifest.boards.map(({ artifacts }) => artifacts.length)).toEqual([5, 4, 4, 4, 4])
+  expect(manifest.boards.map(({ artifacts }) => artifacts.length)).toEqual([8, 4, 4, 4, 4])
   expect(manifest.sources).toHaveLength(5)
 
   for (const board of manifest.boards) {
@@ -46,10 +46,7 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
     }
   }
 
-  const fullBoard = await loadPrebuiltArtifact(
-    repositoryRoot,
-    "full-evaluation-kit.circuit.json.gz",
-  )
+  const fullBoard = await loadPrebuiltArtifact(repositoryRoot, "full-board.circuit.json.gz")
   const board = fullBoard.find(({ type }) => type === "pcb_board")
   if (!board || board.type !== "pcb_board") throw new Error("Full TSX render has no PCB board")
   expect(board.num_layers).toBe(12)

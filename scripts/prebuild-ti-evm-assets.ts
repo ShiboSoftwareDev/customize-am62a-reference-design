@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises"
+import { mkdir, rm, writeFile } from "node:fs/promises"
 import { basename, resolve } from "node:path"
 import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
@@ -17,6 +17,7 @@ type ManifestArtifact = {
 }
 
 export async function prebuildTiEvmAssets(): Promise<void> {
+  await rm(outputDirectory, { recursive: true, force: true })
   await mkdir(outputDirectory, { recursive: true })
   const artifacts: ManifestArtifact[] = []
 
