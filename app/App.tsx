@@ -3,21 +3,13 @@ import { useMemo, useState } from "react"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
 import { useEvmRender } from "app/hooks/use-evm-render"
-import { getTiEvm, getTiEvmVariant, tiEvms, type TiEvmId } from "lib/ti-evm-catalog"
+import { getTiEvmVariant, skAm62aLp } from "lib/ti-evm-catalog"
 
 export function App() {
-  const [evmId, setEvmId] = useState<TiEvmId>(tiEvms[0].id)
-  const [variantId, setVariantId] = useState(tiEvms[0].variants[0].id)
-  const [schematicPageId, setSchematicPageId] = useState("")
+  const [variantId, setVariantId] = useState(skAm62aLp.variants[0].id)
   const [retryIndex, setRetryIndex] = useState(0)
-  const evm = getTiEvm(evmId)
-  const variant = getTiEvmVariant(evm, variantId)
-  const selectedSchematicPageId = schematicPageId || variant.schematicPages?.[0]?.id || ""
-  const render = useEvmRender({
-    variant,
-    schematicPageId: selectedSchematicPageId,
-    retryIndex,
-  })
+  const variant = getTiEvmVariant(variantId)
+  const render = useEvmRender({ variant, retryIndex })
   const statusText = useMemo(() => {
     const seconds = (render.elapsedMs / 1000).toFixed(1)
     if (render.isLoading) return `Loading prebuilt design… ${seconds}s elapsed`
@@ -25,42 +17,26 @@ export function App() {
     return `Loaded in ${seconds}s`
   }, [render.elapsedMs, render.isLoading, render.pcbCircuitJson])
 
-  const selectEvm = (nextEvmId: TiEvmId) => {
-    const nextEvm = getTiEvm(nextEvmId)
-    setEvmId(nextEvmId)
-    setVariantId(nextEvm.variants[0].id)
-    setSchematicPageId(nextEvm.variants[0].schematicPages?.[0]?.id ?? "")
-  }
-
-  const selectVariant = (nextVariantId: string) => {
-    const nextVariant = getTiEvmVariant(evm, nextVariantId)
-    setVariantId(nextVariantId)
-    setSchematicPageId(nextVariant.schematicPages?.[0]?.id ?? "")
-  }
-
   const exportCircuitJson = () => {
     if (!render.pcbCircuitJson) return
-    downloadCircuitJson(render.pcbCircuitJson, `${evm.id}-${variant.id}.circuit.json`)
+    downloadCircuitJson(render.pcbCircuitJson, `${skAm62aLp.id}-${variant.id}.circuit.json`)
   }
 
   return (
     <main className="app-shell">
       <ConfigurationPanel
-        evm={evm}
+        evm={skAm62aLp}
         variant={variant}
-        schematicPageId={selectedSchematicPageId}
         statusText={statusText}
         error={render.error}
-        onEvmChange={selectEvm}
-        onVariantChange={selectVariant}
-        onSchematicPageChange={setSchematicPageId}
+        onVariantChange={setVariantId}
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
         canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}
       />
       <DesignViewer
-        pcbKey={`${evm.id}:${variant.id}`}
-        schematicKey={`${evm.id}:${variant.id}:${selectedSchematicPageId}`}
+        pcbKey={`${skAm62aLp.id}:${variant.id}`}
+        schematicKey={`${skAm62aLp.id}:${variant.id}`}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJson={render.schematicCircuitJson}
         isLoading={render.isLoading}

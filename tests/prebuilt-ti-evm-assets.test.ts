@@ -7,54 +7,49 @@ type PrebuiltManifest = {
     id: string
     artifacts: Array<{ elementCount: number; output: string; source: string }>
   }>
-  sources: Array<{ name: string; sha256: string; url: string }>
+  sources: Array<{ name: string; source: string; url: string }>
 }
 
-test("every catalog artifact is checked in with pinned TI source provenance", async () => {
+test("every prebuilt artifact is rendered from the parameterized SK-AM62A-LP TSX", async () => {
   const repositoryRoot = resolve(import.meta.dir, "..")
   const manifest = (await Bun.file(
     resolve(repositoryRoot, "public/prebuilt-ti-evms/manifest.json"),
   ).json()) as PrebuiltManifest
 
-  expect(manifest.boards.map(({ id }) => id)).toEqual([
-    "sk-am62a-lp",
-    "tmds62levm",
-    "am62l-evse-dev-evm",
+  expect(manifest.boards.map(({ id }) => id)).toEqual(["sk-am62a-lp"])
+  expect(manifest.boards[0].artifacts).toHaveLength(5)
+  expect(manifest.sources).toEqual([
+    {
+      name: "Texas Instruments SK-AM62A-LP",
+      source: "lib/generated/am62a-board.tsx",
+      url: "https://www.ti.com/tool/SK-AM62A-LP",
+    },
   ])
-  expect(manifest.boards.flatMap(({ artifacts }) => artifacts)).toHaveLength(80)
-  expect(manifest.sources).toHaveLength(2)
-  expect(manifest.sources.every(({ sha256 }) => /^[a-f0-9]{64}$/u.test(sha256))).toBe(true)
-  expect(manifest.boards[1].artifacts[0].elementCount).toBeGreaterThan(50_000)
-  expect(manifest.boards[2].artifacts[0].elementCount).toBeGreaterThan(20_000)
 
-  for (const artifact of manifest.boards.flatMap(({ artifacts }) => artifacts)) {
+  for (const artifact of manifest.boards[0].artifacts) {
+    expect(artifact.source).toBe("Parameterized SK-AM62A-LP tscircuit TSX")
     const prebuiltFile = Bun.file(resolve(repositoryRoot, "public", artifact.output))
     expect(await prebuiltFile.exists()).toBe(true)
     expect(prebuiltFile.size).toBeGreaterThan(0)
-    expect(artifact.elementCount).toBeGreaterThan(0)
+    expect(artifact.elementCount).toBeGreaterThan(60_000)
   }
 
-  const evsePcbPath = resolve(
+  const fullBoard = await loadPrebuiltArtifact(
     repositoryRoot,
-    "public/prebuilt-ti-evms/am62l-evse-dev-evm/pcb.circuit.json.gz",
+    "full-evaluation-kit.circuit.json.gz",
   )
-  const evsePcb = parsePrebuiltCircuitJson(
-    new Uint8Array(await Bun.file(evsePcbPath).arrayBuffer()),
-  )
-  const pcbBoard = evsePcb.find(({ type }) => type === "pcb_board")
-  if (!pcbBoard) throw new Error("EVSE prebuilt artifact has no PCB board")
-  const boardCenter = pcbBoard.center as { x: number; y: number }
-  const halfWidth = (pcbBoard.width as number) / 2
-  const halfHeight = (pcbBoard.height as number) / 2
-  const hasOffBoardComponentBounds = evsePcb.some((element) => {
-    if (element.type !== "pcb_component") return false
-    const componentCenter = element.center as { x: number; y: number }
-    return (
-      componentCenter.x < boardCenter.x - halfWidth ||
-      componentCenter.x > boardCenter.x + halfWidth ||
-      componentCenter.y < boardCenter.y - halfHeight ||
-      componentCenter.y > boardCenter.y + halfHeight
-    )
-  })
-  expect(hasOffBoardComponentBounds).toBe(false)
+  const board = fullBoard.find(({ type }) => type === "pcb_board")
+  if (!board || board.type !== "pcb_board") throw new Error("Full TSX render has no PCB board")
+  expect(board.num_layers).toBe(12)
+  expect(board.width).toBeCloseTo(84.99983, 5)
+  expect(board.height).toBeCloseTo(150.096728, 5)
+  expect(fullBoard.filter(({ type }) => type === "source_component")).toHaveLength(1482)
+  expect(fullBoard.filter(({ type }) => type === "source_trace")).toHaveLength(5137)
+  expect(fullBoard.filter(({ type }) => type === "pcb_trace")).toHaveLength(5009)
+  expect(fullBoard.filter(({ type }) => type === "pcb_via")).toHaveLength(3392)
 })
+
+async function loadPrebuiltArtifact(repositoryRoot: string, fileName: string) {
+  const path = resolve(repositoryRoot, "public/prebuilt-ti-evms/sk-am62a-lp", fileName)
+  return parsePrebuiltCircuitJson(new Uint8Array(await Bun.file(path).arrayBuffer()))
+}

@@ -13,7 +13,6 @@ type EvmRenderState = {
 
 export function useEvmRender(request: {
   variant: TiEvmVariant
-  schematicPageId: string
   retryIndex: number
 }): EvmRenderState {
   const [pcbCircuitJson, setPcbCircuitJson] = useState<AnyCircuitElement[] | null>(null)
@@ -28,14 +27,6 @@ export function useEvmRender(request: {
     const abortController = new AbortController()
     const startedAt = performance.now()
     const interval = window.setInterval(() => setElapsedMs(performance.now() - startedAt), 100)
-    const schematicPage = request.variant.schematicPages?.find(
-      ({ id }) => id === request.schematicPageId,
-    )
-    const schematicUrl =
-      schematicPage?.circuitJsonUrl ??
-      request.variant.schematicCircuitJsonUrl ??
-      request.variant.pcbCircuitJsonUrl
-
     setIsLoading(true)
     setError("")
     setElapsedMs(0)
@@ -44,15 +35,13 @@ export function useEvmRender(request: {
 
     void (async () => {
       try {
-        const [nextPcbCircuitJson, nextSchematicCircuitJson] = await Promise.all([
-          loadCircuitJson(request.variant.pcbCircuitJsonUrl, abortController.signal),
-          schematicUrl === request.variant.pcbCircuitJsonUrl
-            ? Promise.resolve(null)
-            : loadCircuitJson(schematicUrl, abortController.signal),
-        ])
+        const nextCircuitJson = await loadCircuitJson(
+          request.variant.circuitJsonUrl,
+          abortController.signal,
+        )
         if (requestIndex !== requestIndexRef.current) return
-        setPcbCircuitJson(nextPcbCircuitJson)
-        setSchematicCircuitJson(nextSchematicCircuitJson ?? nextPcbCircuitJson)
+        setPcbCircuitJson(nextCircuitJson)
+        setSchematicCircuitJson(nextCircuitJson)
       } catch (loadError) {
         if (!abortController.signal.aborted && requestIndex === requestIndexRef.current) {
           setError(loadError instanceof Error ? loadError.message : String(loadError))
@@ -70,7 +59,7 @@ export function useEvmRender(request: {
       window.clearInterval(interval)
       abortController.abort()
     }
-  }, [request.variant, request.schematicPageId, request.retryIndex])
+  }, [request.variant, request.retryIndex])
 
   return { pcbCircuitJson, schematicCircuitJson, error, isLoading, elapsedMs }
 }

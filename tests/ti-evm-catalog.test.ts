@@ -1,19 +1,21 @@
 import { expect, test } from "bun:test"
-import { tiEvms } from "lib/ti-evm-catalog"
+import { optionalModuleGroups } from "lib/module-config"
+import { skAm62aLp } from "lib/ti-evm-catalog"
 
-test("catalog contains complex source-backed TI EVMs and curated variants", () => {
-  expect(tiEvms.map(({ id }) => id)).toEqual(["sk-am62a-lp", "tmds62levm", "am62l-evse-dev-evm"])
-  expect(tiEvms.every(({ sourceUrl }) => sourceUrl.startsWith("https://www.ti.com/tool/"))).toBe(
-    true,
-  )
-
-  const skAm62a = tiEvms[0]
-  expect(skAm62a.variants).toHaveLength(5)
+test("catalog exposes only parameterized TSX variants of the SK-AM62A-LP", () => {
+  expect(skAm62aLp.id).toBe("sk-am62a-lp")
+  expect(skAm62aLp.sourceUrl).toBe("https://www.ti.com/tool/SK-AM62A-LP")
+  expect(skAm62aLp.variants).toHaveLength(5)
   expect(
-    new Set(skAm62a.variants.map(({ sourceSelection }) => JSON.stringify(sourceSelection))).size,
-  ).toBe(skAm62a.variants.length)
+    new Set(skAm62aLp.variants.map(({ sourceSelection }) => JSON.stringify(sourceSelection))).size,
+  ).toBe(skAm62aLp.variants.length)
 
-  expect(tiEvms[1].variants[0].schematicPages).toHaveLength(57)
-  expect(tiEvms[2].variants[0].schematicPages).toHaveLength(16)
-  expect(JSON.stringify(tiEvms).toLowerCase()).not.toContain("booster")
+  const optionalModuleIds = optionalModuleGroups.map(({ id }) => id).sort()
+  for (const variant of skAm62aLp.variants) {
+    expect(Object.keys(variant.sourceSelection).sort()).toEqual(optionalModuleIds)
+    expect(variant.circuitJsonUrl.startsWith("/prebuilt-ti-evms/sk-am62a-lp/")).toBe(true)
+  }
+
+  expect(JSON.stringify(skAm62aLp).toLowerCase()).not.toContain("altium")
+  expect(JSON.stringify(skAm62aLp).toLowerCase()).not.toContain("booster")
 })

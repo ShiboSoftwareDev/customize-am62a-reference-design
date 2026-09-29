@@ -1,28 +1,28 @@
-# TI EVM configurator
+# TI SK-AM62A-LP configurator
 
-A source-backed viewer for substantial Texas Instruments evaluation modules. The
-demo uses real TI reference-design files and loads prebuilt Circuit JSON, so board
-and variant changes are immediate and do not depend on a long-running serverless
-render.
+A source-backed configurator for the real Texas Instruments
+[SK-AM62A-LP](https://www.ti.com/tool/SK-AM62A-LP) evaluation module. Every
+configuration is rendered from the same parameterized tscircuit TSX board; the
+application does not import an Altium conversion or filter static Circuit JSON.
 
-## Included EVMs
+The 53,001-line TSX reconstruction retains the reference board's 12-layer stack,
+84.99983 mm × 150.096728 mm outline, component placement, copper routes, vias,
+module ownership, and schematic ownership. Its full render contains 1,482 source
+components, 5,137 source traces, 5,009 PCB traces, and 3,392 vias.
 
-| EVM | Source | What is prebuilt |
-| --- | --- | --- |
-| SK-AM62A-LP | Parameterized tscircuit TSX reconstructed from TI's 12-layer design | Five curated configurations, from the full kit to minimum bring-up |
-| TMDS62LEVM Rev. B | TI SPRCAL9 Altium project | The 59,234-element PCB and all 57 schematic sheets |
-| AM62L-EVSE-DEV-EVM | TI SLVMEM2 Altium project | Released assembly 001, its 28,753-element PCB, and all 16 schematic sheets |
+## Configurations
 
-The SK-AM62A-LP choices are explicit system configurations rather than an
-arbitrary powerset. Required processor, memory, power, boot, clock, and reset
-circuits remain present, while each configuration selects coherent optional
-subsystems and their shared dependencies. The other two projects are shown as
-their exact released TI assemblies; the demo does not claim unsupported
-depopulation options for them.
+- Full evaluation kit
+- Vision AI camera
+- Headless edge AI
+- Industrial gateway
+- Minimum bring-up
 
-The variant selector swaps checked-in prebuilt artifacts. Multi-sheet Altium
-projects also expose a schematic-page selector. The PCB viewer has trace and pad
-hover focus enabled.
+Each selection becomes module flags passed directly to `AM62ABoard`. Required
+processor, LPDDR4, power, clock, reset, and boot circuitry is always retained.
+Optional modules and their dependency flags are conditionally rendered by TSX.
+Changing the variant therefore rerenders the board model during the prebuild;
+the browser only loads the resulting checked-in artifact for fast switching.
 
 ## Run locally
 
@@ -31,27 +31,16 @@ bun install --no-save
 bun run dev
 ```
 
-## Rebuild the source artifacts
+## Rebuild all configurations
 
 ```sh
 bun run prebuild:ti-evms
 ```
 
-The prebuild renders each SK-AM62A-LP TSX configuration, downloads the two
-published TI archives, verifies their SHA-256 checksums, converts the Altium PCB
-and schematic documents, and writes gzip-compressed Circuit JSON under
-`public/prebuilt-ti-evms`.
-
-The exact upstream archive checksums are recorded in
-`public/prebuilt-ti-evms/manifest.json`:
-
-- SPRCAL9 / TMDS62LEVM Rev. B:
-  `40e6c4d0bea5381bf7b4e0ef26ec4ec9adae156be308e4a3838bd344972b7615`
-- SLVMEM2 / AM62L-EVSE-DEV-EVM:
-  `c9b92c2ce9e6262e5118aa0d1a63794866ac56f4a9843197def220d0297751dc`
-
-Downloaded archives live in the ignored `.cache/ti-evm-sources` directory. They
-are not committed.
+This evaluates `lib/generated/am62a-board.tsx` five times with different typed
+module selections and writes gzip-compressed Circuit JSON under
+`public/prebuilt-ti-evms/sk-am62a-lp`. The manifest records the TSX source for
+every artifact.
 
 ## Verify
 
@@ -62,35 +51,33 @@ bun run format:check
 bun run build
 ```
 
-Tests use one focused case per file. They cover the EVM catalog, prebuilt artifact
-manifest and files, gzip parsing, module dependency derivation, generated runtime,
-and the full and minimal SK-AM62A-LP renders.
+Tests use one focused case per file. They verify module dependencies, all five
+parameter selections, generated-runtime integrity, full and minimal renders,
+gzip loading, and fixed reference-design invariants for dimensions, layers,
+components, source traces, routed PCB traces, and vias.
 
 ## Implementation notes
 
-- `lib/ti-evm-catalog.ts` is the single catalog for EVMs, variants, official TI
-  links, and schematic pages.
-- `scripts/prebuild-ti-evm-assets.ts` owns deterministic source acquisition,
-  checksum verification, conversion, validation, and compression.
-- `lib/generated/am62a-board.tsx` is the parameterized SK-AM62A-LP board. It
-  retains imported coordinates, copper routes, component ownership, and
-  schematic-sheet ownership.
-- `app/hooks/use-evm-render.ts` loads the selected prebuilt PCB and schematic in
-  parallel and cancels stale selections.
-- `app/components/DesignViewer.tsx` uses `@tscircuit/pcb-viewer` directly so net
-  focus on hover remains available.
+- `lib/generated/am62a-board.tsx` is the parameterized board reconstruction.
+- `lib/module-config.ts` owns the optional feature groups and required-module
+  dependencies.
+- `lib/server/evaluate-board.tsx` evaluates `AM62ABoard` with a selected flag
+  set; it does not accept Circuit JSON as its board source.
+- `scripts/prebuild-ti-evm-assets.ts` renders the five TSX configurations.
+- `app/hooks/use-evm-render.ts` loads the selected prebuilt result and cancels
+  stale requests.
 
-The SK-AM62A-LP is a 12-layer board. The pinned tscircuit releases validate ten
-layers by default, so the repository carries three narrow Bun patches:
+The board is 12 layers. The pinned tscircuit releases validate ten layers by
+default, so the repository carries three narrow Bun patches:
 `@tscircuit/props` accepts `layers={12}`, `circuit-json` validates `inner9` and
 `inner10`, and `@tscircuit/checks` runs design-rule checks across all 12 layers.
-The source design's two 0.089 mm pad-clearance findings at U90 are retained in the
-dedicated validation test rather than hidden.
+The reference design's two 0.089 mm pad-clearance findings at U90 remain visible
+in the validation test rather than being hidden.
 
 ## Reference-design notice
 
-The board geometry is derived from public Texas Instruments reference designs and
-is provided for evaluation and visualization. Texas Instruments and its marks are
-the property of Texas Instruments Incorporated. Validate signal integrity, power
-integrity, thermals, manufacturing outputs, and component availability before
-fabrication.
+The geometry is derived from the public Texas Instruments reference design and
+is provided for evaluation and visualization. Texas Instruments and its marks
+are the property of Texas Instruments Incorporated. Validate signal integrity,
+power integrity, thermals, manufacturing outputs, and component availability
+before fabrication.
