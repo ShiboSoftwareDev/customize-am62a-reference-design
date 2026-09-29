@@ -12,7 +12,7 @@
     "prebuild:board-details": "bun scripts/prebuild-board-details.ts",
     "dev": "bun run prepare:generated && vite",
     "build": "bun run prepare:generated && vite build",
-    "test": "bun run prepare:generated && bun test",
+    "test": "bun run prepare:generated && bun test --smol",
     "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
     "format": "biome format --write .",
     "format:check": "biome format ."
@@ -20,8 +20,9 @@
   "dependencies": {
     "@tscircuit/checks": "0.0.222",
     "@tscircuit/circuit-json-util": "0.0.116",
-    "@tscircuit/core": "0.0.1993",
+    "@tscircuit/core": "0.0.2006",
     "@tscircuit/pcb-viewer": "1.11.409",
+    "@tscircuit/props": "0.0.668",
     "@tscircuit/schematic-viewer": "2.0.98",
     "circuit-json": "0.0.506",
     "fflate": "0.8.3",

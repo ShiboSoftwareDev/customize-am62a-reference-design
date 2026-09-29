@@ -72,6 +72,11 @@ export type ReferenceNet = {
     componentName: string
     pinKey: string
   }>
+  teardropEndpoints?: Array<{
+    componentName: string
+    pinKey: string
+  }>
+  hasViaTeardrops?: boolean
 }
 
 export type ReferenceSilkscreenLine = {

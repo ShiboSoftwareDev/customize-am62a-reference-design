@@ -60,14 +60,24 @@ export function ReferenceEvmBoard(props: {
           <ReferenceEvmSilkscreen key={`silkscreen-${index}`} silkscreen={silkscreen} />
         ))}
       {populatedNets.flatMap((net) =>
-        net.endpoints.map((endpoint) => (
-          <Fragment key={`${net.name}-${endpoint.componentName}-${endpoint.pinKey}`}>
-            <trace
-              from={`.${endpoint.componentName} > .${endpoint.pinKey}`}
-              to={`net.${net.name}`}
-            />
-          </Fragment>
-        )),
+        net.endpoints.map((endpoint) => {
+          const hasEndpointTeardrop = net.teardropEndpoints?.some(
+            ({ componentName, pinKey }) =>
+              componentName === endpoint.componentName && pinKey === endpoint.pinKey,
+          )
+          return (
+            <Fragment key={`${net.name}-${endpoint.componentName}-${endpoint.pinKey}`}>
+              <trace
+                from={`.${endpoint.componentName} > .${endpoint.pinKey}`}
+                to={`net.${net.name}`}
+                pcbTeardrops={net.hasViaTeardrops}
+                pcbTeardropStart={
+                  hasEndpointTeardrop ? true : net.hasViaTeardrops ? false : undefined
+                }
+              />
+            </Fragment>
+          )
+        }),
       )}
     </board>
   )

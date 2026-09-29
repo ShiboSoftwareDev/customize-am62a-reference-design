@@ -4,6 +4,8 @@ import { convertAltiumToCircuitJson } from "altium-to-circuit-json"
 import {
   type AltiumComponentRecord,
   type AltiumPadRecord,
+  AltiumRegionRecord,
+  AltiumViaRecord,
   getAltiumPcbPadGeometry,
   parseAltiumBinaryPcbDoc,
 } from "altiumts"
@@ -29,6 +31,8 @@ type ReferenceInput = {
   outputName: string
   getRemovableFeatureId: (name: string) => string | undefined
 }
+
+const TEARDROP_CONTACT_TOLERANCE_MILS = 0.1
 
 const drvSpeedControlComponents = new Set([
   "U5",
@@ -299,6 +303,12 @@ async function createDefinition(reference: ReferenceInput): Promise<{
   }
 
   const populatedComponentIndexes = new Set(componentPinKeys.keys())
+  const teardropsByNet = getTeardropsByNet({
+    pcbDocument,
+    padRecords,
+    componentNames,
+    componentPinKeys,
+  })
   const nets: ReferenceNet[] = netRecords.flatMap((netRecord, netIndex) => {
     const endpoints = padRecords.flatMap((padRecord) => {
       const componentIndex = padRecord.componentIndex
@@ -322,10 +332,18 @@ async function createDefinition(reference: ReferenceInput): Promise<{
       ).values(),
     ]
     if (uniqueEndpoints.length < 2) return []
+    const teardrops = teardropsByNet.get(netIndex)
     return [
       {
         name: `N${netIndex}_${toIdentifier(netRecord.name ?? "unnamed")}`,
         endpoints: uniqueEndpoints,
+        teardropEndpoints:
+          teardrops && teardrops.endpointKeys.size > 0
+            ? uniqueEndpoints.filter(({ componentName, pinKey }) =>
+                teardrops.endpointKeys.has(`${componentName}.${pinKey}`),
+              )
+            : undefined,
+        hasViaTeardrops: teardrops?.hasViaTeardrops || undefined,
       },
     ]
   })
@@ -374,6 +392,151 @@ async function createDefinition(reference: ReferenceInput): Promise<{
   return {
     definition,
     referenceSchematicCircuitJson: schematicCircuitJsons[0],
+  }
+}
+
+function getTeardropsByNet(params: {
+  pcbDocument: ReturnType<typeof parseAltiumBinaryPcbDoc>
+  padRecords: AltiumPadRecord[]
+  componentNames: Map<number, string>
+  componentPinKeys: Map<number, Map<string, string>>
+}): Map<number, { endpointKeys: Set<string>; hasViaTeardrops: boolean }> {
+  const teardropsByNet = new Map<number, { endpointKeys: Set<string>; hasViaTeardrops: boolean }>()
+  const viaRecords = (params.pcbDocument.primitiveRecords.get("Vias6") ?? []).filter(
+    (record): record is AltiumViaRecord => record instanceof AltiumViaRecord,
+  )
+  const teardropRegions = (
+    params.pcbDocument.primitiveRecords.get("ShapeBasedRegions6") ?? []
+  ).filter(
+    (record): record is AltiumRegionRecord =>
+      record instanceof AltiumRegionRecord && record.getBoolean("TEARDROP") === true,
+  )
+
+  for (const region of teardropRegions) {
+    const netIndex = region.netIndex
+    if (netIndex === undefined) continue
+    const outlinePoints = region.geometry.outline.points
+    const padContacts = params.padRecords.filter(
+      (padRecord) =>
+        padRecord.netIndex === netIndex &&
+        isPadOnRegionLayer(padRecord, region.layer) &&
+        outlinePoints.some((point) => isPointOnPad(point, padRecord)),
+    )
+    const viaContacts = viaRecords.filter((viaRecord) => {
+      const position = viaRecord.position
+      return (
+        viaRecord.netIndex === netIndex &&
+        position !== undefined &&
+        outlinePoints.some(
+          (point) =>
+            Math.hypot(point.x - position.x, point.y - position.y) <=
+            (viaRecord.diameterMils ?? 0) / 2 + TEARDROP_CONTACT_TOLERANCE_MILS,
+        )
+      )
+    })
+    const contacts =
+      padContacts.length > 0 || viaContacts.length > 0
+        ? { padContacts, viaContacts }
+        : getNearestTeardropContact({
+            region,
+            padRecords: params.padRecords,
+            viaRecords,
+          })
+    const teardrops = teardropsByNet.get(netIndex) ?? {
+      endpointKeys: new Set<string>(),
+      hasViaTeardrops: false,
+    }
+
+    for (const padRecord of contacts.padContacts) {
+      const componentIndex = padRecord.componentIndex
+      if (componentIndex === undefined) continue
+      const componentName = params.componentNames.get(componentIndex)
+      const pinKeys = params.componentPinKeys.get(componentIndex)
+      const pinKey = pinKeys && getPinKey(padRecord, pinKeys)
+      if (componentName && pinKey) {
+        teardrops.endpointKeys.add(`${componentName}.${pinKey}`)
+      }
+    }
+    if (contacts.viaContacts.length > 0) teardrops.hasViaTeardrops = true
+    teardropsByNet.set(netIndex, teardrops)
+  }
+
+  return teardropsByNet
+}
+
+function isPadOnRegionLayer(padRecord: AltiumPadRecord, regionLayer?: string): boolean {
+  const padLayer = padRecord.layer?.toUpperCase()
+  const normalizedRegionLayer = regionLayer?.toUpperCase()
+  return padLayer === "MULTILAYER" || padLayer === normalizedRegionLayer
+}
+
+function isPointOnPad(point: { x: number; y: number }, padRecord: AltiumPadRecord): boolean {
+  const geometry = getAltiumPcbPadGeometry({ record: padRecord })
+  const radians = (-geometry.ccwRotationDegrees * Math.PI) / 180
+  const deltaX = point.x - geometry.xMils
+  const deltaY = point.y - geometry.yMils
+  const localX = deltaX * Math.cos(radians) - deltaY * Math.sin(radians)
+  const localY = deltaX * Math.sin(radians) + deltaY * Math.cos(radians)
+  if (geometry.shape === "ROUND" && nearlyEqual(geometry.widthMils, geometry.heightMils)) {
+    return Math.hypot(localX, localY) <= geometry.widthMils / 2 + TEARDROP_CONTACT_TOLERANCE_MILS
+  }
+  return (
+    Math.abs(localX) <= geometry.widthMils / 2 + TEARDROP_CONTACT_TOLERANCE_MILS &&
+    Math.abs(localY) <= geometry.heightMils / 2 + TEARDROP_CONTACT_TOLERANCE_MILS
+  )
+}
+
+function getNearestTeardropContact(params: {
+  region: AltiumRegionRecord
+  padRecords: AltiumPadRecord[]
+  viaRecords: AltiumViaRecord[]
+}): { padContacts: AltiumPadRecord[]; viaContacts: AltiumViaRecord[] } {
+  const netIndex = params.region.netIndex
+  const outlinePoints = params.region.geometry.outline.points
+  const candidates = [
+    ...params.padRecords.flatMap((padRecord) => {
+      const position = padRecord.position
+      if (
+        padRecord.netIndex !== netIndex ||
+        position === undefined ||
+        !isPadOnRegionLayer(padRecord, params.region.layer)
+      ) {
+        return []
+      }
+      return [
+        {
+          kind: "pad" as const,
+          record: padRecord,
+          position,
+        },
+      ]
+    }),
+    ...params.viaRecords.flatMap((viaRecord) => {
+      const position = viaRecord.position
+      if (viaRecord.netIndex !== netIndex || position === undefined) return []
+      return [
+        {
+          kind: "via" as const,
+          record: viaRecord,
+          position,
+        },
+      ]
+    }),
+  ]
+  const nearest = candidates
+    .map((candidate) => ({
+      ...candidate,
+      distance: Math.min(
+        ...outlinePoints.map((point) =>
+          Math.hypot(point.x - candidate.position.x, point.y - candidate.position.y),
+        ),
+      ),
+    }))
+    .sort((first, second) => first.distance - second.distance)[0]
+
+  return {
+    padContacts: nearest?.kind === "pad" ? [nearest.record] : [],
+    viaContacts: nearest?.kind === "via" ? [nearest.record] : [],
   }
 }
 
