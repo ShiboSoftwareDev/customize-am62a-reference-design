@@ -24,6 +24,7 @@ test("loads every prebuilt configuration as valid Circuit JSON", async () => {
     expect(circuitJson.some(({ type }) => type === "source_failed_to_create_component_error")).toBe(
       false,
     )
+    expect(circuitJson.some(({ type }) => type === "pcb_autorouting_error")).toBe(false)
     const renderedElementNames = new Set(
       circuitJson.flatMap((element) =>
         "name" in element && typeof element.name === "string" ? [element.name] : [],

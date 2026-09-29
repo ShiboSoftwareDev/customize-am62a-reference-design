@@ -1,5 +1,5 @@
 export const boosterPackSourceRepositoryUrl = "https://github.com/tscircuit/boosters"
-export const boosterPackSourceCommit = "053bcf5a80b732a7c8c7a9da4926a19bb58fe779"
+export const boosterPackSourceCommit = "8a4c69dd9a7ada8250f83da4cf146e37141b870b"
 
 export type BoosterPackId =
   | "boostxl_edumkii"

@@ -30,6 +30,14 @@ export async function renderBoosterPackConfiguration(params: {
   if (sourceErrors.length > 0) {
     throw new Error(`${params.configuration.id} produced ${sourceErrors.length} source errors`)
   }
+  const autoroutingErrors = circuitJson.filter(
+    (element) => element.type === "pcb_autorouting_error",
+  )
+  if (autoroutingErrors.length > 0) {
+    throw new Error(
+      `${params.configuration.id} produced ${autoroutingErrors.length} autorouting errors`,
+    )
+  }
 
   const renderedElementNames = new Set(
     circuitJson.flatMap((element) =>
