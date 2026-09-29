@@ -8,7 +8,8 @@
     "prepare:generated": "bun scripts/prepare-generated-assets.ts",
     "download:ti-evm-references": "bun scripts/download-ti-evm-references.ts",
     "generate:ti-evm-references": "bun run download:ti-evm-references && bun scripts/generate-ti-evm-reference-definitions.ts",
-    "prebuild:ti-evms": "bun run prepare:generated && bun scripts/prebuild-ti-evms.ts",
+    "prebuild:ti-evms": "bun run prepare:generated && bun scripts/prebuild-ti-evms.ts && bun scripts/prebuild-board-details.ts",
+    "prebuild:board-details": "bun scripts/prebuild-board-details.ts",
     "dev": "bun run prepare:generated && vite",
     "build": "bun run prepare:generated && vite build",
     "test": "bun run prepare:generated && bun test",
@@ -39,6 +40,8 @@
     "bun-match-svg": "0.0.17",
     "bun-types": "1.2.22",
     "circuit-to-svg": "0.0.432",
+    "circuit-json-to-gltf": "0.0.133",
+    "poppygl": "0.0.29",
     "typescript": "5.9.2",
     "vite": "7.1.7"
   },

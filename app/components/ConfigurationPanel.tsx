@@ -81,9 +81,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
       </fieldset>
 
       <div className="source-links">
-        <a href={props.evm.sourceUrl} rel="noreferrer" target="_blank">
-          {props.evm.sourceLabel} ↗
-        </a>
+        <a href={`/?board=${props.evm.id}`}>View PCB, schematic, 3D, and TSX →</a>
       </div>
 
       <button

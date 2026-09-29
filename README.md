@@ -4,6 +4,8 @@ A fast, source-backed configurator for five Texas Instruments evaluation modules
 
 The application does not remove elements from static Circuit JSON and does not use Altium-viewer output as its board source.
 
+Each board also has a shareable detail page linked from the configurator. The page presents checked-in full-board PCB and schematic SVGs, a 3D PNG rendered through the same GLB/PoppyGL pipeline used by the tscircuit snapshot CLI, the board's parameterized `index.circuit.tsx`, and its official TI reference.
+
 ## Boards and configurations
 
 | Board | Purpose | Prebuilt variants | TI reference |
@@ -30,6 +32,8 @@ bun run prebuild:ti-evms
 ```
 
 The prebuild renders every TSX population, rejects failed components, routing errors, and zero-trace PCB output, compresses the Circuit JSON under `public/prebuilt-ti-evms`, and records source and element counts in the manifest.
+
+The same command regenerates `public/board-details` from each full-board Circuit JSON. The detail artifacts are static so the browser does not rerun SVG or 3D rendering.
 
 To regenerate the checked-in TypeScript reference definitions from TI's original Altium files:
 

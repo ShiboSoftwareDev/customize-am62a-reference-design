@@ -1,6 +1,7 @@
 node_modules
 dist
 .cache
+.tscircuit
 .vercel
 .DS_Store
 bun.lock

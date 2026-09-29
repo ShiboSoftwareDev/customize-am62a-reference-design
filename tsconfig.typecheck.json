@@ -14,6 +14,6 @@
       "circuit-json": ["./types/circuit-json.d.ts"]
     }
   },
-  "include": ["app", "api", "lib", "tests", "types", "vite.config.ts"],
+  "include": ["app", "api", "boards", "lib", "tests", "types", "vite.config.ts"],
   "exclude": ["lib/generated"]
 }

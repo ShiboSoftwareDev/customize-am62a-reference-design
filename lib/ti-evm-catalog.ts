@@ -29,6 +29,7 @@ export type TiEvm = {
   description: string
   sourceLabel: string
   sourceUrl: string
+  sourcePath: string
   removableFeatures: TiEvmRemovableFeature[]
   variants: TiEvmVariant[]
 }
@@ -119,6 +120,7 @@ export const skAm62aLp: TiEvm = {
     "TI's 12-layer AM62A edge-AI starter kit, reconstructed as parameterized tscircuit TSX.",
   sourceLabel: "TI SK-AM62A-LP design files",
   sourceUrl: "https://www.ti.com/tool/SK-AM62A-LP",
+  sourcePath: "boards/sk-am62a-lp/index.circuit.tsx",
   removableFeatures: skAm62aFeatures,
   variants: createVariants({
     evmId: "sk-am62a-lp",
@@ -134,6 +136,7 @@ function createEvaluationEvm(params: {
   description: string
   sourceLabel: string
   sourceUrl: string
+  sourcePath: string
   removableFeatures: TiEvmRemovableFeature[]
 }): TiEvm {
   return {
@@ -156,6 +159,7 @@ export const tiEvms: TiEvm[] = [
       "TI's 84-component DRV8307/DRV8308 motor-control evaluation board with three external MOSFET half-bridges.",
     sourceLabel: "TI DRV8307EVM Altium release",
     sourceUrl: "https://www.ti.com/tool/DRV8307EVM",
+    sourcePath: "boards/drv8307evm/index.circuit.tsx",
     removableFeatures: [
       {
         id: "onboard-speed-control",
@@ -177,6 +181,7 @@ export const tiEvms: TiEvm[] = [
       "TI's medium-complexity isolated 5-V/4-A flyback converter with primary controller, transformer, secondary feedback, and protection networks.",
     sourceLabel: "TI LM5155EVM-FLY Altium release",
     sourceUrl: "https://www.ti.com/tool/LM5155EVM-FLY",
+    sourcePath: "boards/lm5155evm-fly/index.circuit.tsx",
     removableFeatures: [
       {
         id: "test-and-measurement",
@@ -199,6 +204,7 @@ export const tiEvms: TiEvm[] = [
       "TI's 169-component high-power LM251772 evaluation module with synchronous four-switch power stage and dense configuration network.",
     sourceLabel: "TI LM251772EVM-PD Altium release",
     sourceUrl: "https://www.ti.com/tool/LM251772EVM-PD",
+    sourcePath: "boards/lm251772evm-pd/index.circuit.tsx",
     removableFeatures: [
       {
         id: "test-and-measurement",
@@ -221,6 +227,7 @@ export const tiEvms: TiEvm[] = [
       "TI's 157-component high-voltage GaN half-bridge platform with isolated bias, PWM conditioning, fault reporting, and power terminals.",
     sourceLabel: "TI LMG342X-BB-EVM Altium release",
     sourceUrl: "https://www.ti.com/tool/LMG342X-BB-EVM",
+    sourcePath: "boards/lmg342x-bb-evm/index.circuit.tsx",
     removableFeatures: [
       {
         id: "measurement-interface",

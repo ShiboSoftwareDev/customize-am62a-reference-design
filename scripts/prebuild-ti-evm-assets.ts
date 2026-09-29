@@ -90,12 +90,12 @@ export async function prebuildTiEvmAssets(): Promise<void> {
       {
         name: "Texas Instruments SK-AM62A-LP",
         url: skAm62aLp.sourceUrl,
-        source: "lib/generated/am62a-board.tsx",
+        source: skAm62aLp.sourcePath,
       },
       ...tiEvms.slice(1).map((evm) => ({
         name: `Texas Instruments ${evm.name}`,
         url: evm.sourceUrl,
-        source: `lib/generated/ti-evms/${evm.id}.generated.ts`,
+        source: evm.sourcePath,
       })),
     ],
   }

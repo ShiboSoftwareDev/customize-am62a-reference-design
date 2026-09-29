@@ -2,6 +2,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { useMemo, useState } from "react"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
+import { BoardDetailPage } from "app/components/BoardDetailPage"
 import { useEvmRender } from "app/hooks/use-evm-render"
 import {
   getTiEvm,
@@ -12,6 +13,15 @@ import {
 } from "lib/ti-evm-catalog"
 
 export function App() {
+  const detailBoardId = new URLSearchParams(window.location.search).get("board")
+  const detailBoard = tiEvms.find(({ id }) => id === detailBoardId)
+
+  if (detailBoard) return <BoardDetailPage evm={detailBoard} />
+
+  return <Configurator />
+}
+
+function Configurator() {
   const [evmId, setEvmId] = useState<TiEvmId>(tiEvms[0].id)
   const evm = getTiEvm(evmId)
   const [variantId, setVariantId] = useState(evm.variants[0].id)
