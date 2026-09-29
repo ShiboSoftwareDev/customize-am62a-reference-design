@@ -40,7 +40,7 @@ bun run format:check
 bun run build
 ```
 
-Tests use one focused case per file. They verify catalog provenance, unique option populations, module dependencies, generated-runtime integrity, full and minimal SK-AM62A-LP renders, compressed artifact loading, and routed output for every prebuilt board.
+Tests use one focused case per file. They verify catalog provenance, unique option populations, module dependencies, generated-runtime integrity, full and minimal SK-AM62A-LP renders, compressed artifact loading, and routed output for every prebuilt board. Five visual snapshot tests also preserve the full-board PCB and schematic SVG for each EVM.
 
 ## Implementation notes
 
