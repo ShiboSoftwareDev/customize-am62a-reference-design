@@ -4,6 +4,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
 import { evaluateBoard, evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
 import { skAm62aLp, tiEvms } from "../lib/ti-evm-catalog"
+import { prebuildTiEvmSchematicAssets } from "./prebuild-ti-evm-schematic-assets"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -14,6 +15,7 @@ type ManifestArtifact = {
   source: string
   sourceComponentCount: number
   sourceTraceCount: number
+  schematicOutput?: string
 }
 
 export async function prebuildTiEvmAssets(): Promise<void> {
@@ -43,7 +45,8 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   }
 
   const boards = [{ id: skAm62aLp.id, artifacts }]
-  for (const evm of tiEvms.filter(({ id }) => id !== skAm62aLp.id)) {
+  for (const evm of tiEvms) {
+    if (evm.id === "sk-am62a-lp") continue
     const evmArtifacts: ManifestArtifact[] = []
     for (const variant of evm.variants) {
       if (!variant.evmOptions) throw new Error(`${evm.name} ${variant.label} has no TSX options`)
@@ -73,16 +76,21 @@ export async function prebuildTiEvmAssets(): Promise<void> {
       if (pcbTraceCount === 0) {
         throw new Error(`${evm.name} ${variant.label} produced no routed PCB traces`)
       }
-      evmArtifacts.push(
-        await writeCompressedCircuitJson({
-          outputPath: variant.circuitJsonUrl,
-          circuitJson: result.circuitJson,
-          source: `Parameterized ${evm.name} tscircuit TSX`,
-        }),
-      )
+      const manifestArtifact = await writeCompressedCircuitJson({
+        outputPath: variant.circuitJsonUrl,
+        circuitJson: result.circuitJson,
+        source: `Parameterized ${evm.name} tscircuit TSX`,
+      })
+      if (!variant.schematicCircuitJsonUrl) {
+        throw new Error(`${evm.name} ${variant.label} has no schematic artifact URL`)
+      }
+      manifestArtifact.schematicOutput = variant.schematicCircuitJsonUrl.replace(/^\//u, "")
+      evmArtifacts.push(manifestArtifact)
     }
     boards.push({ id: evm.id, artifacts: evmArtifacts })
   }
+
+  await prebuildTiEvmSchematicAssets()
 
   const manifest = {
     boards,
@@ -116,10 +124,10 @@ async function writeCompressedCircuitJson(artifact: {
 }): Promise<ManifestArtifact> {
   const circuitJson = removeNullProperties(artifact.circuitJson)
   validateCoreOutput(circuitJson, artifact.source)
-  const relativeOutputPath = artifact.outputPath.replace(/^\//u, "")
-  const outputPath = resolve(import.meta.dir, `../public/${relativeOutputPath}`)
-  await mkdir(resolve(outputPath, ".."), { recursive: true })
-  await writeFile(outputPath, gzipSync(strToU8(JSON.stringify(circuitJson)), { level: 9 }))
+  const relativeOutputPath = await writeCompressedCircuitJsonFile({
+    outputPath: artifact.outputPath,
+    circuitJson,
+  })
   return {
     elementCount: circuitJson.length,
     output: relativeOutputPath,
@@ -128,6 +136,20 @@ async function writeCompressedCircuitJson(artifact: {
     sourceComponentCount: circuitJson.filter(({ type }) => type === "source_component").length,
     sourceTraceCount: circuitJson.filter(({ type }) => type === "source_trace").length,
   }
+}
+
+async function writeCompressedCircuitJsonFile(artifact: {
+  outputPath: string
+  circuitJson: AnyCircuitElement[]
+}): Promise<string> {
+  const relativeOutputPath = artifact.outputPath.replace(/^\//u, "")
+  const outputPath = resolve(import.meta.dir, `../public/${relativeOutputPath}`)
+  await mkdir(resolve(outputPath, ".."), { recursive: true })
+  await writeFile(
+    outputPath,
+    gzipSync(strToU8(JSON.stringify(removeNullProperties(artifact.circuitJson))), { level: 9 }),
+  )
+  return relativeOutputPath
 }
 
 function validateCoreOutput(circuitJson: AnyCircuitElement[], source: string): void {

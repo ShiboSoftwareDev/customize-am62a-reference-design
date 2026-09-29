@@ -20,6 +20,9 @@ for (const evm of tiEvms) {
   if (!fullBoard) throw new Error(`${evm.name} has no full-board variant`)
 
   const circuitJson = await readCompressedCircuitJson(fullBoard.circuitJsonUrl)
+  const schematicCircuitJson = await readCompressedCircuitJson(
+    fullBoard.schematicCircuitJsonUrl ?? fullBoard.circuitJsonUrl,
+  )
   const pcbSvg = stripTrailingWhitespace(
     convertCircuitJsonToPcbSvg(circuitJson, {
       backgroundColor: "#07100c",
@@ -32,10 +35,10 @@ for (const evm of tiEvms) {
     }),
   )
   const schematicSvg = stripTrailingWhitespace(
-    convertCircuitJsonToSchematicSvg(circuitJson, {
+    convertCircuitJsonToSchematicSvg(schematicCircuitJson, {
       height: 900,
       includeVersion: true,
-      width: 1200,
+      width: fullBoard.schematicCircuitJsonUrl ? 1800 : 1200,
     }),
   )
   const threeDimensionalPng = await renderThreeDimensionalPng(circuitJson)

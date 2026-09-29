@@ -17,5 +17,10 @@ test("catalog exposes five real TI EVM product references", () => {
     expect(new Set(evm.variants.map(({ circuitJsonUrl }) => circuitJsonUrl)).size).toBe(
       evm.variants.length,
     )
+    if (evm.id !== "sk-am62a-lp") {
+      expect(
+        new Set(evm.variants.map(({ schematicCircuitJsonUrl }) => schematicCircuitJsonUrl)).size,
+      ).toBe(evm.variants.length)
+    }
   }
 })

@@ -20,6 +20,12 @@ const definitions: Record<ParameterizedTiEvmId, ReferenceEvmDefinition> = {
   "lmg342x-bb-evm": lmg342xBbEvmDefinition,
 }
 
+export function getParameterizedTiEvmDefinition(
+  evmId: ParameterizedTiEvmId,
+): ReferenceEvmDefinition {
+  return definitions[evmId]
+}
+
 export function ParameterizedTiEvm(props: {
   evmId: ParameterizedTiEvmId
   options: ParameterizedTiEvmOptions

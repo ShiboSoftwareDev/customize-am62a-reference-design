@@ -1,6 +1,8 @@
 import { expect, test } from "bun:test"
 import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import { getParameterizedTiEvmDefinition } from "lib/evms/parameterized-ti-evms"
+import { tiEvms } from "lib/ti-evm-catalog"
 
 type PrebuiltManifest = {
   boards: Array<{
@@ -12,6 +14,7 @@ type PrebuiltManifest = {
       source: string
       sourceComponentCount: number
       sourceTraceCount: number
+      schematicOutput?: string
     }>
   }>
   sources: Array<{ name: string; source: string; url: string }>
@@ -46,6 +49,39 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
     }
   }
 
+  for (const evm of tiEvms) {
+    if (evm.id === "sk-am62a-lp") continue
+    const definition = getParameterizedTiEvmDefinition(evm.id)
+    for (const variant of evm.variants) {
+      expect(variant.schematicCircuitJsonUrl).toBeDefined()
+      const schematic = await loadCompressedCircuitJson(
+        repositoryRoot,
+        variant.schematicCircuitJsonUrl ?? "",
+      )
+      expect(schematic.filter(({ type }) => type === "schematic_component").length).toBeGreaterThan(
+        10,
+      )
+      const removedComponentNames = new Set(
+        definition.components.flatMap((component) =>
+          component.removableFeatureId !== undefined &&
+          variant.removedFeatureIds.includes(component.removableFeatureId)
+            ? [component.name]
+            : [],
+        ),
+      )
+      const renderedComponentNames = new Set(
+        schematic.flatMap((element) =>
+          element.type === "source_component" && typeof element.name === "string"
+            ? [element.name]
+            : [],
+        ),
+      )
+      for (const componentName of removedComponentNames) {
+        expect(renderedComponentNames.has(componentName)).toBe(false)
+      }
+    }
+  }
+
   const fullBoard = await loadPrebuiltArtifact(repositoryRoot, "full-board.circuit.json.gz")
   const board = fullBoard.find(({ type }) => type === "pcb_board")
   if (!board || board.type !== "pcb_board") throw new Error("Full TSX render has no PCB board")
@@ -60,5 +96,10 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
 
 async function loadPrebuiltArtifact(repositoryRoot: string, fileName: string) {
   const path = resolve(repositoryRoot, "public/prebuilt-ti-evms/sk-am62a-lp", fileName)
+  return parsePrebuiltCircuitJson(new Uint8Array(await Bun.file(path).arrayBuffer()))
+}
+
+async function loadCompressedCircuitJson(repositoryRoot: string, publicUrl: string) {
+  const path = resolve(repositoryRoot, "public", publicUrl.replace(/^\//u, ""))
   return parsePrebuiltCircuitJson(new Uint8Array(await Bun.file(path).arrayBuffer()))
 }

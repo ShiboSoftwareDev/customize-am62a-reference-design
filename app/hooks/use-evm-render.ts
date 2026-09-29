@@ -35,13 +35,16 @@ export function useEvmRender(request: {
 
     void (async () => {
       try {
-        const nextCircuitJson = await loadCircuitJson(
-          request.variant.circuitJsonUrl,
-          abortController.signal,
-        )
+        const [nextPcbCircuitJson, nextSchematicCircuitJson] = await Promise.all([
+          loadCircuitJson(request.variant.circuitJsonUrl, abortController.signal),
+          loadCircuitJson(
+            request.variant.schematicCircuitJsonUrl ?? request.variant.circuitJsonUrl,
+            abortController.signal,
+          ),
+        ])
         if (requestIndex !== requestIndexRef.current) return
-        setPcbCircuitJson(nextCircuitJson)
-        setSchematicCircuitJson(nextCircuitJson)
+        setPcbCircuitJson(nextPcbCircuitJson)
+        setSchematicCircuitJson(nextSchematicCircuitJson)
       } catch (loadError) {
         if (!abortController.signal.aborted && requestIndex === requestIndexRef.current) {
           setError(loadError instanceof Error ? loadError.message : String(loadError))

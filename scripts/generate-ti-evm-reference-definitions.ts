@@ -8,6 +8,7 @@ import {
   parseAltiumBinaryPcbDoc,
 } from "altiumts"
 import type { AnyCircuitElement } from "circuit-json"
+import { gzipSync, strToU8 } from "fflate"
 import type {
   ReferenceComponent,
   ReferenceEvmDefinition,
@@ -170,7 +171,7 @@ const outputDirectory = resolve(import.meta.dir, "../lib/generated/ti-evms")
 await mkdir(outputDirectory, { recursive: true })
 
 for (const reference of references) {
-  const definition = await createDefinition(reference)
+  const { definition, referenceSchematicCircuitJson } = await createDefinition(reference)
   const source = [
     'import type { ReferenceEvmDefinition } from "../../evms/reference-evm-types"',
     "",
@@ -180,12 +181,19 @@ for (const reference of references) {
     "",
   ].join("\n")
   await Bun.write(resolve(outputDirectory, reference.outputName), source)
+  await Bun.write(
+    resolve(outputDirectory, `${reference.id}.schematic.circuit.json.gz`),
+    gzipSync(strToU8(JSON.stringify(referenceSchematicCircuitJson)), { level: 9 }),
+  )
   console.log(
     `${reference.name}: ${definition.components.length} placed components, ${definition.nets.length} routed nets`,
   )
 }
 
-async function createDefinition(reference: ReferenceInput): Promise<ReferenceEvmDefinition> {
+async function createDefinition(reference: ReferenceInput): Promise<{
+  definition: ReferenceEvmDefinition
+  referenceSchematicCircuitJson: AnyCircuitElement[]
+}> {
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
   const pcbCircuitJson = convertAltiumToCircuitJson(pcbBytes, {
@@ -341,7 +349,7 @@ async function createDefinition(reference: ReferenceInput): Promise<ReferenceEvm
     populatedComponentIndexes,
   })
 
-  return {
+  const definition: ReferenceEvmDefinition = {
     id: reference.id,
     name: reference.name,
     sourceUrl: reference.sourceUrl,
@@ -362,6 +370,10 @@ async function createDefinition(reference: ReferenceInput): Promise<ReferenceEvm
     nets,
     standaloneHoles,
     silkscreen,
+  }
+  return {
+    definition,
+    referenceSchematicCircuitJson: schematicCircuitJsons[0],
   }
 }
 

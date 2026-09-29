@@ -17,6 +17,7 @@ export type TiEvmVariant = {
   id: string
   label: string
   circuitJsonUrl: string
+  schematicCircuitJsonUrl?: string
   removedFeatureIds: string[]
   sourceSelection?: OptionalModuleSelection
   evmOptions?: ParameterizedTiEvmOptions
@@ -87,6 +88,10 @@ function createVariants(params: {
           ? "Minimal board"
           : `Remove ${removedFeatures.map(({ label }) => label).join(" and ")}`,
       circuitJsonUrl: `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`,
+      schematicCircuitJsonUrl:
+        params.evmId === "sk-am62a-lp"
+          ? undefined
+          : `/prebuilt-ti-evms/${params.evmId}/${id}.schematic.circuit.json.gz`,
       removedFeatureIds,
       ...params.createPopulation(removedFeatureIds),
     }
