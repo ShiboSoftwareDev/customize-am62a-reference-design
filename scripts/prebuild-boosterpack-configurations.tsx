@@ -1,92 +1,138 @@
-import { mkdir, readdir, unlink } from "node:fs/promises"
+import { mkdir, mkdtemp, rename, rm } from "node:fs/promises"
+import { availableParallelism } from "node:os"
 import { resolve } from "node:path"
-import { Circuit } from "@tscircuit/core"
-import AudioBoosterPack from "@tsci/tscircuit.boosters/boostxl-audio/index.circuit.tsx"
-import BuildingAutomationSensorsBoosterPack from "@tsci/tscircuit.boosters/boostxl-bassensors/index.circuit.tsx"
-import WirelessBoosterPack from "@tsci/tscircuit.boosters/boostxl-cc2650ma/index.circuit.tsx"
-import EducationalBoosterPack from "@tsci/tscircuit.boosters/boostxl-edumkii/index.circuit.tsx"
-import MotorDriverBoosterPack from "@tsci/tscircuit.boosters/boost-drv8848/index.circuit.tsx"
-import type { AnyCircuitElement } from "circuit-json"
-import { gzipSync, strToU8 } from "fflate"
-import type { ReactNode } from "react"
 import {
   boosterPackBoards,
   boosterPackSourceCommit,
+  type BoosterPackBoard,
+  type BoosterPackConfiguration,
   type BoosterPackConfigurationId,
   type BoosterPackId,
 } from "../lib/boosterpack-configurations"
-import { filterCircuitJsonByElementNames } from "../lib/filter-circuit-json-by-element-names"
+import type { ConfigurationRenderResult } from "./render-boosterpack-configuration"
 
-const boardComponents: Record<BoosterPackId, () => ReactNode> = {
-  boostxl_edumkii: EducationalBoosterPack,
-  boost_drv8848: MotorDriverBoosterPack,
-  boostxl_bassensors: BuildingAutomationSensorsBoosterPack,
-  boostxl_audio: AudioBoosterPack,
-  boostxl_cc2650ma: WirelessBoosterPack,
-}
-
-const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-boosterpacks")
-await mkdir(outputDirectory, { recursive: true })
-for (const fileName of await readdir(outputDirectory)) {
-  if (fileName.endsWith(".circuit.json.gz") || fileName === "manifest.json") {
-    await unlink(resolve(outputDirectory, fileName))
-  }
-}
-
-const manifest: Array<{
+type ManifestEntry = {
   boardId: BoosterPackId
   configurationId: BoosterPackConfigurationId
   removedFeatureIds: string[]
   circuitElementCount: number
   compressedBytes: number
-}> = []
+}
 
-for (const board of boosterPackBoards) {
-  const startedAt = performance.now()
-  const circuit = new Circuit({ platform: { drcChecksDisabled: true } })
-  circuit._featureMspSchematicTraceRouting = false
-  circuit.add(boardComponents[board.id]())
-  await circuit.renderUntilSettled()
+type PrebuildTask = {
+  board: BoosterPackBoard
+  configuration: BoosterPackConfiguration
+}
 
-  const fullCircuitJson = circuit.getCircuitJson() as AnyCircuitElement[]
-  const sourceErrors = fullCircuitJson.filter((element) =>
-    element.type.startsWith("source_failed_to_create_component_error"),
+const renderConcurrency = Math.min(4, availableParallelism())
+const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-boosterpacks")
+const outputParentDirectory = resolve(outputDirectory, "..")
+const workerScriptPath = resolve(import.meta.dir, "render-boosterpack-configuration-worker.ts")
+await mkdir(outputParentDirectory, { recursive: true })
+const stagingDirectory = await mkdtemp(resolve(outputParentDirectory, ".prebuilt-boosterpacks-"))
+const prebuildTasks = boosterPackBoards.flatMap((board) =>
+  board.configurations.map((configuration) => ({ board, configuration })),
+)
+
+try {
+  const manifest = await mapWithConcurrency({
+    items: prebuildTasks,
+    concurrency: renderConcurrency,
+    transform: renderConfigurationInSubprocess,
+  })
+
+  if (
+    manifest.length !== boosterPackBoards.flatMap(({ configurations }) => configurations).length
+  ) {
+    throw new Error("Prebuilt manifest does not cover every BoosterPack configuration")
+  }
+
+  await Bun.write(
+    resolve(stagingDirectory, "manifest.json"),
+    `${JSON.stringify({ sourceCommit: boosterPackSourceCommit, configurations: manifest }, null, 2)}\n`,
   )
-  if (sourceErrors.length > 0) {
-    throw new Error(`${board.id} produced ${sourceErrors.length} source errors`)
+  await rm(outputDirectory, { recursive: true, force: true })
+  await rename(stagingDirectory, outputDirectory)
+} catch (error) {
+  await rm(stagingDirectory, { recursive: true, force: true })
+  throw error
+}
+
+async function renderConfigurationInSubprocess(params: PrebuildTask): Promise<ManifestEntry> {
+  const startedAt = performance.now()
+  const subprocess = Bun.spawn(
+    [
+      process.execPath,
+      workerScriptPath,
+      params.board.id,
+      params.configuration.id,
+      stagingDirectory,
+    ],
+    { stdout: "pipe", stderr: "inherit" },
+  )
+  const workerOutput = await new Response(subprocess.stdout).text()
+  const exitCode = await subprocess.exited
+  if (exitCode !== 0) {
+    throw new Error(`${params.configuration.id} render exited with code ${exitCode}`)
+  }
+
+  const workerResult: unknown = JSON.parse(workerOutput)
+  if (!isConfigurationRenderResult(workerResult)) {
+    throw new Error(`${params.configuration.id} render returned an invalid result`)
   }
 
   console.log(
-    `${board.id}: rendered ${fullCircuitJson.length} elements in ${(
+    `${params.configuration.id}: rendered ${workerResult.circuitElementCount} elements in ${(
       (performance.now() - startedAt) / 1000
-    ).toFixed(1)}s; materializing ${board.configurations.length} combinations`,
+    ).toFixed(1)}s`,
   )
 
-  for (const configuration of board.configurations) {
-    const circuitJson = filterCircuitJsonByElementNames({
-      circuitJson: fullCircuitJson,
-      excludedElementNames: configuration.excludedElementNames,
-    })
-    const compressedCircuitJson = gzipSync(strToU8(JSON.stringify(circuitJson)), { level: 9 })
-    await Bun.write(
-      resolve(outputDirectory, `${configuration.id}.circuit.json.gz`),
-      compressedCircuitJson,
-    )
-    manifest.push({
-      boardId: board.id,
-      configurationId: configuration.id,
-      removedFeatureIds: configuration.removedFeatureIds,
-      circuitElementCount: circuitJson.length,
-      compressedBytes: compressedCircuitJson.byteLength,
-    })
+  return {
+    boardId: params.board.id,
+    configurationId: params.configuration.id,
+    removedFeatureIds: params.configuration.removedFeatureIds,
+    circuitElementCount: workerResult.circuitElementCount,
+    compressedBytes: workerResult.compressedBytes,
   }
 }
 
-if (manifest.length !== boosterPackBoards.flatMap(({ configurations }) => configurations).length) {
-  throw new Error("Prebuilt manifest does not cover every BoosterPack configuration")
+function isConfigurationRenderResult(value: unknown): value is ConfigurationRenderResult {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "circuitElementCount" in value &&
+    typeof value.circuitElementCount === "number" &&
+    "compressedBytes" in value &&
+    typeof value.compressedBytes === "number"
+  )
 }
 
-await Bun.write(
-  resolve(outputDirectory, "manifest.json"),
-  `${JSON.stringify({ sourceCommit: boosterPackSourceCommit, configurations: manifest }, null, 2)}\n`,
-)
+async function mapWithConcurrency<Item, Result>(params: {
+  items: Item[]
+  concurrency: number
+  transform: (item: Item) => Promise<Result>
+}): Promise<Result[]> {
+  const results = new Array<Result>(params.items.length)
+  let nextIndex = 0
+  let firstError: unknown
+  let hasFailed = false
+
+  const workers = Array.from(
+    { length: Math.min(params.concurrency, params.items.length) },
+    async () => {
+      while (nextIndex < params.items.length && !hasFailed) {
+        const index = nextIndex
+        nextIndex += 1
+        try {
+          results[index] = await params.transform(params.items[index])
+        } catch (error) {
+          firstError = error
+          hasFailed = true
+        }
+      }
+    },
+  )
+  await Promise.all(workers)
+  if (hasFailed) throw firstError
+  return results
+}

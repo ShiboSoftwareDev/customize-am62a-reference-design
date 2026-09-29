@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@tsci/tscircuit.boosters": "github:tscircuit/boosters#4b8b330cf06cee8109edab00d8bba5973925da76",
+    "@tsci/tscircuit.boosters": "github:tscircuit/boosters#053bcf5a80b732a7c8c7a9da4926a19bb58fe779",
     "@types/node": "24.5.2",
     "@types/react": "19.1.16",
     "@types/react-dom": "19.1.9",

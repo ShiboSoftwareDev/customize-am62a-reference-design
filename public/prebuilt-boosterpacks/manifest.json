@@ -1,12 +1,12 @@
 {
-  "sourceCommit": "4b8b330cf06cee8109edab00d8bba5973925da76",
+  "sourceCommit": "053bcf5a80b732a7c8c7a9da4926a19bb58fe779",
   "configurations": [
     {
       "boardId": "boostxl_edumkii",
       "configurationId": "boostxl_edumkii_full",
       "removedFeatureIds": [],
-      "circuitElementCount": 2154,
-      "compressedBytes": 101167
+      "circuitElementCount": 2207,
+      "compressedBytes": 105910
     },
     {
       "boardId": "boostxl_edumkii",
@@ -14,8 +14,8 @@
       "removedFeatureIds": [
         "display"
       ],
-      "circuitElementCount": 1991,
-      "compressedBytes": 94327
+      "circuitElementCount": 2027,
+      "compressedBytes": 95442
     },
     {
       "boardId": "boostxl_edumkii",
@@ -23,8 +23,8 @@
       "removedFeatureIds": [
         "controls"
       ],
-      "circuitElementCount": 1858,
-      "compressedBytes": 90415
+      "circuitElementCount": 1896,
+      "compressedBytes": 88919
     },
     {
       "boardId": "boostxl_edumkii",
@@ -33,8 +33,8 @@
         "display",
         "controls"
       ],
-      "circuitElementCount": 1695,
-      "compressedBytes": 83900
+      "circuitElementCount": 1701,
+      "compressedBytes": 70771
     },
     {
       "boardId": "boostxl_edumkii",
@@ -42,8 +42,8 @@
       "removedFeatureIds": [
         "sensors"
       ],
-      "circuitElementCount": 1779,
-      "compressedBytes": 85047
+      "circuitElementCount": 1804,
+      "compressedBytes": 80225
     },
     {
       "boardId": "boostxl_edumkii",
@@ -52,8 +52,8 @@
         "display",
         "sensors"
       ],
-      "circuitElementCount": 1622,
-      "compressedBytes": 78898
+      "circuitElementCount": 1616,
+      "compressedBytes": 64302
     },
     {
       "boardId": "boostxl_edumkii",
@@ -62,8 +62,8 @@
         "controls",
         "sensors"
       ],
-      "circuitElementCount": 1490,
-      "compressedBytes": 74956
+      "circuitElementCount": 1494,
+      "compressedBytes": 61906
     },
     {
       "boardId": "boostxl_edumkii",
@@ -73,8 +73,8 @@
         "controls",
         "sensors"
       ],
-      "circuitElementCount": 1333,
-      "compressedBytes": 68457
+      "circuitElementCount": 1320,
+      "compressedBytes": 51811
     },
     {
       "boardId": "boostxl_edumkii",
@@ -82,8 +82,8 @@
       "removedFeatureIds": [
         "microphone"
       ],
-      "circuitElementCount": 1888,
-      "compressedBytes": 92939
+      "circuitElementCount": 1903,
+      "compressedBytes": 92338
     },
     {
       "boardId": "boostxl_edumkii",
@@ -92,8 +92,8 @@
         "display",
         "microphone"
       ],
-      "circuitElementCount": 1725,
-      "compressedBytes": 86430
+      "circuitElementCount": 1727,
+      "compressedBytes": 78549
     },
     {
       "boardId": "boostxl_edumkii",
@@ -102,8 +102,8 @@
         "controls",
         "microphone"
       ],
-      "circuitElementCount": 1600,
-      "compressedBytes": 83600
+      "circuitElementCount": 1591,
+      "compressedBytes": 72100
     },
     {
       "boardId": "boostxl_edumkii",
@@ -113,8 +113,8 @@
         "controls",
         "microphone"
       ],
-      "circuitElementCount": 1437,
-      "compressedBytes": 76757
+      "circuitElementCount": 1416,
+      "compressedBytes": 62590
     },
     {
       "boardId": "boostxl_edumkii",
@@ -123,8 +123,8 @@
         "sensors",
         "microphone"
       ],
-      "circuitElementCount": 1510,
-      "compressedBytes": 77068
+      "circuitElementCount": 1504,
+      "compressedBytes": 68069
     },
     {
       "boardId": "boostxl_edumkii",
@@ -134,8 +134,8 @@
         "sensors",
         "microphone"
       ],
-      "circuitElementCount": 1353,
-      "compressedBytes": 70622
+      "circuitElementCount": 1316,
+      "compressedBytes": 55460
     },
     {
       "boardId": "boostxl_edumkii",
@@ -145,8 +145,8 @@
         "sensors",
         "microphone"
       ],
-      "circuitElementCount": 1229,
-      "compressedBytes": 67548
+      "circuitElementCount": 1194,
+      "compressedBytes": 50333
     },
     {
       "boardId": "boostxl_edumkii",
@@ -157,8 +157,8 @@
         "sensors",
         "microphone"
       ],
-      "circuitElementCount": 1072,
-      "compressedBytes": 61180
+      "circuitElementCount": 1022,
+      "compressedBytes": 40818
     },
     {
       "boardId": "boostxl_edumkii",
@@ -166,8 +166,8 @@
       "removedFeatureIds": [
         "outputs"
       ],
-      "circuitElementCount": 1789,
-      "compressedBytes": 90394
+      "circuitElementCount": 1787,
+      "compressedBytes": 88707
     },
     {
       "boardId": "boostxl_edumkii",
@@ -176,8 +176,8 @@
         "display",
         "outputs"
       ],
-      "circuitElementCount": 1626,
-      "compressedBytes": 83885
+      "circuitElementCount": 1610,
+      "compressedBytes": 75822
     },
     {
       "boardId": "boostxl_edumkii",
@@ -186,8 +186,8 @@
         "controls",
         "outputs"
       ],
-      "circuitElementCount": 1497,
-      "compressedBytes": 80476
+      "circuitElementCount": 1469,
+      "compressedBytes": 66947
     },
     {
       "boardId": "boostxl_edumkii",
@@ -197,8 +197,8 @@
         "controls",
         "outputs"
       ],
-      "circuitElementCount": 1334,
-      "compressedBytes": 73430
+      "circuitElementCount": 1296,
+      "compressedBytes": 58631
     },
     {
       "boardId": "boostxl_edumkii",
@@ -207,8 +207,8 @@
         "sensors",
         "outputs"
       ],
-      "circuitElementCount": 1417,
-      "compressedBytes": 74630
+      "circuitElementCount": 1384,
+      "compressedBytes": 61499
     },
     {
       "boardId": "boostxl_edumkii",
@@ -218,8 +218,8 @@
         "sensors",
         "outputs"
       ],
-      "circuitElementCount": 1260,
-      "compressedBytes": 68206
+      "circuitElementCount": 1205,
+      "compressedBytes": 50809
     },
     {
       "boardId": "boostxl_edumkii",
@@ -229,8 +229,8 @@
         "sensors",
         "outputs"
       ],
-      "circuitElementCount": 1132,
-      "compressedBytes": 64605
+      "circuitElementCount": 1073,
+      "compressedBytes": 44650
     },
     {
       "boardId": "boostxl_edumkii",
@@ -241,8 +241,8 @@
         "sensors",
         "outputs"
       ],
-      "circuitElementCount": 975,
-      "compressedBytes": 58438
+      "circuitElementCount": 900,
+      "compressedBytes": 35497
     },
     {
       "boardId": "boostxl_edumkii",
@@ -251,8 +251,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 1523,
-      "compressedBytes": 82729
+      "circuitElementCount": 1473,
+      "compressedBytes": 70903
     },
     {
       "boardId": "boostxl_edumkii",
@@ -262,8 +262,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 1360,
-      "compressedBytes": 75730
+      "circuitElementCount": 1296,
+      "compressedBytes": 61686
     },
     {
       "boardId": "boostxl_edumkii",
@@ -273,8 +273,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 1239,
-      "compressedBytes": 73083
+      "circuitElementCount": 1175,
+      "compressedBytes": 58585
     },
     {
       "boardId": "boostxl_edumkii",
@@ -285,8 +285,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 1076,
-      "compressedBytes": 66103
+      "circuitElementCount": 1006,
+      "compressedBytes": 48528
     },
     {
       "boardId": "boostxl_edumkii",
@@ -296,8 +296,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 1148,
-      "compressedBytes": 66242
+      "circuitElementCount": 1075,
+      "compressedBytes": 48935
     },
     {
       "boardId": "boostxl_edumkii",
@@ -308,8 +308,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 991,
-      "compressedBytes": 59769
+      "circuitElementCount": 907,
+      "compressedBytes": 41639
     },
     {
       "boardId": "boostxl_edumkii",
@@ -320,8 +320,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 871,
-      "compressedBytes": 57139
+      "circuitElementCount": 778,
+      "compressedBytes": 34461
     },
     {
       "boardId": "boostxl_edumkii",
@@ -333,8 +333,8 @@
         "microphone",
         "outputs"
       ],
-      "circuitElementCount": 714,
-      "compressedBytes": 50740
+      "circuitElementCount": 604,
+      "compressedBytes": 23913
     },
     {
       "boardId": "boostxl_edumkii",
@@ -342,8 +342,8 @@
       "removedFeatureIds": [
         "expansion"
       ],
-      "circuitElementCount": 2074,
-      "compressedBytes": 98055
+      "circuitElementCount": 2110,
+      "compressedBytes": 94714
     },
     {
       "boardId": "boostxl_edumkii",
@@ -352,8 +352,8 @@
         "display",
         "expansion"
       ],
-      "circuitElementCount": 1911,
-      "compressedBytes": 91048
+      "circuitElementCount": 1936,
+      "compressedBytes": 86921
     },
     {
       "boardId": "boostxl_edumkii",
@@ -362,8 +362,8 @@
         "controls",
         "expansion"
       ],
-      "circuitElementCount": 1779,
-      "compressedBytes": 87388
+      "circuitElementCount": 1809,
+      "compressedBytes": 79597
     },
     {
       "boardId": "boostxl_edumkii",
@@ -373,8 +373,8 @@
         "controls",
         "expansion"
       ],
-      "circuitElementCount": 1616,
-      "compressedBytes": 80859
+      "circuitElementCount": 1632,
+      "compressedBytes": 69494
     },
     {
       "boardId": "boostxl_edumkii",
@@ -383,8 +383,8 @@
         "sensors",
         "expansion"
       ],
-      "circuitElementCount": 1705,
-      "compressedBytes": 82788
+      "circuitElementCount": 1712,
+      "compressedBytes": 72590
     },
     {
       "boardId": "boostxl_edumkii",
@@ -394,8 +394,8 @@
         "sensors",
         "expansion"
       ],
-      "circuitElementCount": 1548,
-      "compressedBytes": 76503
+      "circuitElementCount": 1535,
+      "compressedBytes": 62416
     },
     {
       "boardId": "boostxl_edumkii",
@@ -405,8 +405,8 @@
         "sensors",
         "expansion"
       ],
-      "circuitElementCount": 1417,
-      "compressedBytes": 72507
+      "circuitElementCount": 1409,
+      "compressedBytes": 55542
     },
     {
       "boardId": "boostxl_edumkii",
@@ -417,8 +417,8 @@
         "sensors",
         "expansion"
       ],
-      "circuitElementCount": 1260,
-      "compressedBytes": 66180
+      "circuitElementCount": 1217,
+      "compressedBytes": 45910
     },
     {
       "boardId": "boostxl_edumkii",
@@ -427,8 +427,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1808,
-      "compressedBytes": 89836
+      "circuitElementCount": 1804,
+      "compressedBytes": 83768
     },
     {
       "boardId": "boostxl_edumkii",
@@ -438,8 +438,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1645,
-      "compressedBytes": 83359
+      "circuitElementCount": 1624,
+      "compressedBytes": 73851
     },
     {
       "boardId": "boostxl_edumkii",
@@ -449,8 +449,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1521,
-      "compressedBytes": 80571
+      "circuitElementCount": 1504,
+      "compressedBytes": 65023
     },
     {
       "boardId": "boostxl_edumkii",
@@ -461,8 +461,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1358,
-      "compressedBytes": 73545
+      "circuitElementCount": 1330,
+      "compressedBytes": 56270
     },
     {
       "boardId": "boostxl_edumkii",
@@ -472,8 +472,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1436,
-      "compressedBytes": 74606
+      "circuitElementCount": 1406,
+      "compressedBytes": 58833
     },
     {
       "boardId": "boostxl_edumkii",
@@ -484,8 +484,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1279,
-      "compressedBytes": 68270
+      "circuitElementCount": 1230,
+      "compressedBytes": 48000
     },
     {
       "boardId": "boostxl_edumkii",
@@ -496,8 +496,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 1156,
-      "compressedBytes": 65129
+      "circuitElementCount": 1118,
+      "compressedBytes": 47145
     },
     {
       "boardId": "boostxl_edumkii",
@@ -509,8 +509,8 @@
         "microphone",
         "expansion"
       ],
-      "circuitElementCount": 999,
-      "compressedBytes": 58854
+      "circuitElementCount": 932,
+      "compressedBytes": 34924
     },
     {
       "boardId": "boostxl_edumkii",
@@ -519,8 +519,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1711,
-      "compressedBytes": 87584
+      "circuitElementCount": 1681,
+      "compressedBytes": 78749
     },
     {
       "boardId": "boostxl_edumkii",
@@ -530,8 +530,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1548,
-      "compressedBytes": 80965
+      "circuitElementCount": 1523,
+      "compressedBytes": 73793
     },
     {
       "boardId": "boostxl_edumkii",
@@ -541,8 +541,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1420,
-      "compressedBytes": 77605
+      "circuitElementCount": 1373,
+      "compressedBytes": 58915
     },
     {
       "boardId": "boostxl_edumkii",
@@ -553,8 +553,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1257,
-      "compressedBytes": 70385
+      "circuitElementCount": 1204,
+      "compressedBytes": 50939
     },
     {
       "boardId": "boostxl_edumkii",
@@ -564,8 +564,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1345,
-      "compressedBytes": 72339
+      "circuitElementCount": 1290,
+      "compressedBytes": 55367
     },
     {
       "boardId": "boostxl_edumkii",
@@ -576,8 +576,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1188,
-      "compressedBytes": 65952
+      "circuitElementCount": 1122,
+      "compressedBytes": 47033
     },
     {
       "boardId": "boostxl_edumkii",
@@ -588,8 +588,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1061,
-      "compressedBytes": 62531
+      "circuitElementCount": 989,
+      "compressedBytes": 40921
     },
     {
       "boardId": "boostxl_edumkii",
@@ -601,8 +601,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 904,
-      "compressedBytes": 56315
+      "circuitElementCount": 818,
+      "compressedBytes": 31867
     },
     {
       "boardId": "boostxl_edumkii",
@@ -612,8 +612,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1445,
-      "compressedBytes": 79714
+      "circuitElementCount": 1379,
+      "compressedBytes": 62684
     },
     {
       "boardId": "boostxl_edumkii",
@@ -624,8 +624,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1282,
-      "compressedBytes": 72555
+      "circuitElementCount": 1211,
+      "compressedBytes": 56492
     },
     {
       "boardId": "boostxl_edumkii",
@@ -636,8 +636,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1162,
-      "compressedBytes": 70038
+      "circuitElementCount": 1079,
+      "compressedBytes": 51983
     },
     {
       "boardId": "boostxl_edumkii",
@@ -649,8 +649,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 999,
-      "compressedBytes": 63076
+      "circuitElementCount": 911,
+      "compressedBytes": 41231
     },
     {
       "boardId": "boostxl_edumkii",
@@ -661,8 +661,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 1076,
-      "compressedBytes": 64008
+      "circuitElementCount": 988,
+      "compressedBytes": 43063
     },
     {
       "boardId": "boostxl_edumkii",
@@ -674,8 +674,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 919,
-      "compressedBytes": 57562
+      "circuitElementCount": 819,
+      "compressedBytes": 34384
     },
     {
       "boardId": "boostxl_edumkii",
@@ -687,8 +687,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 800,
-      "compressedBytes": 55045
+      "circuitElementCount": 690,
+      "compressedBytes": 28581
     },
     {
       "boardId": "boostxl_edumkii",
@@ -701,8 +701,8 @@
         "outputs",
         "expansion"
       ],
-      "circuitElementCount": 643,
-      "compressedBytes": 48721
+      "circuitElementCount": 519,
+      "compressedBytes": 19384
     },
     {
       "boardId": "boostxl_edumkii",
@@ -710,8 +710,8 @@
       "removedFeatureIds": [
         "power_indicators"
       ],
-      "circuitElementCount": 2048,
-      "compressedBytes": 97925
+      "circuitElementCount": 2087,
+      "compressedBytes": 102353
     },
     {
       "boardId": "boostxl_edumkii",
@@ -720,8 +720,8 @@
         "display",
         "power_indicators"
       ],
-      "circuitElementCount": 1885,
-      "compressedBytes": 90900
+      "circuitElementCount": 1910,
+      "compressedBytes": 88976
     },
     {
       "boardId": "boostxl_edumkii",
@@ -730,8 +730,8 @@
         "controls",
         "power_indicators"
       ],
-      "circuitElementCount": 1757,
-      "compressedBytes": 87523
+      "circuitElementCount": 1775,
+      "compressedBytes": 81645
     },
     {
       "boardId": "boostxl_edumkii",
@@ -741,8 +741,8 @@
         "controls",
         "power_indicators"
       ],
-      "circuitElementCount": 1594,
-      "compressedBytes": 80979
+      "circuitElementCount": 1602,
+      "compressedBytes": 71784
     },
     {
       "boardId": "boostxl_edumkii",
@@ -751,8 +751,8 @@
         "sensors",
         "power_indicators"
       ],
-      "circuitElementCount": 1673,
-      "compressedBytes": 81922
+      "circuitElementCount": 1682,
+      "compressedBytes": 74149
     },
     {
       "boardId": "boostxl_edumkii",
@@ -762,8 +762,8 @@
         "sensors",
         "power_indicators"
       ],
-      "circuitElementCount": 1516,
-      "compressedBytes": 75613
+      "circuitElementCount": 1509,
+      "compressedBytes": 63996
     },
     {
       "boardId": "boostxl_edumkii",
@@ -773,8 +773,8 @@
         "sensors",
         "power_indicators"
       ],
-      "circuitElementCount": 1389,
-      "compressedBytes": 71896
+      "circuitElementCount": 1378,
+      "compressedBytes": 56873
     },
     {
       "boardId": "boostxl_edumkii",
@@ -785,8 +785,8 @@
         "sensors",
         "power_indicators"
       ],
-      "circuitElementCount": 1232,
-      "compressedBytes": 65580
+      "circuitElementCount": 1207,
+      "compressedBytes": 49018
     },
     {
       "boardId": "boostxl_edumkii",
@@ -795,8 +795,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1782,
-      "compressedBytes": 89698
+      "circuitElementCount": 1798,
+      "compressedBytes": 90418
     },
     {
       "boardId": "boostxl_edumkii",
@@ -806,8 +806,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1619,
-      "compressedBytes": 83245
+      "circuitElementCount": 1602,
+      "compressedBytes": 75409
     },
     {
       "boardId": "boostxl_edumkii",
@@ -817,8 +817,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1499,
-      "compressedBytes": 80708
+      "circuitElementCount": 1498,
+      "compressedBytes": 75797
     },
     {
       "boardId": "boostxl_edumkii",
@@ -829,8 +829,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1336,
-      "compressedBytes": 73704
+      "circuitElementCount": 1300,
+      "compressedBytes": 58417
     },
     {
       "boardId": "boostxl_edumkii",
@@ -840,8 +840,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1404,
-      "compressedBytes": 73754
+      "circuitElementCount": 1382,
+      "compressedBytes": 62835
     },
     {
       "boardId": "boostxl_edumkii",
@@ -852,8 +852,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1247,
-      "compressedBytes": 67446
+      "circuitElementCount": 1205,
+      "compressedBytes": 51515
     },
     {
       "boardId": "boostxl_edumkii",
@@ -864,8 +864,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 1128,
-      "compressedBytes": 64504
+      "circuitElementCount": 1082,
+      "compressedBytes": 47438
     },
     {
       "boardId": "boostxl_edumkii",
@@ -877,8 +877,8 @@
         "microphone",
         "power_indicators"
       ],
-      "circuitElementCount": 971,
-      "compressedBytes": 58239
+      "circuitElementCount": 914,
+      "compressedBytes": 38884
     },
     {
       "boardId": "boostxl_edumkii",
@@ -887,8 +887,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1683,
-      "compressedBytes": 87201
+      "circuitElementCount": 1641,
+      "compressedBytes": 77754
     },
     {
       "boardId": "boostxl_edumkii",
@@ -898,8 +898,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1520,
-      "compressedBytes": 80557
+      "circuitElementCount": 1472,
+      "compressedBytes": 67663
     },
     {
       "boardId": "boostxl_edumkii",
@@ -909,8 +909,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1396,
-      "compressedBytes": 77441
+      "circuitElementCount": 1350,
+      "compressedBytes": 63347
     },
     {
       "boardId": "boostxl_edumkii",
@@ -921,8 +921,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1233,
-      "compressedBytes": 70305
+      "circuitElementCount": 1178,
+      "compressedBytes": 53024
     },
     {
       "boardId": "boostxl_edumkii",
@@ -932,8 +932,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1311,
-      "compressedBytes": 71172
+      "circuitElementCount": 1263,
+      "compressedBytes": 56624
     },
     {
       "boardId": "boostxl_edumkii",
@@ -944,8 +944,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1154,
-      "compressedBytes": 64837
+      "circuitElementCount": 1089,
+      "compressedBytes": 47456
     },
     {
       "boardId": "boostxl_edumkii",
@@ -956,8 +956,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1031,
-      "compressedBytes": 61555
+      "circuitElementCount": 960,
+      "compressedBytes": 41764
     },
     {
       "boardId": "boostxl_edumkii",
@@ -969,8 +969,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 874,
-      "compressedBytes": 55352
+      "circuitElementCount": 784,
+      "compressedBytes": 30231
     },
     {
       "boardId": "boostxl_edumkii",
@@ -980,8 +980,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1417,
-      "compressedBytes": 79381
+      "circuitElementCount": 1351,
+      "compressedBytes": 66394
     },
     {
       "boardId": "boostxl_edumkii",
@@ -992,8 +992,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1254,
-      "compressedBytes": 72223
+      "circuitElementCount": 1183,
+      "compressedBytes": 57363
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1004,8 +1004,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1138,
-      "compressedBytes": 69928
+      "circuitElementCount": 1054,
+      "compressedBytes": 51018
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1017,8 +1017,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 975,
-      "compressedBytes": 63045
+      "circuitElementCount": 880,
+      "compressedBytes": 41167
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1029,8 +1029,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 1042,
-      "compressedBytes": 62920
+      "circuitElementCount": 961,
+      "compressedBytes": 45333
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1042,8 +1042,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 885,
-      "compressedBytes": 56403
+      "circuitElementCount": 792,
+      "compressedBytes": 36583
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1055,8 +1055,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 770,
-      "compressedBytes": 54176
+      "circuitElementCount": 661,
+      "compressedBytes": 28389
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1069,8 +1069,8 @@
         "outputs",
         "power_indicators"
       ],
-      "circuitElementCount": 613,
-      "compressedBytes": 47903
+      "circuitElementCount": 485,
+      "compressedBytes": 18933
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1079,8 +1079,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1968,
-      "compressedBytes": 94682
+      "circuitElementCount": 1989,
+      "compressedBytes": 89632
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1090,8 +1090,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1805,
-      "compressedBytes": 87741
+      "circuitElementCount": 1813,
+      "compressedBytes": 80268
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1101,8 +1101,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1678,
-      "compressedBytes": 84626
+      "circuitElementCount": 1693,
+      "compressedBytes": 76473
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1113,8 +1113,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1515,
-      "compressedBytes": 77859
+      "circuitElementCount": 1511,
+      "compressedBytes": 64320
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1124,8 +1124,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1599,
-      "compressedBytes": 79559
+      "circuitElementCount": 1596,
+      "compressedBytes": 66729
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1136,8 +1136,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1442,
-      "compressedBytes": 73149
+      "circuitElementCount": 1421,
+      "compressedBytes": 57592
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1148,8 +1148,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1316,
-      "compressedBytes": 69565
+      "circuitElementCount": 1292,
+      "compressedBytes": 51257
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1161,8 +1161,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1159,
-      "compressedBytes": 63331
+      "circuitElementCount": 1123,
+      "compressedBytes": 43139
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1172,8 +1172,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1702,
-      "compressedBytes": 86761
+      "circuitElementCount": 1690,
+      "compressedBytes": 76744
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1184,8 +1184,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1539,
-      "compressedBytes": 80103
+      "circuitElementCount": 1515,
+      "compressedBytes": 67456
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1196,8 +1196,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1420,
-      "compressedBytes": 77557
+      "circuitElementCount": 1410,
+      "compressedBytes": 67865
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1209,8 +1209,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1257,
-      "compressedBytes": 70410
+      "circuitElementCount": 1210,
+      "compressedBytes": 51137
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1221,8 +1221,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1330,
-      "compressedBytes": 71198
+      "circuitElementCount": 1297,
+      "compressedBytes": 56701
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1234,8 +1234,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1173,
-      "compressedBytes": 64918
+      "circuitElementCount": 1118,
+      "compressedBytes": 44678
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1247,8 +1247,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1055,
-      "compressedBytes": 62177
+      "circuitElementCount": 998,
+      "compressedBytes": 40820
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1261,8 +1261,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 898,
-      "compressedBytes": 55838
+      "circuitElementCount": 818,
+      "compressedBytes": 29901
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1272,8 +1272,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1602,
-      "compressedBytes": 84361
+      "circuitElementCount": 1558,
+      "compressedBytes": 71669
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1284,8 +1284,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1439,
-      "compressedBytes": 77461
+      "circuitElementCount": 1380,
+      "compressedBytes": 62842
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1296,8 +1296,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1316,
-      "compressedBytes": 74374
+      "circuitElementCount": 1263,
+      "compressedBytes": 56987
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1309,8 +1309,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1153,
-      "compressedBytes": 67410
+      "circuitElementCount": 1091,
+      "compressedBytes": 49576
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1321,8 +1321,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1236,
-      "compressedBytes": 68882
+      "circuitElementCount": 1166,
+      "compressedBytes": 49661
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1334,8 +1334,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1079,
-      "compressedBytes": 62501
+      "circuitElementCount": 998,
+      "compressedBytes": 41400
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1347,8 +1347,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 957,
-      "compressedBytes": 59405
+      "circuitElementCount": 866,
+      "compressedBytes": 33692
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1361,8 +1361,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 800,
-      "compressedBytes": 53126
+      "circuitElementCount": 701,
+      "compressedBytes": 27588
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1373,8 +1373,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1336,
-      "compressedBytes": 76211
+      "circuitElementCount": 1263,
+      "compressedBytes": 59529
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1386,8 +1386,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1173,
-      "compressedBytes": 68910
+      "circuitElementCount": 1089,
+      "compressedBytes": 51317
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1399,8 +1399,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 1058,
-      "compressedBytes": 66853
+      "circuitElementCount": 968,
+      "compressedBytes": 45161
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1413,8 +1413,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 895,
-      "compressedBytes": 59919
+      "circuitElementCount": 795,
+      "compressedBytes": 37326
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1426,8 +1426,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 967,
-      "compressedBytes": 60516
+      "circuitElementCount": 872,
+      "compressedBytes": 40046
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1440,8 +1440,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 810,
-      "compressedBytes": 54107
+      "circuitElementCount": 701,
+      "compressedBytes": 30291
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1454,8 +1454,8 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 696,
-      "compressedBytes": 51897
+      "circuitElementCount": 576,
+      "compressedBytes": 26476
     },
     {
       "boardId": "boostxl_edumkii",
@@ -1469,15 +1469,15 @@
         "expansion",
         "power_indicators"
       ],
-      "circuitElementCount": 539,
-      "compressedBytes": 45202
+      "circuitElementCount": 403,
+      "compressedBytes": 14934
     },
     {
       "boardId": "boost_drv8848",
       "configurationId": "boost_drv8848_full",
       "removedFeatureIds": [],
-      "circuitElementCount": 862,
-      "compressedBytes": 51993
+      "circuitElementCount": 933,
+      "compressedBytes": 55016
     },
     {
       "boardId": "boost_drv8848",
@@ -1485,8 +1485,8 @@
       "removedFeatureIds": [
         "fault_indicator"
       ],
-      "circuitElementCount": 811,
-      "compressedBytes": 50281
+      "circuitElementCount": 885,
+      "compressedBytes": 55078
     },
     {
       "boardId": "boost_drv8848",
@@ -1494,8 +1494,8 @@
       "removedFeatureIds": [
         "power_indicator"
       ],
-      "circuitElementCount": 815,
-      "compressedBytes": 50853
+      "circuitElementCount": 884,
+      "compressedBytes": 52861
     },
     {
       "boardId": "boost_drv8848",
@@ -1504,15 +1504,15 @@
         "fault_indicator",
         "power_indicator"
       ],
-      "circuitElementCount": 764,
-      "compressedBytes": 48831
+      "circuitElementCount": 832,
+      "compressedBytes": 51675
     },
     {
       "boardId": "boostxl_bassensors",
       "configurationId": "boostxl_bassensors_full",
       "removedFeatureIds": [],
-      "circuitElementCount": 1241,
-      "compressedBytes": 54018
+      "circuitElementCount": 1294,
+      "compressedBytes": 37878
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1520,8 +1520,8 @@
       "removedFeatureIds": [
         "temperature"
       ],
-      "circuitElementCount": 1002,
-      "compressedBytes": 46261
+      "circuitElementCount": 1018,
+      "compressedBytes": 42094
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1529,8 +1529,8 @@
       "removedFeatureIds": [
         "humidity"
       ],
-      "circuitElementCount": 1102,
-      "compressedBytes": 48585
+      "circuitElementCount": 1143,
+      "compressedBytes": 34608
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1539,8 +1539,8 @@
         "temperature",
         "humidity"
       ],
-      "circuitElementCount": 863,
-      "compressedBytes": 40569
+      "circuitElementCount": 864,
+      "compressedBytes": 36918
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1548,8 +1548,8 @@
       "removedFeatureIds": [
         "hall"
       ],
-      "circuitElementCount": 1127,
-      "compressedBytes": 50212
+      "circuitElementCount": 1168,
+      "compressedBytes": 35200
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1558,8 +1558,8 @@
         "temperature",
         "hall"
       ],
-      "circuitElementCount": 889,
-      "compressedBytes": 42404
+      "circuitElementCount": 892,
+      "compressedBytes": 39356
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1568,8 +1568,8 @@
         "humidity",
         "hall"
       ],
-      "circuitElementCount": 990,
-      "compressedBytes": 44421
+      "circuitElementCount": 1017,
+      "compressedBytes": 31316
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1579,8 +1579,8 @@
         "humidity",
         "hall"
       ],
-      "circuitElementCount": 752,
-      "compressedBytes": 36558
+      "circuitElementCount": 730,
+      "compressedBytes": 29084
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1588,8 +1588,8 @@
       "removedFeatureIds": [
         "light"
       ],
-      "circuitElementCount": 1110,
-      "compressedBytes": 48528
+      "circuitElementCount": 1165,
+      "compressedBytes": 34695
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1598,8 +1598,8 @@
         "temperature",
         "light"
       ],
-      "circuitElementCount": 875,
-      "compressedBytes": 40822
+      "circuitElementCount": 885,
+      "compressedBytes": 37215
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1608,8 +1608,8 @@
         "humidity",
         "light"
       ],
-      "circuitElementCount": 976,
-      "compressedBytes": 43475
+      "circuitElementCount": 1014,
+      "compressedBytes": 31302
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1619,8 +1619,8 @@
         "humidity",
         "light"
       ],
-      "circuitElementCount": 741,
-      "compressedBytes": 35777
+      "circuitElementCount": 723,
+      "compressedBytes": 27650
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1629,8 +1629,8 @@
         "hall",
         "light"
       ],
-      "circuitElementCount": 997,
-      "compressedBytes": 44630
+      "circuitElementCount": 1039,
+      "compressedBytes": 31925
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1640,8 +1640,8 @@
         "hall",
         "light"
       ],
-      "circuitElementCount": 763,
-      "compressedBytes": 37095
+      "circuitElementCount": 751,
+      "compressedBytes": 30188
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1651,8 +1651,8 @@
         "hall",
         "light"
       ],
-      "circuitElementCount": 865,
-      "compressedBytes": 39337
+      "circuitElementCount": 888,
+      "compressedBytes": 27857
     },
     {
       "boardId": "boostxl_bassensors",
@@ -1663,15 +1663,15 @@
         "hall",
         "light"
       ],
-      "circuitElementCount": 631,
-      "compressedBytes": 32071
+      "circuitElementCount": 596,
+      "compressedBytes": 22739
     },
     {
       "boardId": "boostxl_audio",
       "configurationId": "boostxl_audio_full",
       "removedFeatureIds": [],
-      "circuitElementCount": 2435,
-      "compressedBytes": 108033
+      "circuitElementCount": 2594,
+      "compressedBytes": 115603
     },
     {
       "boardId": "boostxl_audio",
@@ -1679,8 +1679,8 @@
       "removedFeatureIds": [
         "dac_source"
       ],
-      "circuitElementCount": 2109,
-      "compressedBytes": 96526
+      "circuitElementCount": 2225,
+      "compressedBytes": 94218
     },
     {
       "boardId": "boostxl_audio",
@@ -1688,8 +1688,8 @@
       "removedFeatureIds": [
         "headset"
       ],
-      "circuitElementCount": 2015,
-      "compressedBytes": 94096
+      "circuitElementCount": 2112,
+      "compressedBytes": 88403
     },
     {
       "boardId": "boostxl_audio",
@@ -1698,8 +1698,8 @@
         "dac_source",
         "headset"
       ],
-      "circuitElementCount": 1689,
-      "compressedBytes": 82048
+      "circuitElementCount": 1751,
+      "compressedBytes": 71986
     },
     {
       "boardId": "boostxl_audio",
@@ -1707,8 +1707,8 @@
       "removedFeatureIds": [
         "microphone"
       ],
-      "circuitElementCount": 2003,
-      "compressedBytes": 92941
+      "circuitElementCount": 2091,
+      "compressedBytes": 88982
     },
     {
       "boardId": "boostxl_audio",
@@ -1717,8 +1717,8 @@
         "dac_source",
         "microphone"
       ],
-      "circuitElementCount": 1681,
-      "compressedBytes": 81624
+      "circuitElementCount": 1756,
+      "compressedBytes": 80957
     },
     {
       "boardId": "boostxl_audio",
@@ -1727,8 +1727,8 @@
         "headset",
         "microphone"
       ],
-      "circuitElementCount": 1584,
-      "compressedBytes": 78754
+      "circuitElementCount": 1623,
+      "compressedBytes": 68072
     },
     {
       "boardId": "boostxl_audio",
@@ -1738,8 +1738,8 @@
         "headset",
         "microphone"
       ],
-      "circuitElementCount": 1262,
-      "compressedBytes": 67072
+      "circuitElementCount": 1272,
+      "compressedBytes": 52448
     },
     {
       "boardId": "boostxl_audio",
@@ -1747,8 +1747,8 @@
       "removedFeatureIds": [
         "audio_switch"
       ],
-      "circuitElementCount": 2135,
-      "compressedBytes": 96164
+      "circuitElementCount": 2248,
+      "compressedBytes": 94701
     },
     {
       "boardId": "boostxl_audio",
@@ -1757,8 +1757,8 @@
         "dac_source",
         "audio_switch"
       ],
-      "circuitElementCount": 1816,
-      "compressedBytes": 84883
+      "circuitElementCount": 1884,
+      "compressedBytes": 74122
     },
     {
       "boardId": "boostxl_audio",
@@ -1767,8 +1767,8 @@
         "headset",
         "audio_switch"
       ],
-      "circuitElementCount": 1727,
-      "compressedBytes": 82979
+      "circuitElementCount": 1745,
+      "compressedBytes": 72697
     },
     {
       "boardId": "boostxl_audio",
@@ -1778,8 +1778,8 @@
         "headset",
         "audio_switch"
       ],
-      "circuitElementCount": 1408,
-      "compressedBytes": 71991
+      "circuitElementCount": 1416,
+      "compressedBytes": 53687
     },
     {
       "boardId": "boostxl_audio",
@@ -1788,8 +1788,8 @@
         "microphone",
         "audio_switch"
       ],
-      "circuitElementCount": 1708,
-      "compressedBytes": 81294
+      "circuitElementCount": 1761,
+      "compressedBytes": 71820
     },
     {
       "boardId": "boostxl_audio",
@@ -1799,8 +1799,8 @@
         "microphone",
         "audio_switch"
       ],
-      "circuitElementCount": 1393,
-      "compressedBytes": 70545
+      "circuitElementCount": 1412,
+      "compressedBytes": 58800
     },
     {
       "boardId": "boostxl_audio",
@@ -1810,8 +1810,8 @@
         "microphone",
         "audio_switch"
       ],
-      "circuitElementCount": 1301,
-      "compressedBytes": 68093
+      "circuitElementCount": 1291,
+      "compressedBytes": 52979
     },
     {
       "boardId": "boostxl_audio",
@@ -1822,8 +1822,8 @@
         "microphone",
         "audio_switch"
       ],
-      "circuitElementCount": 986,
-      "compressedBytes": 57540
+      "circuitElementCount": 939,
+      "compressedBytes": 37409
     },
     {
       "boardId": "boostxl_audio",
@@ -1831,8 +1831,8 @@
       "removedFeatureIds": [
         "speaker"
       ],
-      "circuitElementCount": 2062,
-      "compressedBytes": 94532
+      "circuitElementCount": 2158,
+      "compressedBytes": 94347
     },
     {
       "boardId": "boostxl_audio",
@@ -1841,8 +1841,8 @@
         "dac_source",
         "speaker"
       ],
-      "circuitElementCount": 1738,
-      "compressedBytes": 82775
+      "circuitElementCount": 1796,
+      "compressedBytes": 74109
     },
     {
       "boardId": "boostxl_audio",
@@ -1851,8 +1851,8 @@
         "headset",
         "speaker"
       ],
-      "circuitElementCount": 1645,
-      "compressedBytes": 80366
+      "circuitElementCount": 1685,
+      "compressedBytes": 67983
     },
     {
       "boardId": "boostxl_audio",
@@ -1863,7 +1863,7 @@
         "speaker"
       ],
       "circuitElementCount": 1321,
-      "compressedBytes": 68501
+      "compressedBytes": 49725
     },
     {
       "boardId": "boostxl_audio",
@@ -1872,8 +1872,8 @@
         "microphone",
         "speaker"
       ],
-      "circuitElementCount": 1630,
-      "compressedBytes": 79057
+      "circuitElementCount": 1675,
+      "compressedBytes": 72750
     },
     {
       "boardId": "boostxl_audio",
@@ -1883,8 +1883,8 @@
         "microphone",
         "speaker"
       ],
-      "circuitElementCount": 1310,
-      "compressedBytes": 67656
+      "circuitElementCount": 1324,
+      "compressedBytes": 58514
     },
     {
       "boardId": "boostxl_audio",
@@ -1894,8 +1894,8 @@
         "microphone",
         "speaker"
       ],
-      "circuitElementCount": 1214,
-      "compressedBytes": 64896
+      "circuitElementCount": 1194,
+      "compressedBytes": 47788
     },
     {
       "boardId": "boostxl_audio",
@@ -1906,8 +1906,8 @@
         "microphone",
         "speaker"
       ],
-      "circuitElementCount": 894,
-      "compressedBytes": 53425
+      "circuitElementCount": 844,
+      "compressedBytes": 31052
     },
     {
       "boardId": "boostxl_audio",
@@ -1916,8 +1916,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 1782,
-      "compressedBytes": 84564
+      "circuitElementCount": 1823,
+      "compressedBytes": 73967
     },
     {
       "boardId": "boostxl_audio",
@@ -1927,8 +1927,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 1465,
-      "compressedBytes": 73883
+      "circuitElementCount": 1450,
+      "compressedBytes": 60025
     },
     {
       "boardId": "boostxl_audio",
@@ -1938,8 +1938,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 1377,
-      "compressedBytes": 71828
+      "circuitElementCount": 1343,
+      "compressedBytes": 52988
     },
     {
       "boardId": "boostxl_audio",
@@ -1950,8 +1950,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 1060,
-      "compressedBytes": 60979
+      "circuitElementCount": 996,
+      "compressedBytes": 37819
     },
     {
       "boardId": "boostxl_audio",
@@ -1961,8 +1961,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 1355,
-      "compressedBytes": 69572
+      "circuitElementCount": 1343,
+      "compressedBytes": 55521
     },
     {
       "boardId": "boostxl_audio",
@@ -1973,8 +1973,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 1042,
-      "compressedBytes": 59087
+      "circuitElementCount": 991,
+      "compressedBytes": 41437
     },
     {
       "boardId": "boostxl_audio",
@@ -1985,8 +1985,8 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 951,
-      "compressedBytes": 56682
+      "circuitElementCount": 876,
+      "compressedBytes": 38503
     },
     {
       "boardId": "boostxl_audio",
@@ -1998,15 +1998,15 @@
         "audio_switch",
         "speaker"
       ],
-      "circuitElementCount": 638,
-      "compressedBytes": 46136
+      "circuitElementCount": 519,
+      "compressedBytes": 20227
     },
     {
       "boardId": "boostxl_cc2650ma",
       "configurationId": "boostxl_cc2650ma_full",
       "removedFeatureIds": [],
-      "circuitElementCount": 1555,
-      "compressedBytes": 105362
+      "circuitElementCount": 1643,
+      "compressedBytes": 110201
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2014,8 +2014,8 @@
       "removedFeatureIds": [
         "debug_header"
       ],
-      "circuitElementCount": 1453,
-      "compressedBytes": 101099
+      "circuitElementCount": 1508,
+      "compressedBytes": 91361
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2023,8 +2023,8 @@
       "removedFeatureIds": [
         "external_flash"
       ],
-      "circuitElementCount": 1334,
-      "compressedBytes": 95840
+      "circuitElementCount": 1424,
+      "compressedBytes": 106495
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2033,8 +2033,8 @@
         "debug_header",
         "external_flash"
       ],
-      "circuitElementCount": 1230,
-      "compressedBytes": 91212
+      "circuitElementCount": 1276,
+      "compressedBytes": 82604
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2042,8 +2042,8 @@
       "removedFeatureIds": [
         "routing_options"
       ],
-      "circuitElementCount": 1258,
-      "compressedBytes": 93522
+      "circuitElementCount": 1320,
+      "compressedBytes": 82143
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2052,8 +2052,8 @@
         "debug_header",
         "routing_options"
       ],
-      "circuitElementCount": 1156,
-      "compressedBytes": 89060
+      "circuitElementCount": 1199,
+      "compressedBytes": 67765
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2062,8 +2062,8 @@
         "external_flash",
         "routing_options"
       ],
-      "circuitElementCount": 1038,
-      "compressedBytes": 84021
+      "circuitElementCount": 1077,
+      "compressedBytes": 58085
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2073,8 +2073,8 @@
         "external_flash",
         "routing_options"
       ],
-      "circuitElementCount": 934,
-      "compressedBytes": 79275
+      "circuitElementCount": 965,
+      "compressedBytes": 58031
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2082,8 +2082,8 @@
       "removedFeatureIds": [
         "status_leds"
       ],
-      "circuitElementCount": 1451,
-      "compressedBytes": 102078
+      "circuitElementCount": 1530,
+      "compressedBytes": 95347
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2092,8 +2092,8 @@
         "debug_header",
         "status_leds"
       ],
-      "circuitElementCount": 1349,
-      "compressedBytes": 97576
+      "circuitElementCount": 1387,
+      "compressedBytes": 89878
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2102,8 +2102,8 @@
         "external_flash",
         "status_leds"
       ],
-      "circuitElementCount": 1235,
-      "compressedBytes": 92704
+      "circuitElementCount": 1279,
+      "compressedBytes": 84356
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2113,8 +2113,8 @@
         "external_flash",
         "status_leds"
       ],
-      "circuitElementCount": 1131,
-      "compressedBytes": 88239
+      "circuitElementCount": 1140,
+      "compressedBytes": 68368
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2123,8 +2123,8 @@
         "routing_options",
         "status_leds"
       ],
-      "circuitElementCount": 1162,
-      "compressedBytes": 90787
+      "circuitElementCount": 1181,
+      "compressedBytes": 72928
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2134,8 +2134,8 @@
         "routing_options",
         "status_leds"
       ],
-      "circuitElementCount": 1060,
-      "compressedBytes": 86469
+      "circuitElementCount": 1074,
+      "compressedBytes": 59412
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2145,8 +2145,8 @@
         "routing_options",
         "status_leds"
       ],
-      "circuitElementCount": 947,
-      "compressedBytes": 81562
+      "circuitElementCount": 955,
+      "compressedBytes": 51598
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2157,8 +2157,8 @@
         "routing_options",
         "status_leds"
       ],
-      "circuitElementCount": 843,
-      "compressedBytes": 76893
+      "circuitElementCount": 842,
+      "compressedBytes": 47324
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2166,8 +2166,8 @@
       "removedFeatureIds": [
         "test_points"
       ],
-      "circuitElementCount": 1515,
-      "compressedBytes": 104059
+      "circuitElementCount": 1589,
+      "compressedBytes": 100936
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2176,8 +2176,8 @@
         "debug_header",
         "test_points"
       ],
-      "circuitElementCount": 1413,
-      "compressedBytes": 99684
+      "circuitElementCount": 1464,
+      "compressedBytes": 89220
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2186,8 +2186,8 @@
         "external_flash",
         "test_points"
       ],
-      "circuitElementCount": 1300,
-      "compressedBytes": 94784
+      "circuitElementCount": 1357,
+      "compressedBytes": 86375
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2197,8 +2197,8 @@
         "external_flash",
         "test_points"
       ],
-      "circuitElementCount": 1196,
-      "compressedBytes": 90241
+      "circuitElementCount": 1213,
+      "compressedBytes": 76962
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2207,8 +2207,8 @@
         "routing_options",
         "test_points"
       ],
-      "circuitElementCount": 1221,
-      "compressedBytes": 92261
+      "circuitElementCount": 1275,
+      "compressedBytes": 74048
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2218,8 +2218,8 @@
         "routing_options",
         "test_points"
       ],
-      "circuitElementCount": 1119,
-      "compressedBytes": 87826
+      "circuitElementCount": 1163,
+      "compressedBytes": 69711
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2229,8 +2229,8 @@
         "routing_options",
         "test_points"
       ],
-      "circuitElementCount": 1007,
-      "compressedBytes": 83129
+      "circuitElementCount": 1036,
+      "compressedBytes": 62617
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2241,8 +2241,8 @@
         "routing_options",
         "test_points"
       ],
-      "circuitElementCount": 903,
-      "compressedBytes": 78438
+      "circuitElementCount": 914,
+      "compressedBytes": 51742
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2251,8 +2251,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 1411,
-      "compressedBytes": 100628
+      "circuitElementCount": 1470,
+      "compressedBytes": 90077
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2262,8 +2262,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 1309,
-      "compressedBytes": 96075
+      "circuitElementCount": 1341,
+      "compressedBytes": 83330
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2273,8 +2273,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 1201,
-      "compressedBytes": 91644
+      "circuitElementCount": 1239,
+      "compressedBytes": 81729
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2285,8 +2285,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 1097,
-      "compressedBytes": 87275
+      "circuitElementCount": 1093,
+      "compressedBytes": 59633
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2296,8 +2296,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 1125,
-      "compressedBytes": 89542
+      "circuitElementCount": 1143,
+      "compressedBytes": 68416
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2308,8 +2308,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 1023,
-      "compressedBytes": 85175
+      "circuitElementCount": 1033,
+      "compressedBytes": 57216
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2320,8 +2320,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 916,
-      "compressedBytes": 80708
+      "circuitElementCount": 912,
+      "compressedBytes": 52790
     },
     {
       "boardId": "boostxl_cc2650ma",
@@ -2333,8 +2333,8 @@
         "status_leds",
         "test_points"
       ],
-      "circuitElementCount": 812,
-      "compressedBytes": 76057
+      "circuitElementCount": 793,
+      "compressedBytes": 43183
     }
   ]
 }

@@ -1,5 +1,5 @@
 export const boosterPackSourceRepositoryUrl = "https://github.com/tscircuit/boosters"
-export const boosterPackSourceCommit = "4b8b330cf06cee8109edab00d8bba5973925da76"
+export const boosterPackSourceCommit = "053bcf5a80b732a7c8c7a9da4926a19bb58fe779"
 
 export type BoosterPackId =
   | "boostxl_edumkii"
@@ -14,7 +14,8 @@ export type BoosterPackRemovableFeature = {
   id: string
   label: string
   description: string
-  excludedElementNames: string[]
+  expectedExcludedElementNames: string[]
+  expectedExcludedText?: string[]
 }
 
 export type BoosterPackConfiguration = {
@@ -23,7 +24,8 @@ export type BoosterPackConfiguration = {
   description: string
   circuitJsonUrl: string
   removedFeatureIds: string[]
-  excludedElementNames: string[]
+  expectedExcludedElementNames: string[]
+  expectedExcludedText: string[]
 }
 
 export type BoosterPackBoard = {
@@ -83,8 +85,11 @@ function createAllConfigurations(params: {
           : `${removedLabels.join(", ")} ${removedLabels.length === 1 ? "is" : "are"} removed.`,
       circuitJsonUrl: `/prebuilt-boosterpacks/${id}.circuit.json.gz`,
       removedFeatureIds: removedFeatures.map(({ id }) => id),
-      excludedElementNames: removedFeatures.flatMap(
-        ({ excludedElementNames }) => excludedElementNames,
+      expectedExcludedElementNames: removedFeatures.flatMap(
+        ({ expectedExcludedElementNames }) => expectedExcludedElementNames,
+      ),
+      expectedExcludedText: removedFeatures.flatMap(
+        ({ expectedExcludedText }) => expectedExcludedText ?? [],
       ),
     }
   })
@@ -103,43 +108,50 @@ export const boosterPackBoards: BoosterPackBoard[] = [
         id: "display",
         label: "TFT display",
         description: "SPI display module and its support passives.",
-        excludedElementNames: ["DisplaySchematic"],
+        expectedExcludedElementNames: ["DisplaySchematic"],
+        expectedExcludedText: ["SPI TFT Display"],
       },
       {
         id: "controls",
         label: "Joystick and buttons",
         description: "Analog joystick and both push buttons.",
-        excludedElementNames: ["ControlsSchematic"],
+        expectedExcludedElementNames: ["ControlsSchematic"],
+        expectedExcludedText: ["Joystick & Buttons"],
       },
       {
         id: "sensors",
         label: "Sensor suite",
         description: "Temperature, light, and motion sensors.",
-        excludedElementNames: ["SensorsSchematic"],
+        expectedExcludedElementNames: ["SensorsSchematic"],
+        expectedExcludedText: ["Environmental & Motion Sensors"],
       },
       {
         id: "microphone",
         label: "Microphone input",
         description: "Electret microphone and preamplifier front end.",
-        excludedElementNames: ["AudioSchematic"],
+        expectedExcludedElementNames: ["AudioSchematic"],
+        expectedExcludedText: ["Microphone Front End"],
       },
       {
         id: "outputs",
         label: "RGB LED and buzzer",
         description: "Visual and audible output driver blocks.",
-        excludedElementNames: ["OutputsSchematic"],
+        expectedExcludedElementNames: ["OutputsSchematic"],
+        expectedExcludedText: ["RGB LED & Buzzer Drivers"],
       },
       {
         id: "expansion",
         label: "Servo and clip expansion",
         description: "Servo header and clip expansion connections.",
-        excludedElementNames: ["ExpansionSchematic"],
+        expectedExcludedElementNames: ["ExpansionSchematic"],
+        expectedExcludedText: ["Servo & Clip Expansion"],
       },
       {
         id: "power_indicators",
         label: "Power indicators",
         description: "3.3 V and 5 V power LEDs.",
-        excludedElementNames: ["PowerSchematic"],
+        expectedExcludedElementNames: ["PowerSchematic"],
+        expectedExcludedText: ["Power Indicators"],
       },
     ],
   }),
@@ -155,13 +167,13 @@ export const boosterPackBoards: BoosterPackBoard[] = [
         id: "fault_indicator",
         label: "Fault indicator",
         description: "nFAULT LED and its series resistor.",
-        excludedElementNames: ["D1", "R2"],
+        expectedExcludedElementNames: ["D1", "R2"],
       },
       {
         id: "power_indicator",
         label: "Motor-power indicator",
         description: "VM power LED and its series resistor.",
-        excludedElementNames: ["D2", "R6"],
+        expectedExcludedElementNames: ["D2", "R6"],
       },
     ],
   }),
@@ -177,25 +189,25 @@ export const boosterPackBoards: BoosterPackBoard[] = [
         id: "temperature",
         label: "TMP116 temperature sensor",
         description: "Temperature coupon, connector, and support circuit.",
-        excludedElementNames: ["TMP116_CONNECTOR_BLOCK", "TMP116_SENSOR_COUPON_BLOCK"],
+        expectedExcludedElementNames: ["TMP116_CONNECTOR_BLOCK", "TMP116_SENSOR_COUPON_BLOCK"],
       },
       {
         id: "humidity",
         label: "HDC2010 humidity sensor",
         description: "Humidity sensor and its switched supply.",
-        excludedElementNames: ["HDC2010_BLOCK"],
+        expectedExcludedElementNames: ["HDC2010_BLOCK"],
       },
       {
         id: "hall",
         label: "DRV5055 Hall sensor",
         description: "Hall-effect sensor and its switched supply.",
-        excludedElementNames: ["DRV5055_BLOCK"],
+        expectedExcludedElementNames: ["DRV5055_BLOCK"],
       },
       {
         id: "light",
         label: "OPT3001 ambient-light sensor",
         description: "Ambient-light sensor and support passives.",
-        excludedElementNames: ["OPT3001_BLOCK"],
+        expectedExcludedElementNames: ["OPT3001_BLOCK"],
       },
     ],
   }),
@@ -211,31 +223,31 @@ export const boosterPackBoards: BoosterPackBoard[] = [
         id: "dac_source",
         label: "DAC and PWM source",
         description: "DAC, PWM filter, and source-selection network.",
-        excludedElementNames: ["DAC_SIGNAL_SOURCE"],
+        expectedExcludedElementNames: ["DAC_SIGNAL_SOURCE"],
       },
       {
         id: "headset",
         label: "Headset jack and detection",
         description: "Headset connector and jack-detection circuit.",
-        excludedElementNames: ["AUDIO_JACK_DETECTION"],
+        expectedExcludedElementNames: ["AUDIO_JACK_DETECTION"],
       },
       {
         id: "microphone",
         label: "Microphone preamplifier",
         description: "On-board microphone and analog preamplifier.",
-        excludedElementNames: ["MICROPHONE_AMPLIFIER"],
+        expectedExcludedElementNames: ["MICROPHONE_AMPLIFIER"],
       },
       {
         id: "audio_switch",
         label: "Analog audio switch",
         description: "Analog path-selection and routing switch.",
-        excludedElementNames: ["ANALOG_AUDIO_SWITCH"],
+        expectedExcludedElementNames: ["ANALOG_AUDIO_SWITCH"],
       },
       {
         id: "speaker",
         label: "Loudspeaker amplifier",
         description: "Power amplifier, gain network, and speaker output.",
-        excludedElementNames: ["LOUDSPEAKER_AMPLIFIER"],
+        expectedExcludedElementNames: ["LOUDSPEAKER_AMPLIFIER"],
       },
     ],
   }),
@@ -251,31 +263,35 @@ export const boosterPackBoards: BoosterPackBoard[] = [
         id: "debug_header",
         label: "JTAG debug header",
         description: "Ten-pin JTAG programming and debug connector.",
-        excludedElementNames: ["P20"],
+        expectedExcludedElementNames: ["P20"],
+        expectedExcludedText: ["1.27 mm JTAG Debug Header"],
       },
       {
         id: "external_flash",
         label: "Optional external flash",
         description: "Unpopulated flash footprint and support passives.",
-        excludedElementNames: ["DNM_FLASH_OPTIONS", "C1"],
+        expectedExcludedElementNames: ["DNM_FLASH_OPTIONS", "C1"],
+        expectedExcludedText: ["Optional MX25R8035F Flash (DNM)"],
       },
       {
         id: "routing_options",
         label: "Unpopulated routing options",
         description: "Do-not-mount radio and current-link option resistors.",
-        excludedElementNames: ["DNM_RADIO_OPTIONS", "DNM_CURRENT_LINK"],
+        expectedExcludedElementNames: ["DNM_RADIO_OPTIONS", "DNM_CURRENT_LINK"],
       },
       {
         id: "status_leds",
         label: "Status LEDs",
         description: "Green and red radio status indicators.",
-        excludedElementNames: ["R5", "CR1", "R6", "CR2"],
+        expectedExcludedElementNames: ["R5", "CR1", "R6", "CR2"],
+        expectedExcludedText: ["DIO2 Green and DIO4 Red Status LEDs"],
       },
       {
         id: "test_points",
         label: "Reference test points",
         description: "Ground, 3.3 V, and module-supply test points.",
-        excludedElementNames: ["TP1", "TP2", "TP3"],
+        expectedExcludedElementNames: ["TP1", "TP2", "TP3"],
+        expectedExcludedText: ["Reference Test Points (TI MH1-MH3)"],
       },
     ],
   }),

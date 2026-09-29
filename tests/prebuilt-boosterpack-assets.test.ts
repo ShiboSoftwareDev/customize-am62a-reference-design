@@ -29,8 +29,12 @@ test("loads every prebuilt configuration as valid Circuit JSON", async () => {
         "name" in element && typeof element.name === "string" ? [element.name] : [],
       ),
     )
-    for (const excludedElementName of configuration.excludedElementNames) {
-      expect(renderedElementNames.has(excludedElementName)).toBe(false)
+    for (const expectedExcludedElementName of configuration.expectedExcludedElementNames) {
+      expect(renderedElementNames.has(expectedExcludedElementName)).toBe(false)
+    }
+    const serializedCircuitJson = JSON.stringify(circuitJson)
+    for (const expectedExcludedText of configuration.expectedExcludedText) {
+      expect(serializedCircuitJson).not.toContain(expectedExcludedText)
     }
     expect(
       manifest.configurations.find(

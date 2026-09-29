@@ -13,5 +13,5 @@
       "circuit-json": ["./types/circuit-json.d.ts"]
     }
   },
-  "include": ["app", "lib", "tests", "types", "vite.config.ts"]
+  "include": ["app", "lib", "scripts", "tests", "types", "vite.config.ts"]
 }

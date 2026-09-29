@@ -21,10 +21,12 @@ source repository. It does not present a separate catalog or gallery.
 
 The 212 configurations are generated from a pinned `tscircuit/boosters` commit by
 [`scripts/prebuild-boosterpack-configurations.tsx`](./scripts/prebuild-boosterpack-configurations.tsx).
-The script renders each complete TSX board once, then removes each selected block and
-all of its source-linked schematic, PCB, trace, and CAD elements for every powerset
-combination. It stores the results as gzip-compressed Circuit JSON in
-`public/prebuilt-boosterpacks`.
+For every powerset combination, the script passes the selected `exclude...` props to
+the upstream board component and performs a fresh tscircuit render and autoroute. It
+validates the result, then stores it as gzip-compressed Circuit JSON in
+`public/prebuilt-boosterpacks`. Renders run in bounded, isolated worker processes and
+replace the existing asset set only after the complete batch succeeds. No rendered
+Circuit JSON is edited or filtered.
 
 Local Vite and the Vercel deployment serve exactly the same static files, so checking
 or unchecking a block requires no cloud function and no runtime circuit render. To

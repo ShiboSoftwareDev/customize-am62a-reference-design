@@ -23,5 +23,5 @@
       "tests/*": ["./tests/*"]
     }
   },
-  "include": ["app", "api", "lib", "tests", "vite.config.ts"]
+  "include": ["app", "api", "lib", "scripts", "tests", "vite.config.ts"]
 }
