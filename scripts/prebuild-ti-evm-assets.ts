@@ -57,6 +57,18 @@ export async function prebuildTiEvmAssets(): Promise<void> {
       if (failedComponents.length > 0) {
         throw new Error(`${evm.name} ${variant.label} failed to render`)
       }
+      const routingErrors = result.circuitJson.filter(({ type }) =>
+        [
+          "pcb_trace_error",
+          "pcb_port_not_matched_error",
+          "source_trace_not_connected_error",
+        ].includes(type),
+      )
+      if (routingErrors.length > 0) {
+        throw new Error(
+          `${evm.name} ${variant.label} produced ${routingErrors.length} routing errors`,
+        )
+      }
       const pcbTraceCount = result.circuitJson.filter(({ type }) => type === "pcb_trace").length
       if (pcbTraceCount === 0) {
         throw new Error(`${evm.name} ${variant.label} produced no routed PCB traces`)
@@ -83,7 +95,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
       ...tiEvms.slice(1).map((evm) => ({
         name: `Texas Instruments ${evm.name}`,
         url: evm.sourceUrl,
-        source: "lib/evms/parameterized-ti-evms.tsx",
+        source: `lib/generated/ti-evms/${evm.id}.generated.ts`,
       })),
     ],
   }

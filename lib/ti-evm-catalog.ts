@@ -58,19 +58,6 @@ const skAm62aFeatures: SkAm62aFeature[] = [
   },
 ]
 
-const evaluationFeatures: TiEvmRemovableFeature[] = [
-  {
-    id: "controls",
-    label: "evaluation controls",
-    description: "Configuration headers, jumpers, and adjustment controls.",
-  },
-  {
-    id: "measurement",
-    label: "measurement points",
-    description: "Optional signal and power-rail test points.",
-  },
-]
-
 function createVariants(params: {
   evmId: TiEvmId
   features: TiEvmRemovableFeature[]
@@ -120,11 +107,7 @@ function createEvaluationOptions(removedFeatureIds: string[]): {
   evmOptions: ParameterizedTiEvmOptions
 } {
   return {
-    evmOptions: {
-      connectors: true,
-      controls: !removedFeatureIds.includes("controls"),
-      measurement: !removedFeatureIds.includes("measurement"),
-    },
+    evmOptions: { removedFeatureIds },
   }
 }
 
@@ -151,13 +134,13 @@ function createEvaluationEvm(params: {
   description: string
   sourceLabel: string
   sourceUrl: string
+  removableFeatures: TiEvmRemovableFeature[]
 }): TiEvm {
   return {
     ...params,
-    removableFeatures: evaluationFeatures,
     variants: createVariants({
       evmId: params.id,
-      features: evaluationFeatures,
+      features: params.removableFeatures,
       createPopulation: createEvaluationOptions,
     }),
   }
@@ -166,36 +149,91 @@ function createEvaluationEvm(params: {
 export const tiEvms: TiEvm[] = [
   skAm62aLp,
   createEvaluationEvm({
-    id: "bq25731evm",
-    name: "BQ25731EVM",
-    category: "1-to-5-cell buck-boost charger EVM",
-    description: "I2C-controlled 16-A NVDC battery charger evaluation module.",
-    sourceLabel: "TI BQ25731EVM reference",
-    sourceUrl: "https://www.ti.com/tool/BQ25731EVM",
+    id: "drv8307evm",
+    name: "DRV8307EVM",
+    category: "Three-phase BLDC pre-driver EVM",
+    description:
+      "TI's 84-component DRV8307/DRV8308 motor-control evaluation board with three external MOSFET half-bridges.",
+    sourceLabel: "TI DRV8307EVM Altium release",
+    sourceUrl: "https://www.ti.com/tool/DRV8307EVM",
+    removableFeatures: [
+      {
+        id: "onboard-speed-control",
+        label: "on-board speed control",
+        description: "TLC555 PWM generator, speed potentiometer, and support components.",
+      },
+      {
+        id: "hall-interface",
+        label: "Hall-sensor interface",
+        description: "Hall input conditioning, selection jumpers, and buffer devices.",
+      },
+    ],
   }),
   createEvaluationEvm({
-    id: "drv8210evm",
-    name: "DRV8210EVM",
-    category: "Low-voltage H-bridge motor-driver EVM",
-    description: "Brushed-DC motor-driver evaluation module with selectable control access.",
-    sourceLabel: "TI DRV8210EVM reference",
-    sourceUrl: "https://www.ti.com/tool/DRV8210EVM",
+    id: "lm5155evm-fly",
+    name: "LM5155EVM-FLY",
+    category: "Isolated flyback controller EVM",
+    description:
+      "TI's medium-complexity isolated 5-V/4-A flyback converter with primary controller, transformer, secondary feedback, and protection networks.",
+    sourceLabel: "TI LM5155EVM-FLY Altium release",
+    sourceUrl: "https://www.ti.com/tool/LM5155EVM-FLY",
+    removableFeatures: [
+      {
+        id: "test-and-measurement",
+        label: "test and measurement hardware",
+        description: "Optional test points and oscilloscope probe access used during evaluation.",
+      },
+      {
+        id: "configuration-interface",
+        label: "configuration interface",
+        description:
+          "Optional evaluation header and population option for controller configuration.",
+      },
+    ],
   }),
   createEvaluationEvm({
-    id: "lmk1c1104evm",
-    name: "LMK1C1104EVM",
-    category: "Low-jitter clock-buffer EVM",
-    description: "Four-output LVCMOS fan-out clock-buffer evaluation module with 50-ohm outputs.",
-    sourceLabel: "TI LMK1C1104EVM reference",
-    sourceUrl: "https://www.ti.com/tool/LMK1C1104EVM",
+    id: "lm251772evm-pd",
+    name: "LM251772EVM-PD",
+    category: "Four-switch buck-boost power-density EVM",
+    description:
+      "TI's 169-component high-power LM251772 evaluation module with synchronous four-switch power stage and dense configuration network.",
+    sourceLabel: "TI LM251772EVM-PD Altium release",
+    sourceUrl: "https://www.ti.com/tool/LM251772EVM-PD",
+    removableFeatures: [
+      {
+        id: "test-and-measurement",
+        label: "test and measurement hardware",
+        description:
+          "Thirteen reference test points distributed across the power and control nets.",
+      },
+      {
+        id: "configuration-jumpers",
+        label: "configuration jumpers",
+        description: "Evaluation-only mode, threshold, and control jumper population.",
+      },
+    ],
   }),
   createEvaluationEvm({
-    id: "tps62933pevm",
-    name: "TPS62933PEVM",
-    category: "3-A synchronous buck-converter EVM",
-    description: "Configurable high-efficiency step-down converter evaluation module.",
-    sourceLabel: "TI TPS62933PEVM reference",
-    sourceUrl: "https://www.ti.com/tool/TPS62933PEVM",
+    id: "lmg342x-bb-evm",
+    name: "LMG342X-BB-EVM",
+    category: "650-V GaN half-bridge motherboard",
+    description:
+      "TI's 157-component high-voltage GaN half-bridge platform with isolated bias, PWM conditioning, fault reporting, and power terminals.",
+    sourceLabel: "TI LMG342X-BB-EVM Altium release",
+    sourceUrl: "https://www.ti.com/tool/LMG342X-BB-EVM",
+    removableFeatures: [
+      {
+        id: "measurement-interface",
+        label: "measurement interface",
+        description:
+          "Evaluation-only PWM, rail, ground, switch-node, and tachometer access points.",
+      },
+      {
+        id: "status-indicators",
+        label: "status indicators",
+        description: "High-side, low-side, over-current, fault, and rail-status LEDs.",
+      },
+    ],
   }),
 ]
 

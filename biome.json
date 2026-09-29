@@ -6,8 +6,10 @@
       "!.vercel",
       "!dist",
       "!node_modules",
+      "!tmp",
       "!lib/generated/am62a-board.tsx",
-      "!lib/generated/am62a-board.runtime.js"
+      "!lib/generated/am62a-board.runtime.js",
+      "!lib/generated/ti-evms/**"
     ]
   },
   "formatter": {

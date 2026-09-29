@@ -70,150 +70,150 @@
       ]
     },
     {
-      "id": "bq25731evm",
+      "id": "drv8307evm",
       "artifacts": [
         {
-          "elementCount": 2155,
-          "output": "prebuilt-ti-evms/bq25731evm/full-board.circuit.json.gz",
-          "pcbTraceCount": 124,
-          "source": "Parameterized BQ25731EVM tscircuit TSX",
-          "sourceComponentCount": 71,
-          "sourceTraceCount": 144
+          "elementCount": 3199,
+          "output": "prebuilt-ti-evms/drv8307evm/full-board.circuit.json.gz",
+          "pcbTraceCount": 197,
+          "source": "Parameterized DRV8307EVM tscircuit TSX",
+          "sourceComponentCount": 83,
+          "sourceTraceCount": 254
         },
         {
-          "elementCount": 2064,
-          "output": "prebuilt-ti-evms/bq25731evm/remove-controls.circuit.json.gz",
-          "pcbTraceCount": 122,
-          "source": "Parameterized BQ25731EVM tscircuit TSX",
-          "sourceComponentCount": 70,
-          "sourceTraceCount": 141
+          "elementCount": 2898,
+          "output": "prebuilt-ti-evms/drv8307evm/remove-onboard-speed-control.circuit.json.gz",
+          "pcbTraceCount": 175,
+          "source": "Parameterized DRV8307EVM tscircuit TSX",
+          "sourceComponentCount": 73,
+          "sourceTraceCount": 226
         },
         {
-          "elementCount": 2101,
-          "output": "prebuilt-ti-evms/bq25731evm/remove-measurement.circuit.json.gz",
-          "pcbTraceCount": 124,
-          "source": "Parameterized BQ25731EVM tscircuit TSX",
-          "sourceComponentCount": 67,
-          "sourceTraceCount": 140
+          "elementCount": 2212,
+          "output": "prebuilt-ti-evms/drv8307evm/remove-hall-interface.circuit.json.gz",
+          "pcbTraceCount": 126,
+          "source": "Parameterized DRV8307EVM tscircuit TSX",
+          "sourceComponentCount": 62,
+          "sourceTraceCount": 173
         },
         {
-          "elementCount": 2010,
-          "output": "prebuilt-ti-evms/bq25731evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 122,
-          "source": "Parameterized BQ25731EVM tscircuit TSX",
-          "sourceComponentCount": 66,
-          "sourceTraceCount": 137
+          "elementCount": 1932,
+          "output": "prebuilt-ti-evms/drv8307evm/minimal-board.circuit.json.gz",
+          "pcbTraceCount": 105,
+          "source": "Parameterized DRV8307EVM tscircuit TSX",
+          "sourceComponentCount": 52,
+          "sourceTraceCount": 146
         }
       ]
     },
     {
-      "id": "drv8210evm",
+      "id": "lm5155evm-fly",
       "artifacts": [
         {
-          "elementCount": 373,
-          "output": "prebuilt-ti-evms/drv8210evm/full-board.circuit.json.gz",
-          "pcbTraceCount": 14,
-          "source": "Parameterized DRV8210EVM tscircuit TSX",
-          "sourceComponentCount": 12,
-          "sourceTraceCount": 27
+          "elementCount": 2528,
+          "output": "prebuilt-ti-evms/lm5155evm-fly/full-board.circuit.json.gz",
+          "pcbTraceCount": 149,
+          "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
+          "sourceComponentCount": 87,
+          "sourceTraceCount": 183
         },
         {
-          "elementCount": 241,
-          "output": "prebuilt-ti-evms/drv8210evm/remove-controls.circuit.json.gz",
-          "pcbTraceCount": 10,
-          "source": "Parameterized DRV8210EVM tscircuit TSX",
-          "sourceComponentCount": 9,
-          "sourceTraceCount": 17
+          "elementCount": 2377,
+          "output": "prebuilt-ti-evms/lm5155evm-fly/remove-test-and-measurement.circuit.json.gz",
+          "pcbTraceCount": 140,
+          "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
+          "sourceComponentCount": 78,
+          "sourceTraceCount": 174
         },
         {
-          "elementCount": 315,
-          "output": "prebuilt-ti-evms/drv8210evm/remove-measurement.circuit.json.gz",
-          "pcbTraceCount": 12,
-          "source": "Parameterized DRV8210EVM tscircuit TSX",
-          "sourceComponentCount": 8,
-          "sourceTraceCount": 23
+          "elementCount": 2403,
+          "output": "prebuilt-ti-evms/lm5155evm-fly/remove-configuration-interface.circuit.json.gz",
+          "pcbTraceCount": 142,
+          "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
+          "sourceComponentCount": 85,
+          "sourceTraceCount": 176
         },
         {
-          "elementCount": 183,
-          "output": "prebuilt-ti-evms/drv8210evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 8,
-          "source": "Parameterized DRV8210EVM tscircuit TSX",
-          "sourceComponentCount": 5,
-          "sourceTraceCount": 13
+          "elementCount": 2256,
+          "output": "prebuilt-ti-evms/lm5155evm-fly/minimal-board.circuit.json.gz",
+          "pcbTraceCount": 133,
+          "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
+          "sourceComponentCount": 76,
+          "sourceTraceCount": 167
         }
       ]
     },
     {
-      "id": "lmk1c1104evm",
+      "id": "lm251772evm-pd",
       "artifacts": [
         {
-          "elementCount": 2282,
-          "output": "prebuilt-ti-evms/lmk1c1104evm/full-board.circuit.json.gz",
-          "pcbTraceCount": 113,
-          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
-          "sourceComponentCount": 68,
-          "sourceTraceCount": 129
+          "elementCount": 4697,
+          "output": "prebuilt-ti-evms/lm251772evm-pd/full-board.circuit.json.gz",
+          "pcbTraceCount": 293,
+          "source": "Parameterized LM251772EVM-PD tscircuit TSX",
+          "sourceComponentCount": 147,
+          "sourceTraceCount": 355
         },
         {
-          "elementCount": 2248,
-          "output": "prebuilt-ti-evms/lmk1c1104evm/remove-controls.circuit.json.gz",
-          "pcbTraceCount": 110,
-          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
-          "sourceComponentCount": 67,
-          "sourceTraceCount": 126
+          "elementCount": 4464,
+          "output": "prebuilt-ti-evms/lm251772evm-pd/remove-test-and-measurement.circuit.json.gz",
+          "pcbTraceCount": 280,
+          "source": "Parameterized LM251772EVM-PD tscircuit TSX",
+          "sourceComponentCount": 134,
+          "sourceTraceCount": 342
         },
         {
-          "elementCount": 2258,
-          "output": "prebuilt-ti-evms/lmk1c1104evm/remove-measurement.circuit.json.gz",
-          "pcbTraceCount": 111,
-          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
-          "sourceComponentCount": 66,
-          "sourceTraceCount": 127
+          "elementCount": 4295,
+          "output": "prebuilt-ti-evms/lm251772evm-pd/remove-configuration-jumpers.circuit.json.gz",
+          "pcbTraceCount": 260,
+          "source": "Parameterized LM251772EVM-PD tscircuit TSX",
+          "sourceComponentCount": 135,
+          "sourceTraceCount": 320
         },
         {
-          "elementCount": 2218,
-          "output": "prebuilt-ti-evms/lmk1c1104evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 108,
-          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
-          "sourceComponentCount": 65,
-          "sourceTraceCount": 124
+          "elementCount": 4046,
+          "output": "prebuilt-ti-evms/lm251772evm-pd/minimal-board.circuit.json.gz",
+          "pcbTraceCount": 247,
+          "source": "Parameterized LM251772EVM-PD tscircuit TSX",
+          "sourceComponentCount": 122,
+          "sourceTraceCount": 307
         }
       ]
     },
     {
-      "id": "tps62933pevm",
+      "id": "lmg342x-bb-evm",
       "artifacts": [
         {
-          "elementCount": 706,
-          "output": "prebuilt-ti-evms/tps62933pevm/full-board.circuit.json.gz",
-          "pcbTraceCount": 36,
-          "source": "Parameterized TPS62933PEVM tscircuit TSX",
-          "sourceComponentCount": 28,
-          "sourceTraceCount": 54
+          "elementCount": 3869,
+          "output": "prebuilt-ti-evms/lmg342x-bb-evm/full-board.circuit.json.gz",
+          "pcbTraceCount": 190,
+          "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
+          "sourceComponentCount": 141,
+          "sourceTraceCount": 252
         },
         {
-          "elementCount": 645,
-          "output": "prebuilt-ti-evms/tps62933pevm/remove-controls.circuit.json.gz",
-          "pcbTraceCount": 34,
-          "source": "Parameterized TPS62933PEVM tscircuit TSX",
-          "sourceComponentCount": 26,
-          "sourceTraceCount": 49
+          "elementCount": 3515,
+          "output": "prebuilt-ti-evms/lmg342x-bb-evm/remove-measurement-interface.circuit.json.gz",
+          "pcbTraceCount": 169,
+          "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
+          "sourceComponentCount": 123,
+          "sourceTraceCount": 228
         },
         {
-          "elementCount": 652,
-          "output": "prebuilt-ti-evms/tps62933pevm/remove-measurement.circuit.json.gz",
-          "pcbTraceCount": 36,
-          "source": "Parameterized TPS62933PEVM tscircuit TSX",
-          "sourceComponentCount": 24,
-          "sourceTraceCount": 50
+          "elementCount": 3589,
+          "output": "prebuilt-ti-evms/lmg342x-bb-evm/remove-status-indicators.circuit.json.gz",
+          "pcbTraceCount": 174,
+          "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
+          "sourceComponentCount": 131,
+          "sourceTraceCount": 230
         },
         {
-          "elementCount": 592,
-          "output": "prebuilt-ti-evms/tps62933pevm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 34,
-          "source": "Parameterized TPS62933PEVM tscircuit TSX",
-          "sourceComponentCount": 22,
-          "sourceTraceCount": 45
+          "elementCount": 3207,
+          "output": "prebuilt-ti-evms/lmg342x-bb-evm/minimal-board.circuit.json.gz",
+          "pcbTraceCount": 153,
+          "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
+          "sourceComponentCount": 113,
+          "sourceTraceCount": 206
         }
       ]
     }
@@ -225,24 +225,24 @@
       "source": "lib/generated/am62a-board.tsx"
     },
     {
-      "name": "Texas Instruments BQ25731EVM",
-      "url": "https://www.ti.com/tool/BQ25731EVM",
-      "source": "lib/evms/parameterized-ti-evms.tsx"
+      "name": "Texas Instruments DRV8307EVM",
+      "url": "https://www.ti.com/tool/DRV8307EVM",
+      "source": "lib/generated/ti-evms/drv8307evm.generated.ts"
     },
     {
-      "name": "Texas Instruments DRV8210EVM",
-      "url": "https://www.ti.com/tool/DRV8210EVM",
-      "source": "lib/evms/parameterized-ti-evms.tsx"
+      "name": "Texas Instruments LM5155EVM-FLY",
+      "url": "https://www.ti.com/tool/LM5155EVM-FLY",
+      "source": "lib/generated/ti-evms/lm5155evm-fly.generated.ts"
     },
     {
-      "name": "Texas Instruments LMK1C1104EVM",
-      "url": "https://www.ti.com/tool/LMK1C1104EVM",
-      "source": "lib/evms/parameterized-ti-evms.tsx"
+      "name": "Texas Instruments LM251772EVM-PD",
+      "url": "https://www.ti.com/tool/LM251772EVM-PD",
+      "source": "lib/generated/ti-evms/lm251772evm-pd.generated.ts"
     },
     {
-      "name": "Texas Instruments TPS62933PEVM",
-      "url": "https://www.ti.com/tool/TPS62933PEVM",
-      "source": "lib/evms/parameterized-ti-evms.tsx"
+      "name": "Texas Instruments LMG342X-BB-EVM",
+      "url": "https://www.ti.com/tool/LMG342X-BB-EVM",
+      "source": "lib/generated/ti-evms/lmg342x-bb-evm.generated.ts"
     }
   ]
 }
