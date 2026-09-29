@@ -2,7 +2,7 @@
   "name": "customize-am62a-reference-design",
   "version": "0.1.0",
   "private": true,
-  "description": "Prebuilt parameterized-TSX configurator for the TI SK-AM62A-LP EVM",
+  "description": "Prebuilt parameterized-TSX configurator for five Texas Instruments EVMs",
   "type": "module",
   "scripts": {
     "prepare:generated": "bun scripts/prepare-generated-assets.ts",
@@ -15,6 +15,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
+    "@tsci/tscircuit.ti": "github:tscircuit/ti#8b37d053dae636858c4f767403a2db50d317d1aa",
     "@tscircuit/checks": "0.0.222",
     "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "0.0.1993",
@@ -39,6 +40,7 @@
   "patchedDependencies": {
     "@tscircuit/props@0.0.668": "patches/@tscircuit%2Fprops@0.0.668.patch",
     "circuit-json@0.0.506": "patches/circuit-json@0.0.506.patch",
-    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch"
+    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch",
+    "@tsci/tscircuit.ti@github:tscircuit/ti#8b37d05": "patches/@tsci%2Ftscircuit.ti@github%3Atscircuit%2Fti#8b37d05.patch"
   }
 }

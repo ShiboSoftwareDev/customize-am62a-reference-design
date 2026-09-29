@@ -5,33 +5,45 @@ import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 type PrebuiltManifest = {
   boards: Array<{
     id: string
-    artifacts: Array<{ elementCount: number; output: string; source: string }>
+    artifacts: Array<{
+      elementCount: number
+      output: string
+      pcbTraceCount: number
+      source: string
+      sourceComponentCount: number
+      sourceTraceCount: number
+    }>
   }>
   sources: Array<{ name: string; source: string; url: string }>
 }
 
-test("every prebuilt artifact is rendered from the parameterized SK-AM62A-LP TSX", async () => {
+test("every catalog board has prebuilt output from parameterized TSX", async () => {
   const repositoryRoot = resolve(import.meta.dir, "..")
   const manifest = (await Bun.file(
     resolve(repositoryRoot, "public/prebuilt-ti-evms/manifest.json"),
   ).json()) as PrebuiltManifest
 
-  expect(manifest.boards.map(({ id }) => id)).toEqual(["sk-am62a-lp"])
-  expect(manifest.boards[0].artifacts).toHaveLength(5)
-  expect(manifest.sources).toEqual([
-    {
-      name: "Texas Instruments SK-AM62A-LP",
-      source: "lib/generated/am62a-board.tsx",
-      url: "https://www.ti.com/tool/SK-AM62A-LP",
-    },
+  expect(manifest.boards.map(({ id }) => id)).toEqual([
+    "sk-am62a-lp",
+    "bq25731evm",
+    "drv8210evm",
+    "lmk1c1104evm",
+    "tps62933pevm",
   ])
+  expect(manifest.boards.map(({ artifacts }) => artifacts.length)).toEqual([5, 4, 4, 4, 4])
+  expect(manifest.sources).toHaveLength(5)
 
-  for (const artifact of manifest.boards[0].artifacts) {
-    expect(artifact.source).toBe("Parameterized SK-AM62A-LP tscircuit TSX")
-    const prebuiltFile = Bun.file(resolve(repositoryRoot, "public", artifact.output))
-    expect(await prebuiltFile.exists()).toBe(true)
-    expect(prebuiltFile.size).toBeGreaterThan(0)
-    expect(artifact.elementCount).toBeGreaterThan(60_000)
+  for (const board of manifest.boards) {
+    for (const artifact of board.artifacts) {
+      expect(artifact.source).toContain("Parameterized")
+      const prebuiltFile = Bun.file(resolve(repositoryRoot, "public", artifact.output))
+      expect(await prebuiltFile.exists()).toBe(true)
+      expect(prebuiltFile.size).toBeGreaterThan(0)
+      expect(artifact.elementCount).toBeGreaterThan(100)
+      expect(artifact.sourceComponentCount).toBeGreaterThan(0)
+      expect(artifact.sourceTraceCount).toBeGreaterThan(0)
+      expect(artifact.pcbTraceCount).toBeGreaterThan(0)
+    }
   }
 
   const fullBoard = await loadPrebuiltArtifact(

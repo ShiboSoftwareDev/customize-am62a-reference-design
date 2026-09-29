@@ -3,12 +3,14 @@ import { useMemo, useState } from "react"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
 import { useEvmRender } from "app/hooks/use-evm-render"
-import { getTiEvmVariant, skAm62aLp } from "lib/ti-evm-catalog"
+import { getTiEvm, getTiEvmVariant, tiEvms, type TiEvmId } from "lib/ti-evm-catalog"
 
 export function App() {
-  const [variantId, setVariantId] = useState(skAm62aLp.variants[0].id)
+  const [evmId, setEvmId] = useState<TiEvmId>(tiEvms[0].id)
+  const evm = getTiEvm(evmId)
+  const [variantId, setVariantId] = useState(evm.variants[0].id)
   const [retryIndex, setRetryIndex] = useState(0)
-  const variant = getTiEvmVariant(variantId)
+  const variant = getTiEvmVariant(evm, variantId)
   const render = useEvmRender({ variant, retryIndex })
   const statusText = useMemo(() => {
     const seconds = (render.elapsedMs / 1000).toFixed(1)
@@ -19,24 +21,32 @@ export function App() {
 
   const exportCircuitJson = () => {
     if (!render.pcbCircuitJson) return
-    downloadCircuitJson(render.pcbCircuitJson, `${skAm62aLp.id}-${variant.id}.circuit.json`)
+    downloadCircuitJson(render.pcbCircuitJson, `${evm.id}-${variant.id}.circuit.json`)
+  }
+
+  const changeEvm = (nextEvmId: TiEvmId) => {
+    const nextEvm = getTiEvm(nextEvmId)
+    setEvmId(nextEvmId)
+    setVariantId(nextEvm.variants[0].id)
   }
 
   return (
     <main className="app-shell">
       <ConfigurationPanel
-        evm={skAm62aLp}
+        evms={tiEvms}
+        evm={evm}
         variant={variant}
         statusText={statusText}
         error={render.error}
+        onEvmChange={changeEvm}
         onVariantChange={setVariantId}
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
         canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}
       />
       <DesignViewer
-        pcbKey={`${skAm62aLp.id}:${variant.id}`}
-        schematicKey={`${skAm62aLp.id}:${variant.id}`}
+        pcbKey={`${evm.id}:${variant.id}`}
+        schematicKey={`${evm.id}:${variant.id}`}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJson={render.schematicCircuitJson}
         isLoading={render.isLoading}

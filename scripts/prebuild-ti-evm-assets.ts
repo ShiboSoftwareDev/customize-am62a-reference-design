@@ -2,15 +2,18 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { basename, resolve } from "node:path"
 import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
-import { evaluateBoard } from "../lib/server/evaluate-board"
-import { skAm62aLp } from "../lib/ti-evm-catalog"
+import { evaluateBoard, evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
+import { skAm62aLp, tiEvms } from "../lib/ti-evm-catalog"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
 type ManifestArtifact = {
   elementCount: number
   output: string
+  pcbTraceCount: number
   source: string
+  sourceComponentCount: number
+  sourceTraceCount: number
 }
 
 export async function prebuildTiEvmAssets(): Promise<void> {
@@ -18,6 +21,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   const artifacts: ManifestArtifact[] = []
 
   for (const variant of skAm62aLp.variants) {
+    if (!variant.sourceSelection) throw new Error(`${variant.label} has no AM62A selection`)
     const result = await evaluateBoard({
       selection: variant.sourceSelection,
       addPours: false,
@@ -37,14 +41,49 @@ export async function prebuildTiEvmAssets(): Promise<void> {
     )
   }
 
+  const boards = [{ id: skAm62aLp.id, artifacts }]
+  for (const evm of tiEvms.filter(({ id }) => id !== skAm62aLp.id)) {
+    const evmArtifacts: ManifestArtifact[] = []
+    for (const variant of evm.variants) {
+      if (!variant.evmOptions) throw new Error(`${evm.name} ${variant.label} has no TSX options`)
+      const result = await evaluateParameterizedTiEvm({
+        evmId: evm.id,
+        options: variant.evmOptions,
+      })
+      const failedComponents = result.circuitJson.filter(
+        ({ type }) => type === "source_failed_to_create_component_error",
+      )
+      if (failedComponents.length > 0) {
+        throw new Error(`${evm.name} ${variant.label} failed to render`)
+      }
+      const pcbTraceCount = result.circuitJson.filter(({ type }) => type === "pcb_trace").length
+      if (pcbTraceCount === 0) {
+        throw new Error(`${evm.name} ${variant.label} produced no routed PCB traces`)
+      }
+      evmArtifacts.push(
+        await writeCompressedCircuitJson({
+          outputPath: variant.circuitJsonUrl,
+          circuitJson: result.circuitJson,
+          source: `Parameterized ${evm.name} tscircuit TSX`,
+        }),
+      )
+    }
+    boards.push({ id: evm.id, artifacts: evmArtifacts })
+  }
+
   const manifest = {
-    boards: [{ id: skAm62aLp.id, artifacts }],
+    boards,
     sources: [
       {
         name: "Texas Instruments SK-AM62A-LP",
         url: skAm62aLp.sourceUrl,
         source: "lib/generated/am62a-board.tsx",
       },
+      ...tiEvms.slice(1).map((evm) => ({
+        name: `Texas Instruments ${evm.name}`,
+        url: evm.sourceUrl,
+        source: "lib/evms/parameterized-ti-evms.tsx",
+      })),
     ],
   }
   await writeFile(
@@ -52,7 +91,9 @@ export async function prebuildTiEvmAssets(): Promise<void> {
     `${JSON.stringify(manifest, null, 2)}\n`,
   )
 
-  console.log(`Prebuilt ${artifacts.length} ${skAm62aLp.name} TSX variants`)
+  console.log(
+    `Prebuilt ${boards.reduce((count, board) => count + board.artifacts.length, 0)} variants across ${boards.length} TI EVMs`,
+  )
 }
 
 async function writeCompressedCircuitJson(artifact: {
@@ -69,7 +110,10 @@ async function writeCompressedCircuitJson(artifact: {
   return {
     elementCount: circuitJson.length,
     output: relativeOutputPath,
+    pcbTraceCount: circuitJson.filter(({ type }) => type === "pcb_trace").length,
     source: artifact.source,
+    sourceComponentCount: circuitJson.filter(({ type }) => type === "source_component").length,
+    sourceTraceCount: circuitJson.filter(({ type }) => type === "source_trace").length,
   }
 }
 

@@ -6,27 +6,190 @@
         {
           "elementCount": 110392,
           "output": "prebuilt-ti-evms/sk-am62a-lp/full-evaluation-kit.circuit.json.gz",
-          "source": "Parameterized SK-AM62A-LP tscircuit TSX"
+          "pcbTraceCount": 5009,
+          "source": "Parameterized SK-AM62A-LP tscircuit TSX",
+          "sourceComponentCount": 1482,
+          "sourceTraceCount": 5137
         },
         {
           "elementCount": 89155,
           "output": "prebuilt-ti-evms/sk-am62a-lp/vision-ai-camera.circuit.json.gz",
-          "source": "Parameterized SK-AM62A-LP tscircuit TSX"
+          "pcbTraceCount": 3809,
+          "source": "Parameterized SK-AM62A-LP tscircuit TSX",
+          "sourceComponentCount": 1365,
+          "sourceTraceCount": 4669
         },
         {
           "elementCount": 86655,
           "output": "prebuilt-ti-evms/sk-am62a-lp/headless-edge-ai.circuit.json.gz",
-          "source": "Parameterized SK-AM62A-LP tscircuit TSX"
+          "pcbTraceCount": 3725,
+          "source": "Parameterized SK-AM62A-LP tscircuit TSX",
+          "sourceComponentCount": 1330,
+          "sourceTraceCount": 4481
         },
         {
           "elementCount": 88476,
           "output": "prebuilt-ti-evms/sk-am62a-lp/industrial-gateway.circuit.json.gz",
-          "source": "Parameterized SK-AM62A-LP tscircuit TSX"
+          "pcbTraceCount": 3834,
+          "source": "Parameterized SK-AM62A-LP tscircuit TSX",
+          "sourceComponentCount": 1356,
+          "sourceTraceCount": 4582
         },
         {
           "elementCount": 62517,
           "output": "prebuilt-ti-evms/sk-am62a-lp/minimum-bring-up.circuit.json.gz",
-          "source": "Parameterized SK-AM62A-LP tscircuit TSX"
+          "pcbTraceCount": 2792,
+          "source": "Parameterized SK-AM62A-LP tscircuit TSX",
+          "sourceComponentCount": 982,
+          "sourceTraceCount": 3201
+        }
+      ]
+    },
+    {
+      "id": "bq25731evm",
+      "artifacts": [
+        {
+          "elementCount": 2155,
+          "output": "prebuilt-ti-evms/bq25731evm/full-evaluation-module.circuit.json.gz",
+          "pcbTraceCount": 124,
+          "source": "Parameterized BQ25731EVM tscircuit TSX",
+          "sourceComponentCount": 71,
+          "sourceTraceCount": 144
+        },
+        {
+          "elementCount": 2010,
+          "output": "prebuilt-ti-evms/bq25731evm/application-ready.circuit.json.gz",
+          "pcbTraceCount": 122,
+          "source": "Parameterized BQ25731EVM tscircuit TSX",
+          "sourceComponentCount": 66,
+          "sourceTraceCount": 137
+        },
+        {
+          "elementCount": 2101,
+          "output": "prebuilt-ti-evms/bq25731evm/bench-validation.circuit.json.gz",
+          "pcbTraceCount": 124,
+          "source": "Parameterized BQ25731EVM tscircuit TSX",
+          "sourceComponentCount": 67,
+          "sourceTraceCount": 140
+        },
+        {
+          "elementCount": 1942,
+          "output": "prebuilt-ti-evms/bq25731evm/minimum-core.circuit.json.gz",
+          "pcbTraceCount": 122,
+          "source": "Parameterized BQ25731EVM tscircuit TSX",
+          "sourceComponentCount": 63,
+          "sourceTraceCount": 131
+        }
+      ]
+    },
+    {
+      "id": "drv8210evm",
+      "artifacts": [
+        {
+          "elementCount": 373,
+          "output": "prebuilt-ti-evms/drv8210evm/full-evaluation-module.circuit.json.gz",
+          "pcbTraceCount": 14,
+          "source": "Parameterized DRV8210EVM tscircuit TSX",
+          "sourceComponentCount": 12,
+          "sourceTraceCount": 27
+        },
+        {
+          "elementCount": 183,
+          "output": "prebuilt-ti-evms/drv8210evm/application-ready.circuit.json.gz",
+          "pcbTraceCount": 8,
+          "source": "Parameterized DRV8210EVM tscircuit TSX",
+          "sourceComponentCount": 5,
+          "sourceTraceCount": 13
+        },
+        {
+          "elementCount": 322,
+          "output": "prebuilt-ti-evms/drv8210evm/bench-validation.circuit.json.gz",
+          "pcbTraceCount": 12,
+          "source": "Parameterized DRV8210EVM tscircuit TSX",
+          "sourceComponentCount": 10,
+          "sourceTraceCount": 23
+        },
+        {
+          "elementCount": 129,
+          "output": "prebuilt-ti-evms/drv8210evm/minimum-core.circuit.json.gz",
+          "pcbTraceCount": 6,
+          "source": "Parameterized DRV8210EVM tscircuit TSX",
+          "sourceComponentCount": 3,
+          "sourceTraceCount": 9
+        }
+      ]
+    },
+    {
+      "id": "lmk1c1104evm",
+      "artifacts": [
+        {
+          "elementCount": 2282,
+          "output": "prebuilt-ti-evms/lmk1c1104evm/full-evaluation-module.circuit.json.gz",
+          "pcbTraceCount": 113,
+          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
+          "sourceComponentCount": 68,
+          "sourceTraceCount": 129
+        },
+        {
+          "elementCount": 2218,
+          "output": "prebuilt-ti-evms/lmk1c1104evm/application-ready.circuit.json.gz",
+          "pcbTraceCount": 108,
+          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
+          "sourceComponentCount": 65,
+          "sourceTraceCount": 124
+        },
+        {
+          "elementCount": 2259,
+          "output": "prebuilt-ti-evms/lmk1c1104evm/bench-validation.circuit.json.gz",
+          "pcbTraceCount": 111,
+          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
+          "sourceComponentCount": 67,
+          "sourceTraceCount": 127
+        },
+        {
+          "elementCount": 2192,
+          "output": "prebuilt-ti-evms/lmk1c1104evm/minimum-core.circuit.json.gz",
+          "pcbTraceCount": 106,
+          "source": "Parameterized LMK1C1104EVM tscircuit TSX",
+          "sourceComponentCount": 64,
+          "sourceTraceCount": 122
+        }
+      ]
+    },
+    {
+      "id": "tps62933pevm",
+      "artifacts": [
+        {
+          "elementCount": 706,
+          "output": "prebuilt-ti-evms/tps62933pevm/full-evaluation-module.circuit.json.gz",
+          "pcbTraceCount": 36,
+          "source": "Parameterized TPS62933PEVM tscircuit TSX",
+          "sourceComponentCount": 28,
+          "sourceTraceCount": 54
+        },
+        {
+          "elementCount": 592,
+          "output": "prebuilt-ti-evms/tps62933pevm/application-ready.circuit.json.gz",
+          "pcbTraceCount": 34,
+          "source": "Parameterized TPS62933PEVM tscircuit TSX",
+          "sourceComponentCount": 22,
+          "sourceTraceCount": 45
+        },
+        {
+          "elementCount": 662,
+          "output": "prebuilt-ti-evms/tps62933pevm/bench-validation.circuit.json.gz",
+          "pcbTraceCount": 36,
+          "source": "Parameterized TPS62933PEVM tscircuit TSX",
+          "sourceComponentCount": 26,
+          "sourceTraceCount": 50
+        },
+        {
+          "elementCount": 546,
+          "output": "prebuilt-ti-evms/tps62933pevm/minimum-core.circuit.json.gz",
+          "pcbTraceCount": 34,
+          "source": "Parameterized TPS62933PEVM tscircuit TSX",
+          "sourceComponentCount": 20,
+          "sourceTraceCount": 41
         }
       ]
     }
@@ -36,6 +199,26 @@
       "name": "Texas Instruments SK-AM62A-LP",
       "url": "https://www.ti.com/tool/SK-AM62A-LP",
       "source": "lib/generated/am62a-board.tsx"
+    },
+    {
+      "name": "Texas Instruments BQ25731EVM",
+      "url": "https://www.ti.com/tool/BQ25731EVM",
+      "source": "lib/evms/parameterized-ti-evms.tsx"
+    },
+    {
+      "name": "Texas Instruments DRV8210EVM",
+      "url": "https://www.ti.com/tool/DRV8210EVM",
+      "source": "lib/evms/parameterized-ti-evms.tsx"
+    },
+    {
+      "name": "Texas Instruments LMK1C1104EVM",
+      "url": "https://www.ti.com/tool/LMK1C1104EVM",
+      "source": "lib/evms/parameterized-ti-evms.tsx"
+    },
+    {
+      "name": "Texas Instruments TPS62933PEVM",
+      "url": "https://www.ti.com/tool/TPS62933PEVM",
+      "source": "lib/evms/parameterized-ti-evms.tsx"
     }
   ]
 }
