@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@tscircuit/checks": "0.0.222",
+    "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "0.0.1993",
     "@tscircuit/pcb-viewer": "1.11.409",
     "@tscircuit/schematic-viewer": "2.0.98",
