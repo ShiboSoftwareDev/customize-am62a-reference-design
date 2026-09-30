@@ -1,12 +1,14 @@
 import { mkdir, readFile } from "node:fs/promises"
-import { resolve } from "node:path"
+import { basename, resolve } from "node:path"
 import { convertAltiumToCircuitJson } from "altium-to-circuit-json"
 import {
+  AltiumPrjPcb,
   type AltiumComponentRecord,
   type AltiumPadRecord,
   AltiumRegionRecord,
   AltiumViaRecord,
   getAltiumPcbPadGeometry,
+  parseAltiumFile,
   parseAltiumBinaryPcbDoc,
 } from "altiumts"
 import type { AnyCircuitElement } from "circuit-json"
@@ -27,6 +29,7 @@ type ReferenceInput = {
   sourceUrl: string
   archiveSha256: string
   pcbPath: string
+  projectPath: string
   schematicPaths: string[]
   outputName: string
   getRemovableFeatureId: (name: string) => string | undefined
@@ -113,6 +116,7 @@ const references: ReferenceInput[] = [
     sourceUrl: "https://www.ti.com/tool/DRV8307EVM",
     archiveSha256: "660117e30c1f12473f18d825a8318a5460a13025a7a6223689ac1f9afd3921d8",
     pcbPath: "tmp/references/drv8307/Board files/DRV8307EVM RevA.PcbDoc",
+    projectPath: "tmp/references/drv8307/Board files/DRV8307EVM RevA.PrjPcb",
     schematicPaths: ["tmp/references/drv8307/Board files/DRV8307EVM RevA.SchDoc"],
     outputName: "drv8307evm.generated.ts",
     getRemovableFeatureId: (name) => {
@@ -128,6 +132,7 @@ const references: ReferenceInput[] = [
     sourceUrl: "https://www.ti.com/tool/LM5155EVM-FLY",
     archiveSha256: "e8a1573658d294c6b47c8cdd8833df2d50302ac242afe88ecb8e60ca2f80b215",
     pcbPath: "tmp/references/lm5155fly/BMC029A.PcbDoc",
+    projectPath: "tmp/references/lm5155fly/BMC029A.PrjPcb",
     schematicPaths: [
       "tmp/references/lm5155fly/BMC029A_SCH.SchDoc",
       "tmp/references/lm5155fly/BMC029A-HW.SchDoc",
@@ -146,6 +151,7 @@ const references: ReferenceInput[] = [
     sourceUrl: "https://www.ti.com/tool/LM251772EVM-PD",
     archiveSha256: "d538f1bb6dc0976a1d0509faf0a9f6a7932fc1e80ed3730740272fb390e8516f",
     pcbPath: "tmp/references/lm251772/Altium_Files/SR135B.PcbDoc",
+    projectPath: "tmp/references/lm251772/Altium_Files/SR135B.PrjPcb",
     schematicPaths: ["tmp/references/lm251772/Altium_Files/SR135B.SchDoc"],
     outputName: "lm251772evm-pd.generated.ts",
     getRemovableFeatureId: (name) => {
@@ -161,6 +167,7 @@ const references: ReferenceInput[] = [
     sourceUrl: "https://www.ti.com/tool/LMG342X-BB-EVM",
     archiveSha256: "3aba23eea3b9c4751d55468e8716a2c95277b9cd581edc9ae8ef4fb058717b09",
     pcbPath: "tmp/references/lmg342x/LMG342X_BB_EVM.PcbDoc",
+    projectPath: "tmp/references/lmg342x/LMG342X_BB_EVM.PrjPcb",
     schematicPaths: ["tmp/references/lmg342x/LMG342X_BB_EVM.SchDoc"],
     outputName: "lmg342x-bb-evm.generated.ts",
     getRemovableFeatureId: (name) => {
@@ -200,6 +207,12 @@ async function createDefinition(reference: ReferenceInput): Promise<{
 }> {
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
+  const parsedProject = parseAltiumFile(
+    new Uint8Array(await readFile(reference.projectPath)),
+  ).document
+  if (!(parsedProject instanceof AltiumPrjPcb)) {
+    throw new Error(`${reference.name} project file is not an Altium PCB project`)
+  }
   const pcbCircuitJson = convertAltiumToCircuitJson(pcbBytes, {
     sourceType: "pcb",
     pcb: {
@@ -216,7 +229,12 @@ async function createDefinition(reference: ReferenceInput): Promise<{
       const schematicBytes = new Uint8Array(await readFile(schematicPath))
       return convertAltiumToCircuitJson(schematicBytes, {
         sourceType: "schematic",
-        schematic: { sheetName: reference.name },
+        schematic: {
+          documentName: basename(schematicPath),
+          project: parsedProject,
+          projectName: basename(reference.projectPath),
+          sheetName: reference.name,
+        },
       })
     }),
   )
