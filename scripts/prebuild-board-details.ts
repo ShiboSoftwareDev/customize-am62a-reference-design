@@ -6,6 +6,7 @@ import { convertCircuitJsonToPcbSvg, convertCircuitJsonToSchematicSvg } from "ci
 import { gunzipSync, strFromU8 } from "fflate"
 import { renderGLTFToPNGFromGLB } from "poppygl"
 import { tiEvms } from "../lib/ti-evm-catalog"
+import { getSchematicAssetFileName } from "../lib/schematic-sheet-assets"
 
 const repositoryRoot = resolve(import.meta.dir, "..")
 const outputRoot = resolve(repositoryRoot, "public/board-details")
@@ -20,8 +21,14 @@ for (const evm of tiEvms) {
   if (!fullBoard) throw new Error(`${evm.name} has no full-board variant`)
 
   const circuitJson = await readCompressedCircuitJson(fullBoard.circuitJsonUrl)
-  const schematicCircuitJson = await readCompressedCircuitJson(
-    fullBoard.schematicCircuitJsonUrl ?? fullBoard.circuitJsonUrl,
+  const schematicCircuitJsons = await Promise.all(
+    evm.schematicSheetLabels.map((_, schematicSheetIndex) =>
+      readSchematicCircuitJson({
+        evmId: evm.id,
+        primarySchematicUrl: fullBoard.schematicCircuitJsonUrl ?? fullBoard.circuitJsonUrl,
+        schematicSheetIndex,
+      }),
+    ),
   )
   const pcbSvg = stripTrailingWhitespace(
     convertCircuitJsonToPcbSvg(circuitJson, {
@@ -34,18 +41,25 @@ for (const evm of tiEvms) {
       width: 1200,
     }),
   )
-  const schematicSvg = stripTrailingWhitespace(
-    convertCircuitJsonToSchematicSvg(schematicCircuitJson, {
-      height: 900,
-      includeVersion: true,
-      width: fullBoard.schematicCircuitJsonUrl ? 1800 : 1200,
-    }),
+  const schematicSvgs = schematicCircuitJsons.map((schematicCircuitJson) =>
+    stripTrailingWhitespace(
+      convertCircuitJsonToSchematicSvg(schematicCircuitJson, {
+        height: 900,
+        includeVersion: true,
+        width: fullBoard.schematicCircuitJsonUrl ? 1800 : 1200,
+      }),
+    ),
   )
   const threeDimensionalPng = await renderThreeDimensionalPng(circuitJson)
 
   await Promise.all([
     writeFile(resolve(outputDirectory, "pcb.svg"), pcbSvg),
-    writeFile(resolve(outputDirectory, "schematic.svg"), schematicSvg),
+    ...schematicSvgs.map((schematicSvg, schematicSheetIndex) =>
+      writeFile(
+        resolve(outputDirectory, getSchematicAssetFileName(schematicSheetIndex)),
+        schematicSvg,
+      ),
+    ),
     writeFile(resolve(outputDirectory, "3d.png"), threeDimensionalPng),
     Bun.write(
       resolve(outputDirectory, "source.tsx"),
@@ -58,6 +72,28 @@ console.log(`Prebuilt PCB, schematic, 3D, and TSX details for ${tiEvms.length} T
 
 async function readCompressedCircuitJson(publicUrl: string): Promise<CircuitJson> {
   const inputPath = resolve(repositoryRoot, "public", publicUrl.replace(/^\//u, ""))
+  const compressed = new Uint8Array(await Bun.file(inputPath).arrayBuffer())
+  return JSON.parse(strFromU8(gunzipSync(compressed))) as CircuitJson
+}
+
+async function readSchematicCircuitJson(params: {
+  evmId: string
+  primarySchematicUrl: string
+  schematicSheetIndex: number
+}): Promise<CircuitJson> {
+  if (params.schematicSheetIndex === 0) {
+    return readCompressedCircuitJson(params.primarySchematicUrl)
+  }
+  return readCompressedCircuitJsonFile(
+    resolve(
+      repositoryRoot,
+      "lib/generated/ti-evms",
+      `${params.evmId}.schematic-${params.schematicSheetIndex + 1}.circuit.json.gz`,
+    ),
+  )
+}
+
+async function readCompressedCircuitJsonFile(inputPath: string): Promise<CircuitJson> {
   const compressed = new Uint8Array(await Bun.file(inputPath).arrayBuffer())
   return JSON.parse(strFromU8(gunzipSync(compressed))) as CircuitJson
 }

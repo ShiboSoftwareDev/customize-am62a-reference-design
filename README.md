@@ -4,7 +4,7 @@ A fast, source-backed configurator for five Texas Instruments evaluation modules
 
 The application does not mutate Circuit JSON at runtime and does not use Altium-viewer output as its board source.
 
-Each board also has a shareable detail page linked from the configurator. The page presents checked-in full-board PCB and schematic SVGs, a 3D PNG rendered through the same GLB/PoppyGL pipeline used by the tscircuit snapshot CLI, the board's parameterized `index.circuit.tsx`, and its official TI reference.
+Each board also has a shareable detail page linked from the configurator. The page presents checked-in full-board PCB and schematic SVGs for every source sheet, a 3D PNG rendered through the same GLB/PoppyGL pipeline used by the tscircuit snapshot CLI, the board's parameterized `index.circuit.tsx`, and its official TI reference.
 
 ## Boards and configurations
 

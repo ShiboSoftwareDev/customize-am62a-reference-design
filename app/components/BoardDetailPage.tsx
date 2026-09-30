@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import type { TiEvm } from "lib/ti-evm-catalog"
+import { getSchematicAssetFileName } from "lib/schematic-sheet-assets"
 
 export function BoardDetailPage({ evm }: { evm: TiEvm }) {
   const assetRoot = `/board-details/${evm.id}`
@@ -60,13 +61,23 @@ export function BoardDetailPage({ evm }: { evm: TiEvm }) {
           description="Reference placement and geometry with tscircuit autorouted copper."
           alt={`${evm.name} PCB SVG`}
         />
-        <RenderCard
-          href={`${assetRoot}/schematic.svg`}
-          imageUrl={`${assetRoot}/schematic.svg`}
-          title="Schematic"
-          description="Schematic SVG generated from the same full-board TSX render."
-          alt={`${evm.name} schematic SVG`}
-        />
+        {evm.schematicSheetLabels.map((schematicSheetLabel, schematicSheetIndex) => {
+          const schematicAssetUrl = `${assetRoot}/${getSchematicAssetFileName(schematicSheetIndex)}`
+          return (
+            <RenderCard
+              key={schematicSheetLabel}
+              href={schematicAssetUrl}
+              imageUrl={schematicAssetUrl}
+              title={
+                evm.schematicSheetLabels.length === 1
+                  ? "Schematic"
+                  : `Schematic ${schematicSheetIndex + 1}`
+              }
+              description={schematicSheetLabel}
+              alt={`${evm.name} ${schematicSheetLabel} schematic SVG`}
+            />
+          )
+        })}
       </section>
 
       <section className="source-code-section">
