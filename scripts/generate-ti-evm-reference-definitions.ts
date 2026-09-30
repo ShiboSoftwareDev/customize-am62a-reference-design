@@ -182,7 +182,7 @@ const outputDirectory = resolve(import.meta.dir, "../lib/generated/ti-evms")
 await mkdir(outputDirectory, { recursive: true })
 
 for (const reference of references) {
-  const { definition, referenceSchematicCircuitJson } = await createDefinition(reference)
+  const { definition, referenceSchematicCircuitJsons } = await createDefinition(reference)
   const source = [
     'import type { ReferenceEvmDefinition } from "../../evms/reference-evm-types"',
     "",
@@ -192,9 +192,19 @@ for (const reference of references) {
     "",
   ].join("\n")
   await Bun.write(resolve(outputDirectory, reference.outputName), source)
-  await Bun.write(
-    resolve(outputDirectory, `${reference.id}.schematic.circuit.json.gz`),
-    gzipSync(strToU8(JSON.stringify(referenceSchematicCircuitJson)), { level: 9 }),
+  await Promise.all(
+    referenceSchematicCircuitJsons.map((referenceSchematicCircuitJson, schematicSheetIndex) =>
+      Bun.write(
+        resolve(
+          outputDirectory,
+          getReferenceSchematicFileName({
+            referenceId: reference.id,
+            schematicSheetIndex,
+          }),
+        ),
+        gzipSync(strToU8(JSON.stringify(referenceSchematicCircuitJson)), { level: 9 }),
+      ),
+    ),
   )
   console.log(
     `${reference.name}: ${definition.components.length} placed components, ${definition.nets.length} routed nets`,
@@ -203,7 +213,7 @@ for (const reference of references) {
 
 async function createDefinition(reference: ReferenceInput): Promise<{
   definition: ReferenceEvmDefinition
-  referenceSchematicCircuitJson: AnyCircuitElement[]
+  referenceSchematicCircuitJsons: AnyCircuitElement[][]
 }> {
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
@@ -409,8 +419,17 @@ async function createDefinition(reference: ReferenceInput): Promise<{
   }
   return {
     definition,
-    referenceSchematicCircuitJson: schematicCircuitJsons[0],
+    referenceSchematicCircuitJsons: schematicCircuitJsons,
   }
+}
+
+function getReferenceSchematicFileName(params: {
+  referenceId: string
+  schematicSheetIndex: number
+}): string {
+  return params.schematicSheetIndex === 0
+    ? `${params.referenceId}.schematic.circuit.json.gz`
+    : `${params.referenceId}.schematic-${params.schematicSheetIndex + 1}.circuit.json.gz`
 }
 
 function getTeardropsByNet(params: {

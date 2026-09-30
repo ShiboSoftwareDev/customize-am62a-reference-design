@@ -31,6 +31,7 @@ export type TiEvm = {
   sourceLabel: string
   sourceUrl: string
   sourcePath: string
+  schematicSheetLabels: string[]
   removableFeatures: TiEvmRemovableFeature[]
   variants: TiEvmVariant[]
 }
@@ -126,6 +127,7 @@ export const skAm62aLp: TiEvm = {
   sourceLabel: "TI SK-AM62A-LP design files",
   sourceUrl: "https://www.ti.com/tool/SK-AM62A-LP",
   sourcePath: "boards/sk-am62a-lp/index.circuit.tsx",
+  schematicSheetLabels: ["Parameterized schematic"],
   removableFeatures: skAm62aFeatures,
   variants: createVariants({
     evmId: "sk-am62a-lp",
@@ -142,6 +144,7 @@ function createEvaluationEvm(params: {
   sourceLabel: string
   sourceUrl: string
   sourcePath: string
+  schematicSheetLabels: string[]
   removableFeatures: TiEvmRemovableFeature[]
 }): TiEvm {
   return {
@@ -165,6 +168,7 @@ export const tiEvms: TiEvm[] = [
     sourceLabel: "TI DRV8307EVM Altium release",
     sourceUrl: "https://www.ti.com/tool/DRV8307EVM",
     sourcePath: "boards/drv8307evm/index.circuit.tsx",
+    schematicSheetLabels: ["DRV8307EVM RevA.SchDoc"],
     removableFeatures: [
       {
         id: "onboard-speed-control",
@@ -187,6 +191,7 @@ export const tiEvms: TiEvm[] = [
     sourceLabel: "TI LM5155EVM-FLY Altium release",
     sourceUrl: "https://www.ti.com/tool/LM5155EVM-FLY",
     sourcePath: "boards/lm5155evm-fly/index.circuit.tsx",
+    schematicSheetLabels: ["BMC029A_SCH.SchDoc", "BMC029A-HW.SchDoc"],
     removableFeatures: [
       {
         id: "test-and-measurement",
@@ -210,6 +215,7 @@ export const tiEvms: TiEvm[] = [
     sourceLabel: "TI LM251772EVM-PD Altium release",
     sourceUrl: "https://www.ti.com/tool/LM251772EVM-PD",
     sourcePath: "boards/lm251772evm-pd/index.circuit.tsx",
+    schematicSheetLabels: ["SR135B.SchDoc"],
     removableFeatures: [
       {
         id: "test-and-measurement",
@@ -233,6 +239,7 @@ export const tiEvms: TiEvm[] = [
     sourceLabel: "TI LMG342X-BB-EVM Altium release",
     sourceUrl: "https://www.ti.com/tool/LMG342X-BB-EVM",
     sourcePath: "boards/lmg342x-bb-evm/index.circuit.tsx",
+    schematicSheetLabels: ["LMG342X_BB_EVM.SchDoc"],
     removableFeatures: [
       {
         id: "measurement-interface",
