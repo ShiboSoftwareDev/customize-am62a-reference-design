@@ -43,6 +43,7 @@
     "circuit-to-svg": "0.0.432",
     "circuit-json-to-gltf": "0.0.133",
     "poppygl": "0.0.29",
+    "transformation-matrix": "2.16.1",
     "typescript": "5.9.2",
     "vite": "7.1.7"
   },
