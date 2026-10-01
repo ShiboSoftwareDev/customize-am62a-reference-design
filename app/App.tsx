@@ -4,13 +4,7 @@ import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
 import { BoardDetailPage } from "app/components/BoardDetailPage"
 import { useEvmRender } from "app/hooks/use-evm-render"
-import {
-  getTiEvm,
-  getTiEvmVariant,
-  getTiEvmVariantForRemovedFeatures,
-  tiEvms,
-  type TiEvmId,
-} from "lib/ti-evm-catalog"
+import { getTiEvm, getTiEvmVariant, tiEvms, type TiEvmId } from "lib/ti-evm-catalog"
 
 export function App() {
   const detailBoardId = new URLSearchParams(window.location.search).get("board")
@@ -46,13 +40,6 @@ function Configurator() {
     setVariantId(nextEvm.variants[0].id)
   }
 
-  const setFeatureRemoved = (featureId: string, removed: boolean) => {
-    const removedFeatureIds = new Set(variant.removedFeatureIds)
-    if (removed) removedFeatureIds.add(featureId)
-    else removedFeatureIds.delete(featureId)
-    setVariantId(getTiEvmVariantForRemovedFeatures(evm, [...removedFeatureIds]).id)
-  }
-
   return (
     <main className="app-shell">
       <ConfigurationPanel
@@ -62,16 +49,13 @@ function Configurator() {
         statusText={statusText}
         error={render.error}
         onEvmChange={changeEvm}
-        onFeatureRemovalChange={setFeatureRemoved}
-        onSelectFullBoard={() => setVariantId(evm.variants[0].id)}
-        onSelectMinimalBoard={() => setVariantId(evm.variants[evm.variants.length - 1].id)}
+        onVariantChange={setVariantId}
         onRetry={() => setRetryIndex((index) => index + 1)}
         onExportCircuitJson={exportCircuitJson}
         canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}
       />
       <DesignViewer
-        pcbKey={`${evm.id}:${variant.id}`}
-        schematicKey={`${evm.id}:${variant.id}`}
+        boardKey={evm.id}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJson={render.schematicCircuitJson}
         isLoading={render.isLoading}

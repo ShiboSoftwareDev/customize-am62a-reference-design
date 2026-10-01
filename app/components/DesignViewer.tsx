@@ -1,26 +1,44 @@
-import { PCBViewer } from "@tscircuit/pcb-viewer"
-import { SchematicViewer } from "@tscircuit/schematic-viewer"
 import type { AnyCircuitElement } from "circuit-json"
-import { useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState } from "react"
+import { getPcbRenderer } from "app/get-pcb-renderer"
 import { useElementHeight } from "app/hooks/use-element-height"
 
+async function loadPcbViewer() {
+  const module = await import("@tscircuit/pcb-viewer")
+  return { default: module.PCBViewer }
+}
+
+async function loadSchematicViewer() {
+  const module = await import("@tscircuit/schematic-viewer")
+  return { default: module.SchematicViewer }
+}
+
+const PCBViewer = lazy(loadPcbViewer)
+const SchematicViewer = lazy(loadSchematicViewer)
+
 type DesignViewerProps = {
-  pcbKey: string
-  schematicKey: string
+  boardKey: string
   pcbCircuitJson: AnyCircuitElement[] | null
   schematicCircuitJson: AnyCircuitElement[] | null
   isLoading: boolean
 }
 
 export function DesignViewer({
-  pcbKey,
-  schematicKey,
+  boardKey,
   pcbCircuitJson,
   schematicCircuitJson,
   isLoading,
 }: DesignViewerProps) {
   const [activeView, setActiveView] = useState<"pcb" | "schematic">("pcb")
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
+  const pcbRenderer = useMemo(
+    () => (pcbCircuitJson ? getPcbRenderer(pcbCircuitJson) : "webgpu"),
+    [pcbCircuitJson],
+  )
+
+  useEffect(() => {
+    void loadPcbViewer()
+  }, [])
 
   return (
     <section className="design-viewer" aria-label="Design viewer" aria-busy={isLoading}>
@@ -39,6 +57,8 @@ export function DesignViewer({
             role="tab"
             aria-selected={activeView === "schematic"}
             disabled={!schematicCircuitJson}
+            onPointerEnter={() => void loadSchematicViewer()}
+            onFocus={() => void loadSchematicViewer()}
             onClick={() => setActiveView("schematic")}
           >
             <span className="tab-dot schematic-dot" /> Schematic
@@ -53,29 +73,26 @@ export function DesignViewer({
 
       <div className="viewer-canvas" ref={elementRef}>
         {activeView === "pcb" && pcbCircuitJson ? (
-          <PCBViewer
-            key={pcbKey}
-            circuitJson={pcbCircuitJson}
-            height={height}
-            renderer="canvas"
-            allowEditing={false}
-            focusOnHover
-          />
+          <Suspense fallback={<ViewerLoading label="Loading PCB viewer…" />}>
+            <PCBViewer
+              key={boardKey}
+              circuitJson={pcbCircuitJson}
+              height={height}
+              renderer={pcbRenderer}
+              allowEditing={false}
+              focusOnHover
+            />
+          </Suspense>
         ) : activeView === "schematic" && schematicCircuitJson ? (
-          <SchematicViewer
-            key={schematicKey}
-            circuitJson={schematicCircuitJson}
-            containerStyle={{ height: "100%" }}
-          />
+          <Suspense fallback={<ViewerLoading label="Loading schematic viewer…" />}>
+            <SchematicViewer
+              key={boardKey}
+              circuitJson={schematicCircuitJson}
+              containerStyle={{ height: "100%" }}
+            />
+          </Suspense>
         ) : (
-          <div className="viewer-empty">
-            <div className="board-skeleton" aria-hidden="true">
-              {Array.from({ length: 48 }, (_, index) => (
-                <span key={index} />
-              ))}
-            </div>
-            <p>Loading the reference design…</p>
-          </div>
+          <ViewerLoading label="Loading the reference design…" />
         )}
         {isLoading && (pcbCircuitJson || schematicCircuitJson) && (
           <div className="rendering-badge">
@@ -84,5 +101,18 @@ export function DesignViewer({
         )}
       </div>
     </section>
+  )
+}
+
+function ViewerLoading({ label }: { label: string }) {
+  return (
+    <div className="viewer-empty">
+      <div className="board-skeleton" aria-hidden="true">
+        {Array.from({ length: 48 }, (_, index) => (
+          <span key={index} />
+        ))}
+      </div>
+      <p>{label}</p>
+    </div>
   )
 }

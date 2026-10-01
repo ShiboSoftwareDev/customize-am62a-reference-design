@@ -83,11 +83,10 @@ function createVariants(params: {
 
     return {
       id,
-      label: isFullBoard
-        ? "Full board"
-        : isMinimalBoard
-          ? "Minimal board"
-          : `Remove ${removedFeatures.map(({ label }) => label).join(" and ")}`,
+      label: createVariantLabel({
+        features: params.features,
+        removedFeatureIds,
+      }),
       circuitJsonUrl: `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`,
       schematicCircuitJsonUrl:
         params.evmId === "sk-am62a-lp"
@@ -97,6 +96,21 @@ function createVariants(params: {
       ...params.createPopulation(removedFeatureIds),
     }
   })
+}
+
+function createVariantLabel({
+  features,
+  removedFeatureIds,
+}: {
+  features: TiEvmRemovableFeature[]
+  removedFeatureIds: string[]
+}): string {
+  if (removedFeatureIds.length === 0) return "Full board"
+  if (removedFeatureIds.length === features.length) return "Minimal board"
+
+  const includedFeatures = features.filter(({ id }) => !removedFeatureIds.includes(id))
+  const label = includedFeatures.map(({ label: featureLabel }) => featureLabel).join(" + ")
+  return `${label[0].toUpperCase()}${label.slice(1)} only`
 }
 
 function createSkAm62aSelection(removedFeatureIds: string[]): {

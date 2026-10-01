@@ -1,6 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useEffect, useRef, useState } from "react"
-import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import { loadPrebuiltCircuitJson } from "app/load-prebuilt-circuit-json"
 import type { TiEvmVariant } from "lib/ti-evm-catalog"
 
 type EvmRenderState = {
@@ -21,36 +21,38 @@ export function useEvmRender(request: {
   const [isLoading, setIsLoading] = useState(true)
   const [elapsedMs, setElapsedMs] = useState(0)
   const requestIndexRef = useRef(0)
+  const retryIndexRef = useRef(request.retryIndex)
 
   useEffect(() => {
     const requestIndex = ++requestIndexRef.current
-    const abortController = new AbortController()
+    const forceReload = retryIndexRef.current !== request.retryIndex
+    retryIndexRef.current = request.retryIndex
     const startedAt = performance.now()
     const interval = window.setInterval(() => setElapsedMs(performance.now() - startedAt), 100)
     setIsLoading(true)
     setError("")
     setElapsedMs(0)
-    setPcbCircuitJson(null)
-    setSchematicCircuitJson(null)
 
     void (async () => {
       try {
+        const pcbUrl = request.variant.circuitJsonUrl
+        const schematicUrl = request.variant.schematicCircuitJsonUrl ?? pcbUrl
+        const pcbCircuitJsonPromise = loadPrebuiltCircuitJson({ url: pcbUrl, forceReload })
         const [nextPcbCircuitJson, nextSchematicCircuitJson] = await Promise.all([
-          loadCircuitJson(request.variant.circuitJsonUrl, abortController.signal),
-          loadCircuitJson(
-            request.variant.schematicCircuitJsonUrl ?? request.variant.circuitJsonUrl,
-            abortController.signal,
-          ),
+          pcbCircuitJsonPromise,
+          schematicUrl === pcbUrl
+            ? pcbCircuitJsonPromise
+            : loadPrebuiltCircuitJson({ url: schematicUrl, forceReload }),
         ])
         if (requestIndex !== requestIndexRef.current) return
         setPcbCircuitJson(nextPcbCircuitJson)
         setSchematicCircuitJson(nextSchematicCircuitJson)
       } catch (loadError) {
-        if (!abortController.signal.aborted && requestIndex === requestIndexRef.current) {
+        if (requestIndex === requestIndexRef.current) {
           setError(loadError instanceof Error ? loadError.message : String(loadError))
         }
       } finally {
-        if (!abortController.signal.aborted && requestIndex === requestIndexRef.current) {
+        if (requestIndex === requestIndexRef.current) {
           window.clearInterval(interval)
           setElapsedMs(performance.now() - startedAt)
           setIsLoading(false)
@@ -60,15 +62,8 @@ export function useEvmRender(request: {
 
     return () => {
       window.clearInterval(interval)
-      abortController.abort()
     }
   }, [request.variant, request.retryIndex])
 
   return { pcbCircuitJson, schematicCircuitJson, error, isLoading, elapsedMs }
-}
-
-async function loadCircuitJson(url: string, signal: AbortSignal): Promise<AnyCircuitElement[]> {
-  const response = await fetch(url, { signal })
-  if (!response.ok) throw new Error(`Prebuilt EVM failed to load (${response.status})`)
-  return parsePrebuiltCircuitJson(new Uint8Array(await response.arrayBuffer()))
 }
