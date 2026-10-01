@@ -7,19 +7,13 @@ type ConfigurationPanelProps = {
   statusText: string
   error: string
   onEvmChange: (evmId: TiEvmId) => void
-  onFeatureRemovalChange: (featureId: string, removed: boolean) => void
-  onSelectFullBoard: () => void
-  onSelectMinimalBoard: () => void
+  onVariantChange: (variantId: string) => void
   onRetry: () => void
   onExportCircuitJson: () => void
   canExportCircuitJson: boolean
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
-  const isFullBoard = props.variant.removedFeatureIds.length === 0
-  const isMinimalBoard =
-    props.variant.removedFeatureIds.length === props.evm.removableFeatures.length
-
   return (
     <aside className="configuration-panel">
       <header className="board-title">
@@ -50,35 +44,19 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         <p>{props.evm.description}</p>
       </div>
 
-      <fieldset className="configuration-options">
-        <legend>Remove optional blocks</legend>
-        <div className="configuration-quick-actions">
-          <button disabled={isFullBoard} onClick={props.onSelectFullBoard} type="button">
-            Full board
-          </button>
-          <button disabled={isMinimalBoard} onClick={props.onSelectMinimalBoard} type="button">
-            Minimal board
-          </button>
-        </div>
-        {props.evm.removableFeatures.map((feature) => {
-          const isRemoved = props.variant.removedFeatureIds.includes(feature.id)
-          return (
-            <label className="configuration-choice" data-selected={isRemoved} key={feature.id}>
-              <input
-                checked={isRemoved}
-                onChange={(event) =>
-                  props.onFeatureRemovalChange(feature.id, event.currentTarget.checked)
-                }
-                type="checkbox"
-              />
-              <span>
-                <strong>Remove {feature.label}</strong>
-                <small>{feature.description}</small>
-              </span>
-            </label>
-          )
-        })}
-      </fieldset>
+      <label className="select-field">
+        <span>Variant</span>
+        <select
+          value={props.variant.id}
+          onChange={(event) => props.onVariantChange(event.currentTarget.value)}
+        >
+          {props.evm.variants.map((variant) => (
+            <option key={variant.id} value={variant.id}>
+              {variant.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <div className="source-links">
         <a href={`/?board=${props.evm.id}`}>View PCB, schematic, 3D, and TSX →</a>

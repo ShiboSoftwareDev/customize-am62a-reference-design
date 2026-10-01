@@ -3,5 +3,16 @@
   "bunVersion": "1.4.x",
   "buildCommand": "bun run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "headers": [
+    {
+      "source": "/prebuilt-ti-evms/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120, stale-while-revalidate=86400"
+        }
+      ]
+    }
+  ]
 }

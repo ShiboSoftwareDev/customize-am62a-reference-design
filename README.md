@@ -16,7 +16,7 @@ Each board also has a shareable detail page linked from the configurator. The pa
 | LM251772EVM-PD | 169-component four-switch buck-boost | 4 | [LM251772EVM-PD](https://www.ti.com/tool/LM251772EVM-PD) |
 | LMG342X-BB-EVM | 157-component 650-V GaN half-bridge platform | 4 | [LMG342X-BB-EVM](https://www.ti.com/tool/LMG342X-BB-EVM) |
 
-Each board exposes removable-feature checkboxes plus **Full board** and **Minimal board** shortcuts. SK-AM62A-LP has three independent subsystem groups. The other EVMs expose two board-specific, independently removable evaluation subsystems while retaining the required application power stage and connectors. Every possible checkbox combination is prebuilt, for 24 board/configuration artifacts in total.
+Each board exposes a named variant selector, including **Full board**, **Minimal board**, and every meaningful combination of optional subsystems. SK-AM62A-LP has three independent subsystem groups. The other EVMs expose two board-specific, independently removable evaluation subsystems while retaining the required application power stage and connectors. Every possible combination is prebuilt, for 24 board/configuration artifacts in total.
 
 ## Run locally
 
@@ -64,7 +64,9 @@ Tests use one focused case per file. They verify catalog provenance, unique opti
 - `lib/ti-evm-catalog.ts` owns the five-board catalog and all selectable variants.
 - `scripts/prebuild-ti-evm-assets.ts` renders all 24 combinations through `@tscircuit/core`; Pipeline9 is used by default, while LM5155 and LM251772 use Pipeline7 because the pinned Pipeline9 release rejects valid reduced-net topologies on those boards.
 - `scripts/prebuild-ti-evm-schematic-assets.ts` applies each variant's component population to the canonical Altium schematic without rerouting or replacing its authored geometry.
-- `app/hooks/use-evm-render.ts` loads the selected prebuilt PCB and schematic in parallel and cancels stale requests.
+- `app/hooks/use-evm-render.ts` loads the selected prebuilt PCB and schematic in parallel, ignores stale requests, and reuses the parsed result when a variant is selected again.
+- `app/components/DesignViewer.tsx` lazy-loads each viewer, preserves renderer state across variant changes, and starts in Canvas only when the selected board contains geometry unsupported by WebGPU.
+- `vercel.json` gives prebuilt Circuit JSON a short browser cache while Vercel automatically edge-caches the static files for each deployment.
 
 The SK-AM62A-LP is a 12-layer design. The pinned tscircuit releases validate ten layers by default, so the repository carries three narrow Bun patches: `@tscircuit/props` accepts `layers={12}`, `circuit-json` validates `inner9` and `inner10`, and `@tscircuit/checks` runs design-rule checks across all 12 layers. The reference design's two 0.089 mm pad-clearance findings at U90 remain visible in the validation test rather than being hidden.
 
