@@ -1,59 +1,65 @@
 import type { AnyCircuitElement } from "circuit-json"
 
+type SourceComponentId = string
+type SourcePortId = string
+type SourceTraceId = string
+type SchematicComponentId = string
+type SchematicPortId = string
+type SchematicTraceId = string
 type CircuitElementRecord = Record<string, unknown> & { type: string }
 type SourceComponent = CircuitElementRecord & {
   name: string
-  source_component_id: string
+  source_component_id: SourceComponentId
 }
 type SourcePort = CircuitElementRecord & {
-  source_component_id?: string
-  source_port_id: string
+  source_component_id?: SourceComponentId
+  source_port_id: SourcePortId
 }
 type SourceTrace = CircuitElementRecord & {
   connected_source_net_ids: string[]
-  connected_source_port_ids: string[]
-  source_trace_id: string
+  connected_source_port_ids: SourcePortId[]
+  source_trace_id: SourceTraceId
 }
 type SchematicComponent = CircuitElementRecord & {
-  schematic_component_id: string
-  source_component_id?: string
+  schematic_component_id: SchematicComponentId
+  source_component_id?: SourceComponentId
 }
 type SchematicPort = CircuitElementRecord & {
-  schematic_port_id: string
-  source_port_id: string
+  schematic_port_id: SchematicPortId
+  source_port_id: SourcePortId
 }
 type SchematicTraceEdge = {
-  from_schematic_port_id?: string
-  to_schematic_port_id?: string
+  from_schematic_port_id?: SchematicPortId
+  to_schematic_port_id?: SchematicPortId
   [property: string]: unknown
 }
 type SchematicTrace = CircuitElementRecord & {
   edges: SchematicTraceEdge[]
-  schematic_trace_id: string
-  source_trace_id?: string
+  schematic_trace_id: SchematicTraceId
+  source_trace_id?: SourceTraceId
 }
 type SchematicNetLabel = CircuitElementRecord & {
-  schematic_trace_id?: string
+  schematic_trace_id?: SchematicTraceId
 }
 type SchematicGroup = CircuitElementRecord & {
-  schematic_component_ids: string[]
+  schematic_component_ids: SchematicComponentId[]
 }
 
-export function filterReferenceSchematic(
-  circuitJson: AnyCircuitElement[],
-  removedComponentNames: ReadonlySet<string>,
-): AnyCircuitElement[] {
-  if (removedComponentNames.size === 0) return structuredClone(circuitJson)
+export function filterReferenceSchematic(params: {
+  circuitJson: AnyCircuitElement[]
+  removedComponentNames: ReadonlySet<string>
+}): AnyCircuitElement[] {
+  if (params.removedComponentNames.size === 0) return structuredClone(params.circuitJson)
 
-  const removedSourceComponentIds = new Set(
-    circuitJson.flatMap((element) => {
+  const removedSourceComponentIds = new Set<SourceComponentId>(
+    params.circuitJson.flatMap((element) => {
       if (element.type !== "source_component") return []
       const component = element as unknown as SourceComponent
-      return removedComponentNames.has(component.name) ? [component.source_component_id] : []
+      return params.removedComponentNames.has(component.name) ? [component.source_component_id] : []
     }),
   )
-  const removedSourcePortIds = new Set(
-    circuitJson.flatMap((element) => {
+  const removedSourcePortIds = new Set<SourcePortId>(
+    params.circuitJson.flatMap((element) => {
       if (element.type !== "source_port") return []
       const port = element as unknown as SourcePort
       return port.source_component_id !== undefined &&
@@ -62,8 +68,8 @@ export function filterReferenceSchematic(
         : []
     }),
   )
-  const removedSchematicComponentIds = new Set(
-    circuitJson.flatMap((element) => {
+  const removedSchematicComponentIds = new Set<SchematicComponentId>(
+    params.circuitJson.flatMap((element) => {
       if (element.type !== "schematic_component") return []
       const component = element as unknown as SchematicComponent
       return component.source_component_id !== undefined &&
@@ -72,17 +78,17 @@ export function filterReferenceSchematic(
         : []
     }),
   )
-  const removedSchematicPortIds = new Set(
-    circuitJson.flatMap((element) => {
+  const removedSchematicPortIds = new Set<SchematicPortId>(
+    params.circuitJson.flatMap((element) => {
       if (element.type !== "schematic_port") return []
       const port = element as unknown as SchematicPort
       return removedSourcePortIds.has(port.source_port_id) ? [port.schematic_port_id] : []
     }),
   )
 
-  const updatedSourceTraces = new Map<string, AnyCircuitElement>()
-  const removedSourceTraceIds = new Set<string>()
-  for (const element of circuitJson) {
+  const updatedSourceTraces = new Map<SourceTraceId, AnyCircuitElement>()
+  const removedSourceTraceIds = new Set<SourceTraceId>()
+  for (const element of params.circuitJson) {
     if (element.type !== "source_trace") continue
     const sourceTrace = element as unknown as SourceTrace
     const connectedSourcePortIds = sourceTrace.connected_source_port_ids.filter(
@@ -95,12 +101,12 @@ export function filterReferenceSchematic(
     updatedSourceTraces.set(sourceTrace.source_trace_id, {
       ...sourceTrace,
       connected_source_port_ids: connectedSourcePortIds,
-    })
+    } as AnyCircuitElement)
   }
 
-  const updatedSchematicTraces = new Map<string, AnyCircuitElement>()
-  const removedSchematicTraceIds = new Set<string>()
-  for (const element of circuitJson) {
+  const updatedSchematicTraces = new Map<SchematicTraceId, AnyCircuitElement>()
+  const removedSchematicTraceIds = new Set<SchematicTraceId>()
+  for (const element of params.circuitJson) {
     if (element.type !== "schematic_trace") continue
     const schematicTrace = element as unknown as SchematicTrace
     if (
@@ -119,10 +125,13 @@ export function filterReferenceSchematic(
       removedSchematicTraceIds.add(schematicTrace.schematic_trace_id)
       continue
     }
-    updatedSchematicTraces.set(schematicTrace.schematic_trace_id, { ...schematicTrace, edges })
+    updatedSchematicTraces.set(schematicTrace.schematic_trace_id, {
+      ...schematicTrace,
+      edges,
+    } as AnyCircuitElement)
   }
 
-  return circuitJson.flatMap((element) => {
+  return params.circuitJson.flatMap((element) => {
     if (
       (element.type === "source_component" &&
         removedSourceComponentIds.has(
@@ -167,9 +176,9 @@ export function filterReferenceSchematic(
         {
           ...group,
           schematic_component_ids: group.schematic_component_ids.filter(
-            (id) => !removedSchematicComponentIds.has(id),
+            (schematicComponentId) => !removedSchematicComponentIds.has(schematicComponentId),
           ),
-        },
+        } as AnyCircuitElement,
       ]
     }
 

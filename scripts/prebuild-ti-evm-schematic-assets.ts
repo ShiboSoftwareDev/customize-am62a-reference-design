@@ -25,10 +25,10 @@ export async function prebuildTiEvmSchematicAssets(): Promise<void> {
             : [],
         ),
       )
-      const schematicCircuitJson = filterReferenceSchematic(
-        referenceSchematic,
+      const schematicCircuitJson = filterReferenceSchematic({
+        circuitJson: referenceSchematic,
         removedComponentNames,
-      )
+      })
       const outputPath = resolve(
         import.meta.dir,
         `../public/${variant.schematicCircuitJsonUrl.replace(/^\//u, "")}`,

@@ -4,7 +4,6 @@ import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
 import { evaluateBoard, evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
 import { skAm62aLp, tiEvms } from "../lib/ti-evm-catalog"
-import { prebuildTiEvmSchematicAssets } from "./prebuild-ti-evm-schematic-assets"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -43,6 +42,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
       }),
     )
   }
+  console.log(`Prebuilt ${artifacts.length} ${skAm62aLp.name} variants`)
 
   const boards = [{ id: skAm62aLp.id, artifacts }]
   for (const evm of tiEvms) {
@@ -88,9 +88,8 @@ export async function prebuildTiEvmAssets(): Promise<void> {
       evmArtifacts.push(manifestArtifact)
     }
     boards.push({ id: evm.id, artifacts: evmArtifacts })
+    console.log(`Prebuilt ${evmArtifacts.length} ${evm.name} variants`)
   }
-
-  await prebuildTiEvmSchematicAssets()
 
   const manifest = {
     boards,

@@ -1,5 +1,4 @@
-import { ReferenceEvmBoard } from "../../lib/evms/ReferenceEvmBoard"
-import { lm5155EvmFlyDefinition } from "../../lib/generated/ti-evms/lm5155evm-fly.generated"
+import { Lm5155EvmFly as GeneratedLm5155EvmFly } from "../../lib/generated/ti-evms/lm5155evm-fly.circuit"
 
 export type Lm5155EvmFlyProps = {
   removeTestAndMeasurement?: boolean
@@ -12,7 +11,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     props.removeConfigurationInterface && "configuration-interface",
   ].filter((featureId): featureId is string => Boolean(featureId))
 
-  return <ReferenceEvmBoard definition={lm5155EvmFlyDefinition} options={{ removedFeatureIds }} />
+  return <GeneratedLm5155EvmFly removedFeatureIds={removedFeatureIds} />
 }
 
 export default () => <Lm5155EvmFly />
