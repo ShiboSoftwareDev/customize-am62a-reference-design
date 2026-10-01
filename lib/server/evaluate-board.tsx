@@ -1,16 +1,17 @@
 import { Circuit } from "@tscircuit/core"
 import type { AnyCircuitElement } from "circuit-json"
 import type { BoardRenderRequest, BoardRenderResponse } from "../board-render-types"
-import { deriveModuleFlags, getSelectionCacheKey } from "../module-config"
-import { AM62ABoard } from "../generated/am62a-board.runtime.js"
 import {
   ParameterizedTiEvm,
   type ParameterizedTiEvmId,
   type ParameterizedTiEvmOptions,
 } from "../evms/parameterized-ti-evms"
+import { AM62ABoard } from "../generated/am62a-board.runtime.js"
+import { deriveModuleFlags, getSelectionCacheKey } from "../module-config"
 
 const maximumServerCacheEntries = 8
-const renderCache = new Map<string, Promise<BoardRenderResponse>>()
+type RenderCacheKey = string
+const renderCache = new Map<RenderCacheKey, Promise<BoardRenderResponse>>()
 
 type EvaluateBoardOptions = {
   runDrcChecks?: boolean

@@ -1,24 +1,32 @@
 import ts from "typescript"
+import {
+  addRenamedNetSelectorReplacements,
+  applyReplacements,
+  findBoardElement,
+  getAttribute,
+  getStringAttribute,
+  type SourceReplacement,
+} from "./generated-board-source/ast-helpers"
+import { createParameterizedBoardSource } from "./generated-board-source/create-parameterized-board-source"
 
-type SourceReplacement = {
-  end: number
-  start: number
-  text: string
-}
+type ComponentName = string
+type FeatureId = string
+type NetName = string
+type PortSelector = string
 
 export type ParameterizedBoardSource = {
-  componentNames: string[]
+  componentNames: ComponentName[]
   source: string
 }
 
 export function parameterizeGeneratedBoard(params: {
   componentName: string
   autorouterVersion: "beta_pipeline7" | "beta_pipeline9"
-  featureIdByComponentName: ReadonlyMap<string, string>
+  featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
-  routablePortSelectors: ReadonlySet<string>
-  teardropPortSelectors: ReadonlySet<string>
-  viaTeardropPortSelectors: ReadonlySet<string>
+  routablePortSelectors: ReadonlySet<PortSelector>
+  teardropPortSelectors: ReadonlySet<PortSelector>
+  viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): ParameterizedBoardSource {
   const sourceFile = ts.createSourceFile(
     `${params.componentName}.tsx`,
@@ -27,7 +35,7 @@ export function parameterizeGeneratedBoard(params: {
     true,
     ts.ScriptKind.TSX,
   )
-  const boardElement = findBoardElement(sourceFile)
+  const boardElement = findBoardElement({ node: sourceFile, sourceFile })
   if (!boardElement) throw new Error(`${params.componentName} has no generated board element`)
 
   const replacements: SourceReplacement[] = []
@@ -38,60 +46,34 @@ export function parameterizeGeneratedBoard(params: {
     const componentName = getStringAttribute({ element: child, name: "name", sourceFile })
     return componentName ? [componentName] : []
   })
-  const componentNameSet = new Set(componentNames)
-  const renamedNets = new Map<string, string>()
-  for (const child of boardElement.children) {
-    if (!ts.isJsxSelfClosingElement(child) || child.tagName.getText(sourceFile) !== "net") continue
-    const netName = getStringAttribute({ element: child, name: "name", sourceFile })
-    if (!netName || !componentNameSet.has(netName)) continue
-    renamedNets.set(netName, `NET_${netName}`)
-    const nameAttribute = getAttribute({ element: child, name: "name", sourceFile })
-    if (!nameAttribute?.initializer) continue
-    replacements.push({
-      start: nameAttribute.initializer.getStart(sourceFile),
-      end: nameAttribute.initializer.getEnd(),
-      text: JSON.stringify(`NET_${netName}`),
-    })
-  }
+  const componentNameSet = new Set<ComponentName>(componentNames)
+  const renamedNets = renameNetsMatchingComponentNames({
+    boardElement,
+    componentNameSet,
+    replacements,
+    sourceFile,
+  })
 
   for (const child of boardElement.children) {
     if (!ts.isJsxSelfClosingElement(child)) continue
     const tagName = child.tagName.getText(sourceFile)
     if (tagName === "chip") {
-      const componentName = getStringAttribute({
-        element: child,
-        name: "name",
+      addComponentFeatureCondition({
+        componentElement: child,
+        featureIdByComponentName: params.featureIdByComponentName,
+        generatedSource: params.generatedSource,
+        replacements,
         sourceFile,
-      })
-      if (!componentName) continue
-      const featureId = params.featureIdByComponentName.get(componentName)
-      if (!featureId) continue
-      const originalElement = params.generatedSource.slice(
-        child.getStart(sourceFile),
-        child.getEnd(),
-      )
-      replacements.push({
-        start: child.getStart(sourceFile),
-        end: child.getEnd(),
-        text: `{isComponentIncluded({ componentName: ${JSON.stringify(componentName)}, removedFeatureIds }) && (${originalElement})}`,
       })
       continue
     }
     if (tagName === "trace") {
-      const visitTraceNode = (node: ts.Node): void => {
-        if (ts.isStringLiteral(node) && node.text.startsWith("net.")) {
-          const renamedNet = renamedNets.get(node.text.slice("net.".length))
-          if (renamedNet) {
-            replacements.push({
-              start: node.getStart(sourceFile),
-              end: node.getEnd(),
-              text: JSON.stringify(`net.${renamedNet}`),
-            })
-          }
-        }
-        ts.forEachChild(node, visitTraceNode)
-      }
-      visitTraceNode(child)
+      addRenamedNetSelectorReplacements({
+        node: child,
+        renamedNets,
+        replacements,
+        sourceFile,
+      })
       replacements.push({
         start: child.tagName.getStart(sourceFile),
         end: child.tagName.getEnd(),
@@ -100,174 +82,119 @@ export function parameterizeGeneratedBoard(params: {
     }
   }
 
-  const routingDisabledAttribute = boardElement.openingElement.attributes.properties.find(
-    (attribute) =>
-      ts.isJsxAttribute(attribute) && attribute.name.getText(sourceFile) === "routingDisabled",
-  )
-  const autorouterAttributes = `autorouter="auto" autorouterVersion="${params.autorouterVersion}" autorouterEffortLevel="1x"`
-  if (routingDisabledAttribute) {
-    replacements.push({
-      start: routingDisabledAttribute.getStart(sourceFile),
-      end: routingDisabledAttribute.getEnd(),
-      text: autorouterAttributes,
-    })
-  } else {
-    replacements.push({
-      start: boardElement.openingElement.getEnd() - 1,
-      end: boardElement.openingElement.getEnd() - 1,
-      text: ` ${autorouterAttributes}`,
-    })
-  }
-
+  replaceRoutingAttributes({
+    autorouterVersion: params.autorouterVersion,
+    boardElement,
+    replacements,
+    sourceFile,
+  })
   const parameterizedBody = applyReplacements({
     replacements,
     source: params.generatedSource,
   })
   const arrowPrefix = "export default () => ("
-  if (!parameterizedBody.startsWith(arrowPrefix)) {
-    throw new Error(`${params.componentName} has an unexpected generated export`)
-  }
-  if (!parameterizedBody.endsWith(")")) {
-    throw new Error(`${params.componentName} has an unexpected generated function ending`)
+  if (!parameterizedBody.startsWith(arrowPrefix) || !parameterizedBody.endsWith(")")) {
+    throw new Error(`${params.componentName} has an unexpected generated component shape`)
   }
 
-  const featureEntries = [...params.featureIdByComponentName.entries()].filter(([name]) =>
-    componentNames.includes(name),
+  const featureEntries = [...params.featureIdByComponentName.entries()].filter(([componentName]) =>
+    componentNameSet.has(componentName),
   )
-  const featureIds = [...new Set(featureEntries.map(([, featureId]) => featureId))]
-  const featureType = featureIds.map((featureId) => JSON.stringify(featureId)).join(" | ")
-  const featureMap = JSON.stringify(Object.fromEntries(featureEntries), null, 2)
-  const routablePortSelectors = JSON.stringify([...params.routablePortSelectors], null, 2)
-  const teardropPortSelectors = JSON.stringify([...params.teardropPortSelectors], null, 2)
-  const viaTeardropPortSelectors = JSON.stringify([...params.viaTeardropPortSelectors], null, 2)
-  const jsxBody = parameterizedBody.slice(arrowPrefix.length, -1)
-  const source = `import { Fragment } from "react"
-import "tscircuit"
-
-export type ${params.componentName}FeatureId = ${featureType || "never"}
-
-export type ${params.componentName}Props = {
-  removedFeatureIds?: readonly string[]
-}
-
-const featureIdByComponentName: Partial<Record<string, ${params.componentName}FeatureId>> =
-  ${featureMap}
-
-const routablePortSelectors = new Set<string>(${routablePortSelectors})
-const teardropPortSelectors = new Set<string>(${teardropPortSelectors})
-const viaTeardropPortSelectors = new Set<string>(${viaTeardropPortSelectors})
-
-function isComponentIncluded(params: {
-  componentName: string
-  removedFeatureIds: ReadonlySet<string>
-}): boolean {
-  const featureId = featureIdByComponentName[params.componentName]
-  return featureId === undefined || !params.removedFeatureIds.has(featureId)
-}
-
-function ParameterizedTrace(props: {
-  path: string[]
-  removedFeatureIds: ReadonlySet<string>
-}) {
-  const path = props.path.filter((selector) => {
-    const componentName = /^\\.([^ >]+)\\s*>\\s*\\./u.exec(selector)?.[1]
-    return (
-      componentName === undefined ||
-      (routablePortSelectors.has(selector) &&
-        isComponentIncluded({ componentName, removedFeatureIds: props.removedFeatureIds }))
-    )
-  })
-  if (path.length < 2) return null
-
-  const netSelector = path.find((selector) => selector.startsWith("net."))
-  const portSelectors = path.filter((selector) => selector.startsWith("."))
-  const hasPadTeardrops = portSelectors.some((selector) =>
-    teardropPortSelectors.has(selector),
-  )
-  const hasViaTeardrops = portSelectors.some((selector) =>
-    viaTeardropPortSelectors.has(selector),
-  )
-  if (!netSelector || (!hasPadTeardrops && !hasViaTeardrops)) {
-    return <trace path={path} />
+  return {
+    componentNames,
+    source: createParameterizedBoardSource({
+      componentName: params.componentName,
+      featureEntries,
+      jsxBody: parameterizedBody.slice(arrowPrefix.length, -1),
+      routablePortSelectors: params.routablePortSelectors,
+      teardropPortSelectors: params.teardropPortSelectors,
+      viaTeardropPortSelectors: params.viaTeardropPortSelectors,
+    }),
   }
-
-  return (
-    <Fragment>
-      {portSelectors.map((selector) => (
-        <Fragment key={selector}>
-          <trace
-            from={selector}
-            to={netSelector}
-            pcbTeardrops={hasViaTeardrops}
-            pcbTeardropStart={
-              teardropPortSelectors.has(selector)
-                ? true
-                : hasViaTeardrops
-                  ? false
-                  : undefined
-            }
-          />
-        </Fragment>
-      ))}
-    </Fragment>
-  )
 }
 
-export function ${params.componentName}(props: ${params.componentName}Props) {
-  const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
-  return (${jsxBody})
-}
-
-export default ${params.componentName}
-`
-
-  return { componentNames, source }
-}
-
-function findBoardElement(sourceFile: ts.SourceFile): ts.JsxElement | undefined {
-  let boardElement: ts.JsxElement | undefined
-  const visit = (node: ts.Node): void => {
-    if (
-      boardElement === undefined &&
-      ts.isJsxElement(node) &&
-      node.openingElement.tagName.getText(sourceFile) === "board"
-    ) {
-      boardElement = node
-      return
+function renameNetsMatchingComponentNames(params: {
+  boardElement: ts.JsxElement
+  componentNameSet: ReadonlySet<ComponentName>
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): Map<NetName, NetName> {
+  const renamedNets = new Map<NetName, NetName>()
+  for (const child of params.boardElement.children) {
+    if (!ts.isJsxSelfClosingElement(child) || child.tagName.getText(params.sourceFile) !== "net") {
+      continue
     }
-    ts.forEachChild(node, visit)
+    const netName = getStringAttribute({
+      element: child,
+      name: "name",
+      sourceFile: params.sourceFile,
+    })
+    if (!netName || !params.componentNameSet.has(netName)) continue
+    const renamedNet = `NET_${netName}`
+    renamedNets.set(netName, renamedNet)
+    const nameAttribute = getAttribute({
+      element: child,
+      name: "name",
+      sourceFile: params.sourceFile,
+    })
+    if (!nameAttribute?.initializer) continue
+    params.replacements.push({
+      start: nameAttribute.initializer.getStart(params.sourceFile),
+      end: nameAttribute.initializer.getEnd(),
+      text: JSON.stringify(renamedNet),
+    })
   }
-  visit(sourceFile)
-  return boardElement
+  return renamedNets
 }
 
-function getStringAttribute(params: {
-  element: ts.JsxSelfClosingElement
-  name: string
+function addComponentFeatureCondition(params: {
+  componentElement: ts.JsxSelfClosingElement
+  featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
+  generatedSource: string
+  replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
-}): string | undefined {
-  const attribute = getAttribute(params)
-  if (!attribute?.initializer) return undefined
-  return ts.isStringLiteral(attribute.initializer) ? attribute.initializer.text : undefined
-}
-
-function getAttribute(params: {
-  element: ts.JsxSelfClosingElement
-  name: string
-  sourceFile: ts.SourceFile
-}): ts.JsxAttribute | undefined {
-  const attribute = params.element.attributes.properties.find(
-    (candidate) =>
-      ts.isJsxAttribute(candidate) && candidate.name.getText(params.sourceFile) === params.name,
+}): void {
+  const componentName = getStringAttribute({
+    element: params.componentElement,
+    name: "name",
+    sourceFile: params.sourceFile,
+  })
+  if (!componentName || !params.featureIdByComponentName.get(componentName)) return
+  const originalElement = params.generatedSource.slice(
+    params.componentElement.getStart(params.sourceFile),
+    params.componentElement.getEnd(),
   )
-  return attribute && ts.isJsxAttribute(attribute) ? attribute : undefined
+  params.replacements.push({
+    start: params.componentElement.getStart(params.sourceFile),
+    end: params.componentElement.getEnd(),
+    text: `{isComponentIncluded({ componentName: ${JSON.stringify(componentName)}, removedFeatureIds }) && (${originalElement})}`,
+  })
 }
 
-function applyReplacements(params: { replacements: SourceReplacement[]; source: string }): string {
-  let source = params.source
-  const replacements = [...params.replacements].sort((first, second) => second.start - first.start)
-  for (const replacement of replacements) {
-    source = `${source.slice(0, replacement.start)}${replacement.text}${source.slice(replacement.end)}`
+function replaceRoutingAttributes(params: {
+  autorouterVersion: "beta_pipeline7" | "beta_pipeline9"
+  boardElement: ts.JsxElement
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  const routingDisabledAttribute = params.boardElement.openingElement.attributes.properties.find(
+    (attribute) =>
+      ts.isJsxAttribute(attribute) &&
+      attribute.name.getText(params.sourceFile) === "routingDisabled",
+  )
+  const autorouterAttributes = `autorouter="auto" autorouterVersion="${params.autorouterVersion}" autorouterEffortLevel="1x"`
+  if (routingDisabledAttribute) {
+    params.replacements.push({
+      start: routingDisabledAttribute.getStart(params.sourceFile),
+      end: routingDisabledAttribute.getEnd(),
+      text: autorouterAttributes,
+    })
+    return
   }
-  return source
+  const insertionPosition = params.boardElement.openingElement.getEnd() - 1
+  params.replacements.push({
+    start: insertionPosition,
+    end: insertionPosition,
+    text: ` ${autorouterAttributes}`,
+  })
 }
