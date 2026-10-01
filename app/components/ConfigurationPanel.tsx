@@ -1,17 +1,12 @@
-import {
-  boosterPackBoards,
-  boosterPackSourceRepositoryUrl,
-  type BoosterPackBoard,
-  type BoosterPackConfiguration,
-  type BoosterPackId,
-} from "lib/boosterpack-configurations"
+import type { TiEvm, TiEvmId, TiEvmVariant } from "lib/ti-evm-catalog"
 
 type ConfigurationPanelProps = {
-  board: BoosterPackBoard
-  configuration: BoosterPackConfiguration
+  evms: TiEvm[]
+  evm: TiEvm
+  variant: TiEvmVariant
   statusText: string
   error: string
-  onBoardChange: (boardId: BoosterPackId) => void
+  onEvmChange: (evmId: TiEvmId) => void
   onFeatureRemovalChange: (featureId: string, removed: boolean) => void
   onSelectFullBoard: () => void
   onSelectMinimalBoard: () => void
@@ -21,38 +16,39 @@ type ConfigurationPanelProps = {
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
-  const isFullBoard = props.configuration.removedFeatureIds.length === 0
+  const isFullBoard = props.variant.removedFeatureIds.length === 0
   const isMinimalBoard =
-    props.configuration.removedFeatureIds.length === props.board.removableFeatures.length
+    props.variant.removedFeatureIds.length === props.evm.removableFeatures.length
 
   return (
     <aside className="configuration-panel">
       <header className="board-title">
-        <h1>TI BoosterPacks</h1>
+        <span className="eyebrow">Parameterized TSX configurator</span>
+        <h1>TI EVM Configurator</h1>
       </header>
 
-      <fieldset className="board-picker">
-        <legend>Board</legend>
-        {boosterPackBoards.map((boosterPack) => (
-          <label
-            className="board-choice"
-            data-selected={boosterPack.id === props.board.id}
-            key={boosterPack.id}
-          >
-            <input
-              checked={boosterPack.id === props.board.id}
-              name="boosterpack-board"
-              onChange={() => props.onBoardChange(boosterPack.id)}
-              type="radio"
-            />
-            <img alt="" src={boosterPack.thumbnailUrl} />
-            <span>
-              <small>{boosterPack.category}</small>
-              <strong>{boosterPack.name}</strong>
-            </span>
-          </label>
-        ))}
-      </fieldset>
+      <label className="select-field">
+        <span>Board</span>
+        <select
+          value={props.evm.id}
+          onChange={(event) => {
+            const selectedEvm = props.evms.find(({ id }) => id === event.currentTarget.value)
+            if (selectedEvm) props.onEvmChange(selectedEvm.id)
+          }}
+        >
+          {props.evms.map((evm) => (
+            <option key={evm.id} value={evm.id}>
+              {evm.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div className="evm-summary">
+        <small>{props.evm.category}</small>
+        <strong>{props.evm.name}</strong>
+        <p>{props.evm.description}</p>
+      </div>
 
       <fieldset className="configuration-options">
         <legend>Remove optional blocks</legend>
@@ -64,8 +60,8 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
             Minimal board
           </button>
         </div>
-        {props.board.removableFeatures.map((feature) => {
-          const isRemoved = props.configuration.removedFeatureIds.includes(feature.id)
+        {props.evm.removableFeatures.map((feature) => {
+          const isRemoved = props.variant.removedFeatureIds.includes(feature.id)
           return (
             <label className="configuration-choice" data-selected={isRemoved} key={feature.id}>
               <input
@@ -85,12 +81,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
       </fieldset>
 
       <div className="source-links">
-        <a href={props.board.sourceUrl} rel="noreferrer" target="_blank">
-          View this board’s TSX ↗
-        </a>
-        <a href={boosterPackSourceRepositoryUrl} rel="noreferrer" target="_blank">
-          All BoosterPacks ↗
-        </a>
+        <a href={`/?board=${props.evm.id}`}>View PCB, schematic, 3D, and TSX →</a>
       </div>
 
       <button
@@ -99,7 +90,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         disabled={!props.canExportCircuitJson}
         onClick={props.onExportCircuitJson}
       >
-        Export selected Circuit JSON
+        Export PCB Circuit JSON
       </button>
 
       <p className="render-status" role="status">

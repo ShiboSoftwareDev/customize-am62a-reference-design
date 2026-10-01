@@ -2,36 +2,63 @@
   "name": "customize-am62a-reference-design",
   "version": "0.1.0",
   "private": true,
-  "description": "Instant prebuilt configurator for open-source TI BoosterPack designs",
+  "description": "Prebuilt parameterized-TSX configurator for five Texas Instruments EVMs",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "prebuild:boosters": "bun scripts/prebuild-boosterpack-configurations.tsx",
-    "test": "bun test",
+    "prepare:generated": "bun scripts/prepare-generated-assets.ts",
+    "download:ti-evm-references": "bun scripts/download-ti-evm-references.ts",
+    "generate:ti-evm-references": "bun run download:ti-evm-references && bun scripts/generate-ti-evm-reference-definitions.ts",
+    "prebuild:ti-evms": "bun run prepare:generated && bun scripts/prebuild-ti-evms.ts && bun scripts/prebuild-ti-evm-schematic-assets.ts && bun scripts/prebuild-board-details.ts",
+    "rebuild:ti-evms": "bun run generate:ti-evm-references && bun run prebuild:ti-evms",
+    "prebuild:board-details": "bun scripts/prebuild-board-details.ts",
+    "dev": "bun run prepare:generated && vite",
+    "build": "bun run prepare:generated && vite build",
+    "test": "bun run prepare:generated && bun test --smol",
     "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
     "format": "biome format --write .",
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/core": "0.0.1993",
+    "@tscircuit/checks": "0.0.222",
     "@tscircuit/circuit-json-util": "0.0.116",
+    "@tscircuit/core": "0.0.2006",
+    "@tscircuit/math-utils": "0.0.36",
     "@tscircuit/pcb-viewer": "1.11.409",
+    "@tscircuit/props": "0.0.668",
     "@tscircuit/schematic-viewer": "2.0.98",
     "circuit-json": "0.0.506",
     "fflate": "0.8.3",
+    "format-si-unit": "0.0.12",
     "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "react-dom": "19.1.1",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@tsci/tscircuit.boosters": "github:tscircuit/boosters#4b8b330cf06cee8109edab00d8bba5973925da76",
     "@types/node": "24.5.2",
     "@types/react": "19.1.16",
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "5.0.4",
+    "@tscircuit/mm": "0.0.9",
+    "@tscircuit/soup-util": "0.0.41",
+    "altium-to-circuit-json": "0.0.89",
+    "altiumts": "github:tscircuit/altiumts#8db22cf449c7bf6584a968b4913be4e1bd4a93ad",
+    "bun-match-svg": "0.0.17",
     "bun-types": "1.2.22",
+    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#89fe9788213ecf85b753b1bb6eabdfc232b8e242",
+    "circuit-to-svg": "0.0.432",
+    "circuit-json-to-gltf": "0.0.133",
+    "poppygl": "0.0.29",
+    "transformation-matrix": "2.16.1",
     "typescript": "5.9.2",
     "vite": "7.1.7"
-  }
+  },
+  "patchedDependencies": {
+    "@tscircuit/props@0.0.668": "patches/@tscircuit%2Fprops@0.0.668.patch",
+    "circuit-json@0.0.506": "patches/circuit-json@0.0.506.patch",
+    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch"
+  },
+  "trustedDependencies": [
+    "altiumts"
+  ]
 }

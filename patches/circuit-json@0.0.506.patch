@@ -1,0 +1,24 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 3075f71860ebcd40fde8d1c64228432bc9a584f3..234337681031836dfc7b91be9bb5aad8388260ba 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -141,6 +141,8 @@ var pcbRenderLayer = z7.enum([
+   "inner6_copper",
+   "inner7_copper",
+   "inner8_copper",
++  "inner9_copper",
++  "inner10_copper",
+   "edge_cuts",
+   "drill"
+ ]);
+@@ -981,7 +983,9 @@ var all_layers = [
+   "inner5",
+   "inner6",
+   "inner7",
+-  "inner8"
++  "inner8",
++  "inner9",
++  "inner10"
+ ];
+ var layer_string = z63.enum(all_layers);
+ var layer_ref = layer_string.or(
