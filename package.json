@@ -23,7 +23,7 @@
     "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "0.0.2006",
     "@tscircuit/math-utils": "0.0.36",
-    "@tscircuit/pcb-viewer": "github:tscircuit/pcb-viewer#67c06e7ded459a4d641173bb9478ae7e950ff1b7",
+    "@tscircuit/pcb-viewer": "1.11.414",
     "@tscircuit/props": "0.0.668",
     "@tscircuit/schematic-viewer": "2.0.99",
     "circuit-json": "0.0.506",
@@ -41,7 +41,6 @@
     "@vitejs/plugin-react": "5.0.4",
     "@tscircuit/mm": "0.0.9",
     "@tscircuit/soup-util": "0.0.41",
-    "@tscircuit/circuit-json-webgpu": "github:tscircuit/circuit-json-webgpu#6c1414c7464a743190747c99bb8ec504f2ecf646",
     "altium-to-circuit-json": "0.0.89",
     "altiumts": "github:tscircuit/altiumts#8db22cf449c7bf6584a968b4913be4e1bd4a93ad",
     "bun-match-svg": "0.0.17",
@@ -50,9 +49,7 @@
     "circuit-to-svg": "0.0.432",
     "circuit-json-to-gltf": "0.0.133",
     "poppygl": "0.0.29",
-    "react-use": "17.6.0",
     "transformation-matrix": "2.16.1",
-    "tsup": "8.4.0",
     "typescript": "5.9.2",
     "vite": "7.1.7"
   },
@@ -62,7 +59,6 @@
     "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch"
   },
   "trustedDependencies": [
-    "altiumts",
-    "@tscircuit/pcb-viewer"
+    "altiumts"
   ]
 }
