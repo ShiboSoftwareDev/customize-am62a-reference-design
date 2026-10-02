@@ -14,7 +14,7 @@ type PrebuiltManifest = {
       source: string
       sourceComponentCount: number
       sourceTraceCount: number
-      schematicOutput?: string
+      schematicOutputs?: string[]
     }>
   }>
   sources: Array<{ name: string; source: string; url: string }>
@@ -53,14 +53,6 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
     if (evm.id === "sk-am62a-lp") continue
     const definition = getParameterizedTiEvmDefinition(evm.id)
     for (const variant of evm.variants) {
-      expect(variant.schematicCircuitJsonUrl).toBeDefined()
-      const schematic = await loadCompressedCircuitJson(
-        repositoryRoot,
-        variant.schematicCircuitJsonUrl ?? "",
-      )
-      expect(schematic.filter(({ type }) => type === "schematic_component").length).toBeGreaterThan(
-        10,
-      )
       const removedComponentNames = new Set(
         definition.components.flatMap((component) =>
           component.removableFeatureId !== undefined &&
@@ -69,11 +61,25 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
             : [],
         ),
       )
+      const schematics = await Promise.all(
+        variant.schematicCircuitJsonUrls.map((url) =>
+          loadCompressedCircuitJson(repositoryRoot, url),
+        ),
+      )
+      expect(
+        schematics.reduce(
+          (count, schematic) =>
+            count + schematic.filter(({ type }) => type === "schematic_component").length,
+          0,
+        ),
+      ).toBeGreaterThan(10)
       const renderedComponentNames = new Set(
-        schematic.flatMap((element) =>
-          element.type === "source_component" && typeof element.name === "string"
-            ? [element.name]
-            : [],
+        schematics.flatMap((schematic) =>
+          schematic.flatMap((element) =>
+            element.type === "source_component" && typeof element.name === "string"
+              ? [element.name]
+              : [],
+          ),
         ),
       )
       for (const componentName of removedComponentNames) {

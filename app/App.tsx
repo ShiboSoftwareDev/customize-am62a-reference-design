@@ -57,7 +57,8 @@ function Configurator() {
       <DesignViewer
         boardKey={evm.id}
         pcbCircuitJson={render.pcbCircuitJson}
-        schematicCircuitJson={render.schematicCircuitJson}
+        schematicCircuitJsons={render.schematicCircuitJsons}
+        schematicSheetLabels={evm.schematicSheetLabels}
         isLoading={render.isLoading}
       />
     </main>

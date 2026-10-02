@@ -14,7 +14,7 @@ type ManifestArtifact = {
   source: string
   sourceComponentCount: number
   sourceTraceCount: number
-  schematicOutput?: string
+  schematicOutputs?: string[]
 }
 
 export async function prebuildTiEvmAssets(): Promise<void> {
@@ -81,10 +81,12 @@ export async function prebuildTiEvmAssets(): Promise<void> {
         circuitJson: result.circuitJson,
         source: `Parameterized ${evm.name} tscircuit TSX`,
       })
-      if (!variant.schematicCircuitJsonUrl) {
-        throw new Error(`${evm.name} ${variant.label} has no schematic artifact URL`)
+      if (variant.schematicCircuitJsonUrls.length === 0) {
+        throw new Error(`${evm.name} ${variant.label} has no schematic artifact URLs`)
       }
-      manifestArtifact.schematicOutput = variant.schematicCircuitJsonUrl.replace(/^\//u, "")
+      manifestArtifact.schematicOutputs = variant.schematicCircuitJsonUrls.map((url) =>
+        url.replace(/^\//u, ""),
+      )
       evmArtifacts.push(manifestArtifact)
     }
     boards.push({ id: evm.id, artifacts: evmArtifacts })

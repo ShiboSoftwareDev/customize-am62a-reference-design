@@ -17,7 +17,7 @@ export type TiEvmVariant = {
   id: string
   label: string
   circuitJsonUrl: string
-  schematicCircuitJsonUrl?: string
+  schematicCircuitJsonUrls: string[]
   removedFeatureIds: string[]
   sourceSelection?: OptionalModuleSelection
   evmOptions?: ParameterizedTiEvmOptions
@@ -64,6 +64,7 @@ const skAm62aFeatures: SkAm62aFeature[] = [
 function createVariants(params: {
   evmId: TiEvmId
   features: TiEvmRemovableFeature[]
+  schematicSheetCount: number
   createPopulation: (
     removedFeatureIds: string[],
   ) => { sourceSelection: OptionalModuleSelection } | { evmOptions: ParameterizedTiEvmOptions }
@@ -81,17 +82,25 @@ function createVariants(params: {
         ? "minimal-board"
         : `remove-${removedFeatureIds.join("-")}`
 
+    const circuitJsonUrl = `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`
+
     return {
       id,
       label: createVariantLabel({
         features: params.features,
         removedFeatureIds,
       }),
-      circuitJsonUrl: `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`,
-      schematicCircuitJsonUrl:
+      circuitJsonUrl,
+      schematicCircuitJsonUrls:
         params.evmId === "sk-am62a-lp"
-          ? undefined
-          : `/prebuilt-ti-evms/${params.evmId}/${id}.schematic.circuit.json.gz`,
+          ? [circuitJsonUrl]
+          : Array.from(
+              { length: params.schematicSheetCount },
+              (_, schematicSheetIndex) =>
+                `/prebuilt-ti-evms/${params.evmId}/${id}${
+                  schematicSheetIndex === 0 ? ".schematic" : `.schematic-${schematicSheetIndex + 1}`
+                }.circuit.json.gz`,
+            ),
       removedFeatureIds,
       ...params.createPopulation(removedFeatureIds),
     }
@@ -146,6 +155,7 @@ export const skAm62aLp: TiEvm = {
   variants: createVariants({
     evmId: "sk-am62a-lp",
     features: skAm62aFeatures,
+    schematicSheetCount: 1,
     createPopulation: createSkAm62aSelection,
   }),
 }
@@ -166,6 +176,7 @@ function createEvaluationEvm(params: {
     variants: createVariants({
       evmId: params.id,
       features: params.removableFeatures,
+      schematicSheetCount: params.schematicSheetLabels.length,
       createPopulation: createEvaluationOptions,
     }),
   }
