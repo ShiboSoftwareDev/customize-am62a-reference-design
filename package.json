@@ -23,7 +23,7 @@
     "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@16cd6d0",
     "@tscircuit/math-utils": "0.0.36",
-    "@tscircuit/pcb-viewer": "1.11.414",
+    "@tscircuit/pcb-viewer": "https://pkg.pr.new/tscircuit/pcb-viewer/@tscircuit/pcb-viewer@d83cc01",
     "@tscircuit/props": "https://pkg.pr.new/tscircuit/props/@tscircuit/props@5278778",
     "@tscircuit/schematic-viewer": "2.0.99",
     "circuit-json": "0.0.506",
@@ -56,15 +56,11 @@
   "patchedDependencies": {
     "circuit-json@0.0.506": "patches/circuit-json@0.0.506.patch",
     "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch",
-    "@tscircuit/pcb-viewer@1.11.414": "patches/@tscircuit%2Fpcb-viewer@1.11.414.patch",
     "@tscircuit/props@https://pkg.pr.new/tscircuit/props/@tscircuit/props@5278778": "patches/@tscircuit%2Fprops@https%3A%2F%2Fpkg.pr.new%2Ftscircuit%2Fprops%2F@tscircuit%2Fprops@5278778.patch"
   },
   "trustedDependencies": [
     "altium-to-circuit-json",
     "altiumts",
     "circuit-json-to-tscircuit"
-  ],
-  "overrides": {
-    "@tscircuit/circuit-json-webgpu": "github:tscircuit/circuit-json-webgpu#7af89e2774bc18b82d0f2e57a6002a8fe0cf76ab"
-  }
+  ]
 }
