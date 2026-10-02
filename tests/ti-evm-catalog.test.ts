@@ -25,9 +25,13 @@ test("catalog exposes five real TI EVM product references", () => {
       expect(evm.schematicSheetLabels).toHaveLength(
         getParameterizedTiEvmDefinition(evm.id).sourceSchematicPaths.length,
       )
+      for (const variant of evm.variants) {
+        expect(variant.schematicCircuitJsonUrls).toHaveLength(evm.schematicSheetLabels.length)
+      }
       expect(
-        new Set(evm.variants.map(({ schematicCircuitJsonUrl }) => schematicCircuitJsonUrl)).size,
-      ).toBe(evm.variants.length)
+        new Set(evm.variants.flatMap(({ schematicCircuitJsonUrls }) => schematicCircuitJsonUrls))
+          .size,
+      ).toBe(evm.variants.length * evm.schematicSheetLabels.length)
     }
   }
 })

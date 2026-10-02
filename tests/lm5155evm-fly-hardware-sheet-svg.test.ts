@@ -3,11 +3,15 @@ import { resolve } from "node:path"
 import "bun-match-svg"
 import { convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import { getTiEvm } from "lib/ti-evm-catalog"
 
-test("LM5155EVM-FLY hardware schematic sheet", async () => {
+test("LM5155EVM-FLY prebuild includes its hardware schematic sheet", async () => {
+  const fullBoard = getTiEvm("lm5155evm-fly").variants.find(({ id }) => id === "full-board")
+  if (!fullBoard) throw new Error("LM5155EVM-FLY has no full-board variant")
+  expect(fullBoard.schematicCircuitJsonUrls).toHaveLength(2)
   const schematicArtifactPath = resolve(
     import.meta.dir,
-    "../lib/generated/ti-evms/lm5155evm-fly.schematic-2.circuit.json.gz",
+    `../public/${fullBoard.schematicCircuitJsonUrls[1].replace(/^\//u, "")}`,
   )
   const schematicArtifactBytes = new Uint8Array(await Bun.file(schematicArtifactPath).arrayBuffer())
   const schematicCircuitJson = parsePrebuiltCircuitJson(schematicArtifactBytes)
