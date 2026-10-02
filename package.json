@@ -23,7 +23,7 @@
     "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@16cd6d0",
     "@tscircuit/math-utils": "0.0.36",
-    "@tscircuit/pcb-viewer": "https://pkg.pr.new/tscircuit/pcb-viewer/@tscircuit/pcb-viewer@d83cc01",
+    "@tscircuit/pcb-viewer": "https://pkg.pr.new/tscircuit/pcb-viewer/@tscircuit/pcb-viewer@77a8ada",
     "@tscircuit/props": "https://pkg.pr.new/tscircuit/props/@tscircuit/props@5278778",
     "@tscircuit/schematic-viewer": "2.0.99",
     "circuit-json": "0.0.506",
