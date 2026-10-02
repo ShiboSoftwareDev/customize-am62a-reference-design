@@ -11,11 +11,18 @@ export async function prebuildTiEvmSchematicAssets(): Promise<void> {
   for (const evm of tiEvms) {
     if (evm.id === "sk-am62a-lp") continue
     const definition = getParameterizedTiEvmDefinition(evm.id)
-    const referenceSchematic = await readReferenceSchematic(evm.id)
+    const referenceSchematics = await Promise.all(
+      evm.schematicSheetLabels.map((_, schematicSheetIndex) =>
+        readReferenceSchematic({
+          evmId: evm.id,
+          schematicSheetIndex,
+        }),
+      ),
+    )
 
     for (const variant of evm.variants) {
-      if (!variant.schematicCircuitJsonUrl) {
-        throw new Error(`${evm.name} ${variant.label} has no schematic artifact URL`)
+      if (variant.schematicCircuitJsonUrls.length !== referenceSchematics.length) {
+        throw new Error(`${evm.name} ${variant.label} has incomplete schematic artifact URLs`)
       }
       const removedComponentNames = new Set(
         definition.components.flatMap((component) =>
@@ -25,29 +32,40 @@ export async function prebuildTiEvmSchematicAssets(): Promise<void> {
             : [],
         ),
       )
-      const schematicCircuitJson = filterReferenceSchematic({
-        circuitJson: referenceSchematic,
-        removedComponentNames,
-      })
-      const outputPath = resolve(
-        import.meta.dir,
-        `../public/${variant.schematicCircuitJsonUrl.replace(/^\//u, "")}`,
+      await Promise.all(
+        referenceSchematics.map(async (referenceSchematic, schematicSheetIndex) => {
+          const schematicCircuitJson = filterReferenceSchematic({
+            circuitJson: referenceSchematic,
+            removedComponentNames,
+          })
+          const outputPath = resolve(
+            import.meta.dir,
+            `../public/${variant.schematicCircuitJsonUrls[schematicSheetIndex].replace(
+              /^\//u,
+              "",
+            )}`,
+          )
+          await mkdir(resolve(outputPath, ".."), { recursive: true })
+          await writeFile(
+            outputPath,
+            gzipSync(strToU8(JSON.stringify(schematicCircuitJson)), { level: 9 }),
+          )
+          artifactCount += 1
+        }),
       )
-      await mkdir(resolve(outputPath, ".."), { recursive: true })
-      await writeFile(
-        outputPath,
-        gzipSync(strToU8(JSON.stringify(schematicCircuitJson)), { level: 9 }),
-      )
-      artifactCount += 1
     }
   }
   console.log(`Prebuilt ${artifactCount} reference schematic variants`)
 }
 
-async function readReferenceSchematic(evmId: string): Promise<AnyCircuitElement[]> {
+async function readReferenceSchematic(params: {
+  evmId: string
+  schematicSheetIndex: number
+}): Promise<AnyCircuitElement[]> {
+  const sheetSuffix = params.schematicSheetIndex === 0 ? "" : `-${params.schematicSheetIndex + 1}`
   const inputPath = resolve(
     import.meta.dir,
-    `../lib/generated/ti-evms/${evmId}.schematic.circuit.json.gz`,
+    `../lib/generated/ti-evms/${params.evmId}.schematic${sheetSuffix}.circuit.json.gz`,
   )
   const compressed = new Uint8Array(await Bun.file(inputPath).arrayBuffer())
   return JSON.parse(strFromU8(gunzipSync(compressed))) as AnyCircuitElement[]

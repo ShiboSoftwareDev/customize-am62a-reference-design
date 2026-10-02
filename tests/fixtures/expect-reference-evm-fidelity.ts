@@ -116,12 +116,11 @@ export async function expectReferenceEvmFidelity(params: {
   const evm = getTiEvm(params.evmId)
   const fullBoardVariant = evm.variants.find(({ id }) => id === "full-board")
   if (!fullBoardVariant) throw new Error(`${evm.name} has no full-board variant`)
-  if (!fullBoardVariant.schematicCircuitJsonUrl) {
+  if (fullBoardVariant.schematicCircuitJsonUrls.length === 0) {
     throw new Error(`${evm.name} has no full-board schematic artifact`)
   }
 
   const pcbCircuitJson = await loadPublicCircuitJson(fullBoardVariant.circuitJsonUrl)
-  const schematicCircuitJson = await loadPublicCircuitJson(fullBoardVariant.schematicCircuitJsonUrl)
   const sourceCircuitJson = await loadGeneratedSourceCircuitJson(params.evmId)
 
   expectBoardMatchesSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
@@ -133,13 +132,14 @@ export async function expectReferenceEvmFidelity(params: {
   })
 
   for (const variant of evm.variants) {
-    if (!variant.schematicCircuitJsonUrl) {
+    if (variant.schematicCircuitJsonUrls.length === 0) {
       throw new Error(`${evm.name} ${variant.label} has no schematic artifact`)
     }
     const variantPcbCircuitJson = await loadPublicCircuitJson(variant.circuitJsonUrl)
-    const variantSchematicCircuitJson = await loadPublicCircuitJson(variant.schematicCircuitJsonUrl)
     expectNoRoutingErrors(variantPcbCircuitJson)
-    expectNoDanglingSchematicReferences(variantSchematicCircuitJson)
+    for (const schematicUrl of variant.schematicCircuitJsonUrls) {
+      expectNoDanglingSchematicReferences(await loadPublicCircuitJson(schematicUrl))
+    }
   }
 }
 
