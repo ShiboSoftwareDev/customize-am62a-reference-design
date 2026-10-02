@@ -2857,12 +2857,12 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <silkscreentext pcbX={71.92509872000001} pcbY={49.4792} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Caution" />
     <silkscreentext pcbX={69.76609872} pcbY={44.3992} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Op V: 520V" />
     <silkscreentext pcbX={39.2938} pcbY={47.72906888} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="LMG342XX-BB-EVM" />
-    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text=".Layer_Name" />
+    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Top Overlay" />
     <silkscreentext pcbX={45.912001139999994} pcbY={56.0578} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="-" />
     <silkscreentext pcbX={43.11800114} pcbY={56.0578} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="A1" />
-    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="bottom" text=".Layer_Name" />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="bottom" />
+    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="bottom" text="Bottom Overlay" />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Top Layer" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Bottom Layer" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="bottom" />
     <keepout shape="circle" layers={["top"]} description="Altium arc keepout" pcbX="177.5968mm" pcbY="41.5036mm" radius="0.499999mm" />
     <keepout shape="circle" layers={["top"]} description="Altium arc keepout" pcbX="19.9898mm" pcbY="41.3766mm" radius="0.499999mm" />
     <keepout shape="circle" layers={["top"]} description="Altium arc keepout" pcbX="20.1168mm" pcbY="129.2606mm" radius="0.499999mm" />

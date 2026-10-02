@@ -96,8 +96,9 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
   expect(board.height).toBeCloseTo(150.096728, 5)
   expect(fullBoard.filter(({ type }) => type === "source_component")).toHaveLength(1482)
   expect(fullBoard.filter(({ type }) => type === "source_trace")).toHaveLength(5137)
-  expect(fullBoard.filter(({ type }) => type === "pcb_trace")).toHaveLength(5009)
-  expect(fullBoard.filter(({ type }) => type === "pcb_via")).toHaveLength(3392)
+  expect(fullBoard.filter(({ type }) => type === "pcb_trace")).toHaveLength(5432)
+  expect(fullBoard.filter(({ type }) => type === "pcb_via")).toHaveLength(3818)
+  expect(fullBoard.filter(({ type }) => type === "pcb_copper_pour")).toHaveLength(5376)
 })
 
 async function loadPrebuiltArtifact(repositoryRoot: string, fileName: string) {

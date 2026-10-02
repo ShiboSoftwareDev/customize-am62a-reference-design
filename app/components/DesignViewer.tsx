@@ -33,12 +33,18 @@ export function DesignViewer({
 }: DesignViewerProps) {
   const [activeView, setActiveView] = useState<"pcb" | "schematic">("pcb")
   const [schematicSheetIndex, setSchematicSheetIndex] = useState(0)
+  const [renderedPcbCircuitJson, setRenderedPcbCircuitJson] = useState<AnyCircuitElement[] | null>(
+    null,
+  )
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
   const schematicCircuitJson = schematicCircuitJsons[schematicSheetIndex]
   const pcbRenderer = useMemo(
     () => (pcbCircuitJson ? getPcbRenderer(pcbCircuitJson) : "webgpu"),
     [pcbCircuitJson],
   )
+  const isPcbRendering =
+    activeView === "pcb" && pcbCircuitJson !== null && renderedPcbCircuitJson !== pcbCircuitJson
+  const isViewerLoading = isLoading || isPcbRendering
 
   useEffect(() => {
     void loadPcbViewer()
@@ -49,7 +55,7 @@ export function DesignViewer({
   }, [boardKey])
 
   return (
-    <section className="design-viewer" aria-label="Design viewer" aria-busy={isLoading}>
+    <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>
       <header className="viewer-toolbar">
         <div className="view-tabs" role="tablist" aria-label="Design view">
           <button
@@ -105,6 +111,7 @@ export function DesignViewer({
               renderer={pcbRenderer}
               allowEditing={false}
               focusOnHover
+              onRenderComplete={() => setRenderedPcbCircuitJson(pcbCircuitJson)}
             />
           </Suspense>
         ) : activeView === "schematic" && schematicCircuitJson ? (
@@ -118,7 +125,7 @@ export function DesignViewer({
         ) : (
           <ViewerLoading label="Loading the reference design…" />
         )}
-        {isLoading && (pcbCircuitJson || schematicCircuitJsons.length > 0) && (
+        {isViewerLoading && (pcbCircuitJson || schematicCircuitJsons.length > 0) && (
           <div className="rendering-badge">
             <span /> Loading design
           </div>

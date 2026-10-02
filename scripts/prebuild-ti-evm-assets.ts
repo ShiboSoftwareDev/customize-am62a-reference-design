@@ -26,7 +26,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
     if (!variant.sourceSelection) throw new Error(`${variant.label} has no AM62A selection`)
     const result = await evaluateBoard({
       selection: variant.sourceSelection,
-      addPours: false,
+      addPours: true,
     })
     const failedComponents = result.circuitJson.filter(
       ({ type }) => type === "source_failed_to_create_component_error",

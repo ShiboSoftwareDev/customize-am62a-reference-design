@@ -3,7 +3,7 @@ import { basename } from "node:path"
 import {
   convertAltiumProjectToCircuitJson,
   convertAltiumToCircuitJson,
-} from "altium-to-circuit-json"
+} from "../../node_modules/altium-to-circuit-json/lib/index.ts"
 import {
   AltiumComponentRecord,
   AltiumNetRecord,

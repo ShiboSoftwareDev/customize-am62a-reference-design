@@ -1,0 +1,143 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 1bd71ff1b3dc89237fd06956d2ce888871197ea6..e2231f64185908d310bd55202efc9065f6c5f3dc 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -88,6 +88,8 @@ type Props = {
+     editEvents?: ManualEditEvent[];
+     initialState?: Partial<StateProps>;
+     onEditEventsChanged?: (editEvents: ManualEditEvent[]) => void;
++    /** Called after the active renderer has produced a frame for the current data. */
++    onRenderComplete?: () => void;
+     /** Omit when the host has no enabled schematic tab. */
+     onViewSchematicComponent?: (event: ViewSchematicComponentEvent) => void;
+     onBoundsSelected?: (bounds: BoundsSelection) => void;
+@@ -96,7 +98,7 @@ type Props = {
+     debugGraphics?: GraphicsObject | null;
+     disablePcbGroups?: boolean;
+ };
+-declare const PCBViewer: ({ circuitJson, debugGraphics, height, renderer, initialState, allowEditing, editEvents: editEventsProp, onEditEventsChanged, onBoundsSelected, onViewSchematicComponent, focusOnHover, clickToInteractEnabled, disablePcbGroups, }: Props) => react_jsx_runtime.JSX.Element;
++declare const PCBViewer: ({ circuitJson, debugGraphics, height, renderer, initialState, allowEditing, editEvents: editEventsProp, onEditEventsChanged, onRenderComplete, onBoundsSelected, onViewSchematicComponent, focusOnHover, clickToInteractEnabled, disablePcbGroups, }: Props) => react_jsx_runtime.JSX.Element;
+ 
+ interface CanvasElementsRendererProps {
+     elements: AnyCircuitElement[];
+@@ -112,6 +114,7 @@ interface CanvasElementsRendererProps {
+     onViewSchematicComponent?: (event: ViewSchematicComponentEvent) => void;
+     onBoundsSelected?: (bounds: BoundsSelection) => void;
+     onContextMenuOpenChange?: (open: boolean) => void;
++    onRenderComplete?: () => void;
+     cancelPanDrag: () => void;
+     onCreateEditEvent: (event: ManualEditEvent) => void;
+     onModifyEditEvent: (event: Partial<ManualEditEvent>) => void;
+diff --git a/dist/index.js b/dist/index.js
+index a98462c74fcff64b876ea2ba9bfeb7a45f0285ae..fa9479fe943c5545c9c936946c50ade7f8560602 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -166,7 +166,7 @@ var require_copy_to_clipboard = __commonJS({
+   }
+ });
+ 
+-// inline-worker:/home/runner/work/pcb-viewer/pcb-viewer/src/lib/webgpu/pcb-webgpu.worker.ts
++// inline-worker:/Users/shibo/Documents/Codex/2026-09-26/che/work/pcb-viewer-render-ready/src/lib/webgpu/pcb-webgpu.worker.ts
+ var pcb_webgpu_worker_exports = {};
+ __export(pcb_webgpu_worker_exports, {
+   default: () => RenderWorker
+@@ -180,7 +180,7 @@ function RenderWorker() {
+   }
+ }
+ var init_pcb_webgpu_worker = __esm({
+-  "inline-worker:/home/runner/work/pcb-viewer/pcb-viewer/src/lib/webgpu/pcb-webgpu.worker.ts"() {
++  "inline-worker:/Users/shibo/Documents/Codex/2026-09-26/che/work/pcb-viewer-render-ready/src/lib/webgpu/pcb-webgpu.worker.ts"() {
+   }
+ });
+ 
+@@ -11789,6 +11789,8 @@ function WebGpuElementsRenderer(props) {
+   const { elements, primitives, transform, width = 500, height = 500 } = props;
+   const holder = useRef3(null);
+   const workerRef = useRef3(void 0);
++  const onRenderCompleteRef = useRef3(props.onRenderComplete);
++  onRenderCompleteRef.current = props.onRenderComplete;
+   const ready = useRef3(false);
+   const [supportsXRayNet, setSupportsXRayNet] = useState4(null);
+   const [failure, setFailure] = useState4();
+@@ -11904,6 +11906,7 @@ function WebGpuElementsRenderer(props) {
+           if (data.type === "rendered") {
+             if (holder.current)
+               holder.current.dataset.xRayNetActive = String(data.xRayActive);
++            onRenderCompleteRef.current?.();
+           } else if (data.type === "error") {
+             fail(data.message);
+           } else if (data.type === "ready") {
+@@ -13957,10 +13960,13 @@ var CanvasPrimitiveRenderer = ({
+   transform,
+   grid,
+   width = 500,
+-  height = 500
++  height = 500,
++  onRenderComplete
+ }) => {
+   const xRayCanvasRef = useRef4(null);
+   const canvasRefs = useRef4({});
++  const onRenderCompleteRef = useRef4(onRenderComplete);
++  onRenderCompleteRef.current = onRenderComplete;
+   const hiddenLayerOpacity = useGlobalStore((s) => s.hidden_layer_opacity);
+   const selectedLayer = useGlobalStore((s) => s.selected_layer);
+   const isShowingCopperPours = useGlobalStore((s) => s.is_showing_copper_pours);
+@@ -14252,6 +14258,7 @@ var CanvasPrimitiveRenderer = ({
+         { layers: ["drill"], drawSoldermask: false }
+       );
+     }
++    onRenderCompleteRef.current?.();
+   }, [
+     primitives,
+     elements,
+@@ -18518,7 +18525,7 @@ import { css as css3 } from "@emotion/css";
+ // package.json
+ var package_default = {
+   name: "@tscircuit/pcb-viewer",
+-  version: "1.11.413",
++  version: "1.11.414",
+   main: "dist/index.js",
+   type: "module",
+   repository: {
+@@ -20702,7 +20709,8 @@ var CanvasElementsRenderer = (props) => {
+                                   xRayElements,
+                                   width: props.width,
+                                   height: props.height,
+-                                  grid: props.grid
++                                  grid: props.grid,
++                                  onRenderComplete: props.onRenderComplete
+                                 }
+                               ) : /* @__PURE__ */ jsx25(
+                                 WebGpuElementsRenderer,
+@@ -20713,7 +20721,8 @@ var CanvasElementsRenderer = (props) => {
+                                   xRayElements,
+                                   width: props.width,
+                                   height: props.height,
+-                                  grid: props.grid
++                                  grid: props.grid,
++                                  onRenderComplete: props.onRenderComplete
+                                 }
+                               )
+                             }
+@@ -20864,6 +20873,7 @@ var PCBViewer = ({
+   allowEditing = true,
+   editEvents: editEventsProp,
+   onEditEventsChanged,
++  onRenderComplete,
+   onBoundsSelected,
+   onViewSchematicComponent,
+   focusOnHover = false,
+@@ -21013,6 +21023,7 @@ var PCBViewer = ({
+                   onContextMenuOpenChange,
+                   onCreateEditEvent,
+                   onModifyEditEvent,
++                  onRenderComplete,
+                   grid: {
+                     spacing: 1,
+                     view_window: {
+@@ -21101,4 +21112,3 @@ svgson/dist/svgson.umd.js:
+    * @license  MIT
+    *)
+ */
+-//# sourceMappingURL=index.js.map
+\ No newline at end of file
