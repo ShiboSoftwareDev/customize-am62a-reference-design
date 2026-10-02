@@ -22,6 +22,6 @@ test("renders and validates the minimal 12-layer board", async () => {
       .filter((element) => element.type.includes("error"))
       .every((element) => element.type === "pcb_pad_pad_clearance_error"),
   ).toBe(true)
-  expect(result.circuitJson.filter((element) => element.type === "pcb_trace").length).toBe(1819)
+  expect(result.circuitJson.filter((element) => element.type === "pcb_trace").length).toBe(2249)
   expect(result.circuitJson.filter((element) => element.type === "schematic_group").length).toBe(27)
 }, 30_000)

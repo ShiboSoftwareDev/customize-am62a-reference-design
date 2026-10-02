@@ -9,7 +9,7 @@ test("renders every optional module within the interactive path", async () => {
   })
 
   expect(result.circuitJson.filter((element) => element.type.includes("error"))).toHaveLength(0)
-  expect(result.circuitJson.filter((element) => element.type === "pcb_trace")).toHaveLength(5009)
+  expect(result.circuitJson.filter((element) => element.type === "pcb_trace")).toHaveLength(5432)
   expect(result.circuitJson.filter((element) => element.type === "schematic_group")).toHaveLength(
     95,
   )

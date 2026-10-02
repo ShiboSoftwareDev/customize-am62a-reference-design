@@ -21,10 +21,10 @@
   "dependencies": {
     "@tscircuit/checks": "0.0.222",
     "@tscircuit/circuit-json-util": "0.0.116",
-    "@tscircuit/core": "0.0.2006",
+    "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@16cd6d0",
     "@tscircuit/math-utils": "0.0.36",
-    "@tscircuit/pcb-viewer": "1.11.414",
-    "@tscircuit/props": "0.0.668",
+    "@tscircuit/pcb-viewer": "https://pkg.pr.new/tscircuit/pcb-viewer/@tscircuit/pcb-viewer@77a8ada",
+    "@tscircuit/props": "https://pkg.pr.new/tscircuit/props/@tscircuit/props@5278778",
     "@tscircuit/schematic-viewer": "2.0.99",
     "circuit-json": "0.0.506",
     "fflate": "0.8.3",
@@ -41,7 +41,7 @@
     "@vitejs/plugin-react": "5.0.4",
     "@tscircuit/mm": "0.0.9",
     "@tscircuit/soup-util": "0.0.41",
-    "altium-to-circuit-json": "0.0.89",
+    "altium-to-circuit-json": "github:tscircuit/altium-to-circuit-json#f4c4e808641720e8ce89809607228f197d8dd640",
     "altiumts": "github:tscircuit/altiumts#8db22cf449c7bf6584a968b4913be4e1bd4a93ad",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.2.22",
@@ -54,11 +54,13 @@
     "vite": "7.1.7"
   },
   "patchedDependencies": {
-    "@tscircuit/props@0.0.668": "patches/@tscircuit%2Fprops@0.0.668.patch",
     "circuit-json@0.0.506": "patches/circuit-json@0.0.506.patch",
-    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch"
+    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch",
+    "@tscircuit/props@https://pkg.pr.new/tscircuit/props/@tscircuit/props@5278778": "patches/@tscircuit%2Fprops@https%3A%2F%2Fpkg.pr.new%2Ftscircuit%2Fprops%2F@tscircuit%2Fprops@5278778.patch"
   },
   "trustedDependencies": [
-    "altiumts"
+    "altium-to-circuit-json",
+    "altiumts",
+    "circuit-json-to-tscircuit"
   ]
 }

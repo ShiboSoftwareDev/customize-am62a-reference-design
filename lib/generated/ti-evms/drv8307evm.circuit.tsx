@@ -2241,7 +2241,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreentext pcbX={73.37714813999999} pcbY={105.31915182} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="W" />
     <silkscreentext pcbX={69.91980682} pcbY={105.31915182} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="W" />
     <silkscreentext pcbX={65.58609946} pcbY={105.46738875999999} anchorAlignment="center" fontSize={1.27} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="HGND" />
-    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text=".Layer_Name" />
+    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Top Overlay" />
     <silkscreentext pcbX={89.575386} pcbY={74.54534748} anchorAlignment="center" fontSize={2.794} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="U" />
     <silkscreentext pcbX={89.51449711999999} pcbY={85.35698955999999} anchorAlignment="center" fontSize={2.794} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="V" />
     <silkscreentext pcbX={73.90908002} pcbY={82.27420172} anchorAlignment="center" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="UHSG" />
@@ -2260,9 +2260,9 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreentext pcbX={24.9428} pcbY={108.3056} anchorAlignment="center" fontSize={1.27} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="INVERT" />
     <silkscreentext pcbX={20.116799999999998} pcbY={76.5556} anchorAlignment="center" fontSize={1.778} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="GND" />
     <silkscreentext pcbX={95.71031404} pcbY={97.8916} anchorAlignment="center" fontSize={1.778} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="GND" />
-    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="bottom" text=".Layer_Name" />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="bottom" />
+    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="bottom" text="Bottom Overlay" />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Top Layer" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Bottom Layer" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="bottom" />
           </footprint>} />
   </board>
 )

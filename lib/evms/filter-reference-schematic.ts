@@ -30,7 +30,9 @@ type SchematicPort = AnyCircuitElement & {
   source_port_id: SourcePortId
 }
 type SchematicTraceEdge = {
+  from: { x: number; y: number }
   from_schematic_port_id?: SchematicPortId
+  to: { x: number; y: number }
   to_schematic_port_id?: SchematicPortId
   [property: string]: unknown
 }
@@ -186,11 +188,19 @@ function updateSchematicTraces(params: {
       removedSchematicTraceIds.add(element.schematic_trace_id)
       continue
     }
-    const edges = element.edges.filter(
+    const hasRemovedPortEdge = element.edges.some(
+      (edge) =>
+        params.removedSchematicPortIds.has(edge.from_schematic_port_id ?? "") ||
+        params.removedSchematicPortIds.has(edge.to_schematic_port_id ?? ""),
+    )
+    const edgesWithoutRemovedPorts = element.edges.filter(
       (edge) =>
         !params.removedSchematicPortIds.has(edge.from_schematic_port_id ?? "") &&
         !params.removedSchematicPortIds.has(edge.to_schematic_port_id ?? ""),
     )
+    const edges = hasRemovedPortEdge
+      ? keepPortAnchoredEdgeGroups({ edges: edgesWithoutRemovedPorts })
+      : edgesWithoutRemovedPorts
     if (edges.length === 0) {
       removedSchematicTraceIds.add(element.schematic_trace_id)
       continue
@@ -198,6 +208,50 @@ function updateSchematicTraces(params: {
     updatedSchematicTraces.set(element.schematic_trace_id, { ...element, edges })
   }
   return { removedSchematicTraceIds, updatedSchematicTraces }
+}
+
+function keepPortAnchoredEdgeGroups(params: { edges: SchematicTraceEdge[] }): SchematicTraceEdge[] {
+  const edgesByPoint = new Map<string, number[]>()
+  for (const [edgeIndex, edge] of params.edges.entries()) {
+    for (const point of [edge.from, edge.to]) {
+      const pointKey = getPointKey(point)
+      const edgeIndexes = edgesByPoint.get(pointKey) ?? []
+      edgeIndexes.push(edgeIndex)
+      edgesByPoint.set(pointKey, edgeIndexes)
+    }
+  }
+
+  const visitedEdgeIndexes = new Set<number>()
+  const retainedEdgeIndexes = new Set<number>()
+  for (const startingEdgeIndex of params.edges.keys()) {
+    if (visitedEdgeIndexes.has(startingEdgeIndex)) continue
+    const edgeIndexes = [startingEdgeIndex]
+    const connectedEdgeIndexes: number[] = []
+    let hasPortAnchor = false
+
+    while (edgeIndexes.length > 0) {
+      const edgeIndex = edgeIndexes.pop()
+      if (edgeIndex === undefined || visitedEdgeIndexes.has(edgeIndex)) continue
+      visitedEdgeIndexes.add(edgeIndex)
+      connectedEdgeIndexes.push(edgeIndex)
+
+      const edge = params.edges[edgeIndex]
+      if (!edge) continue
+      if (edge.from_schematic_port_id || edge.to_schematic_port_id) hasPortAnchor = true
+      for (const point of [edge.from, edge.to]) {
+        edgeIndexes.push(...(edgesByPoint.get(getPointKey(point)) ?? []))
+      }
+    }
+
+    if (!hasPortAnchor) continue
+    for (const edgeIndex of connectedEdgeIndexes) retainedEdgeIndexes.add(edgeIndex)
+  }
+
+  return params.edges.filter((_, edgeIndex) => retainedEdgeIndexes.has(edgeIndex))
+}
+
+function getPointKey(point: { x: number; y: number }): string {
+  return `${point.x},${point.y}`
 }
 
 function isSourceComponent(element: AnyCircuitElement): element is SourceComponent {

@@ -2,14 +2,15 @@ import { expect, test } from "bun:test"
 import { parameterizeGeneratedBoard } from "../scripts/parameterize-generated-board"
 
 test("generated board TSX is parameterized without selector collisions", () => {
-  const generatedSource = `export default () => (
+  const generatedSource = `export const ExampleBoard = () => (
   <board routingDisabled>
     <chip name="TP1" footprint={<footprint><smtpad portHints={["1"]} /></footprint>} />
     <chip name="R1" footprint={<footprint><smtpad portHints={["1"]} /></footprint>} />
     <net name="TP1" />
     <trace path={[".TP1 > .pin1", ".R1 > .pin1", "net.TP1"]} />
   </board>
-)`
+)
+export default ExampleBoard`
 
   const result = parameterizeGeneratedBoard({
     autorouterVersion: "beta_pipeline9",

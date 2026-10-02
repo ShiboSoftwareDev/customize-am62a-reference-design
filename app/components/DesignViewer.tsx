@@ -19,29 +19,43 @@ const SchematicViewer = lazy(loadSchematicViewer)
 type DesignViewerProps = {
   boardKey: string
   pcbCircuitJson: AnyCircuitElement[] | null
-  schematicCircuitJson: AnyCircuitElement[] | null
+  schematicCircuitJsons: AnyCircuitElement[][]
+  schematicSheetLabels: string[]
   isLoading: boolean
 }
 
 export function DesignViewer({
   boardKey,
   pcbCircuitJson,
-  schematicCircuitJson,
+  schematicCircuitJsons,
+  schematicSheetLabels,
   isLoading,
 }: DesignViewerProps) {
   const [activeView, setActiveView] = useState<"pcb" | "schematic">("pcb")
+  const [schematicSheetIndex, setSchematicSheetIndex] = useState(0)
+  const [renderedPcbCircuitJson, setRenderedPcbCircuitJson] = useState<AnyCircuitElement[] | null>(
+    null,
+  )
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
+  const schematicCircuitJson = schematicCircuitJsons[schematicSheetIndex]
   const pcbRenderer = useMemo(
     () => (pcbCircuitJson ? getPcbRenderer(pcbCircuitJson) : "webgpu"),
     [pcbCircuitJson],
   )
+  const isPcbRendering =
+    activeView === "pcb" && pcbCircuitJson !== null && renderedPcbCircuitJson !== pcbCircuitJson
+  const isViewerLoading = isLoading || isPcbRendering
 
   useEffect(() => {
     void loadPcbViewer()
   }, [])
 
+  useEffect(() => {
+    setSchematicSheetIndex(0)
+  }, [boardKey])
+
   return (
-    <section className="design-viewer" aria-label="Design viewer" aria-busy={isLoading}>
+    <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>
       <header className="viewer-toolbar">
         <div className="view-tabs" role="tablist" aria-label="Design view">
           <button
@@ -69,6 +83,22 @@ export function DesignViewer({
             <span /> Hover a pad or trace to focus its net
           </p>
         )}
+        {activeView === "schematic" && schematicCircuitJsons.length > 1 && (
+          <label className="schematic-sheet-selector">
+            Sheet
+            <select
+              aria-label="Schematic sheet"
+              value={schematicSheetIndex}
+              onChange={(event) => setSchematicSheetIndex(Number(event.target.value))}
+            >
+              {schematicSheetLabels.map((label, index) => (
+                <option key={label} value={index}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </header>
 
       <div className="viewer-canvas" ref={elementRef}>
@@ -81,12 +111,13 @@ export function DesignViewer({
               renderer={pcbRenderer}
               allowEditing={false}
               focusOnHover
+              onRenderComplete={() => setRenderedPcbCircuitJson(pcbCircuitJson)}
             />
           </Suspense>
         ) : activeView === "schematic" && schematicCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading schematic viewer…" />}>
             <SchematicViewer
-              key={boardKey}
+              key={`${boardKey}:${schematicSheetIndex}`}
               circuitJson={schematicCircuitJson}
               containerStyle={{ height: "100%" }}
             />
@@ -94,7 +125,7 @@ export function DesignViewer({
         ) : (
           <ViewerLoading label="Loading the reference design…" />
         )}
-        {isLoading && (pcbCircuitJson || schematicCircuitJson) && (
+        {isViewerLoading && (pcbCircuitJson || schematicCircuitJsons.length > 0) && (
           <div className="rendering-badge">
             <span /> Loading design
           </div>
