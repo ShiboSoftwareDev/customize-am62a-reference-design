@@ -42958,6 +42958,7 @@ export function Xds110({ flags, routing }: { flags: Record<string, boolean>; rou
   {routing.via(3369) && <via connectsTo={"net.DGND"} pcbX={31.105475} pcbY={-69.370448} holeDiameter={0.2032} outerDiameter={0.4572} fromLayer={"top"} toLayer={"bottom"} />}
 </> }
 
+import { brep_shape } from "circuit-json"
 import type { BRepShape, PcbCopperPour } from "circuit-json"
 import poursByNetJson from "./circuit/pour-data.json"
 
@@ -42968,10 +42969,15 @@ type PrecomputedCopperPour = {
   layer: PcbCopperPour["layer"]
 }
 
-const poursByNet = poursByNetJson as unknown as Record<
-  string,
-  PrecomputedCopperPour[]
->
+const poursByNet: Record<string, PrecomputedCopperPour[]> = Object.fromEntries(
+  Object.entries(poursByNetJson).map(([netName, pours]) => [
+    netName,
+    pours.map((pour) => ({
+      brepShape: brep_shape.parse(pour.brepShape),
+      layer: pour.layer,
+    })),
+  ]),
+)
 
 function PoursForNet({ netName }: { netName: string }) {
   return <>

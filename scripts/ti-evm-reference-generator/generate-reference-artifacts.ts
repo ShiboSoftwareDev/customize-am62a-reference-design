@@ -1,5 +1,5 @@
 import { resolve } from "node:path"
-import { convertCircuitJsonToTscircuit } from "../../node_modules/circuit-json-to-tscircuit/lib/index.ts"
+import { convertCircuitJsonToTscircuit } from "circuit-json-to-tscircuit"
 import { parameterizeGeneratedBoard } from "../parameterize-generated-board"
 import { isSourceComponent } from "./circuit-json-elements"
 import { compressCircuitJson } from "./compress-circuit-json"

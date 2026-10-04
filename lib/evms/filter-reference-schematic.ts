@@ -7,6 +7,7 @@ type SourceTraceId = string
 type SchematicComponentId = string
 type SchematicPortId = string
 type SchematicTraceId = string
+type SchematicPointKey = string
 
 type SourceComponent = AnyCircuitElement & {
   name: ComponentName
@@ -211,7 +212,7 @@ function updateSchematicTraces(params: {
 }
 
 function keepPortAnchoredEdgeGroups(params: { edges: SchematicTraceEdge[] }): SchematicTraceEdge[] {
-  const edgesByPoint = new Map<string, number[]>()
+  const edgesByPoint = new Map<SchematicPointKey, number[]>()
   for (const [edgeIndex, edge] of params.edges.entries()) {
     for (const point of [edge.from, edge.to]) {
       const pointKey = getPointKey(point)
@@ -250,7 +251,7 @@ function keepPortAnchoredEdgeGroups(params: { edges: SchematicTraceEdge[] }): Sc
   return params.edges.filter((_, edgeIndex) => retainedEdgeIndexes.has(edgeIndex))
 }
 
-function getPointKey(point: { x: number; y: number }): string {
+function getPointKey(point: { x: number; y: number }): SchematicPointKey {
   return `${point.x},${point.y}`
 }
 
