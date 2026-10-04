@@ -1,0 +1,66 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index ffe7b2a..1bd3516 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -46267,7 +46267,7 @@ declare const boardProps: z.ZodObject<{
+     mountOrientation: z.ZodOptional<z.ZodEnum<["top_layer_toward_mount_face", "bottom_layer_toward_mount_face"]>>;
+     fabricatorPreset: z.ZodOptional<z.ZodEnum<["jlcpcb_economy", "jlcpcb_standard", "jlcpcb_economy_20260912", "jlcpcb_standard_20260912"]>>;
+     material: z.ZodDefault<z.ZodEnum<["fr4", "fr1", "flex"]>>;
+-    layers: z.ZodDefault<z.ZodUnion<[z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<4>, z.ZodLiteral<6>, z.ZodLiteral<8>, z.ZodLiteral<10>]>>;
++    layers: z.ZodDefault<z.ZodUnion<[z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<4>, z.ZodLiteral<6>, z.ZodLiteral<8>, z.ZodLiteral<10>, z.ZodLiteral<12>]>>;
+     allowBlindAndBuriedVias: z.ZodDefault<z.ZodBoolean>;
+     routeRemaining: z.ZodOptional<z.ZodBoolean>;
+     defaultViaTenting: z.ZodOptional<z.ZodEffects<z.ZodUnion<[z.ZodBoolean, z.ZodEnum<["both_sides", "top_and_bottom_tented", "top_tented", "bottom_tented", "exposed"]>]>, "top_and_bottom_tented" | "top_tented" | "bottom_tented" | "exposed", boolean | "both_sides" | "top_and_bottom_tented" | "top_tented" | "bottom_tented" | "exposed">>;
+@@ -46335,7 +46335,7 @@ declare const boardProps: z.ZodObject<{
+     viaStitchPitch: z.ZodOptional<z.ZodPipeline<z.ZodEffects<z.ZodUnion<[z.ZodString, z.ZodNumber]>, number, string | number>, z.ZodNumber>>;
+     schematicDisabled: z.ZodOptional<z.ZodBoolean>;
+ }, "strip", z.ZodTypeAny, {
+-    layers: 1 | 2 | 4 | 6 | 10 | 8;
++    layers: 1 | 2 | 4 | 6 | 8 | 10 | 12;
+     material: "flex" | "fr4" | "fr1";
+     allowBlindAndBuriedVias: boolean;
+     doubleSidedAssembly: boolean;
+@@ -121640,7 +121640,7 @@ declare const stampboardProps: z.ZodObject<{
+     mountOrientation: z.ZodOptional<z.ZodEnum<["top_layer_toward_mount_face", "bottom_layer_toward_mount_face"]>>;
+     fabricatorPreset: z.ZodOptional<z.ZodEnum<["jlcpcb_economy", "jlcpcb_standard", "jlcpcb_economy_20260912", "jlcpcb_standard_20260912"]>>;
+     material: z.ZodDefault<z.ZodEnum<["fr4", "fr1", "flex"]>>;
+-    layers: z.ZodDefault<z.ZodUnion<[z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<4>, z.ZodLiteral<6>, z.ZodLiteral<8>, z.ZodLiteral<10>]>>;
++    layers: z.ZodDefault<z.ZodUnion<[z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<4>, z.ZodLiteral<6>, z.ZodLiteral<8>, z.ZodLiteral<10>, z.ZodLiteral<12>]>>;
+     allowBlindAndBuriedVias: z.ZodDefault<z.ZodBoolean>;
+     routeRemaining: z.ZodOptional<z.ZodBoolean>;
+     defaultViaTenting: z.ZodOptional<z.ZodEffects<z.ZodUnion<[z.ZodBoolean, z.ZodEnum<["both_sides", "top_and_bottom_tented", "top_tented", "bottom_tented", "exposed"]>]>, "top_and_bottom_tented" | "top_tented" | "bottom_tented" | "exposed", boolean | "both_sides" | "top_and_bottom_tented" | "top_tented" | "bottom_tented" | "exposed">>;
+@@ -121719,7 +121719,7 @@ declare const stampboardProps: z.ZodObject<{
+     pinPitch: z.ZodOptional<z.ZodEffects<z.ZodUnion<[z.ZodString, z.ZodNumber]>, number, string | number>>;
+     innerHoles: z.ZodOptional<z.ZodBoolean>;
+ }, "strip", z.ZodTypeAny, {
+-    layers: 1 | 2 | 4 | 6 | 10 | 8;
++    layers: 1 | 2 | 4 | 6 | 8 | 10 | 12;
+     material: "flex" | "fr4" | "fr1";
+     allowBlindAndBuriedVias: boolean;
+     doubleSidedAssembly: boolean;
+diff --git a/dist/index.js b/dist/index.js
+index 172164b..77c1877 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -16920,7 +16920,8 @@ var boardProps = subcircuitGroupProps.omit({ connections: true }).extend({
+     z48.literal(4),
+     z48.literal(6),
+     z48.literal(8),
+-    z48.literal(10)
++    z48.literal(10),
++    z48.literal(12)
+   ]).default(2),
+   allowBlindAndBuriedVias: z48.boolean().default(false).describe(
+     "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack."
+diff --git a/lib/components/board.ts b/lib/components/board.ts
+index dcc3b0f..2c1ea6e 100644
+--- a/lib/components/board.ts
++++ b/lib/components/board.ts
+@@ -209,6 +209,7 @@ export const boardProps = subcircuitGroupProps
+         z.literal(6),
+         z.literal(8),
+         z.literal(10),
++        z.literal(12),
+       ])
+       .default(2),
+     allowBlindAndBuriedVias: z
