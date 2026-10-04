@@ -46,7 +46,7 @@
     "altiumts": "github:tscircuit/altiumts#8db22cf449c7bf6584a968b4913be4e1bd4a93ad",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.2.22",
-    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#f725803c0dbaed6bd0cd6e4f16597fc777101673",
+    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#0b2d9ff87f18d4d64a838b70e9aec6454c90d8a",
     "circuit-to-svg": "0.0.432",
     "circuit-json-to-gltf": "0.0.133",
     "poppygl": "0.0.29",
