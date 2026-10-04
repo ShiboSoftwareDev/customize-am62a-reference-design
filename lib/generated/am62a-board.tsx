@@ -42960,7 +42960,7 @@ export function Xds110({ flags, routing }: { flags: Record<string, boolean>; rou
 
 import { brep_shape } from "circuit-json"
 import type { BRepShape, PcbCopperPour } from "circuit-json"
-import poursByNetJson from "./circuit/pour-data.json"
+import poursByNetJson from "./circuit/precomputed-copper-pours.json"
 
 // Resolved source copper; arcs sampled at <= 0.12 radians and rings simplified within 0.005 mm.
 // Geometry lives in generated JSON so the TSX renderer remains small and fast to transform.

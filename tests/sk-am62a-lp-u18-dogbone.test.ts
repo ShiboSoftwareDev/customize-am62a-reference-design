@@ -46,14 +46,14 @@ function distanceBetween(firstPoint: Point, secondPoint: Point): number {
   return Math.hypot(firstPoint.x - secondPoint.x, firstPoint.y - secondPoint.y)
 }
 
-function isPoint(value: unknown): value is Point {
+function isPoint(point: unknown): point is Point {
   return (
-    typeof value === "object" &&
-    value !== null &&
-    "x" in value &&
-    typeof value.x === "number" &&
-    "y" in value &&
-    typeof value.y === "number"
+    typeof point === "object" &&
+    point !== null &&
+    "x" in point &&
+    typeof point.x === "number" &&
+    "y" in point &&
+    typeof point.y === "number"
   )
 }
 
