@@ -24,7 +24,7 @@
     "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@5dffffd",
     "@tscircuit/math-utils": "0.0.36",
     "@tscircuit/modelprinter": "0.0.8",
-    "@tscircuit/pcb-viewer": "github:tscircuit/pcb-viewer#7b687b002b0012f3276e3d005c1fe18452ed2e99",
+    "@tscircuit/pcb-viewer": "github:tscircuit/pcb-viewer#a4fbb387ff88f177daf4cca34d555cdf82ff54bf",
     "@tscircuit/props": "https://pkg.pr.new/tscircuit/props/@tscircuit/props@7715fdf",
     "@tscircuit/schematic-viewer": "2.0.99",
     "circuit-json": "0.0.506",
