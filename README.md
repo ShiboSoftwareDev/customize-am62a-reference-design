@@ -41,7 +41,7 @@ To regenerate the checked-in Circuit JSON and parameterized TSX from TI's origin
 bun run generate:ti-evm-references
 ```
 
-The download step verifies each official archive against its pinned SHA-256 checksum before extraction. The source archives remain untracked. The generated project Circuit JSON, component-level TSX, compact reference definitions, and provenance metadata are committed. `altium-to-circuit-json` is pinned to a release; the component-aware `circuit-json-to-tscircuit` source revision is pinned by full commit SHA until that converter stack is released.
+The download step verifies each official archive against its pinned SHA-256 checksum before extraction. The source archives remain untracked. The generated project Circuit JSON, component-level TSX, compact reference definitions, and provenance metadata are committed. The Altium parser and Altium converter are pinned to exact releases. `circuit-json-to-tscircuit` remains pinned to the component-preserving converter commit required by the parameterization pipeline.
 
 ## Verify
 
