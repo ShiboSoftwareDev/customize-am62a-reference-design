@@ -92,10 +92,10 @@ export function parameterizeGeneratedBoard(params: {
     replacements,
     source: params.generatedSource,
   })
-  const arrowPrefix = "export default () => ("
-  if (!parameterizedBody.startsWith(arrowPrefix) || !parameterizedBody.endsWith(")")) {
-    throw new Error(`${params.componentName} has an unexpected generated component shape`)
-  }
+  const jsxBody = extractGeneratedJsxBody({
+    componentName: params.componentName,
+    generatedSource: parameterizedBody,
+  })
 
   const featureEntries = [...params.featureIdByComponentName.entries()].filter(([componentName]) =>
     componentNameSet.has(componentName),
@@ -105,12 +105,37 @@ export function parameterizeGeneratedBoard(params: {
     source: createParameterizedBoardSource({
       componentName: params.componentName,
       featureEntries,
-      jsxBody: parameterizedBody.slice(arrowPrefix.length, -1),
+      jsxBody,
       routablePortSelectors: params.routablePortSelectors,
       teardropPortSelectors: params.teardropPortSelectors,
       viaTeardropPortSelectors: params.viaTeardropPortSelectors,
     }),
   }
+}
+
+function extractGeneratedJsxBody(params: {
+  componentName: string
+  generatedSource: string
+}): string {
+  const wrappers = [
+    {
+      prefix: "export default () => (",
+      suffix: ")",
+    },
+    {
+      prefix: `export const ${params.componentName} = () => (`,
+      suffix: `)\nexport default ${params.componentName}`,
+    },
+  ]
+  const wrapper = wrappers.find(
+    ({ prefix, suffix }) =>
+      params.generatedSource.startsWith(prefix) && params.generatedSource.endsWith(suffix),
+  )
+  if (!wrapper) {
+    throw new Error(`${params.componentName} has an unexpected generated component shape`)
+  }
+
+  return params.generatedSource.slice(wrapper.prefix.length, -wrapper.suffix.length)
 }
 
 function renameNetsMatchingComponentNames(params: {

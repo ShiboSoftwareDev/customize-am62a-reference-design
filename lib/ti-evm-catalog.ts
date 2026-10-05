@@ -1,11 +1,6 @@
 import type { ParameterizedTiEvmId, ParameterizedTiEvmOptions } from "./evms/parameterized-ti-evms"
-import {
-  allOptionalModules,
-  type OptionalModuleGroupId,
-  type OptionalModuleSelection,
-} from "./module-config"
 
-export type TiEvmId = "sk-am62a-lp" | ParameterizedTiEvmId
+export type TiEvmId = ParameterizedTiEvmId
 
 export type TiEvmRemovableFeature = {
   id: string
@@ -17,10 +12,9 @@ export type TiEvmVariant = {
   id: string
   label: string
   circuitJsonUrl: string
-  schematicCircuitJsonUrl?: string
+  schematicCircuitJsonUrls: string[]
   removedFeatureIds: string[]
-  sourceSelection?: OptionalModuleSelection
-  evmOptions?: ParameterizedTiEvmOptions
+  evmOptions: ParameterizedTiEvmOptions
 }
 
 export type TiEvm = {
@@ -36,37 +30,10 @@ export type TiEvm = {
   variants: TiEvmVariant[]
 }
 
-type SkAm62aFeature = TiEvmRemovableFeature & {
-  moduleGroups: OptionalModuleGroupId[]
-}
-
-const skAm62aFeatures: SkAm62aFeature[] = [
-  {
-    id: "vision-media",
-    label: "camera, HDMI, and audio",
-    description: "CSI camera input, HDMI output, audio codec, and audio connectors.",
-    moduleGroups: ["camera", "display", "audio"],
-  },
-  {
-    id: "network-io",
-    label: "networking and expansion I/O",
-    description: "Ethernet, wireless, USB host/DRD, and expansion interfaces.",
-    moduleGroups: ["ethernet", "wireless", "usb", "expansion"],
-  },
-  {
-    id: "storage-diagnostics",
-    label: "storage and diagnostics",
-    description: "eMMC, SD, OSPI, debug, board monitoring, and test points.",
-    moduleGroups: ["storage", "debug", "monitoring"],
-  },
-]
-
 function createVariants(params: {
   evmId: TiEvmId
   features: TiEvmRemovableFeature[]
-  createPopulation: (
-    removedFeatureIds: string[],
-  ) => { sourceSelection: OptionalModuleSelection } | { evmOptions: ParameterizedTiEvmOptions }
+  schematicSheetCount: number
 }): TiEvmVariant[] {
   const combinationCount = 1 << params.features.length
 
@@ -81,19 +48,24 @@ function createVariants(params: {
         ? "minimal-board"
         : `remove-${removedFeatureIds.join("-")}`
 
+    const circuitJsonUrl = `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`
+
     return {
       id,
       label: createVariantLabel({
         features: params.features,
         removedFeatureIds,
       }),
-      circuitJsonUrl: `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`,
-      schematicCircuitJsonUrl:
-        params.evmId === "sk-am62a-lp"
-          ? undefined
-          : `/prebuilt-ti-evms/${params.evmId}/${id}.schematic.circuit.json.gz`,
+      circuitJsonUrl,
+      schematicCircuitJsonUrls: Array.from(
+        { length: params.schematicSheetCount },
+        (_, schematicSheetIndex) =>
+          `/prebuilt-ti-evms/${params.evmId}/${id}${
+            schematicSheetIndex === 0 ? ".schematic" : `.schematic-${schematicSheetIndex + 1}`
+          }.circuit.json.gz`,
+      ),
       removedFeatureIds,
-      ...params.createPopulation(removedFeatureIds),
+      evmOptions: { removedFeatureIds },
     }
   })
 }
@@ -113,43 +85,6 @@ function createVariantLabel({
   return `${label[0].toUpperCase()}${label.slice(1)} only`
 }
 
-function createSkAm62aSelection(removedFeatureIds: string[]): {
-  sourceSelection: OptionalModuleSelection
-} {
-  const sourceSelection = { ...allOptionalModules }
-  for (const feature of skAm62aFeatures) {
-    if (!removedFeatureIds.includes(feature.id)) continue
-    for (const moduleGroup of feature.moduleGroups) sourceSelection[moduleGroup] = false
-  }
-  return { sourceSelection }
-}
-
-function createEvaluationOptions(removedFeatureIds: string[]): {
-  evmOptions: ParameterizedTiEvmOptions
-} {
-  return {
-    evmOptions: { removedFeatureIds },
-  }
-}
-
-export const skAm62aLp: TiEvm = {
-  id: "sk-am62a-lp",
-  name: "SK-AM62A-LP",
-  category: "Vision AI processor EVM",
-  description:
-    "TI's 12-layer AM62A edge-AI starter kit, reconstructed as parameterized tscircuit TSX.",
-  sourceLabel: "TI SK-AM62A-LP design files",
-  sourceUrl: "https://www.ti.com/tool/SK-AM62A-LP",
-  sourcePath: "boards/sk-am62a-lp/index.circuit.tsx",
-  schematicSheetLabels: ["Parameterized schematic"],
-  removableFeatures: skAm62aFeatures,
-  variants: createVariants({
-    evmId: "sk-am62a-lp",
-    features: skAm62aFeatures,
-    createPopulation: createSkAm62aSelection,
-  }),
-}
-
 function createEvaluationEvm(params: {
   id: ParameterizedTiEvmId
   name: string
@@ -166,13 +101,46 @@ function createEvaluationEvm(params: {
     variants: createVariants({
       evmId: params.id,
       features: params.removableFeatures,
-      createPopulation: createEvaluationOptions,
+      schematicSheetCount: params.schematicSheetLabels.length,
     }),
   }
 }
 
 export const tiEvms: TiEvm[] = [
-  skAm62aLp,
+  createEvaluationEvm({
+    id: "dp83825evm",
+    name: "DP83825EVM",
+    category: "Industrial Ethernet PHY EVM",
+    description:
+      "TI's 158-component 10/100-Mbps Ethernet PHY platform with RJ-45 and MAC interfaces, onboard USB-to-MDIO control, and compliance test access.",
+    sourceLabel: "TI DP83825EVM Altium release",
+    sourceUrl: "https://www.ti.com/tool/DP83825EVM",
+    sourcePath: "boards/dp83825evm/index.circuit.tsx",
+    schematicSheetLabels: [
+      "HSDC045A_DP83825.SchDoc",
+      "HSDC045A_Coms.SchDoc",
+      "HSDC045A_Power.SchDoc",
+      "HSDC045A_Hardware.SchDoc",
+      "HSDC045A_CoverSheet.SchDoc",
+    ],
+    removableFeatures: [
+      {
+        id: "usb-mdio-controller",
+        label: "USB-to-MDIO controller",
+        description: "Optional MSP430F5529 USB management controller and support circuitry.",
+      },
+      {
+        id: "status-indicators",
+        label: "status indicators",
+        description: "Optional link, activity, power, and controller status LEDs.",
+      },
+      {
+        id: "configuration-headers",
+        label: "configuration and test headers",
+        description: "Optional strap, rail, reset, interrupt, and compliance-test access points.",
+      },
+    ],
+  }),
   createEvaluationEvm({
     id: "drv8307evm",
     name: "DRV8307EVM",

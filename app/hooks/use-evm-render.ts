@@ -5,7 +5,7 @@ import type { TiEvmVariant } from "lib/ti-evm-catalog"
 
 type EvmRenderState = {
   pcbCircuitJson: AnyCircuitElement[] | null
-  schematicCircuitJson: AnyCircuitElement[] | null
+  schematicCircuitJsons: AnyCircuitElement[][]
   error: string
   isLoading: boolean
   elapsedMs: number
@@ -16,7 +16,7 @@ export function useEvmRender(request: {
   retryIndex: number
 }): EvmRenderState {
   const [pcbCircuitJson, setPcbCircuitJson] = useState<AnyCircuitElement[] | null>(null)
-  const [schematicCircuitJson, setSchematicCircuitJson] = useState<AnyCircuitElement[] | null>(null)
+  const [schematicCircuitJsons, setSchematicCircuitJsons] = useState<AnyCircuitElement[][]>([])
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [elapsedMs, setElapsedMs] = useState(0)
@@ -36,17 +36,20 @@ export function useEvmRender(request: {
     void (async () => {
       try {
         const pcbUrl = request.variant.circuitJsonUrl
-        const schematicUrl = request.variant.schematicCircuitJsonUrl ?? pcbUrl
         const pcbCircuitJsonPromise = loadPrebuiltCircuitJson({ url: pcbUrl, forceReload })
-        const [nextPcbCircuitJson, nextSchematicCircuitJson] = await Promise.all([
+        const [nextPcbCircuitJson, nextSchematicCircuitJsons] = await Promise.all([
           pcbCircuitJsonPromise,
-          schematicUrl === pcbUrl
-            ? pcbCircuitJsonPromise
-            : loadPrebuiltCircuitJson({ url: schematicUrl, forceReload }),
+          Promise.all(
+            request.variant.schematicCircuitJsonUrls.map((schematicUrl) =>
+              schematicUrl === pcbUrl
+                ? pcbCircuitJsonPromise
+                : loadPrebuiltCircuitJson({ url: schematicUrl, forceReload }),
+            ),
+          ),
         ])
         if (requestIndex !== requestIndexRef.current) return
         setPcbCircuitJson(nextPcbCircuitJson)
-        setSchematicCircuitJson(nextSchematicCircuitJson)
+        setSchematicCircuitJsons(nextSchematicCircuitJsons)
       } catch (loadError) {
         if (requestIndex === requestIndexRef.current) {
           setError(loadError instanceof Error ? loadError.message : String(loadError))
@@ -65,5 +68,5 @@ export function useEvmRender(request: {
     }
   }, [request.variant, request.retryIndex])
 
-  return { pcbCircuitJson, schematicCircuitJson, error, isLoading, elapsedMs }
+  return { pcbCircuitJson, schematicCircuitJsons, error, isLoading, elapsedMs }
 }

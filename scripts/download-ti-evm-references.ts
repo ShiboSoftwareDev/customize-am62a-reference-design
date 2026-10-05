@@ -5,6 +5,12 @@ import { unzipSync } from "fflate"
 
 const references = [
   {
+    name: "DP83825EVM",
+    url: "https://www.ti.com/lit/zip/SNLR039",
+    sha256: "563481585d9c44e325a46da7891650d70573fa74008de68f80e7fcc9010c388f",
+    outputDirectory: "dp83825",
+  },
+  {
     name: "DRV8307EVM",
     url: "https://www.ti.com/lit/zip/slvc565a",
     sha256: "660117e30c1f12473f18d825a8318a5460a13025a7a6223689ac1f9afd3921d8",

@@ -21,10 +21,7 @@ export async function expectFullBoardSvgSnapshots(params: {
   if (!fullBoard) throw new Error(`${params.evmId} has no full-board variant`)
   const schematicArtifactPath = resolve(
     import.meta.dir,
-    `../../public/${(fullBoard.schematicCircuitJsonUrl ?? fullBoard.circuitJsonUrl).replace(
-      /^\//u,
-      "",
-    )}`,
+    `../../public/${fullBoard.schematicCircuitJsonUrls[0].replace(/^\//u, "")}`,
   )
   const schematicArtifactBytes = new Uint8Array(await Bun.file(schematicArtifactPath).arrayBuffer())
   const schematicCircuitJson = parsePrebuiltCircuitJson(schematicArtifactBytes)

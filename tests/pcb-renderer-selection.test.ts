@@ -18,8 +18,16 @@ test("PCB rendering starts in canvas only when WebGPU cannot preserve the geomet
       route: [],
     },
   ]
+  const throughPadTrace = [
+    {
+      type: "pcb_trace",
+      pcb_trace_id: "trace",
+      route: [{ route_type: "through_pad" }],
+    },
+  ]
 
   expect(getPcbRenderer(board as AnyCircuitElement[])).toBe("webgpu")
-  expect(getPcbRenderer(fabricationDimension as AnyCircuitElement[])).toBe("canvas")
+  expect(getPcbRenderer(fabricationDimension as AnyCircuitElement[])).toBe("webgpu")
   expect(getPcbRenderer(interpolatedTrace as AnyCircuitElement[])).toBe("canvas")
+  expect(getPcbRenderer(throughPadTrace as AnyCircuitElement[])).toBe("canvas")
 })

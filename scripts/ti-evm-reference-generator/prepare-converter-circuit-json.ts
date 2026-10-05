@@ -2,6 +2,7 @@ import { transformPCBElements } from "@tscircuit/circuit-json-util"
 import type { AnyCircuitElement } from "circuit-json"
 import { compose, rotateDEG, scale, translate } from "transformation-matrix"
 import {
+  isPcbBoard,
   isPcbComponent,
   isPcbPort,
   isSourceComponent,
@@ -17,11 +18,76 @@ import type {
   SourcePortId,
 } from "./types"
 
+type CircuitPoint = { x: number; y: number }
+
+type PcbSilkscreenGraphicElement = AnyCircuitElement & {
+  type: "pcb_silkscreen_graphic"
+  brep_shape: { outer_ring: { vertices: CircuitPoint[] } }
+  layer: string
+  pcb_component_id?: string
+  pcb_silkscreen_graphic_id: string
+}
+
+type PcbOutlineKeepoutElement = AnyCircuitElement & {
+  type: "pcb_keepout"
+  shape: "outline"
+  outline: CircuitPoint[]
+}
+
 export function prepareConverterCircuitJson(
   projectCircuitJson: AnyCircuitElement[],
 ): AnyCircuitElement[] {
   return deduplicateFootprintPortHints(
-    replaceUnsupportedPcbPrimitives(mirrorBottomFootprintsForCore(projectCircuitJson)),
+    replaceUnsupportedPcbPrimitives(
+      mirrorBottomFootprintsForCore(removeOffboardPcbComponents(projectCircuitJson)),
+    ),
+  )
+}
+
+function removeOffboardPcbComponents(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
+  const board = circuitJson.find(isPcbBoard)
+  if (!board) return circuitJson
+
+  const minimumX = board.center.x - board.width / 2
+  const maximumX = board.center.x + board.width / 2
+  const minimumY = board.center.y - board.height / 2
+  const maximumY = board.center.y + board.height / 2
+  const offboardAnnotationComponentIds = new Set(
+    circuitJson.flatMap((element) => {
+      if (
+        !isPcbComponent(element) ||
+        hasPhysicalPcbPrimitive({
+          circuitJson,
+          pcbComponentId: element.pcb_component_id,
+        }) ||
+        (element.center.x >= minimumX &&
+          element.center.x <= maximumX &&
+          element.center.y >= minimumY &&
+          element.center.y <= maximumY)
+      ) {
+        return []
+      }
+      return [element.pcb_component_id]
+    }),
+  )
+
+  return circuitJson.filter(
+    (element) =>
+      !("pcb_component_id" in element) ||
+      typeof element.pcb_component_id !== "string" ||
+      !offboardAnnotationComponentIds.has(element.pcb_component_id),
+  )
+}
+
+function hasPhysicalPcbPrimitive(params: {
+  circuitJson: AnyCircuitElement[]
+  pcbComponentId: string
+}): boolean {
+  return params.circuitJson.some(
+    (element) =>
+      ["pcb_smtpad", "pcb_plated_hole"].includes(element.type) &&
+      "pcb_component_id" in element &&
+      element.pcb_component_id === params.pcbComponentId,
   )
 }
 
@@ -74,7 +140,7 @@ function mirrorBottomFootprintsForCore(circuitJson: AnyCircuitElement[]): AnyCir
 
 function replaceUnsupportedPcbPrimitives(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
   return circuitJson.flatMap((element) => {
-    if (element.type === "pcb_silkscreen_graphic") {
+    if (isPcbSilkscreenGraphic(element)) {
       const vertices = element.brep_shape.outer_ring.vertices
       const firstVertex = vertices[0]
       if (!firstVertex || vertices.length < 2) return []
@@ -92,7 +158,7 @@ function replaceUnsupportedPcbPrimitives(circuitJson: AnyCircuitElement[]): AnyC
         },
       ]
     }
-    if (element.type === "pcb_keepout" && element.shape === "outline") {
+    if (isPcbOutlineKeepout(element)) {
       const xs = element.outline.map(({ x }) => x)
       const ys = element.outline.map(({ y }) => y)
       if (xs.length === 0 || ys.length === 0) return []
@@ -122,6 +188,42 @@ function replaceUnsupportedPcbPrimitives(circuitJson: AnyCircuitElement[]): AnyC
     }
     return [element]
   })
+}
+
+function isPcbSilkscreenGraphic(
+  element: AnyCircuitElement,
+): element is PcbSilkscreenGraphicElement {
+  if (
+    element.type !== "pcb_silkscreen_graphic" ||
+    typeof element.pcb_silkscreen_graphic_id !== "string" ||
+    typeof element.layer !== "string" ||
+    !isRecord(element.brep_shape)
+  ) {
+    return false
+  }
+  const outerRing = element.brep_shape.outer_ring
+  return (
+    isRecord(outerRing) &&
+    Array.isArray(outerRing.vertices) &&
+    outerRing.vertices.every(isCircuitPoint)
+  )
+}
+
+function isPcbOutlineKeepout(element: AnyCircuitElement): element is PcbOutlineKeepoutElement {
+  return (
+    element.type === "pcb_keepout" &&
+    element.shape === "outline" &&
+    Array.isArray(element.outline) &&
+    element.outline.every(isCircuitPoint)
+  )
+}
+
+function isCircuitPoint(candidate: unknown): candidate is CircuitPoint {
+  return isRecord(candidate) && typeof candidate.x === "number" && typeof candidate.y === "number"
+}
+
+function isRecord(candidate: unknown): candidate is Record<string, unknown> {
+  return typeof candidate === "object" && candidate !== null
 }
 
 function deduplicateFootprintPortHints(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {

@@ -4,7 +4,6 @@
     "target": "ES2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "paths": {
-      "lib/generated/am62a-board": ["./types/am62a-board.d.ts"],
       "app/*": ["./app/*"],
       "lib/*": ["./lib/*"],
       "tests/*": ["./tests/*"],

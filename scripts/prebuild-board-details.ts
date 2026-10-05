@@ -23,11 +23,7 @@ for (const evm of tiEvms) {
   const circuitJson = await readCompressedCircuitJson(fullBoard.circuitJsonUrl)
   const schematicCircuitJsons = await Promise.all(
     evm.schematicSheetLabels.map((_, schematicSheetIndex) =>
-      readSchematicCircuitJson({
-        evmId: evm.id,
-        primarySchematicUrl: fullBoard.schematicCircuitJsonUrl ?? fullBoard.circuitJsonUrl,
-        schematicSheetIndex,
-      }),
+      readCompressedCircuitJson(fullBoard.schematicCircuitJsonUrls[schematicSheetIndex]),
     ),
   )
   const pcbSvg = stripTrailingWhitespace(
@@ -46,7 +42,7 @@ for (const evm of tiEvms) {
       convertCircuitJsonToSchematicSvg(schematicCircuitJson, {
         height: 900,
         includeVersion: true,
-        width: fullBoard.schematicCircuitJsonUrl ? 1800 : 1200,
+        width: 1800,
       }),
     ),
   )
@@ -72,28 +68,6 @@ console.log(`Prebuilt PCB, schematic, 3D, and TSX details for ${tiEvms.length} T
 
 async function readCompressedCircuitJson(publicUrl: string): Promise<CircuitJson> {
   const inputPath = resolve(repositoryRoot, "public", publicUrl.replace(/^\//u, ""))
-  const compressed = new Uint8Array(await Bun.file(inputPath).arrayBuffer())
-  return JSON.parse(strFromU8(gunzipSync(compressed))) as CircuitJson
-}
-
-async function readSchematicCircuitJson(params: {
-  evmId: string
-  primarySchematicUrl: string
-  schematicSheetIndex: number
-}): Promise<CircuitJson> {
-  if (params.schematicSheetIndex === 0) {
-    return readCompressedCircuitJson(params.primarySchematicUrl)
-  }
-  return readCompressedCircuitJsonFile(
-    resolve(
-      repositoryRoot,
-      "lib/generated/ti-evms",
-      `${params.evmId}.schematic-${params.schematicSheetIndex + 1}.circuit.json.gz`,
-    ),
-  )
-}
-
-async function readCompressedCircuitJsonFile(inputPath: string): Promise<CircuitJson> {
   const compressed = new Uint8Array(await Bun.file(inputPath).arrayBuffer())
   return JSON.parse(strFromU8(gunzipSync(compressed))) as CircuitJson
 }

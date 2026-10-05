@@ -8,5 +8,6 @@ declare module "@tscircuit/pcb-viewer" {
     renderer?: "webgpu" | "canvas"
     allowEditing?: boolean
     focusOnHover?: boolean
+    onRenderComplete?: () => void
   }>
 }

@@ -1,5 +1,53 @@
 import type { ReferenceInput } from "./types"
 
+const dp83825StatusIndicatorComponents = new Set([
+  "LD1",
+  "LD2",
+  "LD3",
+  "LD4",
+  "R4",
+  "R28",
+  "R30",
+  "R32",
+])
+
+const dp83825ConfigurationComponents = new Set([
+  "J2",
+  "J3",
+  "J4",
+  "J5",
+  "J6",
+  "J7",
+  "J8",
+  "J9",
+  "J13",
+  "J14",
+  "J16",
+  "J17",
+  "J18",
+  "S1",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R14",
+  "R15",
+  "R16",
+  "R17",
+  "R18",
+  "R19",
+])
+
+function getDp83825RemovableFeatureId(componentName: string): string | undefined {
+  if (/^(?:U4|D2|J19|Y1|R(?:4[4-9]|5[0-4])|C(?:3\d|40))$/u.test(componentName)) {
+    return "usb-mdio-controller"
+  }
+  if (dp83825StatusIndicatorComponents.has(componentName)) return "status-indicators"
+  if (dp83825ConfigurationComponents.has(componentName)) return "configuration-headers"
+  return undefined
+}
+
 const drvSpeedControlComponents = new Set([
   "U5",
   "R20",
@@ -75,6 +123,26 @@ const lmgMeasurementInterface = new Set([
 ])
 
 export const referenceInputs: ReferenceInput[] = [
+  {
+    id: "dp83825evm",
+    autorouterVersion: "beta_pipeline7",
+    componentName: "Dp83825Evm",
+    exportName: "dp83825EvmDefinition",
+    name: "DP83825EVM",
+    sourceUrl: "https://www.ti.com/tool/DP83825EVM",
+    archiveSha256: "563481585d9c44e325a46da7891650d70573fa74008de68f80e7fcc9010c388f",
+    pcbPath: "tmp/references/dp83825/HSDC045A.PcbDoc",
+    projectPath: "tmp/references/dp83825/HSDC045A.PrjPcb",
+    schematicPaths: [
+      "tmp/references/dp83825/HSDC045A_DP83825.SchDoc",
+      "tmp/references/dp83825/HSDC045A_Coms.SchDoc",
+      "tmp/references/dp83825/HSDC045A_Power.SchDoc",
+      "tmp/references/dp83825/HSDC045A_Hardware.SchDoc",
+      "tmp/references/dp83825/HSDC045A_CoverSheet.SchDoc",
+    ],
+    outputName: "dp83825evm.generated.ts",
+    getRemovableFeatureId: getDp83825RemovableFeatureId,
+  },
   {
     id: "drv8307evm",
     autorouterVersion: "beta_pipeline9",

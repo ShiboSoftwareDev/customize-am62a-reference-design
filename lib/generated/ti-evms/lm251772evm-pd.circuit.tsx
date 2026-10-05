@@ -501,9 +501,6 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={0.04998465999999269} pcbY={0.04998465999999269} anchorAlignment="bottom_left" text="C41" font="tscircuit2024" fontSize={0.49999899999999997} color="#ec4899" />
     <silkscreentext pcbX={4.4989216599999935} pcbY={0.24540971999999783} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C41" />
           </footprint>} />
-    <chip name="ZZ4" pcbX={-46.989999999999995} pcbY={50.8} pcbRotation="0deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
-    <chip name="ZZ3" pcbX={-46.989999999999995} pcbY={53.33999999999999} pcbRotation="0deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
-    <chip name="ZZ2" pcbX={-46.989999999999995} pcbY={55.88000000000001} pcbRotation="0deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="SH-JP12" pcbX={-2.5935482800000074} pcbY={40.64} pcbRotation="180deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="SH-JP11" pcbX={45.69215906000001} pcbY={19.0488189} pcbRotation="180deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="SH-JP10" pcbX={45.69215906000001} pcbY={15.239999999999995} pcbRotation="180deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
@@ -2967,16 +2964,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <silkscreentext pcbX={101.2952} pcbY={128.016} anchorAlignment="bottom_left" fontSize={0.762} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="ILIMCOMP" />
     <silkscreentext pcbX={106.80786359999999} pcbY={87.90939999999999} anchorAlignment="bottom_right" fontSize={0.762} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="BIAS" />
     <silkscreentext pcbX={24.7032907} pcbY={111.2012} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="SR135 Rev.:.PCB_Rev" />
-    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text=".Layer_Name" />
+    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Top Overlay" />
     <silkscreentext pcbX={108.86439999999999} pcbY={40.99593528} anchorAlignment="bottom_left" fontSize={1.27} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="VOUT" />
     <silkscreentext pcbX={108.25588458} pcbY={75.184} anchorAlignment="bottom_left" fontSize={1.27} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="GND" />
     <silkscreentext pcbX={34.188892759999995} pcbY={75.184} anchorAlignment="bottom_left" fontSize={1.27} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="GND" />
     <silkscreentext pcbX={33.756246940000004} pcbY={40.99593528} anchorAlignment="bottom_left" fontSize={1.27} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="VIN" />
-    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="bottom" text=".Layer_Name" />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="bottom" />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="inner2" />
-    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text=".Layer_Name" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="inner1" />
+    <silkscreentext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="bottom" text="Bottom Overlay" />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Top Layer" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Bottom Layer" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="bottom" />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Signal Layer 2" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="inner2" />
+    <coppertext pcbX={32.2326} pcbY={17.1578651} anchorAlignment="center" text="Signal Layer 1" font="tscircuit2024" fontSize={1.524} pcbRotation="0deg" mirrored={false} layer="inner1" />
     <keepout shape="circle" layers={["top"]} description="Altium arc keepout" pcbX="101.3968mm" pcbY="115.2621012mm" radius="0.499999mm" />
     <keepout shape="circle" layers={["top"]} description="Altium arc keepout" pcbX="98.425mm" pcbY="42.5196mm" radius="0.499999mm" />
     <keepout shape="circle" layers={["top"]} description="Altium arc keepout" pcbX="39.4325475mm" pcbY="42.5196mm" radius="0.499999mm" />

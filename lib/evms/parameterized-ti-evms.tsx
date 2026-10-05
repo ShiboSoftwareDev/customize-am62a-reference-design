@@ -1,3 +1,5 @@
+import { Dp83825Evm } from "../generated/ti-evms/dp83825evm.circuit"
+import { dp83825EvmDefinition } from "../generated/ti-evms/dp83825evm.generated"
 import { drv8307EvmDefinition } from "../generated/ti-evms/drv8307evm.generated"
 import { Drv8307Evm } from "../generated/ti-evms/drv8307evm.circuit"
 import { lm5155EvmFlyDefinition } from "../generated/ti-evms/lm5155evm-fly.generated"
@@ -9,6 +11,7 @@ import { Lmg342xBbEvm } from "../generated/ti-evms/lmg342x-bb-evm.circuit"
 import type { ReferenceEvmDefinition } from "./reference-evm-types"
 
 export type ParameterizedTiEvmId =
+  | "dp83825evm"
   | "drv8307evm"
   | "lm5155evm-fly"
   | "lm251772evm-pd"
@@ -19,6 +22,7 @@ export type ParameterizedTiEvmOptions = {
 }
 
 const definitions: Record<ParameterizedTiEvmId, ReferenceEvmDefinition> = {
+  dp83825evm: dp83825EvmDefinition,
   drv8307evm: drv8307EvmDefinition,
   "lm5155evm-fly": lm5155EvmFlyDefinition,
   "lm251772evm-pd": lm251772EvmPdDefinition,
@@ -36,6 +40,8 @@ export function ParameterizedTiEvm(props: {
   options: ParameterizedTiEvmOptions
 }) {
   switch (props.evmId) {
+    case "dp83825evm":
+      return <Dp83825Evm removedFeatureIds={props.options.removedFeatureIds} />
     case "drv8307evm":
       return <Drv8307Evm removedFeatureIds={props.options.removedFeatureIds} />
     case "lm5155evm-fly":
