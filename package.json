@@ -18,6 +18,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
+    "@tscircuit/checks": "0.0.224",
     "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "0.0.2006",
     "@tscircuit/math-utils": "0.0.36",
