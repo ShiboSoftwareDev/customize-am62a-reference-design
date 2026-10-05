@@ -5,27 +5,24 @@
   "description": "Prebuilt parameterized-TSX configurator for five Texas Instruments EVMs",
   "type": "module",
   "scripts": {
-    "prepare:generated": "bun scripts/prepare-generated-assets.ts",
     "download:ti-evm-references": "bun scripts/download-ti-evm-references.ts",
     "generate:ti-evm-references": "bun run download:ti-evm-references && bun scripts/generate-ti-evm-reference-definitions.ts",
-    "prebuild:ti-evms": "bun run prepare:generated && bun scripts/prebuild-ti-evms.ts && bun scripts/prebuild-ti-evm-schematic-assets.ts && bun scripts/prebuild-board-details.ts",
+    "prebuild:ti-evms": "bun scripts/prebuild-ti-evms.ts && bun scripts/prebuild-ti-evm-schematic-assets.ts && bun scripts/prebuild-board-details.ts",
     "rebuild:ti-evms": "bun run generate:ti-evm-references && bun run prebuild:ti-evms",
     "prebuild:board-details": "bun scripts/prebuild-board-details.ts",
-    "dev": "bun run prepare:generated && vite",
-    "build": "bun run prepare:generated && vite build",
-    "test": "bun run prepare:generated && bun test --smol",
+    "dev": "vite",
+    "build": "vite build",
+    "test": "bun test --smol",
     "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
     "format": "biome format --write .",
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/checks": "0.0.222",
     "@tscircuit/circuit-json-util": "0.0.116",
     "@tscircuit/core": "0.0.2006",
     "@tscircuit/math-utils": "0.0.36",
     "@tscircuit/modelprinter": "0.0.8",
-    "@tscircuit/pcb-viewer": "github:tscircuit/pcb-viewer#e4eab0f44a935cd0db9335adbd836daeed2977fa",
-    "@tscircuit/props": "0.0.668",
+    "@tscircuit/pcb-viewer": "1.11.419",
     "@tscircuit/schematic-viewer": "2.0.99",
     "circuit-json": "0.0.506",
     "fflate": "0.8.3",
@@ -54,13 +51,7 @@
     "typescript": "5.9.2",
     "vite": "7.1.7"
   },
-  "patchedDependencies": {
-    "@tscircuit/props@0.0.668": "patches/@tscircuit%2Fprops@0.0.668.patch",
-    "circuit-json@0.0.506": "patches/circuit-json@0.0.506.patch",
-    "@tscircuit/checks@0.0.222": "patches/@tscircuit%2Fchecks@0.0.222.patch"
-  },
   "trustedDependencies": [
-    "@tscircuit/pcb-viewer",
     "altium-to-circuit-json",
     "altiumts",
     "circuit-json-to-tscircuit"

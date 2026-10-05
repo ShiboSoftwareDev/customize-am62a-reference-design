@@ -442,11 +442,6 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
   <board pcbX={60.1218} pcbY={59.9186} width="85.09mm" height="41.91mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 80.8736 }, { x: 102.6668, y: 80.8736 }, { x: 102.6668, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterVersion="beta_pipeline7" autorouterEffortLevel="1x">
-    <chip name="ZZ1" pcbX={-37.846000000000004} pcbY={40.766999999999996} pcbRotation="0deg" layer="top" schX={-13.343040759610933} schY={-2.010595182955072} symbol={<symbol>
-      <schematicrect schX={0} schY={0} width={1.8278138026864292} height={0.1827813802686429} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
-    </symbol>} schDisplayValue="This Assembly Note is for PCB labels only" obstructsWithinBounds={false} footprint={<footprint>
-            <fabricationnotetext pcbX={1.1429999999999971} pcbY={-0.5079999999999956} anchorAlignment="center" text="Install label in silkscreened box after final wash.  Text shall be 8 pt font.  Text shall be per the Label Table in the PDF schematic." font="tscircuit2024" fontSize={1.016} color="#ec4899" />
-          </footprint>} />
     {isComponentIncluded({ componentName: "R26", removedFeatureIds }) && (<chip name="R26" pcbX={-9.906000000000006} pcbY={-10.540999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-10.05297591477536} schY={4.93509726725336} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
@@ -1263,15 +1258,6 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.499999mm" radius="0.50000027mm" shape="circle" />
           </footprint>} />
-    <chip name="ZZ2" pcbX={-37.846000000000004} pcbY={38.20449052000001} pcbRotation="0deg" layer="top" schX={-13.525822139879576} schY={-2.7417207040296425} symbol={<symbol>
-      <schematicrect schX={0} schY={0} width={1.4622510421491433} height={0.1827813802686429} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
-    </symbol>} schDisplayValue="These assemblies are ESD sensitive, ESD precautions shall be observed." obstructsWithinBounds={false} footprint={<footprint />} />
-    <chip name="ZZ3" pcbX={-37.846000000000004} pcbY={35.955145259999995} pcbRotation="0deg" layer="top" schX={-13.525822139879576} schY={-3.472846225104215} symbol={<symbol>
-      <schematicrect schX={0} schY={0} width={1.4622510421491433} height={0.1827813802686429} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
-    </symbol>} schDisplayValue="These assemblies must be clean and free from flux and all contaminants. Use of no clean flux is not acceptable." obstructsWithinBounds={false} footprint={<footprint />} />
-    <chip name="ZZ4" pcbX={-37.846000000000004} pcbY={33.705799999999996} pcbRotation="0deg" layer="top" schX={-13.525822139879576} schY={-4.203971746178786} symbol={<symbol>
-      <schematicrect schX={0} schY={0} width={1.4622510421491433} height={0.1827813802686429} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
-    </symbol>} schDisplayValue="These assemblies must comply with workmanship standards IPC-A-610 Class 2, unless otherwise specified." obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="C28" pcbX={0.3810000000000002} pcbY={-7.366} pcbRotation="180deg" layer="top" symbolName="capacitor_left" schX={1.553641732283463} schY={-4.935097267253358} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-2.00000108mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.59999934mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.99999854mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.59999934mm" ccwRotation={270} shape="rotated_rect" />

@@ -9,7 +9,6 @@ import { tiEvms } from "../lib/ti-evm-catalog"
 export async function prebuildTiEvmSchematicAssets(): Promise<void> {
   let artifactCount = 0
   for (const evm of tiEvms) {
-    if (evm.id === "sk-am62a-lp") continue
     const definition = getParameterizedTiEvmDefinition(evm.id)
     const referenceSchematics = await Promise.all(
       evm.schematicSheetLabels.map((_, schematicSheetIndex) =>

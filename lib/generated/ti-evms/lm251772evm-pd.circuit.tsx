@@ -501,9 +501,6 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={0.04998465999999269} pcbY={0.04998465999999269} anchorAlignment="bottom_left" text="C41" font="tscircuit2024" fontSize={0.49999899999999997} color="#ec4899" />
     <silkscreentext pcbX={4.4989216599999935} pcbY={0.24540971999999783} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C41" />
           </footprint>} />
-    <chip name="ZZ4" pcbX={-46.989999999999995} pcbY={50.8} pcbRotation="0deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
-    <chip name="ZZ3" pcbX={-46.989999999999995} pcbY={53.33999999999999} pcbRotation="0deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
-    <chip name="ZZ2" pcbX={-46.989999999999995} pcbY={55.88000000000001} pcbRotation="0deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="SH-JP12" pcbX={-2.5935482800000074} pcbY={40.64} pcbRotation="180deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="SH-JP11" pcbX={45.69215906000001} pcbY={19.0488189} pcbRotation="180deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />
     <chip name="SH-JP10" pcbX={45.69215906000001} pcbY={15.239999999999995} pcbRotation="180deg" layer="top" noSchematicRepresentation obstructsWithinBounds={false} footprint={<footprint />} />

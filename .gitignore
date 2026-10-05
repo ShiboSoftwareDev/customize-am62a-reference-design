@@ -9,5 +9,3 @@ bun.lock
 bun.lockb
 *.log
 .env.local
-lib/generated/am62a-board.runtime.js
-lib/generated/am62a-board-source.txt

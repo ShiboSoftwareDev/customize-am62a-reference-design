@@ -2,8 +2,8 @@ import { mkdir, rm, writeFile } from "node:fs/promises"
 import { basename, resolve } from "node:path"
 import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
-import { evaluateBoard, evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
-import { skAm62aLp, tiEvms } from "../lib/ti-evm-catalog"
+import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
+import { tiEvms } from "../lib/ti-evm-catalog"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -20,36 +20,10 @@ type ManifestArtifact = {
 export async function prebuildTiEvmAssets(): Promise<void> {
   await rm(outputDirectory, { recursive: true, force: true })
   await mkdir(outputDirectory, { recursive: true })
-  const artifacts: ManifestArtifact[] = []
-
-  for (const variant of skAm62aLp.variants) {
-    if (!variant.sourceSelection) throw new Error(`${variant.label} has no AM62A selection`)
-    const result = await evaluateBoard({
-      selection: variant.sourceSelection,
-      addPours: true,
-    })
-    const failedComponents = result.circuitJson.filter(
-      ({ type }) => type === "source_failed_to_create_component_error",
-    )
-    if (failedComponents.length > 0) {
-      throw new Error(`${skAm62aLp.name} ${variant.label} failed to render`)
-    }
-    artifacts.push(
-      await writeCompressedCircuitJson({
-        outputPath: variant.circuitJsonUrl,
-        circuitJson: result.circuitJson,
-        source: "Parameterized SK-AM62A-LP tscircuit TSX",
-      }),
-    )
-  }
-  console.log(`Prebuilt ${artifacts.length} ${skAm62aLp.name} variants`)
-
-  const boards = [{ id: skAm62aLp.id, artifacts }]
+  const boards: Array<{ id: string; artifacts: ManifestArtifact[] }> = []
   for (const evm of tiEvms) {
-    if (evm.id === "sk-am62a-lp") continue
     const evmArtifacts: ManifestArtifact[] = []
     for (const variant of evm.variants) {
-      if (!variant.evmOptions) throw new Error(`${evm.name} ${variant.label} has no TSX options`)
       const result = await evaluateParameterizedTiEvm({
         evmId: evm.id,
         options: variant.evmOptions,
@@ -96,12 +70,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   const manifest = {
     boards,
     sources: [
-      {
-        name: "Texas Instruments SK-AM62A-LP",
-        url: skAm62aLp.sourceUrl,
-        source: skAm62aLp.sourcePath,
-      },
-      ...tiEvms.slice(1).map((evm) => ({
+      ...tiEvms.map((evm) => ({
         name: `Texas Instruments ${evm.name}`,
         url: evm.sourceUrl,
         source: evm.sourcePath,

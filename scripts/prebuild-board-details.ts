@@ -42,7 +42,7 @@ for (const evm of tiEvms) {
       convertCircuitJsonToSchematicSvg(schematicCircuitJson, {
         height: 900,
         includeVersion: true,
-        width: evm.id === "sk-am62a-lp" ? 1200 : 1800,
+        width: 1800,
       }),
     ),
   )

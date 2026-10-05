@@ -4,14 +4,14 @@ import { tiEvms } from "lib/ti-evm-catalog"
 
 test("catalog exposes five real TI EVM product references", () => {
   expect(tiEvms.map(({ name }) => name)).toEqual([
-    "SK-AM62A-LP",
+    "DP83825EVM",
     "DRV8307EVM",
     "LM5155EVM-FLY",
     "LM251772EVM-PD",
     "LMG342X-BB-EVM",
   ])
   expect(tiEvms.map(({ schematicSheetLabels }) => schematicSheetLabels.length)).toEqual([
-    1, 1, 2, 1, 1,
+    5, 1, 2, 1, 1,
   ])
   for (const evm of tiEvms) {
     expect(evm.sourceUrl).toStartWith("https://www.ti.com/tool/")
@@ -21,17 +21,15 @@ test("catalog exposes five real TI EVM product references", () => {
     expect(new Set(evm.variants.map(({ circuitJsonUrl }) => circuitJsonUrl)).size).toBe(
       evm.variants.length,
     )
-    if (evm.id !== "sk-am62a-lp") {
-      expect(evm.schematicSheetLabels).toHaveLength(
-        getParameterizedTiEvmDefinition(evm.id).sourceSchematicPaths.length,
-      )
-      for (const variant of evm.variants) {
-        expect(variant.schematicCircuitJsonUrls).toHaveLength(evm.schematicSheetLabels.length)
-      }
-      expect(
-        new Set(evm.variants.flatMap(({ schematicCircuitJsonUrls }) => schematicCircuitJsonUrls))
-          .size,
-      ).toBe(evm.variants.length * evm.schematicSheetLabels.length)
+    expect(evm.schematicSheetLabels).toHaveLength(
+      getParameterizedTiEvmDefinition(evm.id).sourceSchematicPaths.length,
+    )
+    for (const variant of evm.variants) {
+      expect(variant.schematicCircuitJsonUrls).toHaveLength(evm.schematicSheetLabels.length)
     }
+    expect(
+      new Set(evm.variants.flatMap(({ schematicCircuitJsonUrls }) => schematicCircuitJsonUrls))
+        .size,
+    ).toBe(evm.variants.length * evm.schematicSheetLabels.length)
   }
 })
