@@ -38,17 +38,43 @@ export function getParameterizedTiEvmDefinition(
 export function ParameterizedTiEvm(props: {
   evmId: ParameterizedTiEvmId
   options: ParameterizedTiEvmOptions
+  renderImportedCopperPours?: boolean
 }) {
   switch (props.evmId) {
     case "dp83825evm":
-      return <Dp83825Evm removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Dp83825Evm
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "drv8307evm":
-      return <Drv8307Evm removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Drv8307Evm
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "lm5155evm-fly":
-      return <Lm5155EvmFly removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Lm5155EvmFly
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "lm251772evm-pd":
-      return <Lm251772EvmPd removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Lm251772EvmPd
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "lmg342x-bb-evm":
-      return <Lmg342xBbEvm removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Lmg342xBbEvm
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
   }
 }

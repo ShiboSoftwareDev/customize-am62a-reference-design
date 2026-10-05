@@ -45,6 +45,11 @@ type CircuitPcbComponent = AnyCircuitElement & {
   layer: string
   rotation: number
 }
+type CircuitPcbCopperPour = AnyCircuitElement & {
+  type: "pcb_copper_pour"
+  layer: string
+  source_net_id?: string
+}
 type CircuitPcbHole = AnyCircuitElement & {
   type: "pcb_hole"
   pcb_component_id?: string
@@ -136,11 +141,41 @@ export async function expectReferenceEvmFidelity(params: {
       throw new Error(`${evm.name} ${variant.label} has no schematic artifact`)
     }
     const variantPcbCircuitJson = await loadPublicCircuitJson(variant.circuitJsonUrl)
+    expectCopperPoursMatchSource({
+      renderedCircuitJson: variantPcbCircuitJson,
+      sourceCircuitJson,
+    })
+    expectNoDanglingCopperPourNets(variantPcbCircuitJson)
     expectNoRoutingErrors(variantPcbCircuitJson)
     for (const schematicUrl of variant.schematicCircuitJsonUrls) {
       expectNoDanglingSchematicReferences(await loadPublicCircuitJson(schematicUrl))
     }
   }
+}
+
+function expectNoDanglingCopperPourNets(circuitJson: AnyCircuitElement[]): void {
+  const sourceNetIds = new Set(
+    circuitJson.flatMap((element) =>
+      element.type === "source_net" ? [element.source_net_id] : [],
+    ),
+  )
+  for (const copperPour of circuitJson.filter(isPcbCopperPour)) {
+    if (copperPour.source_net_id) {
+      expect(sourceNetIds.has(copperPour.source_net_id)).toBe(true)
+    }
+  }
+}
+
+function expectCopperPoursMatchSource(params: {
+  renderedCircuitJson: AnyCircuitElement[]
+  sourceCircuitJson: AnyCircuitElement[]
+}): void {
+  const sourceLayers = params.sourceCircuitJson.filter(isPcbCopperPour).map(({ layer }) => layer)
+  const renderedLayers = params.renderedCircuitJson
+    .filter(isPcbCopperPour)
+    .map(({ layer }) => layer)
+  expect(sourceLayers.length).toBeGreaterThan(0)
+  expect(renderedLayers.sort()).toEqual(sourceLayers.sort())
 }
 
 async function loadGeneratedSourceCircuitJson(
@@ -499,6 +534,10 @@ function isPcbBoard(element: AnyCircuitElement): element is CircuitPcbBoard {
 
 function isPcbComponent(element: AnyCircuitElement): element is CircuitPcbComponent {
   return element.type === "pcb_component"
+}
+
+function isPcbCopperPour(element: AnyCircuitElement): element is CircuitPcbCopperPour {
+  return element.type === "pcb_copper_pour"
 }
 
 function isPhysicalPad(element: AnyCircuitElement): element is PhysicalPad {

@@ -79,6 +79,18 @@ export function parameterizeGeneratedBoard(params: {
         end: child.tagName.getEnd(),
         text: "ParameterizedTrace removedFeatureIds={removedFeatureIds}",
       })
+      continue
+    }
+    if (tagName === "copperpour") {
+      const originalElement = params.generatedSource.slice(
+        child.getStart(sourceFile),
+        child.getEnd(),
+      )
+      replacements.push({
+        start: child.getStart(sourceFile),
+        end: child.getEnd(),
+        text: `{renderImportedCopperPours && (${originalElement})}`,
+      })
     }
   }
 

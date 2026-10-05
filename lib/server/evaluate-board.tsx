@@ -10,10 +10,17 @@ import {
 export async function evaluateParameterizedTiEvm(request: {
   evmId: ParameterizedTiEvmId
   options: ParameterizedTiEvmOptions
+  renderImportedCopperPours?: boolean
 }): Promise<BoardRenderResponse> {
   const startedAt = performance.now()
   const circuit = new Circuit({ platform: { drcChecksDisabled: true } })
-  circuit.add(<ParameterizedTiEvm evmId={request.evmId} options={request.options} />)
+  circuit.add(
+    <ParameterizedTiEvm
+      evmId={request.evmId}
+      options={request.options}
+      renderImportedCopperPours={request.renderImportedCopperPours}
+    />,
+  )
   await circuit.renderUntilSettled()
 
   return {
