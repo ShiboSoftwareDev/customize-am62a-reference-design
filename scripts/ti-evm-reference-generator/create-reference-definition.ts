@@ -3,11 +3,13 @@ import { basename } from "node:path"
 import {
   convertAltiumProjectToCircuitJson,
   convertAltiumToCircuitJson,
+  parseAltiumSource,
 } from "altium-to-circuit-json"
 import {
   AltiumComponentRecord,
   AltiumNetRecord,
   AltiumPadRecord,
+  AltiumPcbDocument,
   AltiumPrjPcb,
   AltiumSchDoc,
   parseAltiumBinaryPcbDoc,
@@ -50,6 +52,7 @@ export async function createReferenceDefinition(
 ): Promise<ReferenceConversion> {
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
+  const converterPcbDocument = parseAltiumSource(pcbBytes, "pcb") as AltiumPcbDocument
   const parsedProject = parseAltiumFile(
     new Uint8Array(await readFile(reference.projectPath)),
   ).document
@@ -58,18 +61,18 @@ export async function createReferenceDefinition(
   }
   const schematicDocuments = await Promise.all(
     reference.schematicPaths.map(async (schematicPath) => {
-      const schematicDocument = parseAltiumFile(
-        new Uint8Array(await readFile(schematicPath)),
-      ).document
+      const schematicBytes = new Uint8Array(await readFile(schematicPath))
+      const schematicDocument = parseAltiumFile(schematicBytes).document
       if (!(schematicDocument instanceof AltiumSchDoc)) {
         throw new Error(`${schematicPath} is not an Altium schematic document`)
       }
-      return { document: schematicDocument, path: schematicPath }
+      const converterDocument = parseAltiumSource(schematicBytes, "schematic") as AltiumSchDoc
+      return { converterDocument, document: schematicDocument, path: schematicPath }
     }),
   )
   const projectCircuitJson = convertAltiumProjectToCircuitJson({
     pcb: {
-      document: pcbDocument,
+      document: converterPcbDocument,
       options: {
         includeCopperAreas: false,
         includeTraces: false,
@@ -77,8 +80,8 @@ export async function createReferenceDefinition(
         project: parsedProject,
       },
     },
-    schematics: schematicDocuments.map(({ document, path }) => ({
-      document,
+    schematics: schematicDocuments.map(({ converterDocument, path }) => ({
+      document: converterDocument,
       options: {
         documentName: basename(path),
         project: parsedProject,
