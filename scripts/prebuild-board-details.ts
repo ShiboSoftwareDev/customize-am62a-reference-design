@@ -46,7 +46,9 @@ for (const evm of tiEvms) {
       }),
     ),
   )
-  const threeDimensionalPng = await renderThreeDimensionalPng(circuitJson)
+  const threeDimensionalPng = await renderThreeDimensionalPng(
+    resolveCadModelUrlsForBuild(circuitJson),
+  )
 
   await Promise.all([
     writeFile(resolve(outputDirectory, "pcb.svg"), pcbSvg),
@@ -74,6 +76,18 @@ async function readCompressedCircuitJson(publicUrl: string): Promise<CircuitJson
 
 function stripTrailingWhitespace(svg: string): string {
   return svg.replace(/[ \t]+$/gmu, "")
+}
+
+function resolveCadModelUrlsForBuild(circuitJson: CircuitJson): CircuitJson {
+  return circuitJson.map((element) => {
+    if (element.type !== "cad_component" || !element.model_step_url?.startsWith("/")) {
+      return element
+    }
+    return {
+      ...element,
+      model_step_url: resolve(repositoryRoot, "public", element.model_step_url.slice(1)),
+    }
+  })
 }
 
 async function renderThreeDimensionalPng(circuitJson: CircuitJson): Promise<Uint8Array> {

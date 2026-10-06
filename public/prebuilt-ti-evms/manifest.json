@@ -64,7 +64,7 @@
           ]
         },
         {
-          "elementCount": 5659,
+          "elementCount": 5657,
           "output": "prebuilt-ti-evms/dp83825evm/remove-configuration-headers.circuit.json.gz",
           "pcbTraceCount": 229,
           "source": "Parameterized DP83825EVM tscircuit TSX",
@@ -149,7 +149,7 @@
           ]
         },
         {
-          "elementCount": 2831,
+          "elementCount": 2833,
           "output": "prebuilt-ti-evms/drv8307evm/remove-hall-interface.circuit.json.gz",
           "pcbTraceCount": 127,
           "source": "Parameterized DRV8307EVM tscircuit TSX",

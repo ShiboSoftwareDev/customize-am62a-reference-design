@@ -12,11 +12,15 @@ import {
 import type { ComponentName, FeatureId, ReferenceInput } from "./types"
 
 export async function generateReferenceArtifacts(params: {
+  cadModelOutputDirectory: string
   outputDirectory: string
   reference: ReferenceInput
 }): Promise<void> {
   const { definition, projectCircuitJson, referenceSchematicCircuitJsons } =
-    await createReferenceDefinition(params.reference)
+    await createReferenceDefinition({
+      cadModelOutputDirectory: params.cadModelOutputDirectory,
+      reference: params.reference,
+    })
 
   await Bun.write(
     resolve(params.outputDirectory, params.reference.outputName),

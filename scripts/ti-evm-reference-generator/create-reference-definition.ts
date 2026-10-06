@@ -26,6 +26,7 @@ import {
   isSourceComponent,
   type SourceComponentElement,
 } from "./circuit-json-elements"
+import { extractEmbeddedCadModels } from "./extract-embedded-cad-models"
 import { getTrailingIndex, round, toIdentifier } from "./geometry"
 import {
   createComponentNames,
@@ -47,11 +48,18 @@ import type {
 
 type EndpointKey = string
 
-export async function createReferenceDefinition(
-  reference: ReferenceInput,
-): Promise<ReferenceConversion> {
+export async function createReferenceDefinition(params: {
+  cadModelOutputDirectory: string
+  reference: ReferenceInput
+}): Promise<ReferenceConversion> {
+  const { reference } = params
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
+  const embeddedModelUrlByIndex = await extractEmbeddedCadModels({
+    outputDirectory: params.cadModelOutputDirectory,
+    pcbDocument,
+    referenceId: reference.id,
+  })
   const converterPcbDocument = parseAltiumSource(pcbBytes, "pcb") as AltiumPcbDocument
   const parsedProject = parseAltiumFile(
     new Uint8Array(await readFile(reference.projectPath)),
@@ -78,6 +86,8 @@ export async function createReferenceDefinition(
         includeTraces: false,
         includeVias: false,
         project: parsedProject,
+        resolveEmbeddedModelUrl: ({ embeddedModel }) =>
+          embeddedModelUrlByIndex.get(embeddedModel.index),
       },
     },
     schematics: schematicDocuments.map(({ converterDocument, path }) => ({

@@ -21,7 +21,7 @@
     "@tscircuit/3d-viewer": "0.0.615",
     "@tscircuit/checks": "0.0.240",
     "@tscircuit/circuit-json-util": "0.0.120",
-    "@tscircuit/core": "0.0.2094",
+    "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@baba364",
     "@tscircuit/math-utils": "0.0.38",
     "@tscircuit/modelprinter": "0.0.8",
     "@tscircuit/pcb-viewer": "1.11.419",
@@ -42,11 +42,11 @@
     "@vitejs/plugin-react": "6.1.2",
     "@tscircuit/mm": "0.0.9",
     "@tscircuit/soup-util": "0.0.41",
-    "altium-to-circuit-json": "0.0.90",
+    "altium-to-circuit-json": "github:tscircuit/altium-to-circuit-json#ef69fc3",
     "altiumts": "0.0.87",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.4.2",
-    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#0b2d9ff87f18d4d64a838b70e9aec6454c90d8a",
+    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#6b91315",
     "circuit-to-svg": "0.0.441",
     "circuit-json-to-gltf": "0.0.145",
     "poppygl": "0.0.33",
@@ -55,6 +55,7 @@
     "vite": "8.3.2"
   },
   "trustedDependencies": [
+    "altium-to-circuit-json",
     "altiumts",
     "circuit-json-to-tscircuit"
   ]
