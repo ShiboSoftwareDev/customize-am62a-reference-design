@@ -4,6 +4,7 @@ import { parameterizeGeneratedBoard } from "../parameterize-generated-board"
 import { isSourceComponent } from "./circuit-json-elements"
 import { compressCircuitJson } from "./compress-circuit-json"
 import { createReferenceDefinition } from "./create-reference-definition"
+import { getSupportedCopperPours } from "./get-supported-copper-pours"
 import {
   getRoutablePortSelectors,
   prepareConverterCircuitJson,
@@ -41,6 +42,9 @@ export async function generateReferenceArtifacts(params: {
     featureIdByComponentName,
     generatedSource,
     routablePortSelectors: getRoutablePortSelectors(projectCircuitJson),
+    supportedCopperPours: getSupportedCopperPours({
+      circuitJson: projectCircuitJson,
+    }),
     teardropPortSelectors: new Set(
       definition.nets.flatMap((net) =>
         (net.teardropEndpoints ?? []).map(

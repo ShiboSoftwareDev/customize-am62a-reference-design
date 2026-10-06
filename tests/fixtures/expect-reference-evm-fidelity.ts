@@ -1,7 +1,7 @@
 import { expect } from "bun:test"
 import { resolve } from "node:path"
-import type { AnyCircuitElement } from "circuit-json"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import type { AnyCircuitElement } from "circuit-json"
 import type { ParameterizedTiEvmId } from "lib/evms/parameterized-ti-evms"
 import { getTiEvm } from "lib/ti-evm-catalog"
 
@@ -44,6 +44,15 @@ type CircuitPcbComponent = AnyCircuitElement & {
   center: CircuitPoint
   layer: string
   rotation: number
+}
+type CircuitPcbCopperPour = AnyCircuitElement & {
+  type: "pcb_copper_pour"
+  source_net_id?: SourceNetId
+}
+type CircuitSourceNet = AnyCircuitElement & {
+  type: "source_net"
+  source_net_id: SourceNetId
+  name: string
 }
 type CircuitPcbHole = AnyCircuitElement & {
   type: "pcb_hole"
@@ -126,6 +135,7 @@ export async function expectReferenceEvmFidelity(params: {
   expectBoardMatchesSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
   expectComponentsMatchSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
   expectPadsMatchSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
+  expectCopperPoursMatchSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
   expectPhysicalConnectivityMatchesSource({
     renderedCircuitJson: pcbCircuitJson,
     sourceCircuitJson,
@@ -137,8 +147,42 @@ export async function expectReferenceEvmFidelity(params: {
     }
     const variantPcbCircuitJson = await loadPublicCircuitJson(variant.circuitJsonUrl)
     expectNoRoutingErrors(variantPcbCircuitJson)
+    expectNoDanglingCopperPourNets(variantPcbCircuitJson)
     for (const schematicUrl of variant.schematicCircuitJsonUrls) {
       expectNoDanglingSchematicReferences(await loadPublicCircuitJson(schematicUrl))
+    }
+  }
+}
+
+function expectCopperPoursMatchSource(params: {
+  renderedCircuitJson: AnyCircuitElement[]
+  sourceCircuitJson: AnyCircuitElement[]
+}): void {
+  expect(normalizeCopperPours(params.renderedCircuitJson)).toEqual(
+    normalizeCopperPours(params.sourceCircuitJson),
+  )
+}
+
+function normalizeCopperPours(circuitJson: AnyCircuitElement[]) {
+  const sourceNetNamesById = new Map<SourceNetId, string>(
+    circuitJson.filter(isSourceNet).map((element) => [element.source_net_id, element.name]),
+  )
+  return circuitJson.filter(isPcbCopperPour).map((copperPour) => {
+    const { source_net_id: sourceNetId, ...geometry } = copperPour
+    return {
+      ...geometry,
+      sourceNetName: sourceNetId ? sourceNetNamesById.get(sourceNetId) : undefined,
+    }
+  })
+}
+
+function expectNoDanglingCopperPourNets(circuitJson: AnyCircuitElement[]): void {
+  const sourceNetIds = new Set(
+    circuitJson.filter(isSourceNet).map((element) => element.source_net_id),
+  )
+  for (const copperPour of circuitJson.filter(isPcbCopperPour)) {
+    if (copperPour.source_net_id) {
+      expect(sourceNetIds.has(copperPour.source_net_id)).toBe(true)
     }
   }
 }
@@ -501,6 +545,10 @@ function isPcbComponent(element: AnyCircuitElement): element is CircuitPcbCompon
   return element.type === "pcb_component"
 }
 
+function isPcbCopperPour(element: AnyCircuitElement): element is CircuitPcbCopperPour {
+  return element.type === "pcb_copper_pour"
+}
+
 function isPhysicalPad(element: AnyCircuitElement): element is PhysicalPad {
   return ["pcb_hole", "pcb_plated_hole", "pcb_smtpad"].includes(element.type)
 }
@@ -511,6 +559,10 @@ function isSourceComponent(element: AnyCircuitElement): element is CircuitSource
 
 function isSourcePort(element: AnyCircuitElement): element is CircuitSourcePort {
   return element.type === "source_port"
+}
+
+function isSourceNet(element: AnyCircuitElement): element is CircuitSourceNet {
+  return element.type === "source_net"
 }
 
 function isSourceTrace(element: AnyCircuitElement): element is CircuitSourceTrace {

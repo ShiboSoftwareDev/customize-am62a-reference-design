@@ -8,6 +8,7 @@ import {
   type SourceReplacement,
 } from "./generated-board-source/ast-helpers"
 import { createParameterizedBoardSource } from "./generated-board-source/create-parameterized-board-source"
+import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
 
 type ComponentName = string
 type FeatureId = string
@@ -25,12 +26,14 @@ export function parameterizeGeneratedBoard(params: {
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
   routablePortSelectors: ReadonlySet<PortSelector>
+  supportedCopperPours?: readonly SupportedCopperPour[]
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): ParameterizedBoardSource {
+  const generatedSource = removeLegacyPcbCopperPours({ source: params.generatedSource })
   const sourceFile = ts.createSourceFile(
     `${params.componentName}.tsx`,
-    params.generatedSource,
+    generatedSource,
     ts.ScriptTarget.Latest,
     true,
     ts.ScriptKind.TSX,
@@ -53,6 +56,13 @@ export function parameterizeGeneratedBoard(params: {
     replacements,
     sourceFile,
   })
+  addSupportedCopperPours({
+    boardElement,
+    copperPours: params.supportedCopperPours ?? [],
+    renamedNets,
+    replacements,
+    sourceFile,
+  })
 
   for (const child of boardElement.children) {
     if (!ts.isJsxSelfClosingElement(child)) continue
@@ -61,7 +71,7 @@ export function parameterizeGeneratedBoard(params: {
       addComponentFeatureCondition({
         componentElement: child,
         featureIdByComponentName: params.featureIdByComponentName,
-        generatedSource: params.generatedSource,
+        generatedSource,
         replacements,
         sourceFile,
       })
@@ -90,7 +100,7 @@ export function parameterizeGeneratedBoard(params: {
   })
   const parameterizedBody = applyReplacements({
     replacements,
-    source: params.generatedSource,
+    source: generatedSource,
   })
   const jsxBody = extractGeneratedJsxBody({
     componentName: params.componentName,
@@ -111,6 +121,69 @@ export function parameterizeGeneratedBoard(params: {
       viaTeardropPortSelectors: params.viaTeardropPortSelectors,
     }),
   }
+}
+
+function removeLegacyPcbCopperPours(params: { source: string }): string {
+  const sourceFile = ts.createSourceFile(
+    "generated-board.tsx",
+    params.source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  )
+  const replacements: SourceReplacement[] = []
+  const visit = (node: ts.Node): void => {
+    if (ts.isJsxSelfClosingElement(node) && node.tagName.getText(sourceFile) === "pcbcopperpour") {
+      replacements.push({
+        start: node.getFullStart(),
+        end: node.getEnd(),
+        text: "",
+      })
+      return
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(sourceFile)
+  return applyReplacements({ replacements, source: params.source }).replace(/^[ \t]+$/gmu, "")
+}
+
+function addSupportedCopperPours(params: {
+  boardElement: ts.JsxElement
+  copperPours: readonly SupportedCopperPour[]
+  renamedNets: ReadonlyMap<NetName, NetName>
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  const emittedNetNames = new Set(
+    params.boardElement.children.flatMap((child) => {
+      if (!ts.isJsxSelfClosingElement(child)) return []
+      if (child.tagName.getText(params.sourceFile) !== "net") return []
+      const netName = getStringAttribute({
+        element: child,
+        name: "name",
+        sourceFile: params.sourceFile,
+      })
+      return netName ? [netName] : []
+    }),
+  )
+  const copperPourElements = params.copperPours.flatMap((copperPour) => {
+    if (!emittedNetNames.has(copperPour.sourceNetName)) return []
+    const netName = params.renamedNets.get(copperPour.sourceNetName) ?? copperPour.sourceNetName
+    const netSelector = `net[name=${JSON.stringify(netName)}]`
+    return [
+      `{renderImportedCopperPours && (<copperpour layer={${JSON.stringify(copperPour.layer)}} connectsTo={${JSON.stringify(netSelector)}} outline={${JSON.stringify(copperPour.outline)}} padMargin={0} traceMargin={0} clearance={0} boardEdgeMargin={0} cutoutMargin={0} useThermalReliefs={false} coveredWithSolderMask={${copperPour.coveredWithSolderMask}} />)}`,
+    ]
+  })
+  if (copperPourElements.length === 0) return
+
+  const closingElementStart = params.boardElement.closingElement.getStart(params.sourceFile)
+  const closingElementLineStart =
+    params.sourceFile.text.lastIndexOf("\n", closingElementStart - 1) + 1
+  params.replacements.push({
+    start: closingElementLineStart,
+    end: closingElementStart,
+    text: `    ${copperPourElements.join("\n    ")}\n  `,
+  })
 }
 
 function extractGeneratedJsxBody(params: {

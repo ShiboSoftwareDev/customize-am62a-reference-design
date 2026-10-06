@@ -9,7 +9,7 @@ import {
   AltiumComponentRecord,
   AltiumNetRecord,
   AltiumPadRecord,
-  AltiumPcbDocument,
+  type AltiumPcbDocument,
   AltiumPrjPcb,
   AltiumSchDoc,
   parseAltiumBinaryPcbDoc,
@@ -74,7 +74,7 @@ export async function createReferenceDefinition(
     pcb: {
       document: converterPcbDocument,
       options: {
-        includeCopperAreas: false,
+        includeCopperAreas: true,
         includeTraces: false,
         includeVias: false,
         project: parsedProject,
