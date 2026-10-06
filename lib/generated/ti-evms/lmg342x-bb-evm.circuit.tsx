@@ -41,6 +41,14 @@ const featureIdByComponentName: Partial<Record<string, Lmg342xBbEvmFeatureId>> =
   "TACH": "measurement-interface"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.PGND",
+  "net.AGND",
+  "net.HVBUS_2",
+  "net.SW_2",
+  "net.NetJ16_1",
+  "net.HVOUT_2"
+])
 const routablePortSelectors = new Set<string>([
   ".C22 > .pin2",
   ".C22 > .pin1",
@@ -339,6 +347,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )

@@ -44,6 +44,14 @@ const featureIdByComponentName: Partial<Record<string, Drv8307EvmFeatureId>> =
   "JP6": "hall-interface"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.VM",
+  "net.W",
+  "net.V",
+  "net.U",
+  "net.ISENSE",
+  "net.GND"
+])
 const routablePortSelectors = new Set<string>([
   ".U13 > .pin2",
   ".U13 > .pin1",
@@ -358,6 +366,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )

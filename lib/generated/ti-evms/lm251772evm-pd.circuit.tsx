@@ -38,6 +38,19 @@ const featureIdByComponentName: Partial<Record<string, Lm251772EvmPdFeatureId>> 
   "TP5": "test-and-measurement"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.LO2",
+  "net.GND",
+  "net.VOUT",
+  "net.VOUT1",
+  "net.VIN",
+  "net.AGND",
+  "net.PPHV",
+  "net.SW2",
+  "net.SW1",
+  "net.NetL1_1",
+  "net.__unassigned_pcb_pcb_copper_pour_altium_region_2072"
+])
 const routablePortSelectors = new Set<string>([
   ".R26 > .pin2",
   ".R26 > .pin1",
@@ -439,6 +452,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )

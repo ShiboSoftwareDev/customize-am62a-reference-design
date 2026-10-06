@@ -72,6 +72,12 @@ const featureIdByComponentName: Partial<Record<string, Dp83825EvmFeatureId>> =
   "R4": "status-indicators"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.EARTH_GND",
+  "net.GND",
+  "net.NetJ1_6",
+  "net.VDDIO"
+])
 const routablePortSelectors = new Set<string>([
   ".J19 > .pin1",
   ".J19 > .pin2",
@@ -561,6 +567,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )

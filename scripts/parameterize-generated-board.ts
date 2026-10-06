@@ -13,6 +13,7 @@ import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-suppo
 type ComponentName = string
 type FeatureId = string
 type NetName = string
+type NetSelector = string
 type PortSelector = string
 
 export type ParameterizedBoardSource = {
@@ -55,7 +56,7 @@ export function parameterizeGeneratedBoard(params: {
     replacements,
     sourceFile,
   })
-  addSupportedCopperPours({
+  const pouredNetSelectors = addSupportedCopperPours({
     boardElement,
     copperPours: params.supportedCopperPours ?? [],
     renamedNets,
@@ -114,6 +115,7 @@ export function parameterizeGeneratedBoard(params: {
       componentName: params.componentName,
       featureEntries,
       jsxBody,
+      pouredNetSelectors,
       routablePortSelectors: params.routablePortSelectors,
       teardropPortSelectors: params.teardropPortSelectors,
       viaTeardropPortSelectors: params.viaTeardropPortSelectors,
@@ -151,7 +153,7 @@ function addSupportedCopperPours(params: {
   renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
-}): void {
+}): Set<NetSelector> {
   const emittedNetNames = new Set(
     params.boardElement.children.flatMap((child) => {
       if (!ts.isJsxSelfClosingElement(child)) return []
@@ -167,8 +169,10 @@ function addSupportedCopperPours(params: {
   const availableNetNames = new Set(
     [...emittedNetNames].map((netName) => params.renamedNets.get(netName) ?? netName),
   )
+  const pouredNetSelectors = new Set<NetSelector>()
   const copperPourElements = params.copperPours.flatMap((copperPour) => {
     const netName = params.renamedNets.get(copperPour.netName) ?? copperPour.netName
+    pouredNetSelectors.add(`net.${netName}`)
     const netSelector = `net[name=${JSON.stringify(netName)}]`
     const netElement = availableNetNames.has(netName)
       ? []
@@ -179,7 +183,7 @@ function addSupportedCopperPours(params: {
       `<copperpour layer={${JSON.stringify(copperPour.layer)}} connectsTo={${JSON.stringify(netSelector)}} outline={${JSON.stringify(copperPour.outline)}} coveredWithSolderMask={${copperPour.coveredWithSolderMask}} />`,
     ]
   })
-  if (copperPourElements.length === 0) return
+  if (copperPourElements.length === 0) return pouredNetSelectors
 
   const closingElementStart = params.boardElement.closingElement.getStart(params.sourceFile)
   const closingElementLineStart =
@@ -189,6 +193,7 @@ function addSupportedCopperPours(params: {
     end: closingElementStart,
     text: `    ${copperPourElements.join("\n    ")}\n  `,
   })
+  return pouredNetSelectors
 }
 
 function extractGeneratedJsxBody(params: {

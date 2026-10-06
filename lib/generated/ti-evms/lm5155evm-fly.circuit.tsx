@@ -24,6 +24,42 @@ const featureIdByComponentName: Partial<Record<string, Lm5155EvmFlyFeatureId>> =
   "R26": "configuration-interface"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.PGND",
+  "net.AGND",
+  "net.VIN",
+  "net.NetD3_2",
+  "net.NetD1_1",
+  "net.NetQ1_1",
+  "net.__unassigned_pcb_pcb_copper_pour_altium_region_1311",
+  "net.__unassigned_pcb_pcb_copper_pour_altium_region_1312",
+  "net.VOUT",
+  "net.COMP",
+  "net.PGOOD",
+  "net.NetC23_1",
+  "net.NetC24_2",
+  "net.NetC18_1",
+  "net.NetC16_2",
+  "net.NetC1_2",
+  "net.NetD4_2",
+  "net.NetC20_1",
+  "net.NetC21_1",
+  "net.NetC19_1",
+  "net.NetR14_1",
+  "net.NetNT2_2",
+  "net.NetC23_2",
+  "net.ISO_GND",
+  "net.VCC",
+  "net.NetR8_2",
+  "net.NetQ1_4",
+  "net.NetC26_1",
+  "net.SS",
+  "net.FB",
+  "net.VAUX",
+  "net.NetR17_2",
+  "net.NetR10_2",
+  "net.NetD2_2"
+])
 const routablePortSelectors = new Set<string>([
   ".TP9 > .pin1",
   ".J3 > .pin1",
@@ -406,6 +442,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )
