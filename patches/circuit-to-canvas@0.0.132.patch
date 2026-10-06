@@ -1,0 +1,64 @@
+diff --git a/dist/index.js b/dist/index.js
+index 5039070666c4113fbde6f884eab39411a05ad414..b6ee8e9a8c581a6e7eaa08035eb7d0e71f4e69e8 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -4623,8 +4623,8 @@ function processSmtPadSoldermask(params) {
+     drawPadShapePath({ ctx, pad, realToCanvasMat, ml: 0, mr: 0, mt: 0, mb: 0 });
+     ctx.fill();
+   } else if (ml < 0 || mr < 0 || mt < 0 || mb < 0) {
+-    drawPadShapePath({ ctx, pad, realToCanvasMat, ml, mr, mt, mb });
+-    cutPathFromSoldermask(ctx);
++    const hasOpening = drawPadShapePath({ ctx, pad, realToCanvasMat, ml, mr, mt, mb });
++    if (hasOpening) cutPathFromSoldermask(ctx);
+     drawNegativeMarginRingForPad({
+       ctx,
+       pad,
+@@ -4660,6 +4660,7 @@ function drawPadShapePath(params) {
+     const scaledWidth = (pad.width + ml + mr) * Math.abs(realToCanvasMat.a);
+     const scaledHeight = (pad.height + mt + mb) * Math.abs(realToCanvasMat.a);
+     const scaledRadius = borderRadius * Math.abs(realToCanvasMat.a);
++    if (scaledWidth <= 0 || scaledHeight <= 0) return false;
+     ctx.save();
+     ctx.translate(cx, cy);
+     if (rotation !== 0) {
+@@ -4675,18 +4676,22 @@ function drawPadShapePath(params) {
+       radius: scaledRadius
+     });
+     ctx.restore();
++    return true;
+   } else if (pad.shape === "circle") {
+     const avgMargin = (ml + mr + mt + mb) / 4;
+     const [cx, cy] = applyToPoint28(realToCanvasMat, [pad.x, pad.y]);
+     const scaledRadius = (pad.radius + avgMargin) * Math.abs(realToCanvasMat.a);
++    if (scaledRadius <= 0) return false;
+     ctx.beginPath();
+     ctx.arc(cx, cy, scaledRadius, 0, Math.PI * 2);
+     ctx.closePath();
++    return true;
+   } else if (pad.shape === "pill" || pad.shape === "rotated_pill") {
+     const avgMargin = (ml + mr) / 2;
+     const [cx, cy] = applyToPoint28(realToCanvasMat, [pad.x, pad.y]);
+     const scaledWidth = (pad.width + avgMargin * 2) * Math.abs(realToCanvasMat.a);
+     const scaledHeight = (pad.height + avgMargin * 2) * Math.abs(realToCanvasMat.a);
++    if (scaledWidth <= 0 || scaledHeight <= 0) return false;
+     ctx.save();
+     ctx.translate(cx, cy);
+     if (rotation !== 0) {
+@@ -4701,6 +4706,7 @@ function drawPadShapePath(params) {
+       height: scaledHeight
+     });
+     ctx.restore();
++    return true;
+   } else if (pad.shape === "polygon" && pad.points && pad.points.length >= 3) {
+     const avgMargin = (ml + mr + mt + mb) / 4;
+     const points = avgMargin !== 0 ? offsetPolygonPoints(pad.points, avgMargin) : pad.points;
+@@ -4710,7 +4716,9 @@ function drawPadShapePath(params) {
+     });
+     ctx.beginPath();
+     drawPolygonPath({ ctx, points: canvasPoints });
++    return true;
+   }
++  return false;
+ }
+ function drawNegativeMarginRingForPad(params) {
+   const {

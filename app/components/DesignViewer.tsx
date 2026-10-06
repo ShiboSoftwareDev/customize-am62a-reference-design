@@ -23,7 +23,7 @@ const SchematicViewer = lazy(loadSchematicViewer)
 const CadViewer = lazy(loadCadViewer)
 
 type DesignViewerProps = {
-  designKey: string
+  boardKey: string
   pcbCircuitJson: AnyCircuitElement[] | null
   schematicCircuitJsons: AnyCircuitElement[][]
   schematicSheetLabels: string[]
@@ -31,7 +31,7 @@ type DesignViewerProps = {
 }
 
 export function DesignViewer({
-  designKey,
+  boardKey,
   pcbCircuitJson,
   schematicCircuitJsons,
   schematicSheetLabels,
@@ -58,7 +58,7 @@ export function DesignViewer({
 
   useEffect(() => {
     setSchematicSheetIndex(0)
-  }, [designKey])
+  }, [boardKey])
 
   return (
     <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>
@@ -122,7 +122,7 @@ export function DesignViewer({
         {activeView === "pcb" && pcbCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading PCB viewer…" />}>
             <PCBViewer
-              key={designKey}
+              key={boardKey}
               circuitJson={pcbCircuitJson}
               height={height}
               renderer={pcbRenderer}
@@ -134,14 +134,14 @@ export function DesignViewer({
         ) : activeView === "schematic" && schematicCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading schematic viewer…" />}>
             <SchematicViewer
-              key={`${designKey}:${schematicSheetIndex}`}
+              key={`${boardKey}:${schematicSheetIndex}`}
               circuitJson={schematicCircuitJson}
               containerStyle={{ height: "100%" }}
             />
           </Suspense>
         ) : activeView === "cad" && pcbCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
-            <CadViewer key={designKey} circuitJson={pcbCircuitJson} />
+            <CadViewer circuitJson={pcbCircuitJson} />
           </Suspense>
         ) : (
           <ViewerLoading label="Loading the reference design…" />
