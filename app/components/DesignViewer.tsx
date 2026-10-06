@@ -52,7 +52,7 @@ export function DesignViewer({
 
   useEffect(() => {
     setSchematicSheetIndex(0)
-  }, [boardKey])
+  }, [boardKey, schematicCircuitJsons])
 
   return (
     <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>

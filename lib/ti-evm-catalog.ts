@@ -6,6 +6,7 @@ export type TiEvmRemovableFeature = {
   id: string
   label: string
   description: string
+  omittedSchematicSheetIndexes?: number[]
 }
 
 export type TiEvmVariant = {
@@ -13,6 +14,7 @@ export type TiEvmVariant = {
   label: string
   circuitJsonUrl: string
   schematicCircuitJsonUrls: string[]
+  visibleSchematicSheetIndexes: number[]
   removedFeatureIds: string[]
   evmOptions: ParameterizedTiEvmOptions
 }
@@ -40,6 +42,15 @@ function createVariants(params: {
   return Array.from({ length: combinationCount }, (_, mask) => {
     const removedFeatures = params.features.filter((_, index) => mask & (1 << index))
     const removedFeatureIds = removedFeatures.map(({ id }) => id)
+    const omittedSchematicSheetIndexes = new Set(
+      removedFeatures.flatMap(
+        ({ omittedSchematicSheetIndexes }) => omittedSchematicSheetIndexes ?? [],
+      ),
+    )
+    const visibleSchematicSheetIndexes = Array.from(
+      { length: params.schematicSheetCount },
+      (_, schematicSheetIndex) => schematicSheetIndex,
+    ).filter((schematicSheetIndex) => !omittedSchematicSheetIndexes.has(schematicSheetIndex))
     const isFullBoard = mask === 0
     const isMinimalBoard = mask === combinationCount - 1
     const id = isFullBoard
@@ -64,6 +75,7 @@ function createVariants(params: {
             schematicSheetIndex === 0 ? ".schematic" : `.schematic-${schematicSheetIndex + 1}`
           }.circuit.json.gz`,
       ),
+      visibleSchematicSheetIndexes,
       removedFeatureIds,
       evmOptions: { removedFeatureIds },
     }
@@ -128,6 +140,7 @@ export const tiEvms: TiEvm[] = [
         id: "usb-mdio-controller",
         label: "USB-to-MDIO controller",
         description: "Optional MSP430F5529 USB management controller and support circuitry.",
+        omittedSchematicSheetIndexes: [1],
       },
       {
         id: "status-indicators",
@@ -248,6 +261,18 @@ export function getTiEvmVariant(evm: TiEvm, variantId: string): TiEvmVariant {
   const variant = evm.variants.find(({ id }) => id === variantId)
   if (!variant) throw new Error(`Unknown ${evm.name} variant: ${variantId}`)
   return variant
+}
+
+export function getTiEvmVariantSchematicCircuitJsonUrls(variant: TiEvmVariant): string[] {
+  return variant.visibleSchematicSheetIndexes.map(
+    (schematicSheetIndex) => variant.schematicCircuitJsonUrls[schematicSheetIndex],
+  )
+}
+
+export function getTiEvmVariantSchematicSheetLabels(evm: TiEvm, variant: TiEvmVariant): string[] {
+  return variant.visibleSchematicSheetIndexes.map(
+    (schematicSheetIndex) => evm.schematicSheetLabels[schematicSheetIndex],
+  )
 }
 
 export function getTiEvmVariantForRemovedFeatures(
