@@ -39,12 +39,12 @@ export function prepareConverterCircuitJson(
 ): AnyCircuitElement[] {
   return deduplicateFootprintPortHints(
     replaceUnsupportedPcbPrimitives(
-      mirrorBottomFootprintsForCore(removeOffboardPcbComponents(projectCircuitJson)),
+      mirrorBottomFootprintsForCore(removeOffboardNonPhysicalElements(projectCircuitJson)),
     ),
   )
 }
 
-function removeOffboardPcbComponents(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
+function removeOffboardNonPhysicalElements(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
   const board = circuitJson.find(isPcbBoard)
   if (!board) return circuitJson
 
@@ -52,11 +52,11 @@ function removeOffboardPcbComponents(circuitJson: AnyCircuitElement[]): AnyCircu
   const maximumX = board.center.x + board.width / 2
   const minimumY = board.center.y - board.height / 2
   const maximumY = board.center.y + board.height / 2
-  const offboardAnnotationComponentIds = new Set(
+  const offboardComponentIds = new Set(
     circuitJson.flatMap((element) => {
       if (
         !isPcbComponent(element) ||
-        hasPhysicalPcbPrimitive({
+        hasBoardPrimitive({
           circuitJson,
           pcbComponentId: element.pcb_component_id,
         }) ||
@@ -70,16 +70,33 @@ function removeOffboardPcbComponents(circuitJson: AnyCircuitElement[]): AnyCircu
       return [element.pcb_component_id]
     }),
   )
+  const offboardCadComponentIds = new Set(
+    circuitJson.flatMap((element) =>
+      element.type === "cad_component" &&
+      "pcb_component_id" in element &&
+      typeof element.pcb_component_id === "string" &&
+      offboardComponentIds.has(element.pcb_component_id)
+        ? [element.pcb_component_id]
+        : [],
+    ),
+  )
 
-  return circuitJson.filter(
-    (element) =>
+  return circuitJson.filter((element) => {
+    if (
       !("pcb_component_id" in element) ||
       typeof element.pcb_component_id !== "string" ||
-      !offboardAnnotationComponentIds.has(element.pcb_component_id),
-  )
+      !offboardComponentIds.has(element.pcb_component_id)
+    ) {
+      return true
+    }
+    return (
+      offboardCadComponentIds.has(element.pcb_component_id) &&
+      ["cad_component", "pcb_component"].includes(element.type)
+    )
+  })
 }
 
-function hasPhysicalPcbPrimitive(params: {
+function hasBoardPrimitive(params: {
   circuitJson: AnyCircuitElement[]
   pcbComponentId: string
 }): boolean {
@@ -123,6 +140,7 @@ function mirrorBottomFootprintsForCore(circuitJson: AnyCircuitElement[]): AnyCir
     const componentElements = mirroredCircuitJson.filter(
       (element) =>
         element.type !== "pcb_component" &&
+        element.type !== "cad_component" &&
         "pcb_component_id" in element &&
         element.pcb_component_id === component.pcb_component_id,
     )

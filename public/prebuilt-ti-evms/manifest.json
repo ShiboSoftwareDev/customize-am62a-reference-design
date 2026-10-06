@@ -4,11 +4,11 @@
       "id": "dp83825evm",
       "artifacts": [
         {
-          "elementCount": 6815,
+          "elementCount": 6863,
           "output": "prebuilt-ti-evms/dp83825evm/full-board.circuit.json.gz",
           "pcbTraceCount": 291,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 151,
+          "sourceComponentCount": 155,
           "sourceTraceCount": 100,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/full-board.schematic.circuit.json.gz",
@@ -19,11 +19,11 @@
           ]
         },
         {
-          "elementCount": 5481,
+          "elementCount": 5529,
           "output": "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller.circuit.json.gz",
           "pcbTraceCount": 230,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 125,
+          "sourceComponentCount": 129,
           "sourceTraceCount": 82,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller.schematic.circuit.json.gz",
@@ -34,11 +34,11 @@
           ]
         },
         {
-          "elementCount": 6724,
+          "elementCount": 6772,
           "output": "prebuilt-ti-evms/dp83825evm/remove-status-indicators.circuit.json.gz",
           "pcbTraceCount": 279,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 143,
+          "sourceComponentCount": 147,
           "sourceTraceCount": 96,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/remove-status-indicators.schematic.circuit.json.gz",
@@ -49,11 +49,11 @@
           ]
         },
         {
-          "elementCount": 5396,
+          "elementCount": 5444,
           "output": "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller-status-indicators.circuit.json.gz",
           "pcbTraceCount": 219,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 117,
+          "sourceComponentCount": 121,
           "sourceTraceCount": 78,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller-status-indicators.schematic.circuit.json.gz",
@@ -64,11 +64,11 @@
           ]
         },
         {
-          "elementCount": 5663,
+          "elementCount": 5711,
           "output": "prebuilt-ti-evms/dp83825evm/remove-configuration-headers.circuit.json.gz",
           "pcbTraceCount": 229,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 126,
+          "sourceComponentCount": 130,
           "sourceTraceCount": 88,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/remove-configuration-headers.schematic.circuit.json.gz",
@@ -79,11 +79,11 @@
           ]
         },
         {
-          "elementCount": 4336,
+          "elementCount": 4384,
           "output": "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller-configuration-headers.circuit.json.gz",
           "pcbTraceCount": 170,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 100,
+          "sourceComponentCount": 104,
           "sourceTraceCount": 69,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller-configuration-headers.schematic.circuit.json.gz",
@@ -94,11 +94,11 @@
           ]
         },
         {
-          "elementCount": 5538,
+          "elementCount": 5586,
           "output": "prebuilt-ti-evms/dp83825evm/remove-status-indicators-configuration-headers.circuit.json.gz",
           "pcbTraceCount": 217,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 118,
+          "sourceComponentCount": 122,
           "sourceTraceCount": 84,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/remove-status-indicators-configuration-headers.schematic.circuit.json.gz",
@@ -109,11 +109,11 @@
           ]
         },
         {
-          "elementCount": 4209,
+          "elementCount": 4257,
           "output": "prebuilt-ti-evms/dp83825evm/minimal-board.circuit.json.gz",
           "pcbTraceCount": 157,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 92,
+          "sourceComponentCount": 96,
           "sourceTraceCount": 65,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/minimal-board.schematic.circuit.json.gz",
