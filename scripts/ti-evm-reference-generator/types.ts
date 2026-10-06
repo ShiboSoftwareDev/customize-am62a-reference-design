@@ -1,7 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import type { ReferenceEvmDefinition } from "../../lib/evms/reference-evm-types"
 
-export type AutorouterVersion = "beta_pipeline7" | "beta_pipeline9"
 export type ComponentName = string
 export type FeatureId = string
 export type NetName = string
@@ -21,7 +20,6 @@ export type PinKeysByComponentRecordIndex = Map<ComponentRecordIndex, PinKeyByRa
 
 export type ReferenceInput = {
   id: string
-  autorouterVersion: AutorouterVersion
   componentName: string
   exportName: string
   name: string

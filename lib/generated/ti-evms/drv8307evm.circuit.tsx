@@ -393,7 +393,7 @@ function ParameterizedTrace(props: {
 export function Drv8307Evm(props: Drv8307EvmProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
-  <board pcbX={61.4426} pcbY={76.463652} width="87.7316mm" height="75.000104mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 113.963704 }, { x: 105.30839999999999, y: 113.963704 }, { x: 105.30839999999999, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterVersion="beta_pipeline9" autorouterEffortLevel="1x">
+  <board pcbX={61.4426} pcbY={76.463652} width="87.7316mm" height="75.000104mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 113.963704 }, { x: 105.30839999999999, y: 113.963704 }, { x: 105.30839999999999, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterEffortLevel="1x">
     <chip name="R29" pcbX={17.0942} pcbY={11.267948000000004} pcbRotation="0deg" layer="top" symbolName="boxresistor_right" schX={7.828588734100544} schY={2.5817686250757124} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />

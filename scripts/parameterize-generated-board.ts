@@ -22,7 +22,6 @@ export type ParameterizedBoardSource = {
 
 export function parameterizeGeneratedBoard(params: {
   componentName: string
-  autorouterVersion: "beta_pipeline7" | "beta_pipeline9"
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
   routablePortSelectors: ReadonlySet<PortSelector>
@@ -93,7 +92,6 @@ export function parameterizeGeneratedBoard(params: {
   }
 
   replaceRoutingAttributes({
-    autorouterVersion: params.autorouterVersion,
     boardElement,
     replacements,
     sourceFile,
@@ -277,7 +275,6 @@ function addComponentFeatureCondition(params: {
 }
 
 function replaceRoutingAttributes(params: {
-  autorouterVersion: "beta_pipeline7" | "beta_pipeline9"
   boardElement: ts.JsxElement
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
@@ -287,7 +284,7 @@ function replaceRoutingAttributes(params: {
       ts.isJsxAttribute(attribute) &&
       attribute.name.getText(params.sourceFile) === "routingDisabled",
   )
-  const autorouterAttributes = `autorouter="auto" autorouterVersion="${params.autorouterVersion}" autorouterEffortLevel="1x"`
+  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x"'
   if (routingDisabledAttribute) {
     params.replacements.push({
       start: routingDisabledAttribute.getStart(params.sourceFile),

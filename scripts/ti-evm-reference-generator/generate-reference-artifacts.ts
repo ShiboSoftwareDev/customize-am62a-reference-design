@@ -37,7 +37,6 @@ export async function generateReferenceArtifacts(params: {
     { componentName: params.reference.componentName },
   )
   const parameterizedBoard = parameterizeGeneratedBoard({
-    autorouterVersion: params.reference.autorouterVersion,
     componentName: params.reference.componentName,
     featureIdByComponentName,
     generatedSource,

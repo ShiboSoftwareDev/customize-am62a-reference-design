@@ -374,7 +374,7 @@ function ParameterizedTrace(props: {
 export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
-  <board pcbX={98.85679999999999} pcbY={85.3821} width="162.56mm" height="92.837mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 180.1368, y: 38.9636 }, { x: 180.1368, y: 131.8006 }, { x: 17.5768, y: 131.8006 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterVersion="beta_pipeline9" autorouterEffortLevel="1x">
+  <board pcbX={98.85679999999999} pcbY={85.3821} width="162.56mm" height="92.837mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 180.1368, y: 38.9636 }, { x: 180.1368, y: 131.8006 }, { x: 17.5768, y: 131.8006 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterEffortLevel="1x">
     <chip name="C22" pcbX={-55.117999999999995} pcbY={-23.558499999999995} pcbRotation="270deg" layer="bottom" schX={4.852941176470589} schY={-5.031264474293655} symbol={<symbol>
       <port name="3" schX={0.11463640574340062} schY={-0.3184344603983318} direction="down" pinNumber={3} aliases={["pin3"]} />
       <port name="1" schX={-0.012737378415934586} schY={-0.3184344603983318} direction="down" pinNumber={1} aliases={["pin1"]} />
