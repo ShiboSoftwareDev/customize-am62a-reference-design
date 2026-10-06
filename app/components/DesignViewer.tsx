@@ -140,11 +140,9 @@ export function DesignViewer({
             />
           </Suspense>
         ) : activeView === "cad" && pcbCircuitJson ? (
-          <div className="three-dimensional-view">
-            <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
-              <CadViewer circuitJson={pcbCircuitJson} />
-            </Suspense>
-          </div>
+          <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
+            <CadViewer circuitJson={pcbCircuitJson} />
+          </Suspense>
         ) : (
           <ViewerLoading label="Loading the reference design…" />
         )}

@@ -201,7 +201,7 @@ button:disabled {
   min-height: 100vh;
   display: grid;
   grid-template-rows: 51px minmax(0, 1fr);
-  background: #0b100d;
+  background: #fff;
 }
 .viewer-toolbar {
   display: flex;
@@ -292,18 +292,10 @@ button:disabled {
   min-height: 0;
   height: calc(100vh - 51px);
   overflow: hidden;
-  background: #020504;
+  background: #fff;
 }
 .viewer-canvas > div {
   width: 100%;
-}
-.three-dimensional-view {
-  height: 100%;
-  overflow: hidden;
-  background: #fff;
-}
-.three-dimensional-view > div {
-  height: 100%;
 }
 .viewer-empty {
   display: grid;
