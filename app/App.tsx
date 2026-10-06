@@ -55,7 +55,7 @@ function Configurator() {
         canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}
       />
       <DesignViewer
-        boardKey={evm.id}
+        designKey={`${evm.id}:${variant.id}`}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJsons={render.schematicCircuitJsons}
         schematicSheetLabels={evm.schematicSheetLabels}
