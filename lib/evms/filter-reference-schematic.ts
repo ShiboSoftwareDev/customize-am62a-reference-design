@@ -1,4 +1,5 @@
 import type { AnyCircuitElement } from "circuit-json"
+import { findRemovedInlineNetLabelIds } from "./find-removed-inline-net-label-ids"
 import {
   pruneSchematicTraceEdgesAfterPortRemoval,
   type SchematicTraceEdge,
@@ -96,6 +97,14 @@ export function filterReferenceSchematic(params: {
     removedSchematicPortIds,
     removedSourceTraceIds,
   })
+  const activeSchematicTraceEdges = new Set(
+    [...updatedSchematicTraces.values()].flatMap(({ edges }) => edges),
+  )
+  const removedSchematicTextIds = findRemovedInlineNetLabelIds({
+    activeEdges: activeSchematicTraceEdges,
+    circuitJson: params.circuitJson,
+    removedSourceTraceIds,
+  })
 
   return params.circuitJson.flatMap((element) => {
     if (
@@ -119,6 +128,13 @@ export function filterReferenceSchematic(params: {
       isSchematicNetLabel(element) &&
       element.schematic_trace_id !== undefined &&
       removedSchematicTraceIds.has(element.schematic_trace_id)
+    ) {
+      return []
+    }
+    if (
+      element.type === "schematic_text" &&
+      typeof element.schematic_text_id === "string" &&
+      removedSchematicTextIds.has(element.schematic_text_id)
     ) {
       return []
     }
@@ -157,7 +173,12 @@ function updateSourceTraces(params: {
     const connectedSourcePortIds = element.connected_source_port_ids.filter(
       (sourcePortId) => !params.removedSourcePortIds.has(sourcePortId),
     )
-    if (connectedSourcePortIds.length + element.connected_source_net_ids.length === 0) {
+    const lostEveryConnectedPort =
+      element.connected_source_port_ids.length > 0 && connectedSourcePortIds.length === 0
+    if (
+      lostEveryConnectedPort ||
+      connectedSourcePortIds.length + element.connected_source_net_ids.length === 0
+    ) {
       removedSourceTraceIds.add(element.source_trace_id)
       continue
     }

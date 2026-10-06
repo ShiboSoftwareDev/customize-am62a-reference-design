@@ -38,6 +38,27 @@ test("DP83825 configuration removal prunes disconnected trace elements", async (
   expect(retainedTracesById.has("schematic_trace_altium_4571")).toBeFalse()
   expect(retainedTracesById.has("schematic_trace_altium_4568")).toBeFalse()
   expect(retainedTracesById.has("schematic_trace_altium_4575")).toBeFalse()
+  expect(filteredCircuitJson).not.toContainEqual(
+    expect.objectContaining({ source_trace_id: "source_trace_altium_51" }),
+  )
+  expect(filteredCircuitJson).not.toContainEqual(
+    expect.objectContaining({
+      schematic_text_id: "schematic_inline_net_label_altium_3304",
+      text: "RX_D1",
+    }),
+  )
+  expect(filteredCircuitJson).not.toContainEqual(
+    expect.objectContaining({
+      schematic_text_id: "schematic_inline_net_label_altium_5174",
+      text: "RX_D1_S",
+    }),
+  )
+  expect(filteredCircuitJson).toContainEqual(
+    expect.objectContaining({
+      schematic_text_id: "schematic_inline_net_label_altium_717",
+      text: "RX_D1",
+    }),
+  )
   expect(
     filteredCircuitJson.flatMap((element) =>
       isSchematicTrace(element) ? (element.junctions ?? []) : [],
