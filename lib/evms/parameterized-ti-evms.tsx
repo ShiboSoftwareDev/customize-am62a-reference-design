@@ -1,13 +1,13 @@
 import { Dp83825Evm } from "../generated/ti-evms/dp83825evm.circuit"
 import { dp83825EvmDefinition } from "../generated/ti-evms/dp83825evm.generated"
-import { drv8307EvmDefinition } from "../generated/ti-evms/drv8307evm.generated"
 import { Drv8307Evm } from "../generated/ti-evms/drv8307evm.circuit"
-import { lm5155EvmFlyDefinition } from "../generated/ti-evms/lm5155evm-fly.generated"
+import { drv8307EvmDefinition } from "../generated/ti-evms/drv8307evm.generated"
 import { Lm5155EvmFly } from "../generated/ti-evms/lm5155evm-fly.circuit"
-import { lm251772EvmPdDefinition } from "../generated/ti-evms/lm251772evm-pd.generated"
+import { lm5155EvmFlyDefinition } from "../generated/ti-evms/lm5155evm-fly.generated"
 import { Lm251772EvmPd } from "../generated/ti-evms/lm251772evm-pd.circuit"
-import { lmg342xBbEvmDefinition } from "../generated/ti-evms/lmg342x-bb-evm.generated"
+import { lm251772EvmPdDefinition } from "../generated/ti-evms/lm251772evm-pd.generated"
 import { Lmg342xBbEvm } from "../generated/ti-evms/lmg342x-bb-evm.circuit"
+import { lmg342xBbEvmDefinition } from "../generated/ti-evms/lmg342x-bb-evm.generated"
 import type { ReferenceEvmDefinition } from "./reference-evm-types"
 
 export type ParameterizedTiEvmId =
@@ -38,17 +38,43 @@ export function getParameterizedTiEvmDefinition(
 export function ParameterizedTiEvm(props: {
   evmId: ParameterizedTiEvmId
   options: ParameterizedTiEvmOptions
+  renderImportedCopperPours?: boolean
 }) {
   switch (props.evmId) {
     case "dp83825evm":
-      return <Dp83825Evm removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Dp83825Evm
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "drv8307evm":
-      return <Drv8307Evm removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Drv8307Evm
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "lm5155evm-fly":
-      return <Lm5155EvmFly removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Lm5155EvmFly
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "lm251772evm-pd":
-      return <Lm251772EvmPd removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Lm251772EvmPd
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
     case "lmg342x-bb-evm":
-      return <Lmg342xBbEvm removedFeatureIds={props.options.removedFeatureIds} />
+      return (
+        <Lmg342xBbEvm
+          removedFeatureIds={props.options.removedFeatureIds}
+          renderImportedCopperPours={props.renderImportedCopperPours}
+        />
+      )
   }
 }
