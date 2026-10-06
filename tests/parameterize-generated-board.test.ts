@@ -16,7 +16,6 @@ test("generated board TSX is parameterized without selector collisions", () => {
 export default ExampleBoard`
 
   const result = parameterizeGeneratedBoard({
-    autorouterVersion: "beta_pipeline9",
     componentName: "ExampleBoard",
     featureIdByComponentName: new Map([["TP1", "measurement"]]),
     generatedSource,
@@ -38,7 +37,8 @@ export default ExampleBoard`
   })
 
   expect(result.componentNames).toEqual(["TP1", "R1"])
-  expect(result.source).toContain('autorouterVersion="beta_pipeline9"')
+  expect(result.source).toContain('autorouter="auto" autorouterEffortLevel="1x"')
+  expect(result.source).not.toContain("autorouterVersion")
   expect(result.source).toContain('name="NET_TP1"')
   expect(result.source).toContain('"net.NET_TP1"')
   expect(result.source).toContain(

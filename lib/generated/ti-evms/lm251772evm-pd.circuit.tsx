@@ -474,7 +474,7 @@ function ParameterizedTrace(props: {
 export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
-  <board pcbX={69.6468} pcbY={84.6836} width="104.14mm" height="91.44mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 130.40359999999998 }, { x: 121.71679491999998, y: 130.40359999999998 }, { x: 121.71679999999999, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={4} material="fr4" autorouter="auto" autorouterVersion="beta_pipeline7" autorouterEffortLevel="1x">
+  <board pcbX={69.6468} pcbY={84.6836} width="104.14mm" height="91.44mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 130.40359999999998 }, { x: 121.71679491999998, y: 130.40359999999998 }, { x: 121.71679999999999, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={4} material="fr4" autorouter="auto" autorouterEffortLevel="1x">
     <chip name="C44" pcbX={14.008000939999988} pcbY={11.683999999999997} pcbRotation="0deg" layer="top" symbolName="capacitor_down" schX={4.012274201018991} schY={-3.7575266327003245} schDisplayValue="680pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.762mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.762mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={90} shape="rotated_rect" />

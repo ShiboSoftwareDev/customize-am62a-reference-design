@@ -125,7 +125,6 @@ const lmgMeasurementInterface = new Set([
 export const referenceInputs: ReferenceInput[] = [
   {
     id: "dp83825evm",
-    autorouterVersion: "beta_pipeline7",
     componentName: "Dp83825Evm",
     exportName: "dp83825EvmDefinition",
     name: "DP83825EVM",
@@ -145,7 +144,6 @@ export const referenceInputs: ReferenceInput[] = [
   },
   {
     id: "drv8307evm",
-    autorouterVersion: "beta_pipeline9",
     componentName: "Drv8307Evm",
     exportName: "drv8307EvmDefinition",
     name: "DRV8307EVM",
@@ -163,7 +161,6 @@ export const referenceInputs: ReferenceInput[] = [
   },
   {
     id: "lm5155evm-fly",
-    autorouterVersion: "beta_pipeline7",
     componentName: "Lm5155EvmFly",
     exportName: "lm5155EvmFlyDefinition",
     name: "LM5155EVM-FLY",
@@ -184,7 +181,6 @@ export const referenceInputs: ReferenceInput[] = [
   },
   {
     id: "lm251772evm-pd",
-    autorouterVersion: "beta_pipeline7",
     componentName: "Lm251772EvmPd",
     exportName: "lm251772EvmPdDefinition",
     name: "LM251772EVM-PD",
@@ -202,7 +198,6 @@ export const referenceInputs: ReferenceInput[] = [
   },
   {
     id: "lmg342x-bb-evm",
-    autorouterVersion: "beta_pipeline9",
     componentName: "Lmg342xBbEvm",
     exportName: "lmg342xBbEvmDefinition",
     name: "LMG342X-BB-EVM",

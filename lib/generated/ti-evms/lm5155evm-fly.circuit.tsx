@@ -441,7 +441,7 @@ function ParameterizedTrace(props: {
 export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
-  <board pcbX={60.1218} pcbY={59.9186} width="85.09mm" height="41.91mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 80.8736 }, { x: 102.6668, y: 80.8736 }, { x: 102.6668, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterVersion="beta_pipeline7" autorouterEffortLevel="1x">
+  <board pcbX={60.1218} pcbY={59.9186} width="85.09mm" height="41.91mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 80.8736 }, { x: 102.6668, y: 80.8736 }, { x: 102.6668, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterEffortLevel="1x">
     {isComponentIncluded({ componentName: "R26", removedFeatureIds }) && (<chip name="R26" pcbX={-9.906000000000006} pcbY={-10.540999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-10.05297591477536} schY={4.93509726725336} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
