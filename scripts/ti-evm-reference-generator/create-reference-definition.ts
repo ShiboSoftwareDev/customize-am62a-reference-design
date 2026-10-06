@@ -15,6 +15,7 @@ import {
   parseAltiumBinaryPcbDoc,
   parseAltiumFile,
 } from "altiumts"
+import type { AnyCircuitElement } from "circuit-json"
 import type {
   ReferenceComponent,
   ReferenceNet,
@@ -47,6 +48,7 @@ import type {
 } from "./types"
 
 type EndpointKey = string
+type EmbeddedModelUrl = string
 
 export async function createReferenceDefinition(params: {
   cadModelOutputDirectory: string
@@ -55,7 +57,7 @@ export async function createReferenceDefinition(params: {
   const { reference } = params
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
-  const embeddedModelUrlByIndex = await extractEmbeddedCadModels({
+  const embeddedModelUrlsByIndex = await extractEmbeddedCadModels({
     outputDirectory: params.cadModelOutputDirectory,
     pcbDocument,
     referenceId: reference.id,
@@ -87,7 +89,7 @@ export async function createReferenceDefinition(params: {
         includeVias: false,
         project: parsedProject,
         resolveEmbeddedModelUrl: ({ embeddedModel }) =>
-          embeddedModelUrlByIndex.get(embeddedModel.index),
+          embeddedModelUrlsByIndex.get(embeddedModel.index)?.stepUrl,
       },
     },
     schematics: schematicDocuments.map(({ converterDocument, path }) => ({
@@ -99,6 +101,10 @@ export async function createReferenceDefinition(params: {
         sheetName: reference.name,
       },
     })),
+  })
+  replaceStepModelUrlsWithGlbUrls({
+    circuitJson: projectCircuitJson,
+    embeddedModelUrlsByIndex,
   })
   const pcbCircuitJson = convertAltiumToCircuitJson(pcbBytes, {
     sourceType: "pcb",
@@ -304,6 +310,22 @@ export async function createReferenceDefinition(params: {
     },
     projectCircuitJson,
     referenceSchematicCircuitJsons: schematicCircuitJsons,
+  }
+}
+
+function replaceStepModelUrlsWithGlbUrls(params: {
+  circuitJson: AnyCircuitElement[]
+  embeddedModelUrlsByIndex: Awaited<ReturnType<typeof extractEmbeddedCadModels>>
+}): void {
+  const glbUrlByStepUrl = new Map<EmbeddedModelUrl, EmbeddedModelUrl>(
+    [...params.embeddedModelUrlsByIndex.values()].map(({ glbUrl, stepUrl }) => [stepUrl, glbUrl]),
+  )
+  for (const element of params.circuitJson) {
+    if (element.type !== "cad_component" || typeof element.model_step_url !== "string") continue
+    const glbUrl = glbUrlByStepUrl.get(element.model_step_url)
+    if (!glbUrl) continue
+    delete element.model_step_url
+    element.model_glb_url = glbUrl
   }
 }
 

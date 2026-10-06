@@ -80,14 +80,17 @@ function stripTrailingWhitespace(svg: string): string {
 
 function resolveCadModelUrlsForBuild(circuitJson: CircuitJson): CircuitJson {
   return circuitJson.map((element) => {
-    if (element.type !== "cad_component" || !element.model_step_url?.startsWith("/")) {
-      return element
-    }
+    if (element.type !== "cad_component") return element
     return {
       ...element,
-      model_step_url: resolve(repositoryRoot, "public", element.model_step_url.slice(1)),
+      model_glb_url: resolvePublicModelUrl(element.model_glb_url),
+      model_step_url: resolvePublicModelUrl(element.model_step_url),
     }
   })
+}
+
+function resolvePublicModelUrl(modelUrl: string | undefined): string | undefined {
+  return modelUrl?.startsWith("/") ? resolve(repositoryRoot, "public", modelUrl.slice(1)) : modelUrl
 }
 
 async function renderThreeDimensionalPng(circuitJson: CircuitJson): Promise<Uint8Array> {

@@ -49,11 +49,17 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
 
       const circuitJson = await loadCompressedCircuitJson(repositoryRoot, artifact.output)
       const modelUrls = circuitJson.flatMap((element) =>
-        element.type === "cad_component" && typeof element.model_step_url === "string"
-          ? [element.model_step_url]
+        element.type === "cad_component" && typeof element.model_glb_url === "string"
+          ? [element.model_glb_url]
           : [],
       )
       expect(modelUrls.length).toBeGreaterThan(0)
+      expect(
+        circuitJson.some(
+          (element) =>
+            element.type === "cad_component" && typeof element.model_step_url === "string",
+        ),
+      ).toBe(false)
       for (const modelUrl of modelUrls) {
         expect(
           await Bun.file(resolve(repositoryRoot, "public", modelUrl.replace(/^\//u, ""))).exists(),
