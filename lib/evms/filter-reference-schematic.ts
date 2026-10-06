@@ -5,6 +5,7 @@ import {
 } from "./prune-unanchored-schematic-trace-edges"
 
 type ComponentName = string
+type SchematicPointKey = string
 type SourceComponentId = string
 type SourcePortId = string
 type SourceTraceId = string
@@ -34,6 +35,7 @@ type SchematicPort = AnyCircuitElement & {
 }
 type SchematicTrace = AnyCircuitElement & {
   edges: SchematicTraceEdge[]
+  junctions?: Array<{ x: number; y: number }>
   schematic_trace_id: SchematicTraceId
   source_trace_id?: SourceTraceId
 }
@@ -234,6 +236,17 @@ function updateSchematicTraceGroup(params: {
       removedSchematicPortIds: params.removedSchematicPortIds,
     }),
   )
+  const activePointKeys = new Set(
+    [...activeEdges].flatMap(({ from, to }) => [
+      getSchematicPointKey(from),
+      getSchematicPointKey(to),
+    ]),
+  )
+  const removedPointKeys = new Set(
+    edges.flatMap((edge) =>
+      activeEdges.has(edge) ? [] : [getSchematicPointKey(edge.from), getSchematicPointKey(edge.to)],
+    ),
+  )
 
   for (const trace of params.traces) {
     const traceEdges = trace.edges.filter((edge) => activeEdges.has(edge))
@@ -244,8 +257,20 @@ function updateSchematicTraceGroup(params: {
     params.updatedSchematicTraces.set(trace.schematic_trace_id, {
       ...trace,
       edges: traceEdges,
+      ...(trace.junctions
+        ? {
+            junctions: trace.junctions.filter((junction) => {
+              const pointKey = getSchematicPointKey(junction)
+              return !removedPointKeys.has(pointKey) || activePointKeys.has(pointKey)
+            }),
+          }
+        : {}),
     })
   }
+}
+
+function getSchematicPointKey(point: { x: number; y: number }): SchematicPointKey {
+  return `${point.x},${point.y}`
 }
 
 function isSourceComponent(element: AnyCircuitElement): element is SourceComponent {

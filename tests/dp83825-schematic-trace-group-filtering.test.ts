@@ -13,6 +13,7 @@ type SchematicTrace = AnyCircuitElement & {
     to: { x: number; y: number }
     to_schematic_port_id?: string
   }>
+  junctions?: Array<{ x: number; y: number }>
   schematic_trace_id: SchematicTraceId
   source_trace_id?: SourceTraceId
 }
@@ -37,6 +38,11 @@ test("DP83825 configuration removal prunes disconnected trace elements", async (
   expect(retainedTracesById.has("schematic_trace_altium_4571")).toBeFalse()
   expect(retainedTracesById.has("schematic_trace_altium_4568")).toBeFalse()
   expect(retainedTracesById.has("schematic_trace_altium_4575")).toBeFalse()
+  expect(
+    filteredCircuitJson.flatMap((element) =>
+      isSchematicTrace(element) ? (element.junctions ?? []) : [],
+    ),
+  ).not.toContainEqual({ x: -10.235757295044003, y: 6.580129689671146 })
   expect(filteredCircuitJson).toContainEqual(
     expect.objectContaining({ type: "source_component", name: "U3" }),
   )
