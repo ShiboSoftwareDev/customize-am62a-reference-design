@@ -25,12 +25,12 @@ export default ExampleBoard`
       {
         coveredWithSolderMask: true,
         layer: "top",
+        netName: "TP1",
         outline: [
           { x: 0, y: 0 },
           { x: 1, y: 0 },
           { x: 1, y: 1 },
         ],
-        sourceNetName: "TP1",
       },
     ],
     teardropPortSelectors: new Set([".R1 > .pin1"]),
@@ -47,7 +47,8 @@ export default ExampleBoard`
   expect(result.source).toContain("routablePortSelectors.has(selector)")
   expect(result.source).toContain("pcbTeardrops={hasViaTeardrops}")
   expect(result.source).toContain("teardropPortSelectors.has(selector)")
-  expect(result.source).toContain("renderImportedCopperPours && (<copperpour")
+  expect(result.source).toContain("<copperpour")
+  expect(result.source).not.toContain("renderImportedCopperPours")
   expect(result.source).toContain('net[name=\\"NET_TP1\\"]')
   expect(result.source).not.toContain("<pcbcopperpour")
 })

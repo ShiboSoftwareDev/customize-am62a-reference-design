@@ -2,7 +2,7 @@ import { expect, test } from "bun:test"
 import type { AnyCircuitElement } from "circuit-json"
 import { getSupportedCopperPours } from "../scripts/ti-evm-reference-generator/get-supported-copper-pours"
 
-test("selects only net-connected rect and polygon pours supported by copperpour", () => {
+test("creates TSX copper-pour definitions for rect, polygon, BRep, and netless copper", () => {
   const circuitJson = [
     {
       type: "source_net",
@@ -29,8 +29,22 @@ test("selects only net-connected rect and polygon pours supported by copperpour"
       layer: "top",
       shape: "brep",
       brep_shape: {
-        outer_ring: { vertices: [{ x: 0, y: 0, bulge: 1 }] },
-        inner_rings: [],
+        outer_ring: {
+          vertices: [
+            { x: 0, y: 0, bulge: 1 },
+            { x: 2, y: 0 },
+            { x: 0, y: 2 },
+          ],
+        },
+        inner_rings: [
+          {
+            vertices: [
+              { x: 0.5, y: 0.5 },
+              { x: 1, y: 0.5 },
+              { x: 0.5, y: 1 },
+            ],
+          },
+        ],
       },
     },
     {
@@ -48,11 +62,11 @@ test("selects only net-connected rect and polygon pours supported by copperpour"
 
   const supportedCopperPours = getSupportedCopperPours({ circuitJson })
 
-  expect(supportedCopperPours).toHaveLength(1)
+  expect(supportedCopperPours).toHaveLength(3)
   expect(supportedCopperPours[0]).toMatchObject({
     coveredWithSolderMask: false,
     layer: "top",
-    sourceNetName: "GND",
+    netName: "GND",
   })
   const expectedOutline = [
     { x: 3, y: 1 },
@@ -64,4 +78,15 @@ test("selects only net-connected rect and polygon pours supported by copperpour"
     expect(supportedCopperPours[0]?.outline[pointIndex]?.x).toBeCloseTo(expectedPoint.x, 12)
     expect(supportedCopperPours[0]?.outline[pointIndex]?.y).toBeCloseTo(expectedPoint.y, 12)
   }
+  expect(supportedCopperPours[1]).toMatchObject({
+    netName: "GND",
+    outline: [
+      { x: 0, y: 0 },
+      { x: 2, y: 0 },
+      { x: 0, y: 2 },
+    ],
+  })
+  expect(supportedCopperPours[2]).toMatchObject({
+    netName: "__unassigned_pcb_copper_pour_netless",
+  })
 })
