@@ -41,6 +41,14 @@ const featureIdByComponentName: Partial<Record<string, Lmg342xBbEvmFeatureId>> =
   "TACH": "measurement-interface"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.PGND",
+  "net.AGND",
+  "net.HVBUS_2",
+  "net.SW_2",
+  "net.NetJ16_1",
+  "net.HVOUT_2"
+])
 const routablePortSelectors = new Set<string>([
   ".C22 > .pin2",
   ".C22 > .pin1",
@@ -339,6 +347,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )
@@ -390,6 +404,13 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":-0.11463640574340062,"y":-0.025474756831866507},{"x":0.08916164891153144,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.012737378415934586,"y":-0.06368689207966582},{"x":0.11463640574340062,"y":-0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.012737378415934586,"y":0.06368689207966671},{"x":0.11463640574340062,"y":0.06368689207966671}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="3" schX={0.11463640574340062} schY={-0.19106067623899836} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="1" schX={-0.012737378415934586} schY={-0.19106067623899836} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="2" schX={-0.012737378415934586} schY={0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="4" schX={0.11463640574340062} schY={0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="900V" schX={0.15284854099120082} schY={-0.17832329782306555} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="20µF" schX={0.15284854099120082} schY={-0.305697081982399} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="C22" schX={0.15284854099120082} schY={-0.050949513663733015} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="20uF" pinLabels={{"pin3":["3","pin3"],"pin1":["1","pin1"],"pin2":["2","pin2"],"pin4":["4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="-18.7500006mm" pcbY="0.05000752mm" outerDiameter="2.25000058mm" holeDiameter="1.49999954mm" shape="circle" />
     <platedhole  portHints={["1"]} pcbX="18.7500006mm" pcbY="0.0500126mm" holeShape="circle" padShape="rect" holeDiameter="1.49999954mm" rectPadWidth="2.25000058mm" rectPadHeight="2.25000058mm" rectBorderRadius="0.562500145mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="270deg" shape="circular_hole_with_rect_pad" />
@@ -588,6 +609,11 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":-0.12737378415933343,"y":0},{"x":-0.03821213524779843,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.12737378415933343,"y":0.12737378415933343},{"x":-0.03821213524779843,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.12737378415933343,"y":-0.12737378415933343},{"x":-0.03821213524779843,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={-0.2547475683186651} schY={0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={-0.2547475683186651} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={-0.2547475683186651} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J15" schX={-0.14011116257526623} schY={0.25474756831866685} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-103-07-G-S" schX={-0.14011116257526623} schY={-0.3821213524779985} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: -0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="TSW-103-07-G-S" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
@@ -810,6 +836,8 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0.12737378415933165,"y":-0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":0.0636868920796676},{"x":0.12737378415933165,"y":0.0636868920796676}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SH-J5" schX={-0.12737378415933343} schY={0.19106067623900103} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="SNT-100-BK-G" schX={-0.6368689207966653} schY={-0.3184344603983309} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="1x2" obstructsWithinBounds={false} footprint={<footprint />} />
@@ -852,6 +880,11 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933343},{"x":0.038212135247800205,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186651} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={0.2547475683186651} schY={0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J14" schX={-0.12737378415933343} schY={0.2547475683186651} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-103-07-G-S" schX={-0.12737378415933343} schY={-0.3821213524779985} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="TSW-103-07-G-S" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
@@ -884,6 +917,8 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0.12737378415933254,"y":-0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":0.06368689207966671},{"x":0.12737378415933254,"y":0.06368689207966671}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SH-J4" schX={-0.12737378415933343} schY={0.19106067623900014} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="SNT-100-BK-G" schX={-0.6368689207966662} schY={-0.3184344603983318} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966671 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="1x2" obstructsWithinBounds={false} footprint={<footprint />} />
@@ -909,6 +944,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933254,"y":0.06368689207966671},{"x":0.03821213524779932,"y":0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933254,"y":-0.06368689207966582},{"x":0.03821213524779932,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186651} schY={0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J13" schX={-0.12737378415933343} schY={0.19106067623900014} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-102-07-G-S" schX={-0.12737378415933343} schY={-0.3184344603983318} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="TSW-102-07-G-S" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.016mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="90deg" shape="circular_hole_with_rect_pad" />
@@ -925,6 +964,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.0636868920796676} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933343,"y":-0.0636868920796676},{"x":0.038212135247800205,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={-0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186651} schY={0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J12" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="282834-2" schX={-0.12737378415933343} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="282834-2" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.59999934mm" holeDiameter="1.10000034mm" shape="circle" />
@@ -986,6 +1029,14 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicline x1={0.15921723019916634} y1={0.9553033811949962} x2={-0.15921723019916634} y2={0.9553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
       <schematicpath points={[{"x":-0.15921723019916634,"y":0.19106067623899925},{"x":-0.18415565275163104,"y":0.18942612566776162},{"x":-0.20866737197998653,"y":0.1845504415675041},{"x":-0.23233298557230242,"y":0.1765170482449765},{"x":-0.25474756831866685,"y":0.16546339928720677},{"x":-0.2755276004937919,"y":0.1515786256925118},{"x":-0.29431752998585026,"y":0.13510029978668392},{"x":-0.31079585589167813,"y":0.11631037029462554},{"x":-0.3246806294863731,"y":0.09553033811950051},{"x":-0.33573427844414283,"y":0.07311575537313608},{"x":-0.34376767176667045,"y":0.04945014178082019},{"x":-0.34864335586692796,"y":0.0249384225524647},{"x":-0.3502779064381656,"y":0},{"x":-0.34864335586692796,"y":-0.0249384225524647},{"x":-0.34376767176667045,"y":-0.04945014178082019},{"x":-0.33573427844414283,"y":-0.07311575537313608},{"x":-0.3246806294863731,"y":-0.09553033811950051},{"x":-0.31079585589167813,"y":-0.11631037029462554},{"x":-0.29431752998585026,"y":-0.13510029978668392},{"x":-0.2755276004937919,"y":-0.1515786256925118},{"x":-0.25474756831866685,"y":-0.16546339928720677},{"x":-0.23233298557230242,"y":-0.1765170482449765},{"x":-0.20866737197998653,"y":-0.1845504415675041},{"x":-0.18415565275163104,"y":-0.18942612566776162},{"x":-0.15921723019916634,"y":-0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.15921723019916634,"y":0.9553033811949962},{"x":-0.18415565275163104,"y":0.9536688306237586},{"x":-0.20866737197998653,"y":0.9487931465235011},{"x":-0.23233298557230242,"y":0.9407597532009735},{"x":-0.25474756831866685,"y":0.9297061042432038},{"x":-0.2755276004937919,"y":0.9158213306485088},{"x":-0.29431752998585026,"y":0.8993430047426809},{"x":-0.31079585589167813,"y":0.8805530752506225},{"x":-0.3246806294863731,"y":0.8597730430754975},{"x":-0.33573427844414283,"y":0.8373584603291331},{"x":-0.34376767176667045,"y":0.8136928467368172},{"x":-0.34864335586692796,"y":0.7891811275084617},{"x":-0.3502779064381656,"y":0.764242704955997},{"x":-0.34864335586692796,"y":0.7393042824035323},{"x":-0.34376767176667045,"y":0.7147925631751768},{"x":-0.33573427844414283,"y":0.6911269495828609},{"x":-0.3246806294863731,"y":0.6687123668364965},{"x":-0.31079585589167813,"y":0.6479323346613715},{"x":-0.29431752998585026,"y":0.6291424051693131},{"x":-0.2755276004937919,"y":0.6126640792634852},{"x":-0.25474756831866685,"y":0.5987793056687902},{"x":-0.23233298557230242,"y":0.5877256567110205},{"x":-0.20866737197998653,"y":0.5796922633884929},{"x":-0.18415565275163104,"y":0.5748165792882354},{"x":-0.15921723019916634,"y":0.5731820287169977}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="7" schX={-0.477651690597499} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="1" schX={0.286591014358498} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.286591014358498} schY={0.12737378415933165} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="U2" schX={-0.3502779064381656} schY={-0.33117183881426726} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="3" schX={-0.477651690597499} schY={0.764242704955997} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="5" schX={0.286591014358498} schY={0.6368689207966636} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="6" schX={0.286591014358498} schY={0.8916164891153304} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="U2" schX={-0.3502779064381656} schY={0.4330708661417315} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="U2" schX={-0.3502779064381656} schY={3.6417183881426585} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="SN74LVC2G08IDCTRQ1" schX={-0.3502779064381656} schY={2.9817183881426583} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
     </symbol>} schDisplayValue="SN74LVC2G08IDCTRQ1" pinLabels={{"pin7":["1Y","7","pin7"],"pin1":["1A","1","pin1"],"pin2":["1B","2","pin2"],"pin3":["2Y","3","pin3"],"pin5":["2A","5","pin5"],"pin6":["2B","6","pin6"],"pin8":["VCC","8","pin8"],"pin4":["GND","4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
@@ -1017,6 +1068,8 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0.12737378415933343,"y":-0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":0.0636868920796676},{"x":0.12737378415933343,"y":0.0636868920796676}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SH-J3" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="SNT-100-BK-G" schX={-0.6368689207966653} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="1x2" obstructsWithinBounds={false} footprint={<footprint />} />
@@ -1034,6 +1087,8 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0,"y":-0.0636868920796676},{"x":0.12737378415933343,"y":-0.0636868920796676}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":0.06368689207966582},{"x":0.12737378415933343,"y":0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SH-J2" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="SNT-100-BK-G" schX={-0.6368689207966653} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.0636868920796676 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966582 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="1x2" obstructsWithinBounds={false} footprint={<footprint />} />
@@ -1072,6 +1127,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933165,"y":0.0636868920796676},{"x":0.03821213524779843,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933165,"y":-0.06368689207966582},{"x":0.03821213524779843,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186651} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J11" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-102-07-G-S" schX={-0.12737378415933343} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="TSW-102-07-G-S" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.016mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="270deg" shape="circular_hole_with_rect_pad" />
@@ -1088,6 +1147,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.0636868920796676} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933165,"y":0.06368689207966582},{"x":0.03821213524779843,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933165,"y":-0.0636868920796676},{"x":0.03821213524779843,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={-0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186651} schY={0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J10" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-102-07-G-S" schX={-0.12737378415933343} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="TSW-102-07-G-S" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.016mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="270deg" shape="circular_hole_with_rect_pad" />
@@ -1379,6 +1442,14 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0.1273737841593352,"y":0.0636868920796676},{"x":0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.1273737841593352,"y":0.19106067623899925},{"x":0.038212135247800205,"y":0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.1273737841593352,"y":0.3184344603983327},{"x":0.038212135247800205,"y":0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="5" schX={0.2547475683186704} schY={0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="4" schX={0.2547475683186704} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="1" schX={0.2547475683186704} schY={-0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186704} schY={-0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={0.2547475683186704} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="6" schX={0.2547475683186704} schY={0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J4" schX={-0.12737378415933165} schY={0.4458082445576661} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-106-07-G-S" schX={-0.12737378415933165} schY={-0.5731820287169977} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
@@ -1415,6 +1486,14 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0.1273737841593352,"y":0.0636868920796676},{"x":0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.1273737841593352,"y":0.19106067623899925},{"x":0.038212135247800205,"y":0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.1273737841593352,"y":0.3184344603983327},{"x":0.038212135247800205,"y":0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="5" schX={0.2547475683186704} schY={0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="4" schX={0.2547475683186704} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="1" schX={0.2547475683186704} schY={-0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186704} schY={-0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={0.2547475683186704} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="6" schX={0.2547475683186704} schY={0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J2" schX={-0.12737378415933165} schY={0.4458082445576661} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-106-07-G-S" schX={-0.12737378415933165} schY={-0.5731820287169977} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
@@ -1475,6 +1554,18 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":-1.3055812876331645,"y":-0.0636868920796676},{"x":-1.178207503473831,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-1.241894395553497,"y":0.06368689207966582},{"x":-1.241894395553497,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-1.178207503473831,"y":0.06368689207966582},{"x":-1.178207503473831,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SN74LVC3G14DCUTG4" schX={0.4458082445576652} schY={-1.2737378415933307} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
+      <schematictext text="U5" schX={-0.20379805465493295} schY={0.20379805465493206} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="5" schX={0.305697081982399} schY={0} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="3" schX={-0.30569708198239987} schY={0} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="SN74LVC3G14DCUTG4" schX={2.6111625752663263} schY={-1.2737378415933307} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
+      <schematictext text="U5" schX={1.9615562760537282} schY={0.20379805465493206} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="2" schX={2.471051412691062} schY={0} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="6" schX={1.8596572487262621} schY={0} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="SN74LVC3G14DCUTG4" schX={-0.7005558128763321} schY={-1.2737378415933307} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
+      <schematictext text="U5" schX={-1.3501621120889302} schY={0.20379805465493206} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="7" schX={-0.8406669754515983} schY={0} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="1" schX={-1.4520611394163963} schY={0} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
       <schematictext text="U5" schX={-3.2480314960629917} schY={1.6037378415933308} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="SN74LVC3G14DCUTG4" schX={-3.2480314960629917} schY={0.9437378415933306} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematiccircle center={{ x: 0.22290412227883216, y: 0 }} radius={0.03184344603983326} strokeWidth={0.012737378415933302} color="#000000" isFilled={true} fillColor="#ffffff" isDashed={false} />
@@ -1557,6 +1648,18 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":3.152501157943492,"y":-0.06368689207966582},{"x":3.2798749421028237,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":3.216188050023158,"y":0.0636868920796676},{"x":3.216188050023158,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":3.2798749421028237,"y":0.0636868920796676},{"x":3.2798749421028237,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SN74LVC3G14DCUTG4" schX={0.4458082445576643} schY={0.12737378415933343} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
+      <schematictext text="U3" schX={-0.20379805465493384} schY={0.20379805465493384} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="7" schX={0.3056970819823981} schY={0} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="1" schX={-0.30569708198239987} schY={0} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="SN74LVC3G14DCUTG4" schX={1.5921723019916616} schY={0.12737378415933343} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
+      <schematictext text="U3" schX={0.9425660027790634} schY={0.20379805465493384} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="5" schX={1.4520611394163954} schY={0} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="3" schX={0.8406669754515965} schY={0} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="SN74LVC3G14DCUTG4" schX={3.7575266327003227} schY={0.12737378415933343} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
+      <schematictext text="U3" schX={3.1079203334877246} schY={0.20379805465493384} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="2" schX={3.6174154701250583} schY={0} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
+      <schematictext text="6" schX={3.0060213061602585} schY={0} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
       <schematictext text="U3" schX={-1.9742936544696619} schY={1.348990273274664} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="SN74LVC3G14DCUTG4" schX={-1.9742936544696619} schY={0.6889902732746638} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematiccircle center={{ x: 0.22290412227883039, y: 0 }} radius={0.03184344603983326} strokeWidth={0.012737378415933302} color="#000000" isFilled={true} fillColor="#ffffff" isDashed={false} />
@@ -1600,6 +1703,14 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicline x1={-0.15921723019916634} y1={-3.884900416859658} x2={0.15921723019916634} y2={-3.884900416859658} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
       <schematicpath points={[{"x":0.15921723019916634,"y":-0.19106067623899925},{"x":0.18415565275163104,"y":-0.18942612566776162},{"x":0.20866737197998653,"y":-0.1845504415675041},{"x":0.23233298557230242,"y":-0.1765170482449765},{"x":0.25474756831866685,"y":-0.16546339928720677},{"x":0.2755276004937919,"y":-0.1515786256925118},{"x":0.29431752998585026,"y":-0.13510029978668392},{"x":0.31079585589167813,"y":-0.11631037029462554},{"x":0.3246806294863731,"y":-0.09553033811950051},{"x":0.33573427844414283,"y":-0.07311575537313608},{"x":0.34376767176667045,"y":-0.04945014178082019},{"x":0.34864335586692796,"y":-0.0249384225524647},{"x":0.3502779064381656,"y":0},{"x":0.34864335586692796,"y":0.0249384225524647},{"x":0.34376767176667045,"y":0.04945014178082019},{"x":0.33573427844414283,"y":0.07311575537313608},{"x":0.3246806294863731,"y":0.09553033811949874},{"x":0.31079585589167813,"y":0.11631037029462554},{"x":0.29431752998585026,"y":0.13510029978668392},{"x":0.2755276004937919,"y":0.1515786256925118},{"x":0.25474756831866685,"y":0.16546339928720677},{"x":0.23233298557230242,"y":0.1765170482449765},{"x":0.20866737197998653,"y":0.1845504415675041},{"x":0.18415565275163104,"y":0.18942612566776162},{"x":0.15921723019916634,"y":0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.15921723019916634,"y":-3.884900416859658},{"x":0.18415565275163104,"y":-3.8832658662884203},{"x":0.20866737197998653,"y":-3.878390182188163},{"x":0.23233298557230242,"y":-3.870356788865635},{"x":0.25474756831866685,"y":-3.8593031399078654},{"x":0.2755276004937919,"y":-3.8454183663131705},{"x":0.29431752998585026,"y":-3.8289400404073426},{"x":0.31079585589167813,"y":-3.810150110915284},{"x":0.3246806294863731,"y":-3.789370078740159},{"x":0.33573427844414283,"y":-3.7669554959937948},{"x":0.34376767176667045,"y":-3.743289882401479},{"x":0.34864335586692796,"y":-3.7187781631731234},{"x":0.3502779064381656,"y":-3.6938397406206587},{"x":0.34864335586692796,"y":-3.668901318068194},{"x":0.34376767176667045,"y":-3.6443895988398385},{"x":0.33573427844414283,"y":-3.6207239852475226},{"x":0.3246806294863731,"y":-3.598309402501158},{"x":0.31079585589167813,"y":-3.577529370326033},{"x":0.29431752998585026,"y":-3.5587394408339748},{"x":0.2755276004937919,"y":-3.542261114928147},{"x":0.25474756831866685,"y":-3.528376341333452},{"x":0.23233298557230242,"y":-3.517322692375682},{"x":0.20866737197998653,"y":-3.5092892990531546},{"x":0.18415565275163104,"y":-3.504413614952897},{"x":0.15921723019916634,"y":-3.5027790643816594}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="7" schX={0.47765169059749724} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="1" schX={-0.28659101435849976} schY={0.12737378415933165} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={-0.28659101435849976} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="U1" schX={-0.17195460861510092} schY={-0.33117183881426726} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="3" schX={0.47765169059749724} schY={-3.6938397406206587} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="5" schX={-0.28659101435849976} schY={-3.5664659564613252} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="6" schX={-0.28659101435849976} schY={-3.821213524779992} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="U1" schX={-0.17195460861510092} schY={-4.025011579434924} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="U1" schX={-0.28659101435849976} schY={1.348990273274664} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="SN74LVC2G08IDCTRQ1" schX={-0.28659101435849976} schY={0.6889902732746638} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
     </symbol>} schDisplayValue="SN74LVC2G08IDCTRQ1" pinLabels={{"pin7":["1Y","7","pin7"],"pin1":["1A","1","pin1"],"pin2":["1B","2","pin2"],"pin3":["2Y","3","pin3"],"pin5":["2A","5","pin5"],"pin6":["2B","6","pin6"],"pin8":["VCC","8","pin8"],"pin4":["GND","4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
@@ -1631,6 +1742,8 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0.12737378415933165,"y":-0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":0.06368689207966582},{"x":0.12737378415933165,"y":0.06368689207966582}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="SH-J1" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="SNT-100-BK-G" schX={-0.6368689207966653} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966582 }} radius={0.025474756831866605} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="1x2" obstructsWithinBounds={false} footprint={<footprint />} />
@@ -1977,6 +2090,13 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":-0.25474756831866685,"y":0.12737378415933343},{"x":-0.19106067623899925,"y":0.12737378415933343}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.14011116257526623,"y":0.12737378415933343},{"x":0.1400021925371835,"y":0.12903634566283095},{"x":0.13967714693050048,"y":0.13067046027805507},{"x":0.13914158737566495,"y":0.132248167850876},{"x":0.13840467744514662,"y":0.13374247336729983},{"x":0.13747902587216565,"y":0.1351278088456418},{"x":0.13638047081177795,"y":0.13638047081177884},{"x":0.13512780884564002,"y":0.13747902587216743},{"x":0.13374247336729894,"y":0.1384046774451475},{"x":0.13224816785087512,"y":0.13914158737566495},{"x":0.13067046027805418,"y":0.13967714693050048},{"x":0.12903634566283095,"y":0.14000219253718438},{"x":0.12737378415933343,"y":0.14011116257526712},{"x":0.1257112226558359,"y":0.14000219253718438},{"x":0.1240771080406109,"y":0.13967714693050048},{"x":0.12249940046778995,"y":0.13914158737566495},{"x":0.12100509495136613,"y":0.1384046774451475},{"x":0.11961975947302328,"y":0.13747902587216743},{"x":0.11836709750688712,"y":0.13638047081177884},{"x":0.11726854244649765,"y":0.1351278088456418},{"x":0.11634289087351846,"y":0.13374247336729983},{"x":0.11560598094300012,"y":0.132248167850876},{"x":0.11507042138816637,"y":0.13067046027805507},{"x":0.11474537578148158,"y":0.12903634566283095},{"x":0.11463640574339884,"y":0.12737378415933343},{"x":0.11474537578148158,"y":0.1257112226558359},{"x":0.11507042138816637,"y":0.12407710804061178},{"x":0.11560598094300012,"y":0.12249940046779084},{"x":0.11634289087351846,"y":0.12100509495136702},{"x":0.11726854244649765,"y":0.11961975947302506},{"x":0.11836709750688712,"y":0.11836709750688801},{"x":0.11961975947302328,"y":0.11726854244649942},{"x":0.12100509495136613,"y":0.11634289087351934},{"x":0.12249940046778995,"y":0.1156059809430019},{"x":0.1240771080406109,"y":0.11507042138816637},{"x":0.1257112226558359,"y":0.11474537578148247},{"x":0.12737378415933343,"y":0.11463640574339973},{"x":0.12903634566283095,"y":0.11474537578148247},{"x":0.13067046027805418,"y":0.11507042138816637},{"x":0.13224816785087512,"y":0.1156059809430019},{"x":0.13374247336729894,"y":0.11634289087351934},{"x":0.13512780884564002,"y":0.11726854244649942},{"x":0.13638047081177795,"y":0.11836709750688801},{"x":0.13747902587216565,"y":0.11961975947302506},{"x":0.13840467744514662,"y":0.12100509495136702},{"x":0.13914158737566495,"y":0.12249940046779084},{"x":0.13967714693050048,"y":0.12407710804061178},{"x":0.1400021925371835,"y":0.1257112226558359},{"x":0.14011116257526623,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.14011116257526623,"y":-0.12737378415933254},{"x":0.1400021925371835,"y":-0.125711222655835},{"x":0.13967714693050048,"y":-0.1240771080406109},{"x":0.13914158737566495,"y":-0.12249940046778995},{"x":0.13840467744514662,"y":-0.12100509495136613},{"x":0.13747902587216565,"y":-0.11961975947302417},{"x":0.13638047081177795,"y":-0.11836709750688712},{"x":0.13512780884564002,"y":-0.11726854244649854},{"x":0.13374247336729894,"y":-0.11634289087351846},{"x":0.13224816785087512,"y":-0.11560598094300101},{"x":0.13067046027805418,"y":-0.11507042138816548},{"x":0.12903634566283095,"y":-0.11474537578148158},{"x":0.12737378415933343,"y":-0.11463640574339884},{"x":0.1257112226558359,"y":-0.11474537578148158},{"x":0.1240771080406109,"y":-0.11507042138816548},{"x":0.12249940046778995,"y":-0.11560598094300101},{"x":0.12100509495136613,"y":-0.11634289087351846},{"x":0.11961975947302328,"y":-0.11726854244649854},{"x":0.11836709750688712,"y":-0.11836709750688712},{"x":0.11726854244649765,"y":-0.11961975947302417},{"x":0.11634289087351846,"y":-0.12100509495136613},{"x":0.11560598094300012,"y":-0.12249940046778995},{"x":0.11507042138816637,"y":-0.1240771080406109},{"x":0.11474537578148158,"y":-0.125711222655835},{"x":0.11463640574339884,"y":-0.12737378415933254},{"x":0.11474537578148158,"y":-0.12903634566283007},{"x":0.11507042138816637,"y":-0.13067046027805418},{"x":0.11560598094300012,"y":-0.13224816785087512},{"x":0.11634289087351846,"y":-0.13374247336729894},{"x":0.11726854244649765,"y":-0.1351278088456409},{"x":0.11836709750688712,"y":-0.13638047081177795},{"x":0.11961975947302328,"y":-0.13747902587216654},{"x":0.12100509495136613,"y":-0.13840467744514662},{"x":0.12249940046778995,"y":-0.13914158737566407},{"x":0.1240771080406109,"y":-0.1396771469304996},{"x":0.1257112226558359,"y":-0.1400021925371835},{"x":0.12737378415933343,"y":-0.14011116257526623},{"x":0.12903634566283095,"y":-0.1400021925371835},{"x":0.13067046027805418,"y":-0.1396771469304996},{"x":0.13224816785087512,"y":-0.13914158737566407},{"x":0.13374247336729894,"y":-0.13840467744514662},{"x":0.13512780884564002,"y":-0.13747902587216654},{"x":0.13638047081177795,"y":-0.13638047081177795},{"x":0.13747902587216565,"y":-0.1351278088456409},{"x":0.13840467744514662,"y":-0.13374247336729894},{"x":0.13914158737566495,"y":-0.13224816785087512},{"x":0.13967714693050048,"y":-0.13067046027805418},{"x":0.1400021925371835,"y":-0.12903634566283007},{"x":0.14011116257526623,"y":-0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={0.3821213524779985} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="2" schX={0.2547475683186651} schY={-0.3821213524779985} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="3" schX={-0.25474756831866685} schY={0.3821213524779985} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="4" schX={-0.25474756831866685} schY={-0.3821213524779985} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="47uH" schX={0.2929597035664653} schY={0.012737378415933698} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="47uH" schX={0.2929597035664653} schY={-0.11463640574339973} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="L3" schX={0.2929597035664653} schY={0.14011116257526623} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="47uH" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"],"pin4":["4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["4"]} pcbX="3.08500018mm" pcbY="0.70000114mm" layer="top" solderMaskMargin="0.0499999mm" width="1.72999908mm" height="1.00000054mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["3"]} pcbX="3.08500018mm" pcbY="-0.70000114mm" layer="top" solderMaskMargin="0.0499999mm" width="1.72999908mm" height="1.00000054mm" ccwRotation={180} shape="rotated_rect" />
@@ -2001,6 +2121,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933165,"y":0.06368689207966671},{"x":0.038212135247800205,"y":0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933165,"y":-0.06368689207966582},{"x":0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.25474756831866685} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.25474756831866685} schY={0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J9" schX={-0.1273737841593352} schY={0.19106067623900014} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="0395443002" schX={-0.1273737841593352} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="0395443002" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="2.15000078mm" holeDiameter="1.64999924mm" shape="circle" />
@@ -2039,6 +2163,13 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0,"y":0.050949513663733015},{"x":0.012737378415934586,"y":0.050949513663733015}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.05094951366373479,"y":0.050949513663733015},{"x":0.038212135247800205,"y":0.050949513663733015}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.19106067623899747,"y":-0.07642427049560041},{"x":0.19106067623900103,"y":-0.07642427049560041}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.19106067623900103} schY={0.050949513663733015} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={-0.19106067623899747} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="3" schX={-0.06368689207966582} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="4" schX={0.0636868920796676} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="5" schX={0.19106067623900103} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="J8" schX={-0.20379805465493206} schY={0.17832329782306644} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="112404" schX={-0.20379805465493206} schY={-0.4840203798054663} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: -0.06368689207966582, y: 0.050949513663733015 }} radius={0.025474756831866605} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="112404" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"],"pin4":["4","pin4"],"pin5":["5","pin5"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="0mm" pcbY="0mm" outerDiameter="2.50000008mm" holeDiameter="1.29999994mm" shape="circle" />
@@ -2069,6 +2200,11 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933165},{"x":0.038212135247800205,"y":0.12737378415933165}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.2547475683186651} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.2547475683186651} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={0.2547475683186651} schY={0.12737378415933165} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J7" schX={-0.12737378415933343} schY={0.2547475683186651} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
+      <schematictext text="TSW-103-07-G-S" schX={-0.12737378415933343} schY={-0.3821213524780003} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.12737378415933165 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="TSW-103-07-G-S" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
@@ -2087,6 +2223,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.06368689207966671} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966671},{"x":0.038212135247800205,"y":0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.25474756831866685} schY={-0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.25474756831866685} schY={0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J6" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="282834-2" schX={-0.12737378415933343} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="282834-2" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.59999934mm" holeDiameter="1.10000034mm" shape="circle" />
@@ -2123,6 +2263,13 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0,"y":0.050949513663733015},{"x":0.012737378415934586,"y":0.050949513663733015}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.05094951366373479,"y":0.050949513663733015},{"x":0.038212135247800205,"y":0.050949513663733015}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.19106067623899747,"y":-0.07642427049559863},{"x":0.19106067623900103,"y":-0.07642427049559863}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.19106067623900103} schY={0.050949513663733015} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={-0.19106067623899747} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="3" schX={-0.06368689207966582} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="4" schX={0.0636868920796676} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="5" schX={0.19106067623900103} schY={-0.20379805465493206} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="J3" schX={-0.20379805465493206} schY={0.17832329782306644} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="112404" schX={-0.20379805465493206} schY={-0.48402037980546453} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: -0.06368689207966582, y: 0.050949513663733015 }} radius={0.025474756831866605} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="112404" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"],"pin4":["4","pin4"],"pin5":["5","pin5"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="0mm" pcbY="0mm" outerDiameter="2.50000008mm" holeDiameter="1.29999994mm" shape="circle" />
@@ -2150,6 +2297,10 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicrect schX={0} schY={-0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0.12737378415933165,"y":0.06368689207966671},{"x":0.03821213524779665,"y":0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.12737378415933165,"y":-0.06368689207966582},{"x":0.03821213524779665,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.25474756831866685} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.25474756831866685} schY={0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J1" schX={-0.1273737841593352} schY={0.19106067623900014} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="0395443002" schX={-0.1273737841593352} schY={-0.3184344603983318} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="0395443002" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="2.15000078mm" holeDiameter="1.64999924mm" shape="circle" />
@@ -2288,6 +2439,9 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0,"y":0.06368689207966671},{"x":0,"y":0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.10189902732746603,"y":-0.025474756831866507},{"x":0.10189902732746603,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="630V" schX={0.11463640574340062} schY={-0.17832329782306644} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="0.1uF" schX={0.11463640574340062} schY={-0.305697081982399} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="COUT4" schX={0.11463640574340062} schY={-0.050949513663733015} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-2.159mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.524mm" height="3.556mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="2.159mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.524mm" height="3.556mm" ccwRotation={270} shape="rotated_rect" />
@@ -2311,6 +2465,9 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0,"y":0.06368689207966671},{"x":0,"y":0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.10189902732746603,"y":-0.025474756831866507},{"x":0.10189902732746603,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="630V" schX={0.11463640574340062} schY={-0.17832329782306644} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="0.1uF" schX={0.11463640574340062} schY={-0.305697081982399} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="COUT3" schX={0.11463640574340062} schY={-0.050949513663733015} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-2.159mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.524mm" height="3.556mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="2.159mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.524mm" height="3.556mm" ccwRotation={270} shape="rotated_rect" />
@@ -2347,6 +2504,9 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0,"y":0.06368689207966671},{"x":0,"y":0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.10189902732746603,"y":-0.025474756831866507},{"x":0.10189902732746958,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="630V" schX={0.11463640574340062} schY={-0.17832329782306555} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="0.1uF" schX={0.11463640574340062} schY={-0.305697081982399} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="CIN4" schX={0.11463640574340062} schY={-0.050949513663733015} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="2.00000108mm" pcbY="-0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.59999934mm" height="3.40000082mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="-1.99999854mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.59999934mm" height="3.40000082mm" shape="rect" />
@@ -2365,6 +2525,9 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
       <schematicpath points={[{"x":0,"y":0.06368689207966671},{"x":0,"y":0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0,"y":-0.06368689207966582},{"x":0,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.10189902732746603,"y":-0.025474756831866507},{"x":0.10189902732746958,"y":-0.025474756831866507}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="630V" schX={0.11463640574340062} schY={-0.17832329782306555} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="0.1uF" schX={0.11463640574340062} schY={-0.305697081982399} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
+      <schematictext text="CIN3" schX={0.11463640574340062} schY={-0.050949513663733015} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="2.159mm" pcbY="-0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.524mm" height="3.556mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="-2.159mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.524mm" height="3.556mm" ccwRotation={90} shape="rotated_rect" />
@@ -2569,155 +2732,6 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <schematicpath points={[{"x":7.132931912922649,"y":-10.062528948587309},{"x":9.043538675312645,"y":-10.062528948587309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
     <schematicpath points={[{"x":7.132931912922649,"y":-9.935155164427977},{"x":9.043538675312645,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
     <schematicpath points={[{"x":7.132931912922649,"y":-9.807781380268644},{"x":9.043538675312645,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematictext text="630V" schX={6.355951829550717} schY={-5.209587772116721} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="0.1uF" schX={6.355951829550717} schY={-5.336961556276054} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="CIN3" schX={6.355951829550717} schY={-5.082213987957388} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="630V" schX={6.9928207503473825} schY={-5.209587772116721} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="0.1uF" schX={6.9928207503473825} schY={-5.336961556276054} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="CIN4" schX={6.9928207503473825} schY={-5.082213987957388} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-9.935155164427975} schY={3.0569708198239915} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-10.317276516905974} schY={2.8022232515053265} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="3" schX={-10.189902732746642} schY={2.8022232515053265} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="4" schX={-10.062528948587309} schY={2.8022232515053265} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="5" schX={-9.935155164427975} schY={2.8022232515053265} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="J3" schX={-10.330013895321908} schY={3.184344603983325} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="112404" schX={-10.330013895321908} schY={2.522000926354794} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="1" schX={-9.935155164427975} schY={-0.6368689207966653} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-10.317276516905974} schY={-0.8916164891153304} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="3" schX={-10.189902732746642} schY={-0.8916164891153304} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="4" schX={-10.062528948587309} schY={-0.8916164891153304} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="5" schX={-9.935155164427975} schY={-0.8916164891153304} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="J8" schX={-10.330013895321908} schY={-0.5094951366373319} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="112404" schX={-10.330013895321908} schY={-1.1718388142658647} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SN74LVC3G14DCUTG4" schX={-7.8971746178786475} schY={3.184344603983325} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-    <schematictext text="U3" schX={-8.546780917091246} schY={3.2607688744789254} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="7" schX={-8.037285780453914} schY={3.0569708198239915} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="1" schX={-8.648679944418712} schY={3.0569708198239915} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="SN74LVC3G14DCUTG4" schX={-6.75081056044465} schY={3.184344603983325} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-    <schematictext text="U3" schX={-7.400416859657248} schY={3.2607688744789254} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="5" schX={-6.8909217230199165} schY={3.0569708198239915} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="3" schX={-7.502315886984715} schY={3.0569708198239915} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="SN74LVC3G14DCUTG4" schX={-4.585456229735989} schY={3.184344603983325} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-    <schematictext text="U3" schX={-5.235062528948587} schY={3.2607688744789254} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="2" schX={-4.725567392311254} schY={3.0569708198239915} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="6" schX={-5.336961556276053} schY={3.0569708198239915} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="SN74LVC3G14DCUTG4" schX={-6.75081056044465} schY={-1.910606762389996} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-    <schematictext text="U5" schX={-7.400416859657248} schY={-0.4330708661417333} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="5" schX={-6.8909217230199165} schY={-0.6368689207966653} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="3" schX={-7.502315886984715} schY={-0.6368689207966653} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="SN74LVC3G14DCUTG4" schX={-4.585456229735989} schY={-1.910606762389996} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-    <schematictext text="U5" schX={-5.235062528948587} schY={-0.4330708661417333} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="2" schX={-4.725567392311254} schY={-0.6368689207966653} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="6" schX={-5.336961556276053} schY={-0.6368689207966653} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="SN74LVC3G14DCUTG4" schX={-7.8971746178786475} schY={-1.910606762389996} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-    <schematictext text="U5" schX={-8.546780917091246} schY={-0.4330708661417333} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="7" schX={-8.037285780453914} schY={-0.6368689207966653} anchor="bottom_left" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="1" schX={-8.648679944418712} schY={-0.6368689207966653} anchor="bottom_right" fontSize={0.12737378415933304} color="#000000" schRotation={0} />
-    <schematictext text="1" schX={-12.100509495136636} schY={-3.5664659564613252} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-12.100509495136636} schY={-3.439092172301992} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J6" schX={-12.482630847614637} schY={-3.3117183881426593} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="282834-2" schX={-12.482630847614637} schY={-3.821213524779991} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="630V" schX={4.827466419638723} schY={-6.865446966188051} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="0.1uF" schX={4.827466419638723} schY={-6.992820750347383} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="COUT3" schX={4.827466419638723} schY={-6.738073182028717} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="630V" schX={5.59170912459472} schY={-6.865446966188051} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="0.1uF" schX={5.59170912459472} schY={-6.992820750347383} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="COUT4" schX={5.59170912459472} schY={-6.738073182028717} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-4.203334877257991} schY={1.6558591940713292} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-4.203334877257991} schY={1.7832329782306626} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={-4.203334877257991} schY={1.9106067623899943} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J7" schX={-4.585456229735989} schY={2.0379805465493277} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-103-07-G-S" schX={-4.585456229735989} schY={1.4011116257526623} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SH-J1" schX={-4.967577582213988} schY={2.0379805465493277} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SNT-100-BK-G" schX={-5.4770727188513195} schY={1.5284854099119958} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-10.189902732746642} schY={-3.1843446039833267} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="2" schX={-10.189902732746642} schY={-3.9485873089393237} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="3" schX={-10.699397869383974} schY={-3.1843446039833267} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="4" schX={-10.699397869383974} schY={-3.9485873089393237} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="47uH" schX={-10.151690597498842} schY={-3.5537285780453916} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="47uH" schX={-10.151690597498842} schY={-3.681102362204725} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="L3" schX={-10.151690597498842} schY={-3.426354793886059} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="5" schX={7.132931912922652} schY={2.420101899027326} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="4" schX={7.132931912922652} schY={2.2927281148679945} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="1" schX={7.132931912922652} schY={1.9106067623899943} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={7.132931912922652} schY={2.0379805465493277} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={7.132931912922652} schY={2.165354330708661} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="6" schX={7.132931912922652} schY={2.5474756831866596} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J2" schX={6.75081056044465} schY={2.674849467345993} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-106-07-G-S" schX={6.75081056044465} schY={1.6558591940713292} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="5" schX={7.132931912922652} schY={0.2547475683186651} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="4" schX={7.132931912922652} schY={0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="1" schX={7.132931912922652} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={7.132931912922652} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={7.132931912922652} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="6" schX={7.132931912922652} schY={0.3821213524779985} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J4" schX={6.75081056044465} schY={0.5094951366373319} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-106-07-G-S" schX={6.75081056044465} schY={-0.5094951366373319} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SH-J2" schX={-1.910606762389996} schY={1.5284854099119958} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SNT-100-BK-G" schX={-2.420101899027328} schY={1.0189902732746638} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="SH-J3" schX={-1.910606762389996} schY={0.764242704955997} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SNT-100-BK-G" schX={-2.420101899027328} schY={0.2547475683186651} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-0.7642427049559988} schY={-2.5474756831866614} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-0.7642427049559988} schY={-2.420101899027328} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J12" schX={-1.1463640574339973} schY={-2.2927281148679945} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="282834-2" schX={-1.1463640574339973} schY={-2.8022232515053265} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="1" schX={-4.203334877257991} schY={0.3821213524779985} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-4.203334877257991} schY={0.5094951366373319} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={-4.203334877257991} schY={0.6368689207966653} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J14" schX={-4.585456229735989} schY={0.764242704955997} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-103-07-G-S" schX={-4.585456229735989} schY={0.12737378415933343} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SH-J5" schX={-4.967577582213988} schY={0.6368689207966653} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SNT-100-BK-G" schX={-5.4770727188513195} schY={0.12737378415933343} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-1.1463640574339973} schY={1.273737841593329} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-1.1463640574339973} schY={1.4011116257526623} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J10" schX={-1.5284854099119958} schY={1.5284854099119958} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-102-07-G-S" schX={-1.5284854099119958} schY={1.0189902732746638} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="1" schX={-1.1463640574339973} schY={0.5094951366373319} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-1.1463640574339973} schY={0.6368689207966653} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J11" schX={-1.5284854099119958} schY={0.764242704955997} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-102-07-G-S" schX={-1.5284854099119958} schY={0.2547475683186651} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="3" schX={4.967577582213989} schY={-5.222325150532654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="1" schX={4.840203798054654} schY={-5.222325150532654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="2" schX={4.840203798054654} schY={-4.840203798054656} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="4" schX={4.967577582213989} schY={-4.840203798054656} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="900V" schX={5.00578971746179} schY={-5.209587772116721} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="20µF" schX={5.00578971746179} schY={-5.336961556276054} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="C22" schX={5.00578971746179} schY={-5.082213987957388} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={4.203334877257992} schY={-5.094951366373321} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={4.203334877257992} schY={-4.9675775822139885} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J1" schX={3.8212135247799903} schY={-4.840203798054655} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="0395443002" schX={3.8212135247799903} schY={-5.349698934691987} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="1" schX={3.31171838814266} schY={-6.75081056044465} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={3.31171838814266} schY={-6.623436776285318} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J9" schX={2.929597035664658} schY={-6.496062992125984} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="0395443002" schX={2.929597035664658} schY={-7.005558128763317} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SH-J4" schX={-7.6424270495599815} schY={-3.184344603983326} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="SNT-100-BK-G" schX={-8.151922186197314} schY={-3.693839740620658} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-6.878184344603984} schY={-3.439092172301992} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-6.878184344603984} schY={-3.3117183881426593} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J13" schX={-7.260305697081982} schY={-3.184344603983326} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-102-07-G-S" schX={-7.260305697081982} schY={-3.693839740620658} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="1" schX={-9.29828624363131} schY={-1.7832329782306626} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-9.29828624363131} schY={-1.910606762389996} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={-9.29828624363131} schY={-2.0379805465493295} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J15" schX={-9.183649837887911} schY={-1.6558591940713292} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-    <schematictext text="TSW-103-07-G-S" schX={-9.183649837887911} schY={-2.2927281148679945} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="7" schX={-0.5094951366373319} schY={0.6368689207966653} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="1" schX={0.2547475683186651} schY={0.5094951366373319} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={0.2547475683186651} schY={0.764242704955997} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="U2" schX={-0.3821213524779985} schY={0.3056970819823981} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="3" schX={-0.5094951366373319} schY={1.4011116257526623} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="5" schX={0.2547475683186651} schY={1.273737841593329} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="6" schX={0.2547475683186651} schY={1.5284854099119958} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="U2" schX={-0.3821213524779985} schY={1.0699397869383969} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="7" schX={-1.910606762389996} schY={2.92959703566466} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="1" schX={-2.674849467345993} schY={3.0569708198239915} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-2.674849467345993} schY={2.8022232515053265} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="U1" schX={-2.560213061602594} schY={2.5984251968503926} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-    <schematictext text="3" schX={-1.910606762389996} schY={-0.7642427049559988} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="5" schX={-2.674849467345993} schY={-0.6368689207966653} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="6" schX={-2.674849467345993} schY={-0.8916164891153322} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="U1" schX={-2.560213061602594} schY={-1.0954145437702643} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
     <schematictext text="HS_FET_PWM" schX={0.5944109927435548} schY={2.9932839277443257} anchor="center" fontSize={0.12737378415933304} color="rgb(132, 0, 0)" schRotation={0} />
     <schematictext text="LS_FET_PWM" schX={0.5944109927435548} schY={-0.700555812876333} anchor="center" fontSize={0.12737378415933304} color="rgb(132, 0, 0)" schRotation={0} />
     <schematictext text="HS_FET_PWM" schX={7.854716689825535} schY={2.6111625752663254} anchor="center" fontSize={0.12737378415933304} color="rgb(132, 0, 0)" schRotation={0} />
