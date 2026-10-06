@@ -1,6 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import {
-  pruneUnanchoredSchematicTraceEdges,
+  pruneSchematicTraceEdgesAfterPortRemoval,
   type SchematicTraceEdge,
 } from "./prune-unanchored-schematic-trace-edges"
 
@@ -177,44 +177,75 @@ function updateSchematicTraces(params: {
 } {
   const removedSchematicTraceIds = new Set<SchematicTraceId>()
   const updatedSchematicTraces = new Map<SchematicTraceId, SchematicTrace>()
+  const schematicTraceGroups = new Map<SourceTraceId, SchematicTrace[]>()
   for (const element of params.circuitJson) {
     if (!isSchematicTrace(element)) continue
-    if (
-      element.source_trace_id !== undefined &&
-      params.removedSourceTraceIds.has(element.source_trace_id)
-    ) {
+    if (element.source_trace_id === undefined) {
+      updateSchematicTraceGroup({
+        circuitJson: params.circuitJson,
+        removedSchematicPortIds: params.removedSchematicPortIds,
+        removedSchematicTraceIds,
+        traces: [element],
+        updatedSchematicTraces,
+      })
+      continue
+    }
+    if (params.removedSourceTraceIds.has(element.source_trace_id)) {
       removedSchematicTraceIds.add(element.schematic_trace_id)
       continue
     }
-    const removedPortEdges = element.edges.filter(
-      (edge) =>
-        params.removedSchematicPortIds.has(edge.from_schematic_port_id ?? "") ||
-        params.removedSchematicPortIds.has(edge.to_schematic_port_id ?? ""),
-    )
-    const edgesWithoutRemovedPorts = element.edges.filter(
-      (edge) =>
-        !params.removedSchematicPortIds.has(edge.from_schematic_port_id ?? "") &&
-        !params.removedSchematicPortIds.has(edge.to_schematic_port_id ?? ""),
-    )
-    const edges =
-      removedPortEdges.length > 0
-        ? pruneUnanchoredSchematicTraceEdges({
-            anchorPoints: params.circuitJson.flatMap((candidate) =>
-              isSchematicNetLabel(candidate) &&
-              candidate.schematic_trace_id === element.schematic_trace_id
-                ? [candidate.anchor_position ?? candidate.center]
-                : [],
-            ),
-            edges: edgesWithoutRemovedPorts,
-          })
-        : edgesWithoutRemovedPorts
-    if (edges.length === 0) {
-      removedSchematicTraceIds.add(element.schematic_trace_id)
-      continue
-    }
-    updatedSchematicTraces.set(element.schematic_trace_id, { ...element, edges })
+    const traces = schematicTraceGroups.get(element.source_trace_id) ?? []
+    traces.push(element)
+    schematicTraceGroups.set(element.source_trace_id, traces)
+  }
+  for (const traces of schematicTraceGroups.values()) {
+    updateSchematicTraceGroup({
+      circuitJson: params.circuitJson,
+      removedSchematicPortIds: params.removedSchematicPortIds,
+      removedSchematicTraceIds,
+      traces,
+      updatedSchematicTraces,
+    })
   }
   return { removedSchematicTraceIds, updatedSchematicTraces }
+}
+
+function updateSchematicTraceGroup(params: {
+  circuitJson: AnyCircuitElement[]
+  removedSchematicPortIds: ReadonlySet<SchematicPortId>
+  removedSchematicTraceIds: Set<SchematicTraceId>
+  traces: SchematicTrace[]
+  updatedSchematicTraces: Map<SchematicTraceId, SchematicTrace>
+}): void {
+  const schematicTraceIds = new Set(
+    params.traces.map(({ schematic_trace_id }) => schematic_trace_id),
+  )
+  const edges = params.traces.flatMap(({ edges }) => edges)
+  const activeEdges = new Set(
+    pruneSchematicTraceEdgesAfterPortRemoval({
+      anchorPoints: params.circuitJson.flatMap((candidate) =>
+        isSchematicNetLabel(candidate) &&
+        candidate.schematic_trace_id !== undefined &&
+        schematicTraceIds.has(candidate.schematic_trace_id)
+          ? [candidate.anchor_position ?? candidate.center]
+          : [],
+      ),
+      edges,
+      removedSchematicPortIds: params.removedSchematicPortIds,
+    }),
+  )
+
+  for (const trace of params.traces) {
+    const traceEdges = trace.edges.filter((edge) => activeEdges.has(edge))
+    if (traceEdges.length === 0) {
+      params.removedSchematicTraceIds.add(trace.schematic_trace_id)
+      continue
+    }
+    params.updatedSchematicTraces.set(trace.schematic_trace_id, {
+      ...trace,
+      edges: traceEdges,
+    })
+  }
 }
 
 function isSourceComponent(element: AnyCircuitElement): element is SourceComponent {
