@@ -1,6 +1,5 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { findRemovedInlineNetLabelIds } from "./find-removed-inline-net-label-ids"
-import { findRemovedNoErcLineIds } from "./find-removed-no-erc-line-ids"
 import {
   pruneSchematicTraceEdgesAfterPortRemoval,
   type SchematicTraceEdge,
@@ -106,11 +105,6 @@ export function filterReferenceSchematic(params: {
     circuitJson: params.circuitJson,
     removedSourceTraceIds,
   })
-  const removedNoErcLineIds = findRemovedNoErcLineIds({
-    circuitJson: params.circuitJson,
-    removedSchematicPortIds,
-  })
-
   return params.circuitJson.flatMap((element) => {
     if (
       (isSourceComponent(element) && removedSourceComponentIds.has(element.source_component_id)) ||
@@ -140,13 +134,6 @@ export function filterReferenceSchematic(params: {
       element.type === "schematic_text" &&
       typeof element.schematic_text_id === "string" &&
       removedSchematicTextIds.has(element.schematic_text_id)
-    ) {
-      return []
-    }
-    if (
-      element.type === "schematic_line" &&
-      typeof element.schematic_line_id === "string" &&
-      removedNoErcLineIds.has(element.schematic_line_id)
     ) {
       return []
     }
