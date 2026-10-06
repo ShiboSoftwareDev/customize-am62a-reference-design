@@ -250,6 +250,9 @@ button:disabled {
 .schematic-dot {
   background: #3d7cea;
 }
+.three-dimensional-dot {
+  background: #66d49a;
+}
 .hover-hint {
   display: flex;
   align-items: center;
@@ -293,6 +296,14 @@ button:disabled {
 }
 .viewer-canvas > div {
   width: 100%;
+}
+.three-dimensional-view {
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+.three-dimensional-view > div {
+  height: 100%;
 }
 .viewer-empty {
   display: grid;
