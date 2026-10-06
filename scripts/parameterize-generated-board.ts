@@ -166,12 +166,19 @@ function addSupportedCopperPours(params: {
       return netName ? [netName] : []
     }),
   )
+  const availableNetNames = new Set(
+    [...emittedNetNames].map((netName) => params.renamedNets.get(netName) ?? netName),
+  )
   const copperPourElements = params.copperPours.flatMap((copperPour) => {
-    if (!emittedNetNames.has(copperPour.sourceNetName)) return []
-    const netName = params.renamedNets.get(copperPour.sourceNetName) ?? copperPour.sourceNetName
+    const netName = params.renamedNets.get(copperPour.netName) ?? copperPour.netName
     const netSelector = `net[name=${JSON.stringify(netName)}]`
+    const netElement = availableNetNames.has(netName)
+      ? []
+      : [`<net name={${JSON.stringify(netName)}} />`]
+    availableNetNames.add(netName)
     return [
-      `{renderImportedCopperPours && (<copperpour layer={${JSON.stringify(copperPour.layer)}} connectsTo={${JSON.stringify(netSelector)}} outline={${JSON.stringify(copperPour.outline)}} padMargin={0} traceMargin={0} clearance={0} boardEdgeMargin={0} cutoutMargin={0} useThermalReliefs={false} coveredWithSolderMask={${copperPour.coveredWithSolderMask}} />)}`,
+      ...netElement,
+      `<copperpour layer={${JSON.stringify(copperPour.layer)}} connectsTo={${JSON.stringify(netSelector)}} outline={${JSON.stringify(copperPour.outline)}} coveredWithSolderMask={${copperPour.coveredWithSolderMask}} />`,
     ]
   })
   if (copperPourElements.length === 0) return

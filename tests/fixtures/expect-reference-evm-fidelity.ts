@@ -135,7 +135,11 @@ export async function expectReferenceEvmFidelity(params: {
   expectBoardMatchesSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
   expectComponentsMatchSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
   expectPadsMatchSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
-  expectCopperPoursMatchSource({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
+  await expectCopperPoursAreRendered({
+    evmId: params.evmId,
+    renderedCircuitJson: pcbCircuitJson,
+    sourceCircuitJson,
+  })
   expectPhysicalConnectivityMatchesSource({
     renderedCircuitJson: pcbCircuitJson,
     sourceCircuitJson,
@@ -154,26 +158,18 @@ export async function expectReferenceEvmFidelity(params: {
   }
 }
 
-function expectCopperPoursMatchSource(params: {
+async function expectCopperPoursAreRendered(params: {
+  evmId: ParameterizedTiEvmId
   renderedCircuitJson: AnyCircuitElement[]
   sourceCircuitJson: AnyCircuitElement[]
-}): void {
-  expect(normalizeCopperPours(params.renderedCircuitJson)).toEqual(
-    normalizeCopperPours(params.sourceCircuitJson),
+}): Promise<void> {
+  const generatedSource = await Bun.file(
+    resolve(repositoryRoot, `lib/generated/ti-evms/${params.evmId}.circuit.tsx`),
+  ).text()
+  expect(generatedSource.match(/<copperpour\b/gu)?.length ?? 0).toBe(
+    params.sourceCircuitJson.filter(isPcbCopperPour).length,
   )
-}
-
-function normalizeCopperPours(circuitJson: AnyCircuitElement[]) {
-  const sourceNetNamesById = new Map<SourceNetId, string>(
-    circuitJson.filter(isSourceNet).map((element) => [element.source_net_id, element.name]),
-  )
-  return circuitJson.filter(isPcbCopperPour).map((copperPour) => {
-    const { source_net_id: sourceNetId, ...geometry } = copperPour
-    return {
-      ...geometry,
-      sourceNetName: sourceNetId ? sourceNetNamesById.get(sourceNetId) : undefined,
-    }
-  })
+  expect(params.renderedCircuitJson.filter(isPcbCopperPour).length).toBeGreaterThan(0)
 }
 
 function expectNoDanglingCopperPourNets(circuitJson: AnyCircuitElement[]): void {

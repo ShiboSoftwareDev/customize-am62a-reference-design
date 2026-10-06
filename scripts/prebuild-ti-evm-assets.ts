@@ -1,10 +1,9 @@
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { basename, resolve } from "node:path"
 import type { AnyCircuitElement } from "circuit-json"
-import { gunzipSync, gzipSync, strFromU8, strToU8 } from "fflate"
+import { gzipSync, strToU8 } from "fflate"
 import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
 import { tiEvms } from "../lib/ti-evm-catalog"
-import { materializeImportedCopperPours } from "./ti-evm-reference-generator/materialize-imported-copper-pours"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -17,25 +16,16 @@ type ManifestArtifact = {
   sourceTraceCount: number
   schematicOutputs?: string[]
 }
-type SourceNet = AnyCircuitElement & {
-  type: "source_net"
-  name: string
-}
-type SourceNetName = string
-
 export async function prebuildTiEvmAssets(): Promise<void> {
   await rm(outputDirectory, { recursive: true, force: true })
   await mkdir(outputDirectory, { recursive: true })
   const boards: Array<{ id: string; artifacts: ManifestArtifact[] }> = []
   for (const evm of tiEvms) {
-    const sourceCircuitJson = await loadGeneratedSourceCircuitJson(evm.id)
     const evmArtifacts: ManifestArtifact[] = []
-    let sourceNetNamesToImport: ReadonlySet<SourceNetName> | undefined
     for (const variant of evm.variants) {
       const result = await evaluateParameterizedTiEvm({
         evmId: evm.id,
         options: variant.evmOptions,
-        renderImportedCopperPours: false,
       })
       const failedComponents = result.circuitJson.filter(
         ({ type }) => type === "source_failed_to_create_component_error",
@@ -55,20 +45,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
           `${evm.name} ${variant.label} produced ${routingErrors.length} routing errors`,
         )
       }
-      if (variant.id === "full-board") {
-        sourceNetNamesToImport = getMissingSourceNetNames({
-          renderedCircuitJson: result.circuitJson,
-          sourceCircuitJson,
-        })
-      }
-      if (!sourceNetNamesToImport) {
-        throw new Error(`${evm.name} must declare its full-board variant first`)
-      }
-      const circuitJson = materializeImportedCopperPours({
-        renderedCircuitJson: result.circuitJson,
-        sourceCircuitJson,
-        sourceNetNamesToImport,
-      })
+      const circuitJson = result.circuitJson
       const pcbTraceCount = circuitJson.filter(({ type }) => type === "pcb_trace").length
       if (pcbTraceCount === 0) {
         throw new Error(`${evm.name} ${variant.label} produced no routed PCB traces`)
@@ -108,34 +85,6 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   console.log(
     `Prebuilt ${boards.reduce((count, board) => count + board.artifacts.length, 0)} variants across ${boards.length} TI EVMs`,
   )
-}
-
-async function loadGeneratedSourceCircuitJson(evmId: string): Promise<AnyCircuitElement[]> {
-  const sourcePath = resolve(
-    import.meta.dir,
-    `../lib/generated/ti-evms/${evmId}.source.circuit.json.gz`,
-  )
-  const compressed = new Uint8Array(await Bun.file(sourcePath).arrayBuffer())
-  return JSON.parse(strFromU8(gunzipSync(compressed))) as AnyCircuitElement[]
-}
-
-function getMissingSourceNetNames(params: {
-  renderedCircuitJson: AnyCircuitElement[]
-  sourceCircuitJson: AnyCircuitElement[]
-}): ReadonlySet<SourceNetName> {
-  const renderedSourceNetNames = new Set(
-    params.renderedCircuitJson.filter(isSourceNet).map((sourceNet) => sourceNet.name),
-  )
-  return new Set(
-    params.sourceCircuitJson
-      .filter(isSourceNet)
-      .map((sourceNet) => sourceNet.name)
-      .filter((sourceNetName) => !renderedSourceNetNames.has(sourceNetName)),
-  )
-}
-
-function isSourceNet(element: AnyCircuitElement): element is SourceNet {
-  return element.type === "source_net"
 }
 
 async function writeCompressedCircuitJson(artifact: {

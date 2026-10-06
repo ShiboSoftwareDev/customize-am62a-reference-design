@@ -24,7 +24,6 @@ export type ${params.componentName}FeatureId = ${featureType || "never"}
 
 export type ${params.componentName}Props = {
   removedFeatureIds?: readonly string[]
-  renderImportedCopperPours?: boolean
 }
 
 const featureIdByComponentName: Partial<Record<string, ${params.componentName}FeatureId>> =
@@ -92,7 +91,6 @@ function ParameterizedTrace(props: {
 
 export function ${params.componentName}(props: ${params.componentName}Props) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
-  const renderImportedCopperPours = props.renderImportedCopperPours ?? true
   return (${params.jsxBody})
 }
 
