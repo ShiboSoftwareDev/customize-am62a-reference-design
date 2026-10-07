@@ -129,7 +129,7 @@
       "id": "drv8307evm",
       "artifacts": [
         {
-          "elementCount": 3998,
+          "elementCount": 3871,
           "output": "prebuilt-ti-evms/drv8307evm/full-board.circuit.json.gz",
           "pcbTraceCount": 197,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -138,7 +138,7 @@
           "schematicOutputs": ["prebuilt-ti-evms/drv8307evm/full-board.schematic.circuit.json.gz"]
         },
         {
-          "elementCount": 3674,
+          "elementCount": 3547,
           "output": "prebuilt-ti-evms/drv8307evm/remove-onboard-speed-control.circuit.json.gz",
           "pcbTraceCount": 175,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -149,7 +149,7 @@
           ]
         },
         {
-          "elementCount": 2806,
+          "elementCount": 2679,
           "output": "prebuilt-ti-evms/drv8307evm/remove-hall-interface.circuit.json.gz",
           "pcbTraceCount": 125,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -160,7 +160,7 @@
           ]
         },
         {
-          "elementCount": 2461,
+          "elementCount": 2334,
           "output": "prebuilt-ti-evms/drv8307evm/minimal-board.circuit.json.gz",
           "pcbTraceCount": 104,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
