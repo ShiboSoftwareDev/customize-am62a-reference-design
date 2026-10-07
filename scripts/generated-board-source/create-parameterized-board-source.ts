@@ -1,11 +1,13 @@
 type ComponentName = string
 type FeatureId = string
+type NetSelector = string
 type PortSelector = string
 
 export function createParameterizedBoardSource(params: {
   componentName: string
   featureEntries: Array<readonly [ComponentName, FeatureId]>
   jsxBody: string
+  pouredNetSelectors: ReadonlySet<NetSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
@@ -13,6 +15,7 @@ export function createParameterizedBoardSource(params: {
   const featureIds = [...new Set(params.featureEntries.map(([, featureId]) => featureId))]
   const featureType = featureIds.map((featureId) => JSON.stringify(featureId)).join(" | ")
   const featureMap = JSON.stringify(Object.fromEntries(params.featureEntries), null, 2)
+  const pouredNetSelectors = JSON.stringify([...params.pouredNetSelectors], null, 2)
   const routablePortSelectors = JSON.stringify([...params.routablePortSelectors], null, 2)
   const teardropPortSelectors = JSON.stringify([...params.teardropPortSelectors], null, 2)
   const viaTeardropPortSelectors = JSON.stringify([...params.viaTeardropPortSelectors], null, 2)
@@ -29,6 +32,7 @@ export type ${params.componentName}Props = {
 const featureIdByComponentName: Partial<Record<string, ${params.componentName}FeatureId>> =
   ${featureMap}
 
+const pouredNetSelectors = new Set<string>(${pouredNetSelectors})
 const routablePortSelectors = new Set<string>(${routablePortSelectors})
 const teardropPortSelectors = new Set<string>(${teardropPortSelectors})
 const viaTeardropPortSelectors = new Set<string>(${viaTeardropPortSelectors})
@@ -57,6 +61,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )

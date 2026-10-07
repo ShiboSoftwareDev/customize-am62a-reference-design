@@ -24,6 +24,42 @@ const featureIdByComponentName: Partial<Record<string, Lm5155EvmFlyFeatureId>> =
   "R26": "configuration-interface"
 }
 
+const pouredNetSelectors = new Set<string>([
+  "net.PGND",
+  "net.AGND",
+  "net.VIN",
+  "net.NetD3_2",
+  "net.NetD1_1",
+  "net.NetQ1_1",
+  "net.__unassigned_pcb_pcb_copper_pour_altium_region_1311",
+  "net.__unassigned_pcb_pcb_copper_pour_altium_region_1312",
+  "net.VOUT",
+  "net.COMP",
+  "net.PGOOD",
+  "net.NetC23_1",
+  "net.NetC24_2",
+  "net.NetC18_1",
+  "net.NetC16_2",
+  "net.NetC1_2",
+  "net.NetD4_2",
+  "net.NetC20_1",
+  "net.NetC21_1",
+  "net.NetC19_1",
+  "net.NetR14_1",
+  "net.NetNT2_2",
+  "net.NetC23_2",
+  "net.ISO_GND",
+  "net.VCC",
+  "net.NetR8_2",
+  "net.NetQ1_4",
+  "net.NetC26_1",
+  "net.SS",
+  "net.FB",
+  "net.VAUX",
+  "net.NetR17_2",
+  "net.NetR10_2",
+  "net.NetD2_2"
+])
 const routablePortSelectors = new Set<string>([
   ".TP9 > .pin1",
   ".J3 > .pin1",
@@ -406,6 +442,12 @@ function ParameterizedTrace(props: {
 
   const netSelector = path.find((selector) => selector.startsWith("net."))
   const portSelectors = path.filter((selector) => selector.startsWith("."))
+  if (
+    portSelectors.length < 2 &&
+    (netSelector === undefined || !pouredNetSelectors.has(netSelector))
+  ) {
+    return null
+  }
   const hasPadTeardrops = portSelectors.some((selector) =>
     teardropPortSelectors.has(selector),
   )
@@ -501,6 +543,16 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicpath points={[{"x":0.3655627605372871,"y":0.45695345067160886},{"x":0.5483441408059306,"y":0.45695345067160886}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.3655627605372871,"y":-0.27417207040296354},{"x":0.5483441408059306,"y":-0.27417207040296354}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.18278138026864355,"y":-0.27417207040296354},{"x":0.17085250148104691,"y":-0.2749539304262054},{"x":0.15912772911681827,"y":-0.27728613265416335},{"x":0.14780767728182553,"y":-0.2811287724601037},{"x":0.13708603520148444,"y":-0.28641610121157157},{"x":0.12714625314438166,"y":-0.29305765124770033},{"x":0.11815840353734686,"y":-0.3009397838059886},{"x":0.11027627097905679,"y":-0.30992763341302343},{"x":0.10363472094292803,"y":-0.3198674154701244},{"x":0.09834739219146371,"y":-0.3305890575504691},{"x":0.09450475238552158,"y":-0.34190910938546004},{"x":0.09217255015756365,"y":-0.35363388174969046},{"x":0.09139069013432177,"y":-0.3655627605372853},{"x":0.09217255015756365,"y":-0.37749163932488017},{"x":0.09450475238552158,"y":-0.3892164116891106},{"x":0.09834739219146371,"y":-0.40053646352410155},{"x":0.10363472094292803,"y":-0.4112581056044462},{"x":0.11027627097905679,"y":-0.4211978876615472},{"x":0.11815840353734686,"y":-0.430185737268582},{"x":0.12714625314438166,"y":-0.4380678698268703},{"x":0.13708603520148444,"y":-0.44470941986299906},{"x":0.14780767728182553,"y":-0.4499967486144669},{"x":0.15912772911681827,"y":-0.4538393884204073},{"x":0.17085250148104691,"y":-0.4561715906483652},{"x":0.18278138026864355,"y":-0.4569534506716071}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="2" schX={-0.7311255210745706} schY={-0.09139069013432177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="7" schX={0.7311255210745742} schY={0.6397348309402524} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="5" schX={-0.7311255210745706} schY={0.09139069013432177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="6" schX={0.7311255210745742} schY={0.45695345067160886} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="1" schX={-0.7311255210745706} schY={-0.8225162112088924} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={-0.7311255210745706} schY={0.8225162112088924} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="9" schX={0.7311255210745742} schY={-0.4569534506716071} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="10" schX={0.7311255210745742} schY={-0.27417207040296354} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="T1" schX={-0.5666222788327921} schY={1.005297591477536} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="750317933" schX={-0.5666222788327921} schY={-1.1880789717461777} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="21uH" pinLabels={{"pin2":["2","pin2"],"pin7":["7","pin7"],"pin5":["5","pin5"],"pin6":["6","pin6"],"pin1":["1","pin1"],"pin3":["3","pin3"],"pin9":["9","pin9"],"pin10":["10","pin10"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["6"]} pcbX="5.00000016mm" pcbY="-8.19999884mm" layer="top" solderMaskMargin="0.0499999mm" cornerRadius="0.0523999968mm" width="1.30999992mm" height="2.08000092mm" shape="rect" />
     <smtpad portHints={["7"]} pcbX="2.50000008mm" pcbY="-8.19999884mm" layer="top" solderMaskMargin="0.0499999mm" cornerRadius="0.0523999968mm" width="1.30999992mm" height="2.08000092mm" shape="rect" />
@@ -533,6 +585,11 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicline x1={0.09139069013432177} y1={-0.18278138026864266} x2={-0.09139069013432177} y2={-0.05483441408059253} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
       <schematicline x1={-0.036556276053728354} y1={0.09139069013432177} x2={0.09139069013432177} y2={0.18278138026864266} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
       <schematicpath points={[{"x":-0.09139069013432177,"y":0.05483441408059342},{"x":0.01827813802686329,"y":0.0731125521074576},{"x":-0.036556276053728354,"y":0.1462251042149143}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={true} strokeWidth={0.05}/>
+      <schematictext text="3" schX={0.09139069013432177} schY={-0.3655627605372862} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="1" schX={-0.27417207040296354} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.09139069013432177} schY={0.3655627605372853} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
+      <schematictext text="Q2" schX={0.14622510421491342} schY={0.018278138026864177} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="FMMT718TA" schX={0.14622510421491342} schY={-0.16450324224177848} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="20 V" pinLabels={{"pin3":["C","3","pin3"],"pin1":["B","1","pin1"],"pin2":["E","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["3"]} pcbX="1.20000014mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" cornerRadius="0.1499997mm" width="0.5999988mm" height="1.00000054mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="-1.20000014mm" pcbY="-0.9499981mm" layer="top" solderMaskMargin="0.0499999mm" cornerRadius="0.1499997mm" width="0.5999988mm" height="1.00000054mm" ccwRotation={90} shape="rotated_rect" />
@@ -582,6 +639,12 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicpath points={[{"x":0.18278138026864355,"y":0},{"x":0.05483441408059342,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.18278138026864355,"y":-0.18278138026864266},{"x":0.05483441408059342,"y":-0.18278138026864266}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.18278138026864355,"y":-0.3655627605372853},{"x":0.05483441408059342,"y":-0.3655627605372853}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="5" schX={0.3655627605372853} schY={-0.3655627605372853} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="4" schX={0.3655627605372853} schY={-0.18278138026864266} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="1" schX={0.3655627605372853} schY={0.3655627605372862} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.3655627605372853} schY={0.18278138026864266} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={0.3655627605372853} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J4" schX={-0.18278138026864355} schY={0.5483441408059289} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.18278138026864266 }} radius={0.05483441408059288} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0.3655627605372862 }} radius={0.05483441408059288} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.05483441408059288} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
@@ -740,6 +803,12 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicpath points={[{"x":0.7311255210745742,"y":0.18278138026864355},{"x":0.7311255210745742,"y":0.3655627605372871}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.7311255210745706,"y":-0.18278138026864177},{"x":-0.5483441408059271,"y":-0.18278138026864177}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.5483441408059271,"y":0.18278138026864355},{"x":-0.7311255210745706,"y":0.18278138026864355}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.9139069013432142} schY={0.18278138026864355} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.9139069013432142} schY={-0.18278138026864177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="4" schX={-0.9139069013432142} schY={0.18278138026864355} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={-0.9139069013432142} schY={-0.18278138026864177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="U2" schX={-0.7494036591014357} schY={0.3838408985641504} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="PS2811-1-M-A" schX={-0.7494036591014357} schY={-0.5666222788327921} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="PS2811-1-M-A" pinLabels={{"pin1":["A","1","pin1"],"pin2":["K","2","pin2"],"pin4":["C","4","pin4"],"pin3":["E","3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["4"]} pcbX="3.1250001mm" pcbY="0.635mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="1.44999964mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["3"]} pcbX="3.1250001mm" pcbY="-0.635mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="1.44999964mm" ccwRotation={270} shape="rotated_rect" />
@@ -931,6 +1000,10 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicrect schX={0} schY={-0.09139069013432177} width={0.10966882816118576} height={0.10966882816118576} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":-0.18278138026864355,"y":0.09139069013432},{"x":-0.054834414080595195,"y":0.09139069013432}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.18278138026864355,"y":-0.09139069013432177},{"x":-0.054834414080595195,"y":-0.09139069013432177}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={-0.3655627605372871} schY={-0.09139069013432177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={-0.3655627605372871} schY={0.09139069013432} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J2" schX={-0.2010595182955086} schY={0.27417207040296354} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="ED350/2" schX={-0.2010595182955086} schY={-0.4569534506716071} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0.09139069013432 }} radius={0.05483441408059288} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ED350/2" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-2.50000008mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.29999994mm" rectPadWidth="1.79999894mm" rectPadHeight="1.79999894mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="90deg" shape="circular_hole_with_rect_pad" />
@@ -959,6 +1032,10 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicrect schX={0} schY={0.09139069013432177} width={0.10966882816118576} height={0.10966882816118576} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematicpath points={[{"x":0.18278138026864177,"y":-0.09139069013432177},{"x":0.05483441408059164,"y":-0.09139069013432177}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.18278138026864177,"y":0.09139069013432177},{"x":0.05483441408059164,"y":0.09139069013432177}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={0.3655627605372853} schY={0.09139069013432177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={0.3655627605372853} schY={-0.09139069013432177} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="J1" schX={-0.18278138026864355} schY={0.2741720704029653} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="ED350/2" schX={-0.18278138026864355} schY={-0.4569534506716071} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: -0.09139069013432177 }} radius={0.05483441408059288} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ED350/2" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-2.50000008mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.29999994mm" rectPadWidth="1.79999894mm" rectPadHeight="1.79999894mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="270deg" shape="circular_hole_with_rect_pad" />
@@ -1018,6 +1095,11 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematicpath points={[{"x":-0.18278138026864355,"y":-0.18278138026864355},{"x":-0.3655627605372871,"y":-0.18278138026864355}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":-0.18278138026864355,"y":-0.18278138026864355},{"x":-0.18278138026864355,"y":0.18278138026864355}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
       <schematicpath points={[{"x":0.18278138026864,"y":0},{"x":0.36556276053728354,"y":0}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="1" schX={-0.5483441408059306} schY={0.18278138026864355} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="3" schX={0.5483441408059271} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="2" schX={-0.5483441408059306} schY={-0.18278138026864355} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
+      <schematictext text="40V" schX={-0.18278138026864355} schY={-0.7311255210745724} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="D1" schX={-0.38384089856415216} schY={0.36556276053728354} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="40V" pinLabels={{"pin1":["A","1","pin1"],"pin3":["K","3","pin3"],"pin2":["A","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.04000046mm" pcbY="1.82999888mm" layer="top" solderMaskMargin="0.0499999mm" width="1.39999974mm" height="1.27mm" shape="rect" />
     <smtpad portHints={["1"]} pcbX="-1.04000046mm" pcbY="1.82999888mm" layer="top" solderMaskMargin="0.0499999mm" width="1.39999974mm" height="1.27mm" shape="rect" />
@@ -1241,18 +1323,21 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-5.841999999999999} pcbY={-4.317999999999998} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C2" />
           </footprint>} />
     <chip name="FID1" pcbX={38.22692379999999} pcbY={-16.636923799999998} pcbRotation="180deg" layer="top" schX={-14.256947660954147} schY={5.300660027790645} symbol={<symbol>
+      <schematictext text="FID1" schX={-0.18278138026864355} schY={-0.3655627605372853} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.1827813802686429} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.07311255210745717} strokeWidth={0.05} color="#c39800" isFilled={true} fillColor="#c39800" isDashed={false} />
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.499999mm" radius="0.50000027mm" shape="circle" />
           </footprint>} />
     <chip name="FID2" pcbX={38.22692379999999} pcbY={16.63707620000001} pcbRotation="180deg" layer="top" schX={-13.343040759610933} schY={5.300660027790645} symbol={<symbol>
+      <schematictext text="FID2" schX={-0.18278138026864355} schY={-0.3655627605372853} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.1827813802686429} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.07311255210745717} strokeWidth={0.05} color="#c39800" isFilled={true} fillColor="#c39800" isDashed={false} />
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.499999mm" radius="0.50000027mm" shape="circle" />
           </footprint>} />
     <chip name="FID3" pcbX={-37.97307112} pcbY={16.63707620000001} pcbRotation="180deg" layer="top" schX={-12.429133858267718} schY={5.300660027790645} symbol={<symbol>
+      <schematictext text="FID3" schX={-0.18278138026864355} schY={-0.3655627605372853} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.1827813802686429} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.07311255210745717} strokeWidth={0.05} color="#c39800" isFilled={true} fillColor="#c39800" isDashed={false} />
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
@@ -1345,6 +1430,8 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
         direction="counterclockwise"
       />
       <schematicpath points={[{"x":-0.3655627605372853,"y":0},{"x":0.3655627605372871,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="H1" schX={-0.42039717461787873} schY={0.054834414080595195} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="SJ61A1" schX={-0.42039717461787873} schY={-0.4752315886984704} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="SJ61A1" obstructsWithinBounds={false} footprint={<footprint>
             <silkscreenpath route={[{"x":-3.967607000000001,"y":0},{"x":-3.9336635721007553,"y":0.5178766339356287},{"x":-3.8324140698652798,"y":1.0268922550820747},{"x":-3.665590900348505,"y":1.5183374650357564},{"x":-3.4360484542329743,"y":1.9838034999999934},{"x":-3.1477142664128763,"y":2.415326107064999},{"x":-2.8055218147832193,"y":2.8055218147832193},{"x":-2.415326107064999,"y":3.1477142664128763},{"x":-1.9838034999999934,"y":3.43604845423296},{"x":-1.5183374650357564,"y":3.665590900348505},{"x":-1.0268922550820747,"y":3.8324140698652798},{"x":-0.5178766339356287,"y":3.9336635721007553},{"x":0,"y":3.967607000000001},{"x":0.5178766339356287,"y":3.9336635721007696},{"x":1.0268922550820747,"y":3.8324140698652798},{"x":1.5183374650357564,"y":3.665590900348505},{"x":1.9838034999999934,"y":3.43604845423296},{"x":2.415326107064999,"y":3.1477142664128763},{"x":2.8055218147832193,"y":2.8055218147832193},{"x":3.1477142664128905,"y":2.415326107064999},{"x":3.4360484542329743,"y":1.9838034999999934},{"x":3.665590900348505,"y":1.5183374650357564},{"x":3.832414069865294,"y":1.0268922550820747},{"x":3.9336635721007553,"y":0.5178766339356287},{"x":3.967607000000001,"y":0},{"x":3.9336635721007696,"y":-0.5178766339356287},{"x":3.832414069865294,"y":-1.0268922550820747},{"x":3.665590900348505,"y":-1.5183374650357564},{"x":3.4360484542329743,"y":-1.9838034999999934},{"x":3.1477142664128763,"y":-2.415326107064999},{"x":2.8055218147832193,"y":-2.8055218147832193},{"x":2.415326107064999,"y":-3.1477142664128763},{"x":1.9838034999999934,"y":-3.4360484542329743},{"x":1.5183374650357564,"y":-3.665590900348505},{"x":1.0268922550820747,"y":-3.832414069865294},{"x":0.5178766339356287,"y":-3.9336635721007553},{"x":0,"y":-3.967607000000001},{"x":-0.5178766339356287,"y":-3.9336635721007553},{"x":-1.0268922550820747,"y":-3.832414069865294},{"x":-1.5183374650357564,"y":-3.665590900348505},{"x":-1.9838034999999934,"y":-3.4360484542329743},{"x":-2.415326107064999,"y":-3.1477142664128763},{"x":-2.805521814783205,"y":-2.8055218147832193},{"x":-3.1477142664128763,"y":-2.415326107064999},{"x":-3.4360484542329743,"y":-1.9838034999999934},{"x":-3.665590900348505,"y":-1.5183374650357564},{"x":-3.8324140698652798,"y":-1.0268922550820747},{"x":-3.9336635721007553,"y":-0.5178766339356287},{"x":-3.967607000000001,"y":0}]} strokeWidth={0.17779999999999999} layer="bottom" />
           </footprint>} />
@@ -1360,6 +1447,8 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
         direction="counterclockwise"
       />
       <schematicpath points={[{"x":-0.3655627605372853,"y":0},{"x":0.3655627605372853,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="H2" schX={-0.42039717461787873} schY={0.054834414080595195} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="SJ61A1" schX={-0.42039717461787873} schY={-0.4752315886984704} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="SJ61A1" obstructsWithinBounds={false} footprint={<footprint>
             <silkscreenpath route={[{"x":-3.967607000000001,"y":0},{"x":-3.9336635721007553,"y":0.5178766339356216},{"x":-3.832414069865294,"y":1.0268922550820818},{"x":-3.665590900348519,"y":1.5183374650357564},{"x":-3.4360484542329743,"y":1.9838035000000005},{"x":-3.1477142664128905,"y":2.415326107064999},{"x":-2.8055218147832193,"y":2.805521814783212},{"x":-2.415326107065013,"y":3.1477142664128905},{"x":-1.9838035000000076,"y":3.4360484542329672},{"x":-1.5183374650357564,"y":3.665590900348505},{"x":-1.026892255082089,"y":3.832414069865294},{"x":-0.5178766339356287,"y":3.9336635721007625},{"x":0,"y":3.967607000000001},{"x":0.5178766339356144,"y":3.9336635721007625},{"x":1.0268922550820747,"y":3.832414069865294},{"x":1.5183374650357422,"y":3.665590900348505},{"x":1.9838034999999934,"y":3.4360484542329672},{"x":2.415326107064999,"y":3.1477142664128905},{"x":2.8055218147832193,"y":2.805521814783212},{"x":3.1477142664128905,"y":2.415326107064999},{"x":3.43604845423296,"y":1.9838035000000005},{"x":3.665590900348505,"y":1.5183374650357635},{"x":3.8324140698652798,"y":1.0268922550820818},{"x":3.9336635721007553,"y":0.5178766339356216},{"x":3.967606999999987,"y":0},{"x":3.9336635721007553,"y":-0.5178766339356216},{"x":3.8324140698652798,"y":-1.0268922550820747},{"x":3.665590900348505,"y":-1.5183374650357564},{"x":3.43604845423296,"y":-1.9838035000000005},{"x":3.1477142664128763,"y":-2.415326107064999},{"x":2.8055218147832193,"y":-2.805521814783212},{"x":2.415326107064999,"y":-3.1477142664128834},{"x":1.9838034999999934,"y":-3.43604845423296},{"x":1.5183374650357422,"y":-3.665590900348505},{"x":1.0268922550820747,"y":-3.832414069865294},{"x":0.5178766339356144,"y":-3.9336635721007625},{"x":0,"y":-3.967607000000001},{"x":-0.5178766339356287,"y":-3.9336635721007625},{"x":-1.026892255082089,"y":-3.832414069865294},{"x":-1.5183374650357564,"y":-3.665590900348505},{"x":-1.9838035000000076,"y":-3.4360484542329672},{"x":-2.415326107065013,"y":-3.1477142664128834},{"x":-2.8055218147832193,"y":-2.805521814783212},{"x":-3.1477142664128905,"y":-2.415326107065006},{"x":-3.4360484542329743,"y":-1.9838035000000005},{"x":-3.665590900348519,"y":-1.5183374650357564},{"x":-3.832414069865294,"y":-1.0268922550820818},{"x":-3.9336635721007553,"y":-0.5178766339356216},{"x":-3.967607000000001,"y":0}]} strokeWidth={0.17779999999999999} layer="bottom" />
           </footprint>} />
@@ -1375,6 +1464,8 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
         direction="counterclockwise"
       />
       <schematicpath points={[{"x":-0.3655627605372853,"y":0},{"x":0.3655627605372853,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="H3" schX={-0.42039717461787873} schY={0.054834414080595195} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="SJ61A1" schX={-0.42039717461787873} schY={-0.4752315886984704} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="SJ61A1" obstructsWithinBounds={false} footprint={<footprint>
             <silkscreenpath route={[{"x":-3.9676069999999974,"y":0},{"x":-3.933663572100759,"y":0.5178766339356287},{"x":-3.8324140698652904,"y":1.0268922550820747},{"x":-3.665590900348505,"y":1.5183374650357564},{"x":-3.4360484542329672,"y":1.9838034999999934},{"x":-3.147714266412887,"y":2.415326107064999},{"x":-2.805521814783212,"y":2.8055218147832193},{"x":-2.4153261070650025,"y":3.1477142664128763},{"x":-1.983803499999997,"y":3.43604845423296},{"x":-1.5183374650357564,"y":3.665590900348505},{"x":-1.0268922550820747,"y":3.8324140698652798},{"x":-0.5178766339356216,"y":3.9336635721007553},{"x":0,"y":3.967607000000001},{"x":0.5178766339356251,"y":3.9336635721007696},{"x":1.0268922550820818,"y":3.8324140698652798},{"x":1.51833746503576,"y":3.665590900348505},{"x":1.9838035000000005,"y":3.43604845423296},{"x":2.415326107065006,"y":3.1477142664128763},{"x":2.8055218147832157,"y":2.8055218147832193},{"x":3.147714266412887,"y":2.415326107064999},{"x":3.4360484542329672,"y":1.9838034999999934},{"x":3.665590900348512,"y":1.5183374650357564},{"x":3.832414069865294,"y":1.0268922550820747},{"x":3.9336635721007625,"y":0.5178766339356287},{"x":3.967607000000001,"y":0},{"x":3.9336635721007625,"y":-0.5178766339356287},{"x":3.832414069865294,"y":-1.0268922550820747},{"x":3.665590900348512,"y":-1.5183374650357564},{"x":3.4360484542329672,"y":-1.9838034999999934},{"x":3.147714266412887,"y":-2.415326107064999},{"x":2.8055218147832157,"y":-2.8055218147832193},{"x":2.415326107065006,"y":-3.1477142664128763},{"x":1.983803500000004,"y":-3.4360484542329743},{"x":1.51833746503576,"y":-3.665590900348505},{"x":1.0268922550820783,"y":-3.832414069865294},{"x":0.5178766339356251,"y":-3.9336635721007553},{"x":0,"y":-3.967607000000001},{"x":-0.5178766339356251,"y":-3.9336635721007553},{"x":-1.0268922550820783,"y":-3.832414069865294},{"x":-1.5183374650357564,"y":-3.665590900348505},{"x":-1.983803499999997,"y":-3.4360484542329743},{"x":-2.4153261070650025,"y":-3.1477142664128763},{"x":-2.805521814783212,"y":-2.8055218147832193},{"x":-3.147714266412887,"y":-2.415326107064999},{"x":-3.43604845423296,"y":-1.9838034999999934},{"x":-3.665590900348505,"y":-1.5183374650357564},{"x":-3.8324140698652904,"y":-1.0268922550820747},{"x":-3.933663572100759,"y":-0.5178766339356287},{"x":-3.9676069999999974,"y":0}]} strokeWidth={0.17779999999999999} layer="bottom" />
           </footprint>} />
@@ -1390,6 +1481,8 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
         direction="counterclockwise"
       />
       <schematicpath points={[{"x":-0.3655627605372871,"y":0},{"x":0.3655627605372853,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematictext text="H4" schX={-0.42039717461787873} schY={0.054834414080595195} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
+      <schematictext text="SJ61A1" schX={-0.42039717461787873} schY={-0.4752315886984704} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     </symbol>} schDisplayValue="SJ61A1" obstructsWithinBounds={false} footprint={<footprint>
             <silkscreenpath route={[{"x":-3.9676069999999974,"y":0},{"x":-3.933663572100759,"y":0.5178766339356216},{"x":-3.8324140698652904,"y":1.0268922550820818},{"x":-3.665590900348505,"y":1.5183374650357564},{"x":-3.4360484542329672,"y":1.9838035000000005},{"x":-3.147714266412887,"y":2.415326107064999},{"x":-2.805521814783212,"y":2.805521814783212},{"x":-2.4153261070650025,"y":3.1477142664128905},{"x":-1.983803499999997,"y":3.4360484542329672},{"x":-1.5183374650357564,"y":3.665590900348505},{"x":-1.0268922550820747,"y":3.832414069865294},{"x":-0.5178766339356216,"y":3.9336635721007625},{"x":0,"y":3.967607000000001},{"x":0.5178766339356251,"y":3.9336635721007625},{"x":1.0268922550820818,"y":3.832414069865294},{"x":1.51833746503576,"y":3.665590900348505},{"x":1.9838035000000005,"y":3.4360484542329672},{"x":2.415326107065006,"y":3.1477142664128905},{"x":2.8055218147832157,"y":2.805521814783212},{"x":3.147714266412887,"y":2.415326107064999},{"x":3.4360484542329672,"y":1.9838035000000005},{"x":3.665590900348512,"y":1.5183374650357635},{"x":3.832414069865294,"y":1.0268922550820818},{"x":3.9336635721007625,"y":0.5178766339356216},{"x":3.967607000000001,"y":0},{"x":3.9336635721007625,"y":-0.5178766339356216},{"x":3.832414069865294,"y":-1.0268922550820747},{"x":3.665590900348512,"y":-1.5183374650357564},{"x":3.4360484542329672,"y":-1.9838035000000005},{"x":3.147714266412887,"y":-2.415326107064999},{"x":2.8055218147832157,"y":-2.805521814783212},{"x":2.415326107065006,"y":-3.1477142664128834},{"x":1.983803500000004,"y":-3.43604845423296},{"x":1.51833746503576,"y":-3.665590900348505},{"x":1.0268922550820783,"y":-3.832414069865294},{"x":0.5178766339356251,"y":-3.9336635721007625},{"x":0,"y":-3.967607000000001},{"x":-0.5178766339356251,"y":-3.9336635721007625},{"x":-1.0268922550820783,"y":-3.832414069865294},{"x":-1.5183374650357564,"y":-3.665590900348505},{"x":-1.983803499999997,"y":-3.4360484542329672},{"x":-2.4153261070650025,"y":-3.1477142664128834},{"x":-2.805521814783212,"y":-2.805521814783212},{"x":-3.147714266412887,"y":-2.415326107065006},{"x":-3.43604845423296,"y":-1.9838035000000005},{"x":-3.665590900348505,"y":-1.5183374650357564},{"x":-3.8324140698652904,"y":-1.0268922550820818},{"x":-3.933663572100759,"y":-0.5178766339356216},{"x":-3.9676069999999974,"y":0}]} strokeWidth={0.17779999999999999} layer="bottom" />
           </footprint>} />
@@ -1655,46 +1748,6 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <schematicpath points={[{"x":-7.128473830477073,"y":0.3655627605372871},{"x":-11.149664196387217,"y":0.3655627605372871}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
     <schematicpath points={[{"x":-7.128473830477073,"y":0},{"x":-11.149664196387217,"y":0}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
     <schematicpath points={[{"x":-7.128473830477073,"y":-0.3655627605372853},{"x":-11.149664196387217,"y":-0.3655627605372853}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematictext text="1" schX={4.935097267253358} schY={6.76291106993979} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={6.031785548865216} schY={6.580129689671146} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={4.935097267253358} schY={6.397348309402503} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="40V" schX={5.300660027790645} schY={5.849004168596574} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="D1" schX={5.099600509495136} schY={6.94569245020843} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={6.580129689671143} schY={-1.2794696618804995} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={6.580129689671143} schY={-1.6450324224177848} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="4" schX={4.752315886984714} schY={-1.2794696618804995} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={4.752315886984714} schY={-1.6450324224177848} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="U2" schX={4.916819129226493} schY={-1.0784101435849927} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="PS2811-1-M-A" schX={4.916819129226493} schY={-2.028873320981935} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={13.343040759610933} schY={5.849004168596574} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={13.343040759610933} schY={6.031785548865216} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J2" schX={13.507544001852711} schY={6.214566929133859} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="ED350/2" schX={13.507544001852711} schY={5.483441408059289} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="1" schX={-13.891384900416861} schY={6.397348309402503} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-13.891384900416861} schY={6.214566929133859} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J1" schX={-14.43972904122279} schY={6.580129689671146} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="ED350/2" schX={-14.43972904122279} schY={5.849004168596574} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="5" schX={-13.16025937934229} schY={-5.300660027790643} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="4" schX={-13.16025937934229} schY={-5.117878647522001} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="1" schX={-13.16025937934229} schY={-4.569534506716072} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-13.16025937934229} schY={-4.752315886984715} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={-13.16025937934229} schY={-4.935097267253358} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="J4" schX={-13.70860352014822} schY={-4.386753126447429} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="3" schX={-3.472846225104215} schY={-2.7417207040296434} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="1" schX={-3.8384089856415002} schY={-2.376157943492357} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="2" schX={-3.472846225104215} schY={-2.010595182955072} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
-    <schematictext text="Q2" schX={-3.4180118110236233} schY={-2.357879805465493} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="FMMT718TA" schX={-3.4180118110236233} schY={-2.5406611857341357} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="2" schX={1.8278138026864283} schY={6.031785548865216} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="7" schX={3.290064844835573} schY={6.76291106993979} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="5" schX={1.8278138026864283} schY={6.214566929133859} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="6" schX={3.290064844835573} schY={6.580129689671146} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="1" schX={1.8278138026864283} schY={5.300660027790645} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="3" schX={1.8278138026864283} schY={6.94569245020843} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="9" schX={3.290064844835573} schY={5.66622278832793} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="10" schX={3.290064844835573} schY={5.849004168596574} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
-    <schematictext text="T1" schX={1.9923170449282068} schY={7.128473830477073} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="750317933" schX={1.9923170449282068} schY={4.93509726725336} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     <schematictext text="1" schX={12.429133858267718} schY={-9.321850393700787} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
     <schematictext text="2" schX={12.886087308939324} schY={-9.321850393700787} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
     <schematictext text="LM5155 Flyback EVM Schematic" schX={9.340128531727654} schY={-9.139069013432145} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
@@ -1735,33 +1788,6 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <schematictext text="N/A" schX={6.580129689671143} schY={-8.86489694302918} anchor="center_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
     <schematictext text="Orderable:" schX={5.721057202408524} schY={-8.773506252894858} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
     <schematictext text="=EVM_orderable" schX={6.580129689671143} schY={-8.682115562760538} anchor="center_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
-    <schematictext text="FID2" schX={-13.525822139879576} schY={4.93509726725336} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="FID1" schX={-14.43972904122279} schY={4.93509726725336} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="FID3" schX={-12.611915238536362} schY={4.93509726725336} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="BMC029" schX={-12.977477999073647} schY={3.865826192681798} anchor="bottom_left" fontSize={0.2193376563223715} color="#1f2937" schRotation={0} />
-    <schematictext text="A" schX={-12.977477999073647} schY={3.5916541222788343} anchor="bottom_left" fontSize={0.2193376563223715} color="#1f2937" schRotation={0} />
-    <schematictext text="PCB Number:" schX={-14.256947660954147} schY={3.865826192681798} anchor="bottom_left" fontSize={0.2193376563223715} color="#1f2937" schRotation={0} />
-    <schematictext text="PCB Rev:" schX={-13.907809818029182} schY={3.5916541222788343} anchor="bottom_left" fontSize={0.2193376563223715} color="#1f2937" schRotation={0} />
-    <schematictext text="Assembly Note" schX={-13.525822139879576} schY={-2.7417207040296425} anchor="center" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="ZZ2" schX={-14.256947660954147} schY={-2.6503300138953216} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="These assemblies are ESD sensitive, ESD precautions shall be observed." schX={-14.256947660954147} schY={-3.015892774432607} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="Assembly Note" schX={-13.525822139879576} schY={-3.472846225104215} anchor="center" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="ZZ3" schX={-14.256947660954147} schY={-3.381455534969893} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="These assemblies must be clean and free from flux and all contaminants. Use of no clean flux is not acceptable." schX={-14.256947660954147} schY={-3.7470182955071794} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="Assembly Note" schX={-13.525822139879576} schY={-4.203971746178786} anchor="center" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="ZZ4" schX={-14.256947660954147} schY={-4.112581056044465} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="These assemblies must comply with workmanship standards IPC-A-610 Class 2, unless otherwise specified." schX={-14.256947660954147} schY={-4.478143816581751} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="H1" schX={-14.679267147348313} schY={6.80308166500695} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="SJ61A1" schX={-14.679267147348313} schY={6.273015662227884} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="H2" schX={-12.668671964393239} schY={6.80308166500695} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="SJ61A1" schX={-12.668671964393239} schY={6.273015662227884} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="H3" schX={-10.84085816170681} schY={6.80308166500695} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="SJ61A1" schX={-10.84085816170681} schY={6.273015662227884} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="H4" schX={-9.01304435902038} schY={6.80308166500695} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="SJ61A1" schX={-9.01304435902038} schY={6.273015662227884} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="Label Assembly Note" schX={-13.343040759610933} schY={-2.010595182955072} anchor="center" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="ZZ1" schX={-14.256947660954147} schY={-1.9192044928207501} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
-    <schematictext text="This Assembly Note is for PCB labels only" schX={-14.256947660954147} schY={-2.2847672533580354} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
     <schematictext text="2" schX={12.429133858267718} schY={-9.321850393700787} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
     <schematictext text="2" schX={12.886087308939324} schY={-9.321850393700787} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />
     <schematictext text="LM5155 Flyback EVM Hardware" schX={9.340128531727654} schY={-9.139069013432145} anchor="bottom_left" fontSize={0.1827813802686429} color="#000080" schRotation={0} />

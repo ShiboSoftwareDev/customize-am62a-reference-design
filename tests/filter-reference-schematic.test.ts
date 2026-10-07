@@ -92,10 +92,10 @@ test("reference schematic filtering removes a feature without dangling reference
       connected_source_port_ids: ["port_u2"],
     }),
   )
-  expect(filteredCircuitJson).toContainEqual(
+  expect(filteredCircuitJson).not.toContainEqual(
     expect.objectContaining({
       type: "schematic_trace",
-      edges: [expect.objectContaining({ to_schematic_port_id: "schematic_port_u2" })],
+      schematic_trace_id: "schematic_trace_1",
     }),
   )
   expect(filteredCircuitJson).toContainEqual(
