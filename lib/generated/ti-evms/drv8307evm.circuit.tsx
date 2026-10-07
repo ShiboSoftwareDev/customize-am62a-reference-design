@@ -1220,7 +1220,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <fabricationnotetext pcbX={0.3048000000000002} pcbY={-0.482600000000005} anchorAlignment="center" text="JP1" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={-1.7780000000000058} pcbY={-1.1554282200000046} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="JP1" />
           </footprint>} />
-    <chip name="D3" pcbX={-1.902287280000003} pcbY={-26.041240780000003} pcbRotation="90deg" layer="top" symbolName="diode_down" schX={2.72334948516051} schY={-3.914294367050273} schDisplayValue="Red" pinLabels={{"pin1":["A","1","pin1"],"pin2":["K","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="D3" pcbX={-1.902287280000003} pcbY={-26.041240780000003} pcbRotation="90deg" layer="top" symbolName="led_down" schX={2.72334948516051} schY={-3.914294367050273} schDisplayValue="Red" pinLabels={{"pin1":["A","1","pin1"],"pin2":["K","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.05000044mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="1.20000014mm" height="1.20000014mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.05000044mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="1.20000014mm" height="1.20000014mm" ccwRotation={90} shape="rotated_rect" />
     <fabricationnotetext pcbX={-1.3999997399999984} pcbY={-0.39999920000000344} anchorAlignment="center" text="D3" font="tscircuit2024" fontSize={0.762} color="#ec4899" />
@@ -1688,7 +1688,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreenline x1={5.333999999999996} y1={3.098799999999997} x2={5.333999999999996} y2={-3.098799999999997} strokeWidth={0.254} />
     <silkscreentext pcbX={0.9492157799999958} pcbY={-3.5611892199999886} anchorAlignment="center" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="D6" />
           </footprint>} />
-    <chip name="D4" pcbX={21.11355442} pcbY={-26.041240780000003} pcbRotation="90deg" layer="top" symbolName="diode_down" schX={7.054058146577832} schY={8.911265899454875} schDisplayValue="Green" pinLabels={{"pin1":["A","1","pin1"],"pin2":["K","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="D4" pcbX={21.11355442} pcbY={-26.041240780000003} pcbRotation="90deg" layer="top" symbolName="led_down" schX={7.054058146577832} schY={8.911265899454875} schDisplayValue="Green" pinLabels={{"pin1":["A","1","pin1"],"pin2":["K","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.05000044mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="1.20000014mm" height="1.20000014mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.05000044mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="1.20000014mm" height="1.20000014mm" ccwRotation={90} shape="rotated_rect" />
     <fabricationnotetext pcbX={-1.3999997399999984} pcbY={-0.39999919999999634} anchorAlignment="center" text="D4" font="tscircuit2024" fontSize={0.762} color="#ec4899" />
