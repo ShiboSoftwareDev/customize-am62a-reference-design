@@ -1,5 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { findRemovedInlineNetLabelIds } from "./find-removed-inline-net-label-ids"
+import { findRemovedSchematicNetLabelIds } from "./find-removed-schematic-net-label-ids"
 import {
   pruneSchematicTraceEdgesAfterPortRemoval,
   type SchematicTraceEdge,
@@ -11,6 +12,7 @@ type SourceComponentId = string
 type SourcePortId = string
 type SourceTraceId = string
 type SchematicComponentId = string
+type SchematicNetLabelId = string
 type SchematicPortId = string
 type SchematicTraceId = string
 type SourceComponent = AnyCircuitElement & {
@@ -43,6 +45,7 @@ type SchematicTrace = AnyCircuitElement & {
 type SchematicNetLabel = AnyCircuitElement & {
   anchor_position?: { x: number; y: number }
   center: { x: number; y: number }
+  schematic_net_label_id: SchematicNetLabelId
   schematic_trace_id?: SchematicTraceId
 }
 type SchematicGroup = AnyCircuitElement & {
@@ -105,6 +108,12 @@ export function filterReferenceSchematic(params: {
     circuitJson: params.circuitJson,
     removedSourceTraceIds,
   })
+  const removedSchematicNetLabelIds = findRemovedSchematicNetLabelIds({
+    activeEdges: activeSchematicTraceEdges,
+    circuitJson: params.circuitJson,
+    removedSchematicPortIds,
+    removedSchematicTraceIds,
+  })
   return params.circuitJson.flatMap((element) => {
     if (
       (isSourceComponent(element) && removedSourceComponentIds.has(element.source_component_id)) ||
@@ -125,8 +134,7 @@ export function filterReferenceSchematic(params: {
     }
     if (
       isSchematicNetLabel(element) &&
-      element.schematic_trace_id !== undefined &&
-      removedSchematicTraceIds.has(element.schematic_trace_id)
+      removedSchematicNetLabelIds.has(element.schematic_net_label_id)
     ) {
       return []
     }
