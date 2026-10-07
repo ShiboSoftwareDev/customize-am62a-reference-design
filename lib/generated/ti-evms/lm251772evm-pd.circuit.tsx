@@ -599,34 +599,34 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="Source" schX={-0.4394395553497006} schY={-0.06368689207966582} direction="left" pinNumber={1} aliases={["1","pin1"]} />
       <port name="Source" schX={-0.4394395553497006} schY={0.0636868920796676} direction="left" pinNumber={2} aliases={["2","pin2"]} />
       <port name="Source" schX={-0.4394395553497006} schY={0.19106067623900103} direction="left" pinNumber={3} aliases={["3","pin3"]} />
-      <schematicline x1={-0.057318202871702084} y1={-0.14011116257526623} x2={0.19742936544696477} y2={-0.14011116257526623} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.14647985178323353} y1={-0.10189902732746603} x2={0.19742936544696477} y2={-0.10189902732746603} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.03184344603983291} y1={-0.10189902732746603} x2={-0.03184344603983291} y2={0.0636868920796676} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.17195460861509915} y1={-0.10189902732746603} x2={0.17195460861509915} y2={0.0636868920796676} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={-0.07642427049559863} x2={0.07005558128763312} y2={0.0636868920796676} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={-0.08916164891153144} x2={0.10826771653543332} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={-0.08916164891153144} x2={0.03184344603983291} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.10826771653543332} y1={-0.02547475683186562} x2={0.03184344603983291} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.08279295970356415} y1={-0.03821213524779843} x2={0.044580824455763945} y2={-0.03821213524779843} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.006368689207967293} y1={-0.10189902732746603} x2={-0.057318202871702084} y2={-0.10189902732746603} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.09553033811949874} y1={-0.10189902732746603} x2={0.044580824455763945} y2={-0.10189902732746603} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.03184344603983291} y1={0.0636868920796676} x2={-0.03184344603983291} y2={0.15284854099120082} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.03184344603983291} y1={0.15284854099120082} x2={0.17195460861509915} y2={0.15284854099120082} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.17195460861509915} y1={0.15284854099120082} x2={0.17195460861509915} y2={0.0636868920796676} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.09553033811949874} y1={0.15284854099120082} x2={0.044580824455763945} y2={0.12737378415933343} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.044580824455763945} y1={0.12737378415933343} x2={0.044580824455763945} y2={0.17832329782306644} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.044580824455763945} y1={0.17832329782306644} x2={0.09553033811949874} y2={0.15284854099120082} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.09553033811949874} y1={0.15284854099120082} x2={0.09553033811949874} y2={0.17832329782306644} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.09553033811949874} y1={0.15284854099120082} x2={0.09553033811949874} y2={0.12737378415933343} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.18469198703103373} y1={-0.06368689207966582} x2={-0.18469198703103373} y2={0.19106067623900103} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.18469198703103373} y1={0.0636868920796676} x2={0.07005558128763312} y2={0.0636868920796676} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.057318202871702084} y1={-0.14011116257526623} x2={-0.057318202871702084} y2={-0.19106067623899925} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.17195460861509915} y1={0.0636868920796676} x2={0.19742936544696477} y2={0.0636868920796676} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.057318202871702084} y1={-0.19106067623899925} x2={-0.057318202871702084} y2={-0.4458082445576643} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19742936544696477} y1={0.0636868920796676} x2={0.4521769337656316} y2={0.0636868920796676} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.18469198703103373} y1={-0.06368689207966582} x2={-0.4394395553497006} y2={-0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.18469198703103373} y1={0.0636868920796676} x2={-0.4394395553497006} y2={0.0636868920796676} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.18469198703103373} y1={0.19106067623900103} x2={-0.4394395553497006} y2={0.19106067623900103} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.057318202871702084} y1={-0.14011116257526623} x2={0.19742936544696477} y2={-0.14011116257526623} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.14647985178323353} y1={-0.10189902732746603} x2={0.19742936544696477} y2={-0.10189902732746603} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.03184344603983291} y1={-0.10189902732746603} x2={-0.03184344603983291} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.17195460861509915} y1={-0.10189902732746603} x2={0.17195460861509915} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={-0.07642427049559863} x2={0.07005558128763312} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={-0.08916164891153144} x2={0.10826771653543332} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={-0.08916164891153144} x2={0.03184344603983291} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.10826771653543332} y1={-0.02547475683186562} x2={0.03184344603983291} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.08279295970356415} y1={-0.03821213524779843} x2={0.044580824455763945} y2={-0.03821213524779843} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.006368689207967293} y1={-0.10189902732746603} x2={-0.057318202871702084} y2={-0.10189902732746603} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.09553033811949874} y1={-0.10189902732746603} x2={0.044580824455763945} y2={-0.10189902732746603} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.03184344603983291} y1={0.0636868920796676} x2={-0.03184344603983291} y2={0.15284854099120082} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.03184344603983291} y1={0.15284854099120082} x2={0.17195460861509915} y2={0.15284854099120082} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.17195460861509915} y1={0.15284854099120082} x2={0.17195460861509915} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.09553033811949874} y1={0.15284854099120082} x2={0.044580824455763945} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.044580824455763945} y1={0.12737378415933343} x2={0.044580824455763945} y2={0.17832329782306644} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.044580824455763945} y1={0.17832329782306644} x2={0.09553033811949874} y2={0.15284854099120082} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.09553033811949874} y1={0.15284854099120082} x2={0.09553033811949874} y2={0.17832329782306644} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.09553033811949874} y1={0.15284854099120082} x2={0.09553033811949874} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.18469198703103373} y1={-0.06368689207966582} x2={-0.18469198703103373} y2={0.19106067623900103} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.18469198703103373} y1={0.0636868920796676} x2={0.07005558128763312} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.057318202871702084} y1={-0.14011116257526623} x2={-0.057318202871702084} y2={-0.19106067623899925} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.17195460861509915} y1={0.0636868920796676} x2={0.19742936544696477} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.057318202871702084} y1={-0.19106067623899925} x2={-0.057318202871702084} y2={-0.4458082445576643} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19742936544696477} y1={0.0636868920796676} x2={0.4521769337656316} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.18469198703103373} y1={-0.06368689207966582} x2={-0.4394395553497006} y2={-0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.18469198703103373} y1={0.0636868920796676} x2={-0.4394395553497006} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.18469198703103373} y1={0.19106067623900103} x2={-0.4394395553497006} y2={0.19106067623900103} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="4" schX={-0.057318202871702084} schY={-0.3184344603983309} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="5-6-7-8" schX={0.32480314960629997} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="1" schX={-0.31206577119036893} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
@@ -634,9 +634,9 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="3" schX={-0.31206577119036893} schY={0.19106067623900103} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="Q5" schX={-0.057318202871702084} schY={0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="ISC0703NLSATMA1" schX={-0.057318202871702084} schY={0.19106067623900103} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: 0.17195460861509915, y: 0.0636868920796676 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: -0.03184344603983291, y: 0.0636868920796676 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: -0.18469198703103373, y: 0.0636868920796676 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.17195460861509915, y: 0.0636868920796676 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: -0.03184344603983291, y: 0.0636868920796676 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: -0.18469198703103373, y: 0.0636868920796676 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ISC0703NLSATMA1" pinLabels={{"pin4":["Gate","4","pin4"],"pin1":["Source","1","pin1"],"pin2":["Source","2","pin2"],"pin3":["Source","3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["5-6-7-8"]} pcbX="0mm" pcbY="1.09750098mm" layer="top" coveredWithSolderMask={true} cornerRadius="0.044099988mm" width="4.4099988mm" height="4.45499998mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["4"]} pcbX="1.905mm" pcbY="-2.86500062mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0499999mm" width="0.499999mm" height="0.92499942mm" ccwRotation={270} shape="rotated_rect" />
@@ -664,28 +664,28 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="6" schX={0.4458082445576679} schY={-2.420101899027328} direction="right" pinNumber={6} aliases={["pin6"]} />
       <port name="8" schX={0.4458082445576679} schY={-2.674849467345994} direction="right" pinNumber={8} aliases={["pin8"]} />
       <port name="10" schX={0.4458082445576679} schY={-2.92959703566466} direction="right" pinNumber={10} aliases={["pin10"]} />
-      <schematicline x1={0.038212135247800205} y1={0.5094951366373319} x2={0.19106067623900103} y2={0.5094951366373319} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={0.2547475683186651} x2={0.19106067623900103} y2={0.2547475683186651} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={0} x2={0.19106067623900103} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-0.25474756831866685} x2={0.19106067623900103} y2={-0.25474756831866685} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-0.5094951366373319} x2={0.19106067623900103} y2={-0.5094951366373319} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={0.5094951366373319} x2={0.4458082445576679} y2={0.5094951366373319} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={0.2547475683186651} x2={0.4458082445576679} y2={0.2547475683186651} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={0} x2={0.4458082445576679} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-0.25474756831866685} x2={0.4458082445576679} y2={-0.25474756831866685} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-0.5094951366373319} x2={0.4458082445576679} y2={-0.5094951366373319} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-1.9106067623899952} x2={0.19106067623900103} y2={-1.9106067623899952} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-2.165354330708661} x2={0.19106067623900103} y2={-2.165354330708661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-2.420101899027328} x2={0.19106067623900103} y2={-2.420101899027328} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-2.674849467345994} x2={0.19106067623900103} y2={-2.674849467345994} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.038212135247800205} y1={-2.92959703566466} x2={0.19106067623900103} y2={-2.92959703566466} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-1.9106067623899952} x2={0.4458082445576679} y2={-1.9106067623899952} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-2.165354330708661} x2={0.4458082445576679} y2={-2.165354330708661} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-2.420101899027328} x2={0.4458082445576679} y2={-2.420101899027328} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-2.674849467345994} x2={0.4458082445576679} y2={-2.674849467345994} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-2.92959703566466} x2={0.4458082445576679} y2={-2.92959703566466} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.38212135247799905} height={1.5284854099119962} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
-      <schematicrect schX={0} schY={-2.420101899027328} width={0.38212135247799905} height={1.5284854099119962} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
+      <schematicline x1={0.038212135247800205} y1={0.5094951366373319} x2={0.19106067623900103} y2={0.5094951366373319} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={0.2547475683186651} x2={0.19106067623900103} y2={0.2547475683186651} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={0} x2={0.19106067623900103} y2={0} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-0.25474756831866685} x2={0.19106067623900103} y2={-0.25474756831866685} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-0.5094951366373319} x2={0.19106067623900103} y2={-0.5094951366373319} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={0.5094951366373319} x2={0.4458082445576679} y2={0.5094951366373319} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={0.2547475683186651} x2={0.4458082445576679} y2={0.2547475683186651} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={0} x2={0.4458082445576679} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-0.25474756831866685} x2={0.4458082445576679} y2={-0.25474756831866685} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-0.5094951366373319} x2={0.4458082445576679} y2={-0.5094951366373319} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-1.9106067623899952} x2={0.19106067623900103} y2={-1.9106067623899952} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-2.165354330708661} x2={0.19106067623900103} y2={-2.165354330708661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-2.420101899027328} x2={0.19106067623900103} y2={-2.420101899027328} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-2.674849467345994} x2={0.19106067623900103} y2={-2.674849467345994} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.038212135247800205} y1={-2.92959703566466} x2={0.19106067623900103} y2={-2.92959703566466} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-1.9106067623899952} x2={0.4458082445576679} y2={-1.9106067623899952} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-2.165354330708661} x2={0.4458082445576679} y2={-2.165354330708661} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-2.420101899027328} x2={0.4458082445576679} y2={-2.420101899027328} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-2.674849467345994} x2={0.4458082445576679} y2={-2.674849467345994} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-2.92959703566466} x2={0.4458082445576679} y2={-2.92959703566466} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.38212135247799905} height={1.5284854099119962} rotation={0} strokeWidth={0.012737378415933302} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
+      <schematicrect schX={0} schY={-2.420101899027328} width={0.38212135247799905} height={1.5284854099119962} rotation={0} strokeWidth={0.012737378415933302} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
       <schematictext text="1" schX={0.10189902732746603} schY={0.662343677628531} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="3" schX={0.10189902732746603} schY={0.4075961093098659} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="5" schX={0.10189902732746603} schY={0.15284854099119904} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
@@ -698,16 +698,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="8" schX={0.10189902732746603} schY={-2.522000926354794} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="10" schX={0.10189902732746603} schY={-2.77674849467346} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="J7" schX={-0.19106067623899747} schY={-1.6558591940713292} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0.5094951366373319 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.2547475683186651 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.25474756831866685 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.5094951366373319 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -1.9106067623899952 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -2.165354330708661 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -2.420101899027328 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -2.674849467345994 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -2.92959703566466 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.5094951366373319 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.2547475683186651 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.25474756831866685 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.5094951366373319 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -1.9106067623899952 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -2.165354330708661 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -2.420101899027328 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -2.674849467345994 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -2.92959703566466 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="SSW-105-02-G-D-RA" pinLabels={{"pin1":["1","pin1"],"pin3":["3","pin3"],"pin5":["5","pin5"],"pin7":["7","pin7"],"pin9":["9","pin9"],"pin2":["2","pin2"],"pin4":["4","pin4"],"pin6":["6","pin6"],"pin8":["8","pin8"],"pin10":["10","pin10"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="5.08mm" pcbY="5.77900038mm" holeShape="circle" padShape="rect" holeDiameter="1.04000046mm" rectPadWidth="1.58999936mm" rectPadHeight="1.58999936mm" rectBorderRadius="0.0476999808mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["3"]} pcbX="2.54mm" pcbY="5.77900038mm" outerDiameter="1.58999936mm" holeDiameter="1.04000046mm" shape="circle" />
@@ -745,34 +745,34 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="Source" schX={-0.06368689207966938} schY={-0.4394395553496988} direction="down" pinNumber={1} aliases={["1","pin1"]} />
       <port name="Source" schX={0.06368689207966582} schY={-0.4394395553496988} direction="down" pinNumber={2} aliases={["2","pin2"]} />
       <port name="Source" schX={0.19106067623899747} schY={-0.4394395553496988} direction="down" pinNumber={3} aliases={["3","pin3"]} />
-      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.14011116257526623} y2={0.19742936544696565} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746958} y1={0.14647985178323264} x2={-0.10189902732746958} y2={0.19742936544696565} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746958} y1={-0.0318434460398338} x2={0.06368689207966582} y2={-0.0318434460398338} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746958} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.07642427049560041} y1={0.07005558128763312} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.089161648911535} y1={0.07005558128763312} x2={-0.025474756831869172} y2={0.10826771653543243} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.089161648911535} y1={0.07005558128763312} x2={-0.025474756831869172} y2={0.03184344603983291} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.025474756831869172} y1={0.10826771653543243} x2={-0.025474756831869172} y2={0.03184344603983291} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.038212135247800205} y1={0.08279295970356593} x2={-0.038212135247800205} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746958} y1={-0.006368689207967293} x2={-0.10189902732746958} y2={-0.05731820287170031} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746958} y1={0.09553033811949962} x2={-0.10189902732746958} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={-0.0318434460398338} x2={0.15284854099119727} y2={-0.0318434460398338} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099119727} y1={-0.0318434460398338} x2={0.15284854099119727} y2={0.17195460861509915} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099119727} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099119727} y1={0.09553033811949962} x2={0.12737378415933165} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.12737378415933165} y1={0.04458082445576661} x2={0.17832329782306644} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.17832329782306644} y1={0.04458082445576661} x2={0.15284854099119727} y2={0.09553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099119727} y1={0.09553033811949962} x2={0.17832329782306644} y2={0.09553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099119727} y1={0.09553033811949962} x2={0.12737378415933165} y2={0.09553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.06368689207966938} y1={-0.18469198703103284} x2={0.19106067623899747} y2={-0.18469198703103284} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.19106067623900103} y2={-0.05731820287170031} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.19742936544696565} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.19106067623900103} y1={-0.05731820287170031} x2={-0.4458082445576679} y2={-0.05731820287170031} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={0.19742936544696565} x2={0.06368689207966582} y2={0.4521769337656316} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.06368689207966938} y1={-0.18469198703103284} x2={-0.06368689207966938} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623899747} y1={-0.18469198703103284} x2={0.19106067623899747} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.14011116257526623} y2={0.19742936544696565} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746958} y1={0.14647985178323264} x2={-0.10189902732746958} y2={0.19742936544696565} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746958} y1={-0.0318434460398338} x2={0.06368689207966582} y2={-0.0318434460398338} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746958} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.07642427049560041} y1={0.07005558128763312} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.089161648911535} y1={0.07005558128763312} x2={-0.025474756831869172} y2={0.10826771653543243} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.089161648911535} y1={0.07005558128763312} x2={-0.025474756831869172} y2={0.03184344603983291} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.025474756831869172} y1={0.10826771653543243} x2={-0.025474756831869172} y2={0.03184344603983291} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.038212135247800205} y1={0.08279295970356593} x2={-0.038212135247800205} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746958} y1={-0.006368689207967293} x2={-0.10189902732746958} y2={-0.05731820287170031} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746958} y1={0.09553033811949962} x2={-0.10189902732746958} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={-0.0318434460398338} x2={0.15284854099119727} y2={-0.0318434460398338} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099119727} y1={-0.0318434460398338} x2={0.15284854099119727} y2={0.17195460861509915} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099119727} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099119727} y1={0.09553033811949962} x2={0.12737378415933165} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.12737378415933165} y1={0.04458082445576661} x2={0.17832329782306644} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.17832329782306644} y1={0.04458082445576661} x2={0.15284854099119727} y2={0.09553033811949962} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099119727} y1={0.09553033811949962} x2={0.17832329782306644} y2={0.09553033811949962} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099119727} y1={0.09553033811949962} x2={0.12737378415933165} y2={0.09553033811949962} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.06368689207966938} y1={-0.18469198703103284} x2={0.19106067623899747} y2={-0.18469198703103284} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.19106067623900103} y2={-0.05731820287170031} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.19742936544696565} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.19106067623900103} y1={-0.05731820287170031} x2={-0.4458082445576679} y2={-0.05731820287170031} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={0.19742936544696565} x2={0.06368689207966582} y2={0.4521769337656316} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.06368689207966938} y1={-0.18469198703103284} x2={-0.06368689207966938} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623899747} y1={-0.18469198703103284} x2={0.19106067623899747} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="4" schX={-0.3184344603983362} schY={-0.05731820287170031} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="5-6-7-8" schX={0.06368689207966582} schY={0.3248031496062982} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="1" schX={-0.06368689207966938} schY={-0.3120657711903654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
@@ -780,9 +780,9 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="3" schX={0.19106067623899747} schY={-0.3120657711903654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="Q7" schX={-0.25474756831866685} schY={0.26111625752663237} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="ISC0703NLSATMA1" schX={0.3821213524779985} schY={-0.375752663270033} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-      <schematiccircle center={{ x: 0.06368689207966582, y: 0.17195460861509915 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.06368689207966582, y: -0.0318434460398338 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.06368689207966582, y: -0.18469198703103284 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.06368689207966582, y: 0.17195460861509915 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.06368689207966582, y: -0.0318434460398338 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.06368689207966582, y: -0.18469198703103284 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ISC0703NLSATMA1" pinLabels={{"pin4":["Gate","4","pin4"],"pin1":["Source","1","pin1"],"pin2":["Source","2","pin2"],"pin3":["Source","3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["5-6-7-8"]} pcbX="0mm" pcbY="1.09750098mm" layer="top" coveredWithSolderMask={true} cornerRadius="0.044099988mm" width="4.4099988mm" height="4.45499998mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["4"]} pcbX="1.905mm" pcbY="-2.86500062mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0499999mm" width="0.499999mm" height="0.92499942mm" ccwRotation={90} shape="rotated_rect" />
@@ -842,16 +842,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     {isComponentIncluded({ componentName: "JP12", removedFeatureIds }) && (<chip name="JP12" pcbX={-2.5400000000000063} pcbY={40.64} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm251772evm-pd/16.step" positionOffset={{ x: 0, y: 0, z: 1.2700000000000002 }} rotationOffset={{ x: 90, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={9.807781380268642} schY={-2.356415006947662} symbol={<symbol>
       <port name="1" schX={-0.3821213524779985} schY={0.0636868920796676} direction="left" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={-0.3821213524779985} schY={-0.06368689207966582} direction="left" pinNumber={2} aliases={["pin2"]} />
-      <schematicline x1={-0.12737378415933165} y1={0.0636868920796676} x2={-0.3821213524779985} y2={0.0636868920796676} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={-0.06368689207966582} x2={-0.3821213524779985} y2={-0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.0636868920796676} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.06368689207966582},{"x":-0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933165,"y":0.0636868920796676},{"x":-0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={-0.12737378415933165} y1={0.0636868920796676} x2={-0.3821213524779985} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={-0.06368689207966582} x2={-0.3821213524779985} y2={-0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.0636868920796676} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.06368689207966582},{"x":-0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933165,"y":0.0636868920796676},{"x":-0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={-0.25474756831866685} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={-0.25474756831866685} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP12" schX={-0.14011116257526623} schY={-0.3184344603983309} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300211121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
@@ -1297,38 +1297,38 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="G" schX={-0.4394395553496988} schY={-0.12737378415933165} direction="left" pinNumber={4} aliases={["4","pin4"]} />
       <port name="S" schX={0.07005558128763312} schY={-0.3821213524779985} direction="down" aliases={["1-2-3"]} />
       <port name="D" schX={0.07005558128763312} schY={0.3821213524780003} direction="up" aliases={["5-6-7-8"]} />
-      <schematicline x1={-0.13374247336729894} y1={-0.12737378415933165} x2={-0.13374247336729894} y2={0.12737378415933343} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.09553033811949874} y1={0.07642427049560041} x2={-0.09553033811949874} y2={0.12737378415933343} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.09553033811949874} y1={-0.10189902732746603} x2={0.07005558128763312} y2={-0.10189902732746603} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.09553033811949874} y1={0.1018990273274678} x2={0.07005558128763312} y2={0.1018990273274678} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.05731820287170031} y1={0} x2={0.07005558128763312} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.07005558128763312} y1={0} x2={-0.006368689207965517} y2={0.038212135247800205} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.07005558128763312} y1={0} x2={-0.006368689207965517} y2={-0.03821213524779843} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.006368689207965517} y1={0.038212135247800205} x2={-0.006368689207965517} y2={-0.03821213524779843} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.019106067623900103} y1={0.012737378415934586} x2={-0.019106067623900103} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.09553033811949874} y1={-0.07642427049559863} x2={-0.09553033811949874} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.09553033811949874} y1={0.025474756831867396} x2={-0.09553033811949874} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={-0.10189902732746603} x2={0.15921723019916634} y2={-0.10189902732746603} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15921723019916634} y1={-0.10189902732746603} x2={0.15921723019916634} y2={0.1018990273274678} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15921723019916634} y1={0.1018990273274678} x2={0.07005558128763312} y2={0.1018990273274678} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15921723019916634} y1={0.025474756831867396} x2={0.13374247336730072} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.13374247336730072} y1={-0.02547475683186562} x2={0.18469198703103373} y2={-0.02547475683186562} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.18469198703103373} y1={-0.02547475683186562} x2={0.15921723019916634} y2={0.025474756831867396} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15921723019916634} y1={0.025474756831867396} x2={0.18469198703103373} y2={0.025474756831867396} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15921723019916634} y1={0.025474756831867396} x2={0.13374247336730072} y2={0.025474756831867396} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.13374247336729894} y1={-0.12737378415933165} x2={-0.18469198703103196} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={0} x2={0.07005558128763312} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={0.1018990273274678} x2={0.07005558128763312} y2={0.12737378415933343} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.18469198703103196} y1={-0.12737378415933165} x2={-0.4394395553496988} y2={-0.12737378415933165} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={-0.12737378415933165} x2={0.07005558128763312} y2={-0.3821213524779985} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.07005558128763312} y1={0.12737378415933343} x2={0.07005558128763312} y2={0.3821213524780003} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.13374247336729894} y1={-0.12737378415933165} x2={-0.13374247336729894} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.09553033811949874} y1={0.07642427049560041} x2={-0.09553033811949874} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.09553033811949874} y1={-0.10189902732746603} x2={0.07005558128763312} y2={-0.10189902732746603} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.09553033811949874} y1={0.1018990273274678} x2={0.07005558128763312} y2={0.1018990273274678} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.05731820287170031} y1={0} x2={0.07005558128763312} y2={0} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.07005558128763312} y1={0} x2={-0.006368689207965517} y2={0.038212135247800205} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.07005558128763312} y1={0} x2={-0.006368689207965517} y2={-0.03821213524779843} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.006368689207965517} y1={0.038212135247800205} x2={-0.006368689207965517} y2={-0.03821213524779843} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.019106067623900103} y1={0.012737378415934586} x2={-0.019106067623900103} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.09553033811949874} y1={-0.07642427049559863} x2={-0.09553033811949874} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.09553033811949874} y1={0.025474756831867396} x2={-0.09553033811949874} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={-0.10189902732746603} x2={0.15921723019916634} y2={-0.10189902732746603} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15921723019916634} y1={-0.10189902732746603} x2={0.15921723019916634} y2={0.1018990273274678} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15921723019916634} y1={0.1018990273274678} x2={0.07005558128763312} y2={0.1018990273274678} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15921723019916634} y1={0.025474756831867396} x2={0.13374247336730072} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.13374247336730072} y1={-0.02547475683186562} x2={0.18469198703103373} y2={-0.02547475683186562} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.18469198703103373} y1={-0.02547475683186562} x2={0.15921723019916634} y2={0.025474756831867396} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15921723019916634} y1={0.025474756831867396} x2={0.18469198703103373} y2={0.025474756831867396} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15921723019916634} y1={0.025474756831867396} x2={0.13374247336730072} y2={0.025474756831867396} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.13374247336729894} y1={-0.12737378415933165} x2={-0.18469198703103196} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={0} x2={0.07005558128763312} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={0.1018990273274678} x2={0.07005558128763312} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.18469198703103196} y1={-0.12737378415933165} x2={-0.4394395553496988} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={-0.12737378415933165} x2={0.07005558128763312} y2={-0.3821213524779985} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.07005558128763312} y1={0.12737378415933343} x2={0.07005558128763312} y2={0.3821213524780003} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="4" schX={-0.3120657711903654} schY={-0.12737378415933165} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="1-2-3" schX={0.07005558128763312} schY={-0.2547475683186651} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="5-6-7-8" schX={0.07005558128763312} schY={0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="Q6" schX={-0.24837887911069956} schY={0.19106067623900103} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="ISZ034N06LM5ATMA1" schX={0.32480314960629997} schY={-0.8279295970356637} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={90} />
-      <schematiccircle center={{ x: 0.07005558128763312, y: 0.1018990273274678 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.07005558128763312, y: -0.10189902732746603 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.07005558128763312, y: 0.1018990273274678 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.07005558128763312, y: -0.10189902732746603 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ISZ034N06LM5ATMA1" pinLabels={{"pin4":["G","4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["5-6-7-8"]} pcbX="0mm" pcbY="0.7200011mm" layer="top" coveredWithSolderMask={true} radius="1.03049959mm" shape="circle" />
     <smtpad portHints={["4"]} pcbX="0.97499932mm" pcbY="-1.44999964mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0492999014mm" width="0.33999932mm" height="0.90000074mm" ccwRotation={270} shape="rotated_rect" />
@@ -1349,34 +1349,34 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="Source" schX={-0.06368689207966582} schY={-0.4394395553496988} direction="down" pinNumber={1} aliases={["1","pin1"]} />
       <port name="Source" schX={0.06368689207966582} schY={-0.4394395553496988} direction="down" pinNumber={2} aliases={["2","pin2"]} />
       <port name="Source" schX={0.19106067623900103} schY={-0.4394395553496988} direction="down" pinNumber={3} aliases={["3","pin3"]} />
-      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.14011116257526623} y2={0.19742936544696565} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.14647985178323264} x2={-0.10189902732746603} y2={0.19742936544696565} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={-0.0318434460398338} x2={0.06368689207966582} y2={-0.0318434460398338} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.07642427049560041} y1={0.07005558128763312} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.08916164891153144} y1={0.07005558128763312} x2={-0.02547475683186562} y2={0.10826771653543243} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.08916164891153144} y1={0.07005558128763312} x2={-0.02547475683186562} y2={0.03184344603983291} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.02547475683186562} y1={0.10826771653543243} x2={-0.02547475683186562} y2={0.03184344603983291} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.038212135247800205} y1={0.08279295970356593} x2={-0.038212135247800205} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={-0.006368689207967293} x2={-0.10189902732746603} y2={-0.05731820287170031} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.09553033811949962} x2={-0.10189902732746603} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={-0.0318434460398338} x2={0.15284854099120082} y2={-0.0318434460398338} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099120082} y1={-0.0318434460398338} x2={0.15284854099120082} y2={0.17195460861509915} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099120082} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099120082} y1={0.09553033811949962} x2={0.1273737841593352} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1273737841593352} y1={0.04458082445576661} x2={0.17832329782306644} y2={0.04458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.17832329782306644} y1={0.04458082445576661} x2={0.15284854099120082} y2={0.09553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099120082} y1={0.09553033811949962} x2={0.17832329782306644} y2={0.09553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.15284854099120082} y1={0.09553033811949962} x2={0.1273737841593352} y2={0.09553033811949962} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.06368689207966582} y1={-0.18469198703103284} x2={0.19106067623900103} y2={-0.18469198703103284} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.19106067623899747} y2={-0.05731820287170031} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.19742936544696565} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.19106067623899747} y1={-0.05731820287170031} x2={-0.4458082445576643} y2={-0.05731820287170031} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={0.19742936544696565} x2={0.06368689207966582} y2={0.4521769337656316} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.06368689207966582} y1={-0.18469198703103284} x2={-0.06368689207966582} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.19106067623900103} y1={-0.18469198703103284} x2={0.19106067623900103} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.14011116257526623} y2={0.19742936544696565} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.14647985178323264} x2={-0.10189902732746603} y2={0.19742936544696565} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={-0.0318434460398338} x2={0.06368689207966582} y2={-0.0318434460398338} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.07642427049560041} y1={0.07005558128763312} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.08916164891153144} y1={0.07005558128763312} x2={-0.02547475683186562} y2={0.10826771653543243} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.08916164891153144} y1={0.07005558128763312} x2={-0.02547475683186562} y2={0.03184344603983291} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.02547475683186562} y1={0.10826771653543243} x2={-0.02547475683186562} y2={0.03184344603983291} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.038212135247800205} y1={0.08279295970356593} x2={-0.038212135247800205} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={-0.006368689207967293} x2={-0.10189902732746603} y2={-0.05731820287170031} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.09553033811949962} x2={-0.10189902732746603} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={-0.0318434460398338} x2={0.15284854099120082} y2={-0.0318434460398338} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099120082} y1={-0.0318434460398338} x2={0.15284854099120082} y2={0.17195460861509915} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099120082} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.17195460861509915} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099120082} y1={0.09553033811949962} x2={0.1273737841593352} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1273737841593352} y1={0.04458082445576661} x2={0.17832329782306644} y2={0.04458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.17832329782306644} y1={0.04458082445576661} x2={0.15284854099120082} y2={0.09553033811949962} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099120082} y1={0.09553033811949962} x2={0.17832329782306644} y2={0.09553033811949962} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.15284854099120082} y1={0.09553033811949962} x2={0.1273737841593352} y2={0.09553033811949962} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.06368689207966582} y1={-0.18469198703103284} x2={0.19106067623900103} y2={-0.18469198703103284} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.14011116257526623} y1={-0.05731820287170031} x2={-0.19106067623899747} y2={-0.05731820287170031} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={0.17195460861509915} x2={0.06368689207966582} y2={0.19742936544696565} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.19106067623899747} y1={-0.05731820287170031} x2={-0.4458082445576643} y2={-0.05731820287170031} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={0.19742936544696565} x2={0.06368689207966582} y2={0.4521769337656316} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.06368689207966582} y1={-0.18469198703103284} x2={-0.06368689207966582} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.06368689207966582} y1={-0.18469198703103284} x2={0.06368689207966582} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.19106067623900103} y1={-0.18469198703103284} x2={0.19106067623900103} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="4" schX={-0.3184344603983327} schY={-0.05731820287170031} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="5-6-7-8" schX={0.06368689207966582} schY={0.3248031496062982} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="1" schX={-0.06368689207966582} schY={-0.3120657711903654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
@@ -1384,9 +1384,9 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="3" schX={0.19106067623900103} schY={-0.3120657711903654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="Q8" schX={-0.25474756831866685} schY={0.26111625752663237} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="ISC0703NLSATMA1" schX={0.22927281148680123} schY={-0.04458082445576661} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: 0.06368689207966582, y: 0.17195460861509915 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.06368689207966582, y: -0.0318434460398338 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.06368689207966582, y: -0.18469198703103284 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.06368689207966582, y: 0.17195460861509915 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.06368689207966582, y: -0.0318434460398338 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.06368689207966582, y: -0.18469198703103284 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ISC0703NLSATMA1" pinLabels={{"pin4":["Gate","4","pin4"],"pin1":["Source","1","pin1"],"pin2":["Source","2","pin2"],"pin3":["Source","3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["5-6-7-8"]} pcbX="0mm" pcbY="1.09750098mm" layer="top" coveredWithSolderMask={true} cornerRadius="0.044099988mm" width="4.4099988mm" height="4.45499998mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["4"]} pcbX="1.905mm" pcbY="-2.86500062mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0499999mm" width="0.499999mm" height="0.92499942mm" ccwRotation={90} shape="rotated_rect" />
@@ -1441,38 +1441,38 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="G" schX={0.12737378415933343} schY={-0.4394395553496988} direction="down" pinNumber={4} aliases={["4","pin4"]} />
       <port name="S" schX={0.3821213524780003} schY={0.07005558128763312} direction="right" aliases={["1-2-3"]} />
       <port name="D" schX={-0.3821213524779985} schY={0.07005558128763312} direction="left" aliases={["5-6-7-8"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.13374247336729894} x2={-0.12737378415933165} y2={-0.13374247336729894} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.07642427049559863} y1={-0.09553033811949874} x2={-0.12737378415933165} y2={-0.09553033811949874} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1018990273274678} y1={-0.09553033811949874} x2={0.1018990273274678} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={-0.09553033811949874} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={-0.05731820287169853} x2={0} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={-0.07005558128763312} x2={-0.03821213524779843} y2={-0.006368689207965517} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={-0.07005558128763312} x2={0.038212135247800205} y2={-0.006368689207965517} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.03821213524779843} y1={-0.006368689207965517} x2={0.038212135247800205} y2={-0.006368689207965517} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.01273737841593281} y1={-0.019106067623900103} x2={0.025474756831867396} y2={-0.019106067623900103} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07642427049560041} y1={-0.09553033811949874} x2={0.12737378415933343} y2={-0.09553033811949874} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.02547475683186562} y1={-0.09553033811949874} x2={0.025474756831867396} y2={-0.09553033811949874} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1018990273274678} y1={0.07005558128763312} x2={0.1018990273274678} y2={0.15921723019916634} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1018990273274678} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.15921723019916634} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.02547475683186562} y1={0.15921723019916634} x2={0.025474756831867396} y2={0.13374247336730072} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.025474756831867396} y1={0.13374247336730072} x2={0.025474756831867396} y2={0.18469198703103373} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.025474756831867396} y1={0.18469198703103373} x2={-0.02547475683186562} y2={0.15921723019916634} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.02547475683186562} y1={0.15921723019916634} x2={-0.02547475683186562} y2={0.18469198703103373} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.02547475683186562} y1={0.15921723019916634} x2={-0.02547475683186562} y2={0.13374247336730072} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.13374247336729894} x2={0.12737378415933343} y2={-0.18469198703103196} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={0.07005558128763312} x2={0.12737378415933343} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.07005558128763312} x2={-0.12737378415933165} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.18469198703103196} x2={0.12737378415933343} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.07005558128763312} x2={0.3821213524780003} y2={0.07005558128763312} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={0.07005558128763312} x2={-0.3821213524779985} y2={0.07005558128763312} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.13374247336729894} x2={-0.12737378415933165} y2={-0.13374247336729894} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.07642427049559863} y1={-0.09553033811949874} x2={-0.12737378415933165} y2={-0.09553033811949874} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1018990273274678} y1={-0.09553033811949874} x2={0.1018990273274678} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={-0.09553033811949874} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={-0.05731820287169853} x2={0} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={-0.07005558128763312} x2={-0.03821213524779843} y2={-0.006368689207965517} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={-0.07005558128763312} x2={0.038212135247800205} y2={-0.006368689207965517} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.03821213524779843} y1={-0.006368689207965517} x2={0.038212135247800205} y2={-0.006368689207965517} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.01273737841593281} y1={-0.019106067623900103} x2={0.025474756831867396} y2={-0.019106067623900103} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07642427049560041} y1={-0.09553033811949874} x2={0.12737378415933343} y2={-0.09553033811949874} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.02547475683186562} y1={-0.09553033811949874} x2={0.025474756831867396} y2={-0.09553033811949874} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1018990273274678} y1={0.07005558128763312} x2={0.1018990273274678} y2={0.15921723019916634} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1018990273274678} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.15921723019916634} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.02547475683186562} y1={0.15921723019916634} x2={0.025474756831867396} y2={0.13374247336730072} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.025474756831867396} y1={0.13374247336730072} x2={0.025474756831867396} y2={0.18469198703103373} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.025474756831867396} y1={0.18469198703103373} x2={-0.02547475683186562} y2={0.15921723019916634} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.02547475683186562} y1={0.15921723019916634} x2={-0.02547475683186562} y2={0.18469198703103373} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.02547475683186562} y1={0.15921723019916634} x2={-0.02547475683186562} y2={0.13374247336730072} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.13374247336729894} x2={0.12737378415933343} y2={-0.18469198703103196} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={0.07005558128763312} x2={0.12737378415933343} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.07005558128763312} x2={-0.12737378415933165} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.18469198703103196} x2={0.12737378415933343} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.07005558128763312} x2={0.3821213524780003} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={0.07005558128763312} x2={-0.3821213524779985} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="4" schX={0.12737378415933343} schY={-0.3120657711903654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="1-2-3" schX={0.25474756831866685} schY={0.07005558128763312} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="5-6-7-8" schX={-0.2547475683186651} schY={0.07005558128763312} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="Q2" schX={-0.06368689207966582} schY={0.32480314960629997} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="ISZ034N06LM5ATMA1" schX={-0.5094951366373319} schY={0.19742936544696654} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: -0.10189902732746603, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.1018990273274678, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: -0.10189902732746603, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.1018990273274678, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ISZ034N06LM5ATMA1" pinLabels={{"pin4":["G","4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1-2-3"]} pcbX="-0.32500062mm" pcbY="-1.44999964mm" layer="top" coveredWithSolderMask={true} radius="0.40500046mm" shape="circle" />
     <smtpad portHints={["4"]} pcbX="0.97499932mm" pcbY="-1.44999964mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0492999014mm" width="0.33999932mm" height="0.90000074mm" ccwRotation={90} shape="rotated_rect" />
@@ -1491,38 +1491,38 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="G" schX={0.12737378415933343} schY={-0.4394395553496988} direction="down" pinNumber={4} aliases={["4","pin4"]} />
       <port name="S" schX={0.3821213524779985} schY={0.07005558128763312} direction="right" aliases={["1-2-3"]} />
       <port name="D" schX={-0.3821213524779985} schY={0.07005558128763312} direction="left" aliases={["5-6-7-8"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.13374247336730072} x2={-0.12737378415933343} y2={-0.13374247336730072} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.07642427049560041} y1={-0.09553033811950051} x2={-0.12737378415933343} y2={-0.09553033811950051} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.10189902732746603} y1={-0.09553033811950051} x2={0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={-0.09553033811950051} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={-0.05731820287170031} x2={0} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={-0.07005558128763312} x2={-0.038212135247800205} y2={-0.006368689207967293} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={-0.07005558128763312} x2={0.038212135247800205} y2={-0.006368689207967293} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.038212135247800205} y1={-0.006368689207967293} x2={0.038212135247800205} y2={-0.006368689207967293} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.01273737841593281} y1={-0.019106067623900103} x2={0.02547475683186562} y2={-0.019106067623900103} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.07642427049560041} y1={-0.09553033811950051} x2={0.12737378415933343} y2={-0.09553033811950051} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.025474756831867396} y1={-0.09553033811950051} x2={0.02547475683186562} y2={-0.09553033811950051} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.10189902732746603} y1={0.07005558128763312} x2={0.10189902732746603} y2={0.15921723019916634} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.10189902732746603} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.15921723019916634} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.025474756831867396} y1={0.15921723019916634} x2={0.02547475683186562} y2={0.13374247336729894} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.02547475683186562} y1={0.13374247336729894} x2={0.02547475683186562} y2={0.18469198703103196} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.02547475683186562} y1={0.18469198703103196} x2={-0.025474756831867396} y2={0.15921723019916634} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.025474756831867396} y1={0.15921723019916634} x2={-0.025474756831867396} y2={0.18469198703103196} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.025474756831867396} y1={0.15921723019916634} x2={-0.025474756831867396} y2={0.13374247336729894} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.13374247336730072} x2={0.12737378415933343} y2={-0.18469198703103373} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0} y1={0.07005558128763312} x2={0.12737378415933343} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.10189902732746603} y1={0.07005558128763312} x2={-0.12737378415933343} y2={0.07005558128763312} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.18469198703103373} x2={0.12737378415933343} y2={-0.4394395553496988} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.07005558128763312} x2={0.3821213524779985} y2={0.07005558128763312} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933343} y1={0.07005558128763312} x2={-0.3821213524779985} y2={0.07005558128763312} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.13374247336730072} x2={-0.12737378415933343} y2={-0.13374247336730072} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.07642427049560041} y1={-0.09553033811950051} x2={-0.12737378415933343} y2={-0.09553033811950051} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.10189902732746603} y1={-0.09553033811950051} x2={0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={-0.09553033811950051} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={-0.05731820287170031} x2={0} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={-0.07005558128763312} x2={-0.038212135247800205} y2={-0.006368689207967293} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={-0.07005558128763312} x2={0.038212135247800205} y2={-0.006368689207967293} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.038212135247800205} y1={-0.006368689207967293} x2={0.038212135247800205} y2={-0.006368689207967293} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.01273737841593281} y1={-0.019106067623900103} x2={0.02547475683186562} y2={-0.019106067623900103} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.07642427049560041} y1={-0.09553033811950051} x2={0.12737378415933343} y2={-0.09553033811950051} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.025474756831867396} y1={-0.09553033811950051} x2={0.02547475683186562} y2={-0.09553033811950051} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.10189902732746603} y1={0.07005558128763312} x2={0.10189902732746603} y2={0.15921723019916634} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.10189902732746603} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.15921723019916634} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.15921723019916634} x2={-0.10189902732746603} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.025474756831867396} y1={0.15921723019916634} x2={0.02547475683186562} y2={0.13374247336729894} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.02547475683186562} y1={0.13374247336729894} x2={0.02547475683186562} y2={0.18469198703103196} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.02547475683186562} y1={0.18469198703103196} x2={-0.025474756831867396} y2={0.15921723019916634} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.025474756831867396} y1={0.15921723019916634} x2={-0.025474756831867396} y2={0.18469198703103196} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.025474756831867396} y1={0.15921723019916634} x2={-0.025474756831867396} y2={0.13374247336729894} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.13374247336730072} x2={0.12737378415933343} y2={-0.18469198703103373} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0} y1={0.07005558128763312} x2={0.12737378415933343} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.10189902732746603} y1={0.07005558128763312} x2={-0.12737378415933343} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.18469198703103373} x2={0.12737378415933343} y2={-0.4394395553496988} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.07005558128763312} x2={0.3821213524779985} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933343} y1={0.07005558128763312} x2={-0.3821213524779985} y2={0.07005558128763312} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="4" schX={0.12737378415933343} schY={-0.3120657711903654} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="1-2-3" schX={0.2547475683186651} schY={0.07005558128763312} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="5-6-7-8" schX={-0.2547475683186651} schY={0.07005558128763312} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="Q4" schX={-0.12737378415933343} schY={0.3248031496062982} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="ISZ034N06LM5ATMA1" schX={-0.6368689207966653} schY={0.19742936544696654} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: -0.10189902732746603, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0.10189902732746603, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: -0.10189902732746603, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0.10189902732746603, y: 0.07005558128763312 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="ISZ034N06LM5ATMA1" pinLabels={{"pin4":["G","4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["5-6-7-8"]} pcbX="0mm" pcbY="0.7200011mm" layer="top" coveredWithSolderMask={true} radius="1.03049959mm" shape="circle" />
     <smtpad portHints={["4"]} pcbX="0.97499932mm" pcbY="-1.44999964mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0492999014mm" width="0.33999932mm" height="0.90000074mm" ccwRotation={90} shape="rotated_rect" />
@@ -1609,20 +1609,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={0.3821213524780003} schY={-0.12737378415933343} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524780003} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524780003} schY={0.12737378415933254} direction="right" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524780003} y2={-0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524780003} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.12737378415933254} x2={0.3821213524780003} y2={0.12737378415933254} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933254},{"x":0.038212135247800205,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524780003} y2={-0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524780003} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.12737378415933254} x2={0.3821213524780003} y2={0.12737378415933254} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933254},{"x":0.038212135247800205,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0.25474756831866685} schY={0.12737378415933254} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP7" schX={-0.12737378415933165} schY={0.25474756831866596} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300311121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["3"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["2"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1634,20 +1634,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={0.3821213524780003} schY={-0.12737378415933343} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524780003} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524780003} schY={0.12737378415933165} direction="right" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524780003} y2={-0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524780003} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.12737378415933165} x2={0.3821213524780003} y2={0.12737378415933165} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933165},{"x":0.038212135247800205,"y":0.12737378415933165}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524780003} y2={-0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524780003} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.12737378415933165} x2={0.3821213524780003} y2={0.12737378415933165} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933165},{"x":0.038212135247800205,"y":0.12737378415933165}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0.25474756831866685} schY={0.12737378415933165} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP3" schX={-0.12737378415933165} schY={0.2547475683186651} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.12737378415933165 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.12737378415933165 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300311121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["3"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["2"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1658,16 +1658,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     {isComponentIncluded({ componentName: "JP6", removedFeatureIds }) && (<chip name="JP6" pcbX={45.72} pcbY={11.429999999999993} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm251772evm-pd/16.step" positionOffset={{ x: 0, y: 0, z: 1.2700000000000002 }} rotationOffset={{ x: 90, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-11.527327466419639} schY={-2.2927281148679945} symbol={<symbol>
       <port name="1" schX={0.3821213524779985} schY={0.06368689207966582} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={-0.0636868920796676} direction="right" pinNumber={2} aliases={["pin2"]} />
-      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.0636868920796676} x2={0.3821213524779985} y2={-0.0636868920796676} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.0636868920796676},{"x":0.038212135247800205,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.0636868920796676} x2={0.3821213524779985} y2={-0.0636868920796676} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.0636868920796676},{"x":0.038212135247800205,"y":-0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={-0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP6" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: -0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300211121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1677,16 +1677,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     {isComponentIncluded({ componentName: "JP8", removedFeatureIds }) && (<chip name="JP8" pcbX={45.72} pcbY={22.86} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm251772evm-pd/16.step" positionOffset={{ x: 0, y: 0, z: 1.2700000000000002 }} rotationOffset={{ x: 90, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-1.0189902732746638} schY={-6.368689207966652} symbol={<symbol>
       <port name="1" schX={0.3821213524779985} schY={0.06368689207966671} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={-0.06368689207966671} direction="right" pinNumber={2} aliases={["pin2"]} />
-      <schematicline x1={0.12737378415933343} y1={0.06368689207966671} x2={0.3821213524779985} y2={0.06368689207966671} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524779985} y2={-0.06368689207966671} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.06368689207966671} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966671},{"x":0.038212135247800205,"y":0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={0.06368689207966671} x2={0.3821213524779985} y2={0.06368689207966671} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524779985} y2={-0.06368689207966671} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.06368689207966671} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966671},{"x":0.038212135247800205,"y":0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.2547475683186651} schY={0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.2547475683186651} schY={-0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP8" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300211121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1697,20 +1697,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={-0.1273737841593352} schY={-0.3821213524779985} direction="down" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0} schY={-0.3821213524779985} direction="down" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.12737378415933165} schY={-0.3821213524779985} direction="down" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={-0.1273737841593352} y1={-0.12737378415933165} x2={-0.1273737841593352} y2={-0.3821213524779985} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0} y1={-0.12737378415933165} x2={0} y2={-0.3821213524779985} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933165} y1={-0.12737378415933165} x2={0.12737378415933165} y2={-0.3821213524779985} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.5094951366373321} height={0.2547475683186661} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={-0.1273737841593352} schY={0} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0,"y":-0.12737378415933165},{"x":0,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.1273737841593352,"y":-0.12737378415933165},{"x":-0.1273737841593352,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933165,"y":-0.12737378415933165},{"x":0.12737378415933165,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={-0.1273737841593352} y1={-0.12737378415933165} x2={-0.1273737841593352} y2={-0.3821213524779985} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0} y1={-0.12737378415933165} x2={0} y2={-0.3821213524779985} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933165} y1={-0.12737378415933165} x2={0.12737378415933165} y2={-0.3821213524779985} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.5094951366373321} height={0.2547475683186661} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={-0.1273737841593352} schY={0} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0,"y":-0.12737378415933165},{"x":0,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.1273737841593352,"y":-0.12737378415933165},{"x":-0.1273737841593352,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933165,"y":-0.12737378415933165},{"x":0.12737378415933165,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={-0.1273737841593352} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="2" schX={0} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="3" schX={0.12737378415933165} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="JP1" schX={-0.3184344603983327} schY={0.19106067623899747} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0.12737378415933165, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933165, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300311121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["3"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["2"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1722,20 +1722,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={0.3821213524779985} schY={-0.12737378415933343} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524779985} schY={0.12737378415933343} direction="right" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524779985} y2={-0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524779985} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.12737378415933343} x2={0.3821213524779985} y2={0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933343},{"x":0.038212135247800205,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524779985} y2={-0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524779985} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.12737378415933343} x2={0.3821213524779985} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933343},{"x":0.038212135247800205,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0.25474756831866685} schY={0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP5" schX={-0.12737378415933343} schY={0.2547475683186651} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300311121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["3"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["2"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1747,20 +1747,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={0.3821213524780003} schY={-0.12737378415933343} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524780003} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524780003} schY={0.12737378415933254} direction="right" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524780003} y2={-0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524780003} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.12737378415933254} x2={0.3821213524780003} y2={0.12737378415933254} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933254},{"x":0.038212135247800205,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={-0.12737378415933343} x2={0.3821213524780003} y2={-0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524780003} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.12737378415933254} x2={0.3821213524780003} y2={0.12737378415933254} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={-0.12737378415933343} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933343},{"x":0.038212135247800205,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933254},{"x":0.038212135247800205,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={-0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0.25474756831866685} schY={0.12737378415933254} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP9" schX={-0.12737378415933165} schY={0.25474756831866596} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300311121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-2.54mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="180deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1771,16 +1771,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     {isComponentIncluded({ componentName: "JP11", removedFeatureIds }) && (<chip name="JP11" pcbX={45.72} pcbY={19.049999999999997} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm251772evm-pd/16.step" positionOffset={{ x: 0, y: 0, z: 1.2700000000000002 }} rotationOffset={{ x: 90, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={0.8916164891153304} schY={-7.8971746178786475} symbol={<symbol>
       <port name="1" schX={0.3821213524780003} schY={0.06368689207966582} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524780003} schY={-0.06368689207966671} direction="right" pinNumber={2} aliases={["pin2"]} />
-      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524780003} y2={0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524780003} y2={-0.06368689207966671} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524780003} y2={0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524780003} y2={-0.06368689207966671} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={-0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP11" schX={-0.12737378415933165} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300211121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1790,16 +1790,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     {isComponentIncluded({ componentName: "JP10", removedFeatureIds }) && (<chip name="JP10" pcbX={45.72} pcbY={15.239999999999995} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm251772evm-pd/16.step" positionOffset={{ x: 0, y: 0, z: 1.2700000000000002 }} rotationOffset={{ x: 90, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-1.0189902732746638} schY={-7.8971746178786475} symbol={<symbol>
       <port name="1" schX={0.3821213524779985} schY={0.06368689207966582} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={-0.06368689207966671} direction="right" pinNumber={2} aliases={["pin2"]} />
-      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524779985} y2={-0.06368689207966671} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524779985} y2={-0.06368689207966671} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.2547475683186651} schY={0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.2547475683186651} schY={-0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP10" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300211121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1812,29 +1812,29 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={0.2547475683186651} schY={-0.3821213524780003} direction="down" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.12737378415933165} schY={-0.3821213524780003} direction="down" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0} schY={-0.3821213524780003} direction="down" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={-0.25474756831866685} y1={-0.12737378415933343} x2={-0.25474756831866685} y2={-0.3821213524780003} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933343} y1={-0.12737378415933343} x2={-0.12737378415933343} y2={-0.3821213524780003} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.2547475683186651} y1={-0.12737378415933343} x2={0.2547475683186651} y2={-0.3821213524780003} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933165} y1={-0.12737378415933343} x2={0.12737378415933165} y2={-0.3821213524780003} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0} y1={-0.12737378415933343} x2={0} y2={-0.3821213524780003} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.7642427049559981} height={0.2547475683186661} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0.2547475683186651} schY={0} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933165,"y":-0.12737378415933343},{"x":0.12737378415933165,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.2547475683186651,"y":-0.12737378415933343},{"x":0.2547475683186651,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0,"y":-0.12737378415933343},{"x":0,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933343,"y":-0.12737378415933343},{"x":-0.12737378415933343,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.25474756831866685,"y":-0.12737378415933343},{"x":-0.25474756831866685,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={-0.25474756831866685} y1={-0.12737378415933343} x2={-0.25474756831866685} y2={-0.3821213524780003} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933343} y1={-0.12737378415933343} x2={-0.12737378415933343} y2={-0.3821213524780003} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.2547475683186651} y1={-0.12737378415933343} x2={0.2547475683186651} y2={-0.3821213524780003} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933165} y1={-0.12737378415933343} x2={0.12737378415933165} y2={-0.3821213524780003} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0} y1={-0.12737378415933343} x2={0} y2={-0.3821213524780003} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.7642427049559981} height={0.2547475683186661} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0.2547475683186651} schY={0} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933165,"y":-0.12737378415933343},{"x":0.12737378415933165,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.2547475683186651,"y":-0.12737378415933343},{"x":0.2547475683186651,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0,"y":-0.12737378415933343},{"x":0,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933343,"y":-0.12737378415933343},{"x":-0.12737378415933343,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.25474756831866685,"y":-0.12737378415933343},{"x":-0.25474756831866685,"y":-0.038212135247800205}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="5" schX={-0.25474756831866685} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="4" schX={-0.12737378415933343} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="1" schX={0.2547475683186651} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="2" schX={0.12737378415933165} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="3" schX={0} schY={-0.25474756831866685} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="JP2" schX={-0.700555812876333} schY={-0.0636868920796676} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0.12737378415933165, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0.2547475683186651, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.12737378415933343, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.25474756831866685, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933165, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.2547475683186651, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.12737378415933343, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.25474756831866685, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300511121" pinLabels={{"pin5":["5","pin5"],"pin4":["4","pin4"],"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["5"]} pcbX="5.08mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.10000034mm" shape="circle" />
     <platedhole  portHints={["4"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.10000034mm" shape="circle" />
@@ -1848,20 +1848,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1" schX={0.3821213524779985} schY={-0.12737378415933165} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524779985} schY={0.12737378415933343} direction="right" pinNumber={3} aliases={["pin3"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.12737378415933165} x2={0.3821213524779985} y2={-0.12737378415933165} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524779985} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.12737378415933343} x2={0.3821213524779985} y2={0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={-0.12737378415933165} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933165},{"x":0.038212135247800205,"y":-0.12737378415933165}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933343},{"x":0.038212135247800205,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={-0.12737378415933165} x2={0.3821213524779985} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0} x2={0.3821213524779985} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.12737378415933343} x2={0.3821213524779985} y2={0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.5094951366373321} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={-0.12737378415933165} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":0},{"x":0.038212135247800205,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.12737378415933165},{"x":0.038212135247800205,"y":-0.12737378415933165}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.12737378415933343},{"x":0.038212135247800205,"y":0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={-0.12737378415933165} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0.25474756831866685} schY={0.12737378415933343} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="JP4" schX={-0.12737378415933343} schY={0.25474756831866685} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300311121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["3"]} pcbX="2.54mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["2"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1892,24 +1892,24 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="+" schX={0.573182028716996} schY={0.19106067623899925} direction="right" pinNumber={2} aliases={["2","pin2"]} />
       <port name="MNT_1" schX={0.573182028716996} schY={-0.19106067623899925} direction="right" pinNumber={3} aliases={["3","pin3"]} />
       <port name="MNT_2" schX={0.573182028716996} schY={-0.4458082445576652} direction="right" pinNumber={4} aliases={["4","pin4"]} />
-      <schematicline x1={0.03821213524779665} y1={0.4458082445576661} x2={0.3184344603983327} y2={0.4458082445576661} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.03821213524779665} y1={0.19106067623899925} x2={0.3184344603983327} y2={0.19106067623899925} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.03821213524779665} y1={-0.19106067623899925} x2={0.3184344603983327} y2={-0.19106067623899925} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.03821213524779665} y1={-0.4458082445576652} x2={0.3184344603983327} y2={-0.4458082445576652} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.3184344603983327} y1={0.4458082445576661} x2={0.573182028716996} y2={0.4458082445576661} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.3184344603983327} y1={0.19106067623899925} x2={0.573182028716996} y2={0.19106067623899925} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.3184344603983327} y1={-0.19106067623899925} x2={0.573182028716996} y2={-0.19106067623899925} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.3184344603983327} y1={-0.4458082445576652} x2={0.573182028716996} y2={-0.4458082445576652} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.6368689207966651} height={1.4011116257526632} rotation={0} strokeWidth={0.05} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
+      <schematicline x1={0.03821213524779665} y1={0.4458082445576661} x2={0.3184344603983327} y2={0.4458082445576661} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.03821213524779665} y1={0.19106067623899925} x2={0.3184344603983327} y2={0.19106067623899925} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.03821213524779665} y1={-0.19106067623899925} x2={0.3184344603983327} y2={-0.19106067623899925} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.03821213524779665} y1={-0.4458082445576652} x2={0.3184344603983327} y2={-0.4458082445576652} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.3184344603983327} y1={0.4458082445576661} x2={0.573182028716996} y2={0.4458082445576661} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.3184344603983327} y1={0.19106067623899925} x2={0.573182028716996} y2={0.19106067623899925} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.3184344603983327} y1={-0.19106067623899925} x2={0.573182028716996} y2={-0.19106067623899925} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.3184344603983327} y1={-0.4458082445576652} x2={0.573182028716996} y2={-0.4458082445576652} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.6368689207966651} height={1.4011116257526632} rotation={0} strokeWidth={0.012737378415933302} color="#800000" isFilled={true} fillColor="#ffffb0" isDashed={false} />
       <schematictext text="-" schX={0.22927281148679768} schY={0.5986567855488651} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="+" schX={0.22927281148679768} schY={0.3439092172301992} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="MNT_1" schX={0.22927281148679768} schY={-0.038212135247800205} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="MNT_2" schX={0.22927281148679768} schY={-0.29295970356646617} anchor="top_right" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="J9" schX={-0.3184344603983327} schY={0.7005558128763321} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0.4458082445576661 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.4458082445576652 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.4458082445576661 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.4458082445576652 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="XT30PW-F" pinLabels={{"pin1":["-","1","pin1"],"pin2":["+","2","pin2"],"pin3":["MNT_1","3","pin3"],"pin4":["MNT_2","4","pin4"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="2.50000008mm" pcbY="8.82499886mm" holeShape="circle" padShape="rect" holeDiameter="1.69999914mm" rectPadWidth="2.59999988mm" rectPadHeight="2.59999988mm" rectBorderRadius="0.0519999976mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["4"]} pcbX="-5.49999916mm" pcbY="3.82500124mm" outerDiameter="1.54999944mm" holeDiameter="1.00000054mm" shape="circle" />
@@ -1937,16 +1937,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <chip name="J11" pcbX={45.72} pcbY={30.480000000000004} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm251772evm-pd/16.step" positionOffset={{ x: 0, y: 0, z: 1.2700000000000002 }} rotationOffset={{ x: 90, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-11.527327466419639} schY={-6.241315423807318} symbol={<symbol>
       <port name="1" schX={0.3821213524779985} schY={0.06368689207966582} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={-0.06368689207966671} direction="right" pinNumber={2} aliases={["pin2"]} />
-      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524779985} y2={-0.06368689207966671} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.06368689207966671} x2={0.3821213524779985} y2={-0.06368689207966671} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.06368689207966582} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966671},{"x":0.038212135247800205,"y":-0.06368689207966671}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.06368689207966582},{"x":0.038212135247800205,"y":0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.25474756831866685} schY={0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.25474756831866685} schY={-0.06368689207966671} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="J11" schX={-0.12737378415933343} schY={0.19106067623899925} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966671 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300211121" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-1.27mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -1997,20 +1997,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="2" schX={0.3821213524779985} schY={0.19106067623900103} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524779985} schY={0.0636868920796676} direction="right" pinNumber={3} aliases={["pin3"]} />
       <port name="6" schX={0.3821213524779985} schY={-0.3184344603983327} direction="right" pinNumber={6} aliases={["pin6"]} />
-      <schematicline x1={0.12737378415933343} y1={-0.19106067623899925} x2={0.3821213524779985} y2={-0.19106067623899925} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.06368689207966582} x2={0.3821213524779985} y2={-0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.3184344603983327} x2={0.3821213524779985} y2={0.3184344603983327} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.19106067623900103} x2={0.3821213524779985} y2={0.19106067623900103} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={0.0636868920796676} x2={0.3821213524779985} y2={0.0636868920796676} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.12737378415933343} y1={-0.3184344603983327} x2={0.3821213524779985} y2={-0.3184344603983327} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.8916164891153312} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.3184344603983327} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.19106067623900103},{"x":0.038212135247800205,"y":0.19106067623900103}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.3184344603983327},{"x":0.038212135247800205,"y":0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":0.0636868920796676},{"x":0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966582},{"x":0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.19106067623899925},{"x":0.038212135247800205,"y":-0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.12737378415933343,"y":-0.3184344603983327},{"x":0.038212135247800205,"y":-0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={0.12737378415933343} y1={-0.19106067623899925} x2={0.3821213524779985} y2={-0.19106067623899925} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.06368689207966582} x2={0.3821213524779985} y2={-0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.3184344603983327} x2={0.3821213524779985} y2={0.3184344603983327} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.19106067623900103} x2={0.3821213524779985} y2={0.19106067623900103} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={0.0636868920796676} x2={0.3821213524779985} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.12737378415933343} y1={-0.3184344603983327} x2={0.3821213524779985} y2={-0.3184344603983327} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.8916164891153312} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.3184344603983327} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.19106067623900103},{"x":0.038212135247800205,"y":0.19106067623900103}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.3184344603983327},{"x":0.038212135247800205,"y":0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":0.0636868920796676},{"x":0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.06368689207966582},{"x":0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.19106067623899925},{"x":0.038212135247800205,"y":-0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.12737378415933343,"y":-0.3184344603983327},{"x":0.038212135247800205,"y":-0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="5" schX={0.2547475683186651} schY={-0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="4" schX={0.2547475683186651} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="1" schX={0.2547475683186651} schY={0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
@@ -2018,11 +2018,11 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="3" schX={0.2547475683186651} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="6" schX={0.2547475683186651} schY={-0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="J3" schX={-0.12737378415933343} schY={0.4458082445576661} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0.19106067623900103 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.3184344603983327 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.19106067623900103 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.3184344603983327 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300611121" pinLabels={{"pin5":["5","pin5"],"pin4":["4","pin4"],"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"],"pin6":["6","pin6"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-6.35mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="90deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="-3.81mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -2053,16 +2053,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="8" schX={-0.5094951366373319} schY={-0.12737378415933343} direction="left" pinNumber={8} aliases={["pin8"]} />
       <port name="9" schX={0.5094951366373337} schY={-0.25474756831866596} direction="right" pinNumber={9} aliases={["pin9"]} />
       <port name="10" schX={-0.5094951366373319} schY={-0.25474756831866596} direction="left" pinNumber={10} aliases={["pin10"]} />
-      <schematicline x1={0.25474756831866685} y1={0.25474756831866596} x2={0.5094951366373337} y2={0.25474756831866596} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.2547475683186651} y1={0.25474756831866596} x2={-0.5094951366373319} y2={0.25474756831866596} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.25474756831866685} y1={0.12737378415933254} x2={0.5094951366373337} y2={0.12737378415933254} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.2547475683186651} y1={0.12737378415933254} x2={-0.5094951366373319} y2={0.12737378415933254} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.25474756831866685} y1={0} x2={0.5094951366373337} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.2547475683186651} y1={0} x2={-0.5094951366373319} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.25474756831866685} y1={-0.12737378415933343} x2={0.5094951366373337} y2={-0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.2547475683186651} y1={-0.12737378415933343} x2={-0.5094951366373319} y2={-0.12737378415933343} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.25474756831866685} y1={-0.25474756831866596} x2={0.5094951366373337} y2={-0.25474756831866596} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.2547475683186651} y1={-0.25474756831866596} x2={-0.5094951366373319} y2={-0.25474756831866596} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.25474756831866685} y1={0.25474756831866596} x2={0.5094951366373337} y2={0.25474756831866596} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.2547475683186651} y1={0.25474756831866596} x2={-0.5094951366373319} y2={0.25474756831866596} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.25474756831866685} y1={0.12737378415933254} x2={0.5094951366373337} y2={0.12737378415933254} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.2547475683186651} y1={0.12737378415933254} x2={-0.5094951366373319} y2={0.12737378415933254} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.25474756831866685} y1={0} x2={0.5094951366373337} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.2547475683186651} y1={0} x2={-0.5094951366373319} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.25474756831866685} y1={-0.12737378415933343} x2={0.5094951366373337} y2={-0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.2547475683186651} y1={-0.12737378415933343} x2={-0.5094951366373319} y2={-0.12737378415933343} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.25474756831866685} y1={-0.25474756831866596} x2={0.5094951366373337} y2={-0.25474756831866596} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.2547475683186651} y1={-0.25474756831866596} x2={-0.5094951366373319} y2={-0.25474756831866596} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematicline x1={-0.5604446503010649} y1={0.20379805465493295} x2={-0.4585456229735989} y2={0.305697081982399} strokeWidth={0.02} color="#ff0000" isDashed={false}/>
       <schematicline x1={-0.4585456229735989} y1={0.20379805465493295} x2={-0.5604446503010649} y2={0.305697081982399} strokeWidth={0.02} color="#ff0000" isDashed={false}/>
       <schematicline x1={0.4585456229735989} y1={0.20379805465493295} x2={0.5604446503010667} y2={0.305697081982399} strokeWidth={0.02} color="#ff0000" isDashed={false}/>
@@ -2075,18 +2075,18 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematicline x1={-0.4585456229735989} y1={-0.17832329782306644} x2={-0.5604446503010649} y2={-0.07642427049559952} strokeWidth={0.02} color="#ff0000" isDashed={false}/>
       <schematicline x1={0.4585456229735989} y1={-0.17832329782306644} x2={0.5604446503010667} y2={-0.07642427049559952} strokeWidth={0.02} color="#ff0000" isDashed={false}/>
       <schematicline x1={0.5604446503010667} y1={-0.17832329782306644} x2={0.4585456229735989} y2={-0.07642427049559952} strokeWidth={0.02} color="#ff0000" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.5094951366373321} height={0.7642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0.12737378415933343} schY={0.25474756831866596} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":0.25474756831866685,"y":0.12737378415933254},{"x":0.16558591940713363,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.25474756831866685,"y":0.25474756831866596},{"x":0.16558591940713363,"y":0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.25474756831866685,"y":0},{"x":0.16558591940713363,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.25474756831866685,"y":-0.12737378415933343},{"x":0.16558591940713363,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":0.25474756831866685,"y":-0.25474756831866596},{"x":0.16558591940713363,"y":-0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.2547475683186651,"y":-0.12737378415933343},{"x":-0.16558591940713185,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.2547475683186651,"y":-0.25474756831866596},{"x":-0.16558591940713185,"y":-0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.2547475683186651,"y":0},{"x":-0.16558591940713185,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.2547475683186651,"y":0.12737378415933254},{"x":-0.16558591940713185,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.2547475683186651,"y":0.25474756831866596},{"x":-0.16558591940713185,"y":0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicrect schX={0} schY={0} width={0.5094951366373321} height={0.7642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0.12737378415933343} schY={0.25474756831866596} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":0.25474756831866685,"y":0.12737378415933254},{"x":0.16558591940713363,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.25474756831866685,"y":0.25474756831866596},{"x":0.16558591940713363,"y":0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.25474756831866685,"y":0},{"x":0.16558591940713363,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.25474756831866685,"y":-0.12737378415933343},{"x":0.16558591940713363,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":0.25474756831866685,"y":-0.25474756831866596},{"x":0.16558591940713363,"y":-0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.2547475683186651,"y":-0.12737378415933343},{"x":-0.16558591940713185,"y":-0.12737378415933343}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.2547475683186651,"y":-0.25474756831866596},{"x":-0.16558591940713185,"y":-0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.2547475683186651,"y":0},{"x":-0.16558591940713185,"y":0}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.2547475683186651,"y":0.12737378415933254},{"x":-0.16558591940713185,"y":0.12737378415933254}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.2547475683186651,"y":0.25474756831866596},{"x":-0.16558591940713185,"y":0.25474756831866596}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="1" schX={0.3821213524780003} schY={0.25474756831866596} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={-0.3821213524779985} schY={0.25474756831866596} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0.3821213524780003} schY={0.12737378415933254} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
@@ -2098,16 +2098,16 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="9" schX={0.3821213524780003} schY={-0.25474756831866596} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="10" schX={-0.3821213524779985} schY={-0.25474756831866596} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="J12" schX={-0.2547475683186651} schY={0.3821213524779985} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0.12737378415933343, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0.12737378415933343, y: 0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0.12737378415933343, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0.12737378415933343, y: -0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0.12737378415933343, y: -0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.12737378415933165, y: -0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.12737378415933165, y: -0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.12737378415933165, y: 0 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.12737378415933165, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: -0.12737378415933165, y: 0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933343, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933343, y: 0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933343, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933343, y: -0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0.12737378415933343, y: -0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.12737378415933165, y: -0.12737378415933343 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.12737378415933165, y: -0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.12737378415933165, y: 0 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.12737378415933165, y: 0.12737378415933254 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: -0.12737378415933165, y: 0.25474756831866596 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="N2510-6002-RB" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"],"pin4":["4","pin4"],"pin5":["5","pin5"],"pin6":["6","pin6"],"pin7":["7","pin7"],"pin8":["8","pin8"],"pin9":["9","pin9"],"pin10":["10","pin10"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["1"]} pcbX="-5.08mm" pcbY="-1.27mm" holeShape="circle" padShape="rect" holeDiameter="1.016mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="0deg" shape="circular_hole_with_rect_pad" />
     <platedhole  portHints={["2"]} pcbX="-5.08mm" pcbY="1.27mm" outerDiameter="1.64999924mm" holeDiameter="1.016mm" shape="circle" />
@@ -2193,20 +2193,20 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="2" schX={-0.3821213524779985} schY={0.19106067623900103} direction="left" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={-0.3821213524779985} schY={0.0636868920796676} direction="left" pinNumber={3} aliases={["pin3"]} />
       <port name="6" schX={-0.3821213524779985} schY={-0.3184344603983327} direction="left" pinNumber={6} aliases={["pin6"]} />
-      <schematicline x1={-0.12737378415933165} y1={-0.19106067623899925} x2={-0.3821213524779985} y2={-0.19106067623899925} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={-0.06368689207966582} x2={-0.3821213524779985} y2={-0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={0.3184344603983327} x2={-0.3821213524779985} y2={0.3184344603983327} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={0.19106067623900103} x2={-0.3821213524779985} y2={0.19106067623900103} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={0.0636868920796676} x2={-0.3821213524779985} y2={0.0636868920796676} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={-0.3184344603983327} x2={-0.3821213524779985} y2={-0.3184344603983327} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.8916164891153312} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
-      <schematicrect schX={0} schY={0.3184344603983327} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematicpath points={[{"x":-0.12737378415933165,"y":0.19106067623900103},{"x":-0.038212135247800205,"y":0.19106067623900103}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933165,"y":0.3184344603983327},{"x":-0.038212135247800205,"y":0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933165,"y":0.0636868920796676},{"x":-0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.06368689207966582},{"x":-0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.19106067623899925},{"x":-0.038212135247800205,"y":-0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
-      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.3184344603983327},{"x":-0.038212135247800205,"y":-0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.05}/>
+      <schematicline x1={-0.12737378415933165} y1={-0.19106067623899925} x2={-0.3821213524779985} y2={-0.19106067623899925} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={-0.06368689207966582} x2={-0.3821213524779985} y2={-0.06368689207966582} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={0.3184344603983327} x2={-0.3821213524779985} y2={0.3184344603983327} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={0.19106067623900103} x2={-0.3821213524779985} y2={0.19106067623900103} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={0.0636868920796676} x2={-0.3821213524779985} y2={0.0636868920796676} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={-0.3184344603983327} x2={-0.3821213524779985} y2={-0.3184344603983327} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicrect schX={0} schY={0} width={0.2547475683186661} height={0.8916164891153312} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#ffffff" isDashed={false} />
+      <schematicrect schX={0} schY={0.3184344603983327} width={0.07642427049559981} height={0.07642427049559981} rotation={0} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematicpath points={[{"x":-0.12737378415933165,"y":0.19106067623900103},{"x":-0.038212135247800205,"y":0.19106067623900103}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933165,"y":0.3184344603983327},{"x":-0.038212135247800205,"y":0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933165,"y":0.0636868920796676},{"x":-0.038212135247800205,"y":0.0636868920796676}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.06368689207966582},{"x":-0.038212135247800205,"y":-0.06368689207966582}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.19106067623899925},{"x":-0.038212135247800205,"y":-0.19106067623899925}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
+      <schematicpath points={[{"x":-0.12737378415933165,"y":-0.3184344603983327},{"x":-0.038212135247800205,"y":-0.3184344603983327}]} strokeColor="#0000ff" fillColor="#0000ff" isFilled={false} strokeWidth={0.012737378415933302}/>
       <schematictext text="5" schX={-0.25474756831866685} schY={-0.19106067623899925} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="4" schX={-0.25474756831866685} schY={-0.06368689207966582} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="1" schX={-0.25474756831866685} schY={0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
@@ -2214,11 +2214,11 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <schematictext text="3" schX={-0.25474756831866685} schY={0.0636868920796676} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="6" schX={-0.25474756831866685} schY={-0.3184344603983327} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="J4" schX={-0.14011116257526623} schY={0.4458082445576661} anchor="bottom_left" fontSize={0.12737378415933304} color="#1f2937" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0.19106067623900103 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
-      <schematiccircle center={{ x: 0, y: -0.3184344603983327 }} radius={0.03821213524779991} strokeWidth={0.05} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.19106067623900103 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0.0636868920796676 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.06368689207966582 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.19106067623899925 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: -0.3184344603983327 }} radius={0.03821213524779991} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={true} fillColor="#0000ff" isDashed={false} />
     </symbol>} schDisplayValue="61300611121" pinLabels={{"pin5":["5","pin5"],"pin4":["4","pin4"],"pin1":["1","pin1"],"pin2":["2","pin2"],"pin3":["3","pin3"],"pin6":["6","pin6"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["6"]} pcbX="6.35mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <platedhole  portHints={["5"]} pcbX="3.81mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
@@ -2257,26 +2257,26 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
       <port name="1_ANODE" schX={-0.6368689207966653} schY={0} direction="left" pinNumber={1} aliases={["1","pin1"]} />
       <port name="2_CATHODE" schX={0.6368689207966653} schY={0} direction="right" pinNumber={2} aliases={["2","pin2"]} />
       <port name="1_CATHODE/2_ANODE" schX={0} schY={-0.25474756831866685} direction="down" pinNumber={3} aliases={["3","pin3"]} />
-      <schematicline x1={-0.3821213524779985} y1={0.1273737841593352} x2={-0.3821213524779985} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={0.1273737841593352} x2={-0.12737378415933165} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.3821213524779985} y1={0.1273737841593352} x2={-0.12737378415933165} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.3821213524779985} y1={-0.12737378415933165} x2={-0.12737378415933165} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.12737378415933165} y1={0} x2={0.1273737841593352} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1273737841593352} y1={0} x2={0.1273737841593352} y2={0.1273737841593352} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1273737841593352} y1={0.1273737841593352} x2={0.1273737841593352} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.1273737841593352} y1={-0.12737378415933165} x2={0.3821213524779985} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.3821213524779985} y1={0} x2={0.1273737841593352} y2={0.1273737841593352} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.3821213524779985} y1={0} x2={0.3821213524779985} y2={0.1273737841593352} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={0.3821213524779985} y1={0.1273737841593352} x2={0.3821213524779985} y2={-0.12737378415933165} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
-      <schematicline x1={-0.3821213524779985} y1={0} x2={-0.6368689207966653} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0.3821213524779985} y1={0} x2={0.6368689207966653} y2={0} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
-      <schematicline x1={0} y1={0} x2={0} y2={-0.25474756831866685} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
+      <schematicline x1={-0.3821213524779985} y1={0.1273737841593352} x2={-0.3821213524779985} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={0.1273737841593352} x2={-0.12737378415933165} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.3821213524779985} y1={0.1273737841593352} x2={-0.12737378415933165} y2={0} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.3821213524779985} y1={-0.12737378415933165} x2={-0.12737378415933165} y2={0} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.12737378415933165} y1={0} x2={0.1273737841593352} y2={0} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1273737841593352} y1={0} x2={0.1273737841593352} y2={0.1273737841593352} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1273737841593352} y1={0.1273737841593352} x2={0.1273737841593352} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.1273737841593352} y1={-0.12737378415933165} x2={0.3821213524779985} y2={0} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.3821213524779985} y1={0} x2={0.1273737841593352} y2={0.1273737841593352} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.3821213524779985} y1={0} x2={0.3821213524779985} y2={0.1273737841593352} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={0.3821213524779985} y1={0.1273737841593352} x2={0.3821213524779985} y2={-0.12737378415933165} strokeWidth={0.012737378415933302} color="#0000ff" isDashed={false}/>
+      <schematicline x1={-0.3821213524779985} y1={0} x2={-0.6368689207966653} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0.3821213524779985} y1={0} x2={0.6368689207966653} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
+      <schematicline x1={0} y1={0} x2={0} y2={-0.25474756831866685} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>
       <schematictext text="1" schX={-0.5094951366373337} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="2" schX={0.5094951366373337} schY={0} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={0} />
       <schematictext text="3" schX={0} schY={-0.1273737841593352} anchor="bottom_center" fontSize={0.15} color="#a90000" schRotation={-90} />
       <schematictext text="D1" schX={-0.3948587308939331} schY={0.14011116257526623} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
       <schematictext text="BAS70-04-E3-18" schX={0.06368689207966582} schY={-0.3184344603983327} anchor="bottom_left" fontSize={0.12737378415933304} color="#000080" schRotation={0} />
-      <schematiccircle center={{ x: 0, y: 0 }} radius={0.012737378415933302} strokeWidth={0.05} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
+      <schematiccircle center={{ x: 0, y: 0 }} radius={0.012737378415933302} strokeWidth={0.012737378415933302} color="#0000ff" isFilled={false} fillColor="#ffffff" isDashed={false} />
     </symbol>} schDisplayValue="BAS70-04-E3-18" pinLabels={{"pin1":["1_ANODE","1","pin1"],"pin2":["2_CATHODE","2","pin2"],"pin3":["1_CATHODE/2_ANODE","3","pin3"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["3"]} pcbX="1.00000054mm" pcbY="0mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0490000798mm" width="0.90000074mm" height="0.70000114mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="-1.00000054mm" pcbY="-0.95000064mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0490000798mm" width="0.90000074mm" height="0.70000114mm" ccwRotation={180} shape="rotated_rect" />
@@ -2726,34 +2726,34 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <ParameterizedTrace removedFeatureIds={removedFeatureIds} path={[".R10 > .pin2",".U1 > .pin15","net.NetR10_2"]} />
     {/* Standalone schematic primitives */}
     <schematicrect schX={-3.693839740620657} schY={-7.706113941639648} width={3.0569708198239924} height={0.6368689207966651} rotation={0} strokeWidth={0} color="transparent" isFilled={true} fillColor="#ffffff" isDashed={false} />
-    <schematicrect schX={-9.839624826308476} schY={0.6368689207966653} width={0.8279295970356646} height={0.38212135247799905} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
-    <schematicrect schX={-5.19048170449282} schY={-4.4899258916164895} width={0.8279295970356646} height={0.19106067623899953} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
-    <schematicrect schX={-1.4011116257526623} schY={5.254168596572487} width={1.1463640574339973} height={0.4458082445576656} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
-    <schematicrect schX={9.298286243631312} schY={-4.553612783696156} width={4.330708661417323} height={9.234599351551644} rotation={0} strokeWidth={0.05} color="#800000" isFilled={false} fillColor="#ffffb0" isDashed={false} />
-    <schematicrect schX={-0.3184344603983327} schY={-5.4452292728114875} width={1.5284854099119962} height={0.5731820287169986} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
-    <schematicrect schX={10.699397869383974} schY={-0.25474756831866685} width={1.0189902732746643} height={0.2547475683186661} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
-    <schematicrect schX={10.317276516905975} schY={-3.5346225104214914} width={1.5284854099119962} height={0.31843446039833256} rotation={0} strokeWidth={0.05} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
-    <schematicpath points={[{"x":9.043538675312645,"y":-10.189902732746642},{"x":12.355257063455303,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":13.756368689207966,"y":-10.444650301065309},{"x":9.043538675312645,"y":-10.444650301065309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":9.043538675312645,"y":-10.189902732746642},{"x":12.355257063455303,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":-2.420101899027328,"y":-10.189902732746642},{"x":7.132931912922649,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":12.355257063455303,"y":-10.317276516905975},{"x":9.043538675312645,"y":-10.317276516905975}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":11.081519221861972,"y":-9.807781380268644},{"x":11.081519221861972,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-10.062528948587309},{"x":12.355257063455303,"y":-10.062528948587309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":9.043538675312645,"y":-10.57202408522464},{"x":9.043538675312645,"y":-9.807781380268644},{"x":13.756368689207966,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":11.463640574339971,"y":-10.189902732746642},{"x":11.463640574339971,"y":-10.317276516905975}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":12.355257063455303,"y":-10.444650301065309},{"x":12.355257063455303,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-10.57202408522464},{"x":7.132931912922649,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-10.444650301065309},{"x":9.043538675312645,"y":-10.444650301065309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":9.043538675312645,"y":-10.317276516905975},{"x":7.132931912922649,"y":-10.317276516905975}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":11.718388142658638,"y":-10.317276516905975},{"x":11.718388142658638,"y":-10.444650301065309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":9.043538675312645,"y":-9.935155164427977},{"x":12.355257063455303,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-10.189902732746642},{"x":9.043538675312645,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":-2.420101899027328,"y":-10.189902732746642},{"x":-2.420101899027328,"y":-10.57202408522464}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":8.40666975451598,"y":-10.062528948587309},{"x":8.40666975451598,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-10.062528948587309},{"x":9.043538675312645,"y":-10.062528948587309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-9.935155164427977},{"x":9.043538675312645,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
-    <schematicpath points={[{"x":7.132931912922649,"y":-9.807781380268644},{"x":9.043538675312645,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.05}/>
+    <schematicrect schX={-9.839624826308476} schY={0.6368689207966653} width={0.8279295970356646} height={0.38212135247799905} rotation={0} strokeWidth={0.012737378415933302} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
+    <schematicrect schX={-5.19048170449282} schY={-4.4899258916164895} width={0.8279295970356646} height={0.19106067623899953} rotation={0} strokeWidth={0.012737378415933302} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
+    <schematicrect schX={-1.4011116257526623} schY={5.254168596572487} width={1.1463640574339973} height={0.4458082445576656} rotation={0} strokeWidth={0.012737378415933302} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
+    <schematicrect schX={9.298286243631312} schY={-4.553612783696156} width={4.330708661417323} height={9.234599351551644} rotation={0} strokeWidth={0.012737378415933302} color="#800000" isFilled={false} fillColor="#ffffb0" isDashed={false} />
+    <schematicrect schX={-0.3184344603983327} schY={-5.4452292728114875} width={1.5284854099119962} height={0.5731820287169986} rotation={0} strokeWidth={0.012737378415933302} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
+    <schematicrect schX={10.699397869383974} schY={-0.25474756831866685} width={1.0189902732746643} height={0.2547475683186661} rotation={0} strokeWidth={0.012737378415933302} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
+    <schematicrect schX={10.317276516905975} schY={-3.5346225104214914} width={1.5284854099119962} height={0.31843446039833256} rotation={0} strokeWidth={0.012737378415933302} color="#1f2937" isFilled={true} fillColor="#fff2cc" isDashed={false} />
+    <schematicpath points={[{"x":9.043538675312645,"y":-10.189902732746642},{"x":12.355257063455303,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":13.756368689207966,"y":-10.444650301065309},{"x":9.043538675312645,"y":-10.444650301065309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":9.043538675312645,"y":-10.189902732746642},{"x":12.355257063455303,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":-2.420101899027328,"y":-10.189902732746642},{"x":7.132931912922649,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":12.355257063455303,"y":-10.317276516905975},{"x":9.043538675312645,"y":-10.317276516905975}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":11.081519221861972,"y":-9.807781380268644},{"x":11.081519221861972,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-10.062528948587309},{"x":12.355257063455303,"y":-10.062528948587309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":9.043538675312645,"y":-10.57202408522464},{"x":9.043538675312645,"y":-9.807781380268644},{"x":13.756368689207966,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":11.463640574339971,"y":-10.189902732746642},{"x":11.463640574339971,"y":-10.317276516905975}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":12.355257063455303,"y":-10.444650301065309},{"x":12.355257063455303,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-10.57202408522464},{"x":7.132931912922649,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-10.444650301065309},{"x":9.043538675312645,"y":-10.444650301065309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":9.043538675312645,"y":-10.317276516905975},{"x":7.132931912922649,"y":-10.317276516905975}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":11.718388142658638,"y":-10.317276516905975},{"x":11.718388142658638,"y":-10.444650301065309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":9.043538675312645,"y":-9.935155164427977},{"x":12.355257063455303,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-10.189902732746642},{"x":9.043538675312645,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":-2.420101899027328,"y":-10.189902732746642},{"x":-2.420101899027328,"y":-10.57202408522464}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":8.40666975451598,"y":-10.062528948587309},{"x":8.40666975451598,"y":-10.189902732746642}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-10.062528948587309},{"x":9.043538675312645,"y":-10.062528948587309}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-9.935155164427977},{"x":9.043538675312645,"y":-9.935155164427977}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
+    <schematicpath points={[{"x":7.132931912922649,"y":-9.807781380268644},{"x":9.043538675312645,"y":-9.807781380268644}]} strokeColor="#1f2937" fillColor="#1f2937" isFilled={false} strokeWidth={0.012737378415933302}/>
     <schematictext text="VCC2" schX={-1.8893777983634408} schY={4.458082445576654} anchor="center" fontSize={0.12737378415933304} color="rgb(132, 0, 0)" schRotation={0} />
     <schematictext text="FB" schX={-1.9742936544696619} schY={4.330708661417322} anchor="center" fontSize={0.12737378415933304} color="rgb(132, 0, 0)" schRotation={0} />
     <schematictext text="VIN" schX={-10.402192373012197} schY={3.7575266327003227} anchor="center" fontSize={0.12737378415933304} color="rgb(132, 0, 0)" schRotation={0} />

@@ -43,7 +43,7 @@
     "@vitejs/plugin-react": "6.1.2",
     "@tscircuit/mm": "0.0.9",
     "@tscircuit/soup-util": "0.0.41",
-    "altium-to-circuit-json": "github:tscircuit/altium-to-circuit-json#660e80f0434f7075f81bfc6bdedee743a886893c",
+    "altium-to-circuit-json": "github:tscircuit/altium-to-circuit-json#6020b0a68872fc8b95b1804076c4d031cbb7feef",
     "altiumts": "0.0.87",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.4.2",
