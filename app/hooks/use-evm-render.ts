@@ -1,7 +1,7 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useEffect, useRef, useState } from "react"
 import { loadPrebuiltCircuitJson } from "app/load-prebuilt-circuit-json"
-import type { TiEvmVariant } from "lib/ti-evm-catalog"
+import { getTiEvmVariantSchematicCircuitJsonUrls, type TiEvmVariant } from "lib/ti-evm-catalog"
 
 type EvmRenderState = {
   pcbCircuitJson: AnyCircuitElement[] | null
@@ -36,11 +36,12 @@ export function useEvmRender(request: {
     void (async () => {
       try {
         const pcbUrl = request.variant.circuitJsonUrl
+        const schematicCircuitJsonUrls = getTiEvmVariantSchematicCircuitJsonUrls(request.variant)
         const pcbCircuitJsonPromise = loadPrebuiltCircuitJson({ url: pcbUrl, forceReload })
         const [nextPcbCircuitJson, nextSchematicCircuitJsons] = await Promise.all([
           pcbCircuitJsonPromise,
           Promise.all(
-            request.variant.schematicCircuitJsonUrls.map((schematicUrl) =>
+            schematicCircuitJsonUrls.map((schematicUrl) =>
               schematicUrl === pcbUrl
                 ? pcbCircuitJsonPromise
                 : loadPrebuiltCircuitJson({ url: schematicUrl, forceReload }),

@@ -4,7 +4,13 @@ import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer } from "app/components/DesignViewer"
 import { BoardDetailPage } from "app/components/BoardDetailPage"
 import { useEvmRender } from "app/hooks/use-evm-render"
-import { getTiEvm, getTiEvmVariant, tiEvms, type TiEvmId } from "lib/ti-evm-catalog"
+import {
+  getTiEvm,
+  getTiEvmVariant,
+  getTiEvmVariantSchematicSheetLabels,
+  tiEvms,
+  type TiEvmId,
+} from "lib/ti-evm-catalog"
 
 export function App() {
   const detailBoardId = new URLSearchParams(window.location.search).get("board")
@@ -58,7 +64,7 @@ function Configurator() {
         boardKey={evm.id}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJsons={render.schematicCircuitJsons}
-        schematicSheetLabels={evm.schematicSheetLabels}
+        schematicSheetLabels={getTiEvmVariantSchematicSheetLabels(evm, variant)}
         isLoading={render.isLoading}
       />
     </main>

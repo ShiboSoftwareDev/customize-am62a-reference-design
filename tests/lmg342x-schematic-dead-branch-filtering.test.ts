@@ -7,9 +7,10 @@ import { lmg342xBbEvmDefinition } from "../lib/generated/ti-evms/lmg342x-bb-evm.
 type SchematicPointKey = string
 type SchematicTraceId = string
 type SchematicTraceEndpointKey = string
+type SourceTraceId = string
 type SourceTrace = AnyCircuitElement & {
   connected_source_port_ids: string[]
-  source_trace_id: string
+  source_trace_id: SourceTraceId
 }
 type SchematicTrace = AnyCircuitElement & {
   edges: Array<{
@@ -19,7 +20,7 @@ type SchematicTrace = AnyCircuitElement & {
     to_schematic_port_id?: string
   }>
   schematic_trace_id: SchematicTraceId
-  source_trace_id?: string
+  source_trace_id?: SourceTraceId
 }
 type SchematicNetLabel = AnyCircuitElement & {
   anchor_position?: { x: number; y: number }
@@ -65,40 +66,43 @@ function getUnanchoredEndpointKeys(
         : [],
     ),
   )
-  const netLabelPointKeysByTraceId = new Map<SchematicTraceId, Set<SchematicPointKey>>()
+  const tracesBySourceTraceId = new Map<SourceTraceId, SchematicTrace[]>()
+  const sourceTraceIdBySchematicTraceId = new Map<SchematicTraceId, SourceTraceId>()
+  for (const element of circuitJson) {
+    if (!isSchematicTrace(element) || !element.source_trace_id) continue
+    const traces = tracesBySourceTraceId.get(element.source_trace_id) ?? []
+    traces.push(element)
+    tracesBySourceTraceId.set(element.source_trace_id, traces)
+    sourceTraceIdBySchematicTraceId.set(element.schematic_trace_id, element.source_trace_id)
+  }
+  const netLabelPointKeysBySourceTraceId = new Map<SourceTraceId, Set<SchematicPointKey>>()
   for (const element of circuitJson) {
     if (!isSchematicNetLabel(element) || !element.schematic_trace_id) continue
+    const sourceTraceId = sourceTraceIdBySchematicTraceId.get(element.schematic_trace_id)
+    if (!sourceTraceId) continue
     const pointKeys =
-      netLabelPointKeysByTraceId.get(element.schematic_trace_id) ?? new Set<SchematicPointKey>()
+      netLabelPointKeysBySourceTraceId.get(sourceTraceId) ?? new Set<SchematicPointKey>()
     pointKeys.add(getSchematicPointKey(element.anchor_position ?? element.center))
-    netLabelPointKeysByTraceId.set(element.schematic_trace_id, pointKeys)
+    netLabelPointKeysBySourceTraceId.set(sourceTraceId, pointKeys)
   }
 
   return new Set(
-    circuitJson.flatMap((element) => {
-      if (
-        !isSchematicTrace(element) ||
-        !element.source_trace_id ||
-        !sourceTraceIdsWithMultiplePorts.has(element.source_trace_id)
-      ) {
-        return []
-      }
+    [...tracesBySourceTraceId].flatMap(([sourceTraceId, traces]) => {
+      if (!sourceTraceIdsWithMultiplePorts.has(sourceTraceId)) return []
       const connectedEdgeCounts = new Map<SchematicPointKey, number>()
-      const anchoredPointKeys = new Set(
-        netLabelPointKeysByTraceId.get(element.schematic_trace_id) ?? [],
-      )
-      for (const edge of element.edges) {
-        const fromKey = getSchematicPointKey(edge.from)
-        const toKey = getSchematicPointKey(edge.to)
-        connectedEdgeCounts.set(fromKey, (connectedEdgeCounts.get(fromKey) ?? 0) + 1)
-        connectedEdgeCounts.set(toKey, (connectedEdgeCounts.get(toKey) ?? 0) + 1)
-        if (edge.from_schematic_port_id) anchoredPointKeys.add(fromKey)
-        if (edge.to_schematic_port_id) anchoredPointKeys.add(toKey)
+      const anchoredPointKeys = new Set(netLabelPointKeysBySourceTraceId.get(sourceTraceId) ?? [])
+      for (const trace of traces) {
+        for (const edge of trace.edges) {
+          const fromKey = getSchematicPointKey(edge.from)
+          const toKey = getSchematicPointKey(edge.to)
+          connectedEdgeCounts.set(fromKey, (connectedEdgeCounts.get(fromKey) ?? 0) + 1)
+          connectedEdgeCounts.set(toKey, (connectedEdgeCounts.get(toKey) ?? 0) + 1)
+          if (edge.from_schematic_port_id) anchoredPointKeys.add(fromKey)
+          if (edge.to_schematic_port_id) anchoredPointKeys.add(toKey)
+        }
       }
       return [...connectedEdgeCounts.entries()].flatMap(([pointKey, edgeCount]) =>
-        edgeCount === 1 && !anchoredPointKeys.has(pointKey)
-          ? [`${element.schematic_trace_id}:${pointKey}`]
-          : [],
+        edgeCount === 1 && !anchoredPointKeys.has(pointKey) ? [`${sourceTraceId}:${pointKey}`] : [],
       )
     }),
   )

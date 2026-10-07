@@ -1,14 +1,18 @@
 import type { AnyCircuitElement } from "circuit-json"
+import { findRemovedInlineNetLabelIds } from "./find-removed-inline-net-label-ids"
+import { findRemovedSchematicNetLabelIds } from "./find-removed-schematic-net-label-ids"
 import {
-  pruneUnanchoredSchematicTraceEdges,
+  pruneSchematicTraceEdgesAfterPortRemoval,
   type SchematicTraceEdge,
 } from "./prune-unanchored-schematic-trace-edges"
 
 type ComponentName = string
+type SchematicPointKey = string
 type SourceComponentId = string
 type SourcePortId = string
 type SourceTraceId = string
 type SchematicComponentId = string
+type SchematicNetLabelId = string
 type SchematicPortId = string
 type SchematicTraceId = string
 type SourceComponent = AnyCircuitElement & {
@@ -34,12 +38,14 @@ type SchematicPort = AnyCircuitElement & {
 }
 type SchematicTrace = AnyCircuitElement & {
   edges: SchematicTraceEdge[]
+  junctions?: Array<{ x: number; y: number }>
   schematic_trace_id: SchematicTraceId
   source_trace_id?: SourceTraceId
 }
 type SchematicNetLabel = AnyCircuitElement & {
   anchor_position?: { x: number; y: number }
   center: { x: number; y: number }
+  schematic_net_label_id: SchematicNetLabelId
   schematic_trace_id?: SchematicTraceId
 }
 type SchematicGroup = AnyCircuitElement & {
@@ -94,7 +100,20 @@ export function filterReferenceSchematic(params: {
     removedSchematicPortIds,
     removedSourceTraceIds,
   })
-
+  const activeSchematicTraceEdges = new Set(
+    [...updatedSchematicTraces.values()].flatMap(({ edges }) => edges),
+  )
+  const removedSchematicTextIds = findRemovedInlineNetLabelIds({
+    activeEdges: activeSchematicTraceEdges,
+    circuitJson: params.circuitJson,
+    removedSourceTraceIds,
+  })
+  const removedSchematicNetLabelIds = findRemovedSchematicNetLabelIds({
+    activeEdges: activeSchematicTraceEdges,
+    circuitJson: params.circuitJson,
+    removedSchematicPortIds,
+    removedSchematicTraceIds,
+  })
   return params.circuitJson.flatMap((element) => {
     if (
       (isSourceComponent(element) && removedSourceComponentIds.has(element.source_component_id)) ||
@@ -115,8 +134,14 @@ export function filterReferenceSchematic(params: {
     }
     if (
       isSchematicNetLabel(element) &&
-      element.schematic_trace_id !== undefined &&
-      removedSchematicTraceIds.has(element.schematic_trace_id)
+      removedSchematicNetLabelIds.has(element.schematic_net_label_id)
+    ) {
+      return []
+    }
+    if (
+      element.type === "schematic_text" &&
+      typeof element.schematic_text_id === "string" &&
+      removedSchematicTextIds.has(element.schematic_text_id)
     ) {
       return []
     }
@@ -155,7 +180,12 @@ function updateSourceTraces(params: {
     const connectedSourcePortIds = element.connected_source_port_ids.filter(
       (sourcePortId) => !params.removedSourcePortIds.has(sourcePortId),
     )
-    if (connectedSourcePortIds.length + element.connected_source_net_ids.length === 0) {
+    const lostEveryConnectedPort =
+      element.connected_source_port_ids.length > 0 && connectedSourcePortIds.length === 0
+    if (
+      lostEveryConnectedPort ||
+      connectedSourcePortIds.length + element.connected_source_net_ids.length === 0
+    ) {
       removedSourceTraceIds.add(element.source_trace_id)
       continue
     }
@@ -177,44 +207,98 @@ function updateSchematicTraces(params: {
 } {
   const removedSchematicTraceIds = new Set<SchematicTraceId>()
   const updatedSchematicTraces = new Map<SchematicTraceId, SchematicTrace>()
+  const schematicTraceGroups = new Map<SourceTraceId, SchematicTrace[]>()
   for (const element of params.circuitJson) {
     if (!isSchematicTrace(element)) continue
-    if (
-      element.source_trace_id !== undefined &&
-      params.removedSourceTraceIds.has(element.source_trace_id)
-    ) {
+    if (element.source_trace_id === undefined) {
+      updateSchematicTraceGroup({
+        circuitJson: params.circuitJson,
+        removedSchematicPortIds: params.removedSchematicPortIds,
+        removedSchematicTraceIds,
+        traces: [element],
+        updatedSchematicTraces,
+      })
+      continue
+    }
+    if (params.removedSourceTraceIds.has(element.source_trace_id)) {
       removedSchematicTraceIds.add(element.schematic_trace_id)
       continue
     }
-    const removedPortEdges = element.edges.filter(
-      (edge) =>
-        params.removedSchematicPortIds.has(edge.from_schematic_port_id ?? "") ||
-        params.removedSchematicPortIds.has(edge.to_schematic_port_id ?? ""),
-    )
-    const edgesWithoutRemovedPorts = element.edges.filter(
-      (edge) =>
-        !params.removedSchematicPortIds.has(edge.from_schematic_port_id ?? "") &&
-        !params.removedSchematicPortIds.has(edge.to_schematic_port_id ?? ""),
-    )
-    const edges =
-      removedPortEdges.length > 0
-        ? pruneUnanchoredSchematicTraceEdges({
-            anchorPoints: params.circuitJson.flatMap((candidate) =>
-              isSchematicNetLabel(candidate) &&
-              candidate.schematic_trace_id === element.schematic_trace_id
-                ? [candidate.anchor_position ?? candidate.center]
-                : [],
-            ),
-            edges: edgesWithoutRemovedPorts,
-          })
-        : edgesWithoutRemovedPorts
-    if (edges.length === 0) {
-      removedSchematicTraceIds.add(element.schematic_trace_id)
-      continue
-    }
-    updatedSchematicTraces.set(element.schematic_trace_id, { ...element, edges })
+    const traces = schematicTraceGroups.get(element.source_trace_id) ?? []
+    traces.push(element)
+    schematicTraceGroups.set(element.source_trace_id, traces)
+  }
+  for (const traces of schematicTraceGroups.values()) {
+    updateSchematicTraceGroup({
+      circuitJson: params.circuitJson,
+      removedSchematicPortIds: params.removedSchematicPortIds,
+      removedSchematicTraceIds,
+      traces,
+      updatedSchematicTraces,
+    })
   }
   return { removedSchematicTraceIds, updatedSchematicTraces }
+}
+
+function updateSchematicTraceGroup(params: {
+  circuitJson: AnyCircuitElement[]
+  removedSchematicPortIds: ReadonlySet<SchematicPortId>
+  removedSchematicTraceIds: Set<SchematicTraceId>
+  traces: SchematicTrace[]
+  updatedSchematicTraces: Map<SchematicTraceId, SchematicTrace>
+}): void {
+  const schematicTraceIds = new Set(
+    params.traces.map(({ schematic_trace_id }) => schematic_trace_id),
+  )
+  const edges = params.traces.flatMap(({ edges }) => edges)
+  const activeEdges = new Set(
+    pruneSchematicTraceEdgesAfterPortRemoval({
+      anchorPoints: params.circuitJson.flatMap((candidate) =>
+        isSchematicNetLabel(candidate) &&
+        candidate.schematic_trace_id !== undefined &&
+        schematicTraceIds.has(candidate.schematic_trace_id)
+          ? [candidate.anchor_position ?? candidate.center]
+          : [],
+      ),
+      edges,
+      removedSchematicPortIds: params.removedSchematicPortIds,
+    }),
+  )
+  const activePointKeys = new Set(
+    [...activeEdges].flatMap(({ from, to }) => [
+      getSchematicPointKey(from),
+      getSchematicPointKey(to),
+    ]),
+  )
+  const removedPointKeys = new Set(
+    edges.flatMap((edge) =>
+      activeEdges.has(edge) ? [] : [getSchematicPointKey(edge.from), getSchematicPointKey(edge.to)],
+    ),
+  )
+
+  for (const trace of params.traces) {
+    const traceEdges = trace.edges.filter((edge) => activeEdges.has(edge))
+    if (traceEdges.length === 0) {
+      params.removedSchematicTraceIds.add(trace.schematic_trace_id)
+      continue
+    }
+    params.updatedSchematicTraces.set(trace.schematic_trace_id, {
+      ...trace,
+      edges: traceEdges,
+      ...(trace.junctions
+        ? {
+            junctions: trace.junctions.filter((junction) => {
+              const pointKey = getSchematicPointKey(junction)
+              return !removedPointKeys.has(pointKey) || activePointKeys.has(pointKey)
+            }),
+          }
+        : {}),
+    })
+  }
+}
+
+function getSchematicPointKey(point: { x: number; y: number }): SchematicPointKey {
+  return `${point.x},${point.y}`
 }
 
 function isSourceComponent(element: AnyCircuitElement): element is SourceComponent {
