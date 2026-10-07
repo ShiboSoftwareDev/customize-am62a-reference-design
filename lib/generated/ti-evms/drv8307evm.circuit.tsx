@@ -27,6 +27,7 @@ const featureIdByComponentName: Partial<Record<string, Drv8307EvmFeatureId>> =
   "C9": "hall-interface",
   "U8": "hall-interface",
   "U9": "hall-interface",
+  "JP4": "hall-interface",
   "R2": "hall-interface",
   "U11": "hall-interface",
   "C8": "hall-interface",
@@ -1155,7 +1156,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreentext pcbX={3.8435864199999976} pcbY={0.6428460599999966} anchorAlignment="center" fontSize={1.397} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R3" />
     <courtyardoutline outline={[{"x":-1.4250009600000055,"y":0.8000009400000039},{"x":1.4249984199999979,"y":0.8000009400000039},{"x":1.4249984199999979,"y":-0.7999984000000069},{"x":-1.4250009600000055,"y":-0.7999984000000069}]} layer="top" />
           </footprint>} />)}
-    <chip name="JP4" pcbX={-21.7678} pcbY={33.873948} pcbRotation="270deg" layer="top" schX={-13.90823743185948} schY={-0.6662628709872802} symbol={<symbol>
+    {isComponentIncluded({ componentName: "JP4", removedFeatureIds }) && (<chip name="JP4" pcbX={-21.7678} pcbY={33.873948} pcbRotation="270deg" layer="top" schX={-13.90823743185948} schY={-0.6662628709872802} symbol={<symbol>
       <port name="1" schX={-0.08328285887341025} schY={0.3331314354936392} direction="up" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.08328285887341025} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={-0.08328285887341025} schY={-0.333131435493641} direction="down" pinNumber={3} aliases={["pin3"]} />
@@ -1187,7 +1188,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreenline x1={5.715000000000018} y1={-1.269999999999996} x2={-0.6349999999999909} y2={-1.269999999999996} strokeWidth={0.254} />
     <silkscreenline x1={-0.6349999999999909} y1={-1.269999999999996} x2={-1.269999999999996} y2={-0.634999999999998} strokeWidth={0.254} />
     <silkscreentext pcbX={-1.7779999999999916} pcbY={-1.269999999999996} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="JP4" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="JP1" pcbX={-4.610371779999994} pcbY={33.873948} pcbRotation="270deg" layer="top" schX={1.3325257419745586} schY={0.08328285887341025} symbol={<symbol>
       <port name="1" schX={-0.3331314354936392} schY={-0.08328285887341025} direction="left" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0} schY={0.08328285887341025} direction="up" pinNumber={2} aliases={["pin2"]} />

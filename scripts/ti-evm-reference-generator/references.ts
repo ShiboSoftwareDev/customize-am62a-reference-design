@@ -82,6 +82,7 @@ const drvHallInterfaceComponents = new Set([
   "C9",
   "C20",
   "JP3",
+  "JP4",
   "JP5",
   "JP6",
   "JP6a",

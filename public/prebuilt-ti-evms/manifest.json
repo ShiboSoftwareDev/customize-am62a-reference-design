@@ -149,22 +149,22 @@
           ]
         },
         {
-          "elementCount": 2853,
+          "elementCount": 2806,
           "output": "prebuilt-ti-evms/drv8307evm/remove-hall-interface.circuit.json.gz",
-          "pcbTraceCount": 126,
+          "pcbTraceCount": 125,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 64,
+          "sourceComponentCount": 63,
           "sourceTraceCount": 47,
           "schematicOutputs": [
             "prebuilt-ti-evms/drv8307evm/remove-hall-interface.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 2509,
+          "elementCount": 2461,
           "output": "prebuilt-ti-evms/drv8307evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 105,
+          "pcbTraceCount": 104,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 54,
+          "sourceComponentCount": 53,
           "sourceTraceCount": 41,
           "schematicOutputs": [
             "prebuilt-ti-evms/drv8307evm/minimal-board.schematic.circuit.json.gz"
