@@ -18,7 +18,7 @@ export function loadPrebuiltCircuitJson({
   if (cachedCircuitJson) return cachedCircuitJson
 
   const circuitJsonPromise = fetch(url, {
-    cache: forceReload ? "reload" : "force-cache",
+    cache: forceReload ? "reload" : "no-cache",
   })
     .then(async (response) => {
       if (!response.ok) throw new Error(`Prebuilt EVM failed to load (${response.status})`)
