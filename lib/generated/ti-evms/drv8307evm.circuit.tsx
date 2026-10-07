@@ -27,6 +27,7 @@ const featureIdByComponentName: Partial<Record<string, Drv8307EvmFeatureId>> =
   "C9": "hall-interface",
   "U8": "hall-interface",
   "U9": "hall-interface",
+  "JP4": "hall-interface",
   "R2": "hall-interface",
   "U11": "hall-interface",
   "C8": "hall-interface",
@@ -1155,7 +1156,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreentext pcbX={3.8435864199999976} pcbY={0.6428460599999966} anchorAlignment="center" fontSize={1.397} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R3" />
     <courtyardoutline outline={[{"x":-1.4250009600000055,"y":0.8000009400000039},{"x":1.4249984199999979,"y":0.8000009400000039},{"x":1.4249984199999979,"y":-0.7999984000000069},{"x":-1.4250009600000055,"y":-0.7999984000000069}]} layer="top" />
           </footprint>} />)}
-    <chip name="JP4" pcbX={-21.7678} pcbY={33.873948} pcbRotation="270deg" layer="top" schX={-13.90823743185948} schY={-0.6662628709872802} symbol={<symbol>
+    {isComponentIncluded({ componentName: "JP4", removedFeatureIds }) && (<chip name="JP4" pcbX={-21.7678} pcbY={33.873948} pcbRotation="270deg" layer="top" schX={-13.90823743185948} schY={-0.6662628709872802} symbol={<symbol>
       <port name="1" schX={-0.08328285887341025} schY={0.3331314354936392} direction="up" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.08328285887341025} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={-0.08328285887341025} schY={-0.333131435493641} direction="down" pinNumber={3} aliases={["pin3"]} />
@@ -1187,7 +1188,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreenline x1={5.715000000000018} y1={-1.269999999999996} x2={-0.6349999999999909} y2={-1.269999999999996} strokeWidth={0.254} />
     <silkscreenline x1={-0.6349999999999909} y1={-1.269999999999996} x2={-1.269999999999996} y2={-0.634999999999998} strokeWidth={0.254} />
     <silkscreentext pcbX={-1.7779999999999916} pcbY={-1.269999999999996} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="JP4" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="JP1" pcbX={-4.610371779999994} pcbY={33.873948} pcbRotation="270deg" layer="top" schX={1.3325257419745586} schY={0.08328285887341025} symbol={<symbol>
       <port name="1" schX={-0.3331314354936392} schY={-0.08328285887341025} direction="left" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0} schY={0.08328285887341025} direction="up" pinNumber={2} aliases={["pin2"]} />
@@ -2015,99 +2016,8 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <schematictext text="JP3_1-2, JP4_2-3" schX={-13.82495457298607} schY={5.913082980012113} anchor="bottom_left" fontSize={0.18322228952150213} color="#1f2937" schRotation={0} />
     <schematictext text="Hall power:" schX={-13.49182313749243} schY={9.410963052695337} anchor="bottom_left" fontSize={0.2665051483949122} color="#1f2937" schRotation={0} />
     <schematictext text="5V or current" schX={-13.49182313749243} schY={9.161114476075106} anchor="bottom_left" fontSize={0.2665051483949122} color="#1f2937" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
     <schematictext text="555 Timer as PWM Generator" schX={-1.5823743185947912} schY={-9.244397334948516} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
     <schematictext text="Approximately 25 kHz" schX={-1.5823743185947912} schY={-9.410963052695337} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
     <schematictext text="Connector" schX={13.291944276196245} schY={4.580557238037553} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="Power" schX={12.825560266505148} schY={9.327680193821926} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="for motor" schX={13.291944276196245} schY={4.4139915202907325} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
@@ -2119,12 +2029,6 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <schematictext text="S1" schX={13.108721986674743} schY={6.562689279224713} anchor="bottom_left" fontSize={0.18322228952150213} color="#1f2937" schRotation={0} />
     <schematictext text="G1" schX={12.525741974560871} schY={6.912477286493036} anchor="bottom_left" fontSize={0.18322228952150213} color="#1f2937" schRotation={0} />
     <schematictext text="G2" schX={12.525741974560871} schY={6.079648697758934} anchor="bottom_left" fontSize={0.18322228952150213} color="#1f2937" schRotation={0} />
-    <schematictext text="General" schX={-15.007571168988493} schY={-11.143246517262266} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Capacitor" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="C" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text={"@DESIGNATOR %1 %2 @VALUE ?\"INITIAL VOLTAGE\"ŽIC=@\"INITIAL VOLTAGE\"Ž"} schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Initial Voltage" schX={-14.624470018170806} schY={-10.976680799515446} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
     <schematictext text="External" schX={5.213506965475469} schY={-7.928528164748638} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="Clock input" schX={5.213506965475469} schY={-8.095093882495458} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="Direction" schX={-13.49182313749243} schY={7.828588734100546} anchor="bottom_left" fontSize={0.2665051483949122} color="#1f2937" schRotation={0} />
@@ -2137,36 +2041,6 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <schematictext text="Installed is Low" schX={-12.242580254391278} schY={7.428831011508176} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="Installed: pot R20 controls speed" schX={-13.49182313749243} schY={6.829194427619626} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="Uninstalled: use a clock on JP6" schX={-13.49182313749243} schY={6.662628709872806} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="General" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Resistor" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="R" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="Excluded Parts" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
-    <schematictext text="@DESIGNATOR %1 %2 @VALUE" schX={-14.624470018170806} schY={-10.876741368867354} anchor="bottom_left" fontSize={0.1665657177468201} color="#000080" schRotation={0} />
     <schematictext text="Optional series resistors slow FET" schX={5.913082980012115} schY={7.245608721986674} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="turn-on time and reduce noise" schX={5.913082980012115} schY={7.079043004239853} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
     <schematictext text="These circuits control whether pullup resistors and 2V biases are" schX={-12.575711689884919} schY={4.330708661417322} anchor="bottom_left" fontSize={0.18322228952150213} color="#ee0e22" schRotation={0} />
