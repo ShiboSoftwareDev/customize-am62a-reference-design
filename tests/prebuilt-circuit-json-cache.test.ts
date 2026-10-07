@@ -27,6 +27,9 @@ test("prebuilt Circuit JSON is fetched and parsed once per asset URL", async () 
   const cachedLoad = await loadPrebuiltCircuitJson({ url: "/board.circuit.json.gz" })
 
   expect(fetchMock).toHaveBeenCalledTimes(1)
+  expect(fetchMock).toHaveBeenCalledWith("/board.circuit.json.gz", {
+    cache: "no-cache",
+  })
   expect(firstLoad).toBe(concurrentLoad)
   expect(firstLoad).toBe(cachedLoad)
 })
