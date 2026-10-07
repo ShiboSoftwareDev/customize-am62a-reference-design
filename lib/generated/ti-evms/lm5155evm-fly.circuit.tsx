@@ -3,7 +3,7 @@
 import { Fragment } from "react"
 import "tscircuit"
 
-export type Lm5155EvmFlyFeatureId = "test-and-measurement" | "configuration-interface"
+export type Lm5155EvmFlyFeatureId = "test-and-measurement"
 
 export type Lm5155EvmFlyProps = {
   removedFeatureIds?: readonly string[]
@@ -20,8 +20,7 @@ const featureIdByComponentName: Partial<Record<string, Lm5155EvmFlyFeatureId>> =
   "TP9": "test-and-measurement",
   "TP6": "test-and-measurement",
   "TP7": "test-and-measurement",
-  "J4": "configuration-interface",
-  "R26": "configuration-interface"
+  "J4": "test-and-measurement"
 }
 
 const pouredNetSelectors = new Set<string>([
@@ -484,7 +483,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
   <board pcbX={60.1218} pcbY={59.9186} width="85.09mm" height="41.91mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 80.8736 }, { x: 102.6668, y: 80.8736 }, { x: 102.6668, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterEffortLevel="1x">
-    {isComponentIncluded({ componentName: "R26", removedFeatureIds }) && (<chip name="R26" pcbX={-9.906000000000006} pcbY={-10.540999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-10.05297591477536} schY={4.93509726725336} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R26" pcbX={-9.906000000000006} pcbY={-10.540999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-10.05297591477536} schY={4.93509726725336} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006199999973} x2={-0.07111999999999341} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -492,7 +491,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.050000439999998} pcbY={-0.2750007199999942} anchorAlignment="center" text="R26" font="tscircuit2024" fontSize={0.5588} color="#ec4899" />
     <silkscreentext pcbX={3.683} pcbY={0.5413629000000029} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R26" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002199999955},{"x":-1.200000139999993,"y":0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
-          </footprint>} />)}
+          </footprint>} />
     <chip name="T1" pcbX={0} pcbY={2.158999999999999} pcbRotation="90deg" layer="top" schX={2.558939323760999} schY={6.1231762389995374} symbol={<symbol>
       <port name="2" schX={-0.9139069013432142} schY={-0.09139069013432177} direction="left" pinNumber={2} aliases={["pin2"]} />
       <port name="7" schX={0.9139069013432177} schY={0.6397348309402524} direction="right" pinNumber={7} aliases={["pin7"]} />

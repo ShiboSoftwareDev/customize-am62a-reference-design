@@ -2,14 +2,12 @@ import { Lm251772EvmPd as GeneratedLm251772EvmPd } from "../../lib/generated/ti-
 
 export type Lm251772EvmPdProps = {
   removeTestAndMeasurement?: boolean
-  removeConfigurationJumpers?: boolean
 }
 
 export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
-  const removedFeatureIds = [
-    props.removeTestAndMeasurement && "test-and-measurement",
-    props.removeConfigurationJumpers && "configuration-jumpers",
-  ].filter((featureId): featureId is string => Boolean(featureId))
+  const removedFeatureIds = [props.removeTestAndMeasurement && "test-and-measurement"].filter(
+    (featureId): featureId is string => Boolean(featureId),
+  )
 
   return <GeneratedLm251772EvmPd removedFeatureIds={removedFeatureIds} />
 }

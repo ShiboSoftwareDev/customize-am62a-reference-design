@@ -33,7 +33,7 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
     "lm251772evm-pd",
     "lmg342x-bb-evm",
   ])
-  expect(manifest.boards.map(({ artifacts }) => artifacts.length)).toEqual([8, 4, 4, 4, 4])
+  expect(manifest.boards.map(({ artifacts }) => artifacts.length)).toEqual([4, 4, 2, 2, 4])
   expect(manifest.sources).toHaveLength(5)
 
   for (const board of manifest.boards) {
