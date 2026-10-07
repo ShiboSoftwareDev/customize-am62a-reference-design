@@ -176,7 +176,7 @@
       "id": "lm5155evm-fly",
       "artifacts": [
         {
-          "elementCount": 3033,
+          "elementCount": 3028,
           "output": "prebuilt-ti-evms/lm5155evm-fly/full-board.circuit.json.gz",
           "pcbTraceCount": 149,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -188,7 +188,7 @@
           ]
         },
         {
-          "elementCount": 2877,
+          "elementCount": 2872,
           "output": "prebuilt-ti-evms/lm5155evm-fly/remove-test-and-measurement.circuit.json.gz",
           "pcbTraceCount": 140,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -200,7 +200,7 @@
           ]
         },
         {
-          "elementCount": 2886,
+          "elementCount": 2881,
           "output": "prebuilt-ti-evms/lm5155evm-fly/remove-configuration-interface.circuit.json.gz",
           "pcbTraceCount": 142,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -212,7 +212,7 @@
           ]
         },
         {
-          "elementCount": 2727,
+          "elementCount": 2722,
           "output": "prebuilt-ti-evms/lm5155evm-fly/minimal-board.circuit.json.gz",
           "pcbTraceCount": 133,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -229,7 +229,7 @@
       "id": "lm251772evm-pd",
       "artifacts": [
         {
-          "elementCount": 5453,
+          "elementCount": 5440,
           "output": "prebuilt-ti-evms/lm251772evm-pd/full-board.circuit.json.gz",
           "pcbTraceCount": 294,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
@@ -240,7 +240,7 @@
           ]
         },
         {
-          "elementCount": 5218,
+          "elementCount": 5205,
           "output": "prebuilt-ti-evms/lm251772evm-pd/remove-test-and-measurement.circuit.json.gz",
           "pcbTraceCount": 281,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
@@ -251,7 +251,7 @@
           ]
         },
         {
-          "elementCount": 4943,
+          "elementCount": 4930,
           "output": "prebuilt-ti-evms/lm251772evm-pd/remove-configuration-jumpers.circuit.json.gz",
           "pcbTraceCount": 261,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
@@ -262,7 +262,7 @@
           ]
         },
         {
-          "elementCount": 4688,
+          "elementCount": 4675,
           "output": "prebuilt-ti-evms/lm251772evm-pd/minimal-board.circuit.json.gz",
           "pcbTraceCount": 248,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",

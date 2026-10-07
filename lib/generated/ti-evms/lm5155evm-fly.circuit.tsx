@@ -974,7 +974,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <smtpad portHints={["6"]} pcbX="2.79500076mm" pcbY="-0.635mm" layer="top" solderMaskMargin="-0.0499999mm" cornerRadius="0.0994498011mm" width="0.91000072mm" height="0.50999898mm" shape="rect" />
     <smtpad portHints={["7"]} pcbX="2.79500076mm" pcbY="0.635mm" layer="top" solderMaskMargin="-0.0499999mm" cornerRadius="0.0994498011mm" width="0.91000072mm" height="0.50999898mm" shape="rect" />
     <smtpad portHints={["8"]} pcbX="2.79500076mm" pcbY="1.905mm" layer="top" solderMaskMargin="-0.0499999mm" cornerRadius="0.0994498011mm" width="0.91000072mm" height="0.50999898mm" shape="rect" />
-    <smtpad portHints={["9"]} pcbX="1.0050018mm" pcbY="0mm" layer="top" solderMaskMargin="-2.50000008mm" cornerRadius="0.0449000118mm" width="4.49000118mm" height="4.57000102mm" shape="rect" />
+    <smtpad portHints={["9"]} pcbX="1.0050018mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} cornerRadius="0.0449000118mm" width="4.49000118mm" height="4.57000102mm" shape="rect" />
     <silkscreenline x1={-2.999999080000002} y1={-2.5999998800000057} x2={-2.799999480000004} y2={-2.5999998800000057} strokeWidth={0.19999959999999997} />
     <silkscreenline x1={2.7999994799999968} y1={-2.5999998800000057} x2={2.999999080000002} y2={-2.5999998800000057} strokeWidth={0.19999959999999997} />
     <silkscreenline x1={2.7999994799999968} y1={2.5999998799999986} x2={2.999999080000002} y2={2.5999998799999986} strokeWidth={0.19999959999999997} />
@@ -988,8 +988,8 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematictext text="NT1" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="Net-Tie" schX={-0.1999999999999993} schY={-0.33000000000000007} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
     </symbol>} schDisplayValue="Net-Tie" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
-            <smtpad portHints={["1"]} pcbX="-0.254mm" pcbY="0mm" layer="top" solderMaskMargin="-0.127mm" width="0.254mm" height="0.254mm" ccwRotation={90} shape="rotated_rect" />
-    <smtpad portHints={["2"]} pcbX="0.254mm" pcbY="0mm" layer="top" solderMaskMargin="-0.127mm" width="0.254mm" height="0.254mm" ccwRotation={90} shape="rotated_rect" />
+            <smtpad portHints={["1"]} pcbX="-0.254mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} width="0.254mm" height="0.254mm" ccwRotation={90} shape="rotated_rect" />
+    <smtpad portHints={["2"]} pcbX="0.254mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} width="0.254mm" height="0.254mm" ccwRotation={90} shape="rotated_rect" />
           </footprint>} />
     <chip name="J2" pcbX={37.97299999999999} pcbY={-4.1910000000000025} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/1.step" positionOffset={{ x: 3.5011410800000107, y: 0.00005080000000390328, z: 0 }} rotationOffset={{ x: 270, y: 0, z: 90 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={13.70860352014822} schY={5.940394858730896} symbol={<symbol>
       <port name="1" schX={-0.5483441408059306} schY={-0.09139069013432177} direction="left" pinNumber={1} aliases={["pin1"]} />
@@ -1586,8 +1586,8 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
       <schematictext text="NT2" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="Net-Tie" schX={-0.1999999999999993} schY={-0.33000000000000007} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
     </symbol>} schDisplayValue="Net-Tie" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
-            <smtpad portHints={["1"]} pcbX="-0.254mm" pcbY="0mm" layer="top" solderMaskMargin="-0.127mm" width="0.254mm" height="0.254mm" ccwRotation={270} shape="rotated_rect" />
-    <smtpad portHints={["2"]} pcbX="0.254mm" pcbY="0mm" layer="top" solderMaskMargin="-0.127mm" width="0.254mm" height="0.254mm" ccwRotation={270} shape="rotated_rect" />
+            <smtpad portHints={["1"]} pcbX="-0.254mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} width="0.254mm" height="0.254mm" ccwRotation={270} shape="rotated_rect" />
+    <smtpad portHints={["2"]} pcbX="0.254mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} width="0.254mm" height="0.254mm" ccwRotation={270} shape="rotated_rect" />
           </footprint>} />
     <chip name="C13" pcbX={19.939} pcbY={7.239000000000004} pcbRotation="90deg" layer="top" symbolName="capacitor_down" schX={11.33244557665586} schY={5.940394858730896} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
