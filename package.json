@@ -18,6 +18,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
+    "@tscircuit/3d-viewer": "0.0.615",
     "@tscircuit/capacity-autorouter": "0.0.962",
     "@tscircuit/checks": "0.0.240",
     "@tscircuit/circuit-json-util": "0.0.120",
