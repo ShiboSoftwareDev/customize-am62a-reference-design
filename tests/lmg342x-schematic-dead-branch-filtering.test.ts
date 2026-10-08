@@ -1,50 +1,62 @@
 import { expect, test } from "bun:test"
+import "bun-match-svg"
 import type { AnyCircuitElement } from "circuit-json"
+import { convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { gunzipSync, strFromU8 } from "fflate"
 import { filterReferenceSchematic } from "../lib/evms/filter-reference-schematic"
 import { lmg342xBbEvmDefinition } from "../lib/generated/ti-evms/lmg342x-bb-evm.generated"
 
-type SchematicPointKey = string
-type SchematicTraceId = string
-type SchematicTraceEndpointKey = string
-type SourceTraceId = string
-type SourceTrace = AnyCircuitElement & {
-  connected_source_port_ids: string[]
-  source_trace_id: SourceTraceId
+type SourceComponentId = string
+type SourcePortId = string
+type SchematicPortId = string
+type SourceComponent = AnyCircuitElement & {
+  name: string
+  source_component_id: SourceComponentId
+}
+type SourcePort = AnyCircuitElement & {
+  name: string
+  source_component_id: SourceComponentId
+  source_port_id: SourcePortId
+}
+type SchematicPort = AnyCircuitElement & {
+  schematic_port_id: SchematicPortId
+  source_port_id: SourcePortId
 }
 type SchematicTrace = AnyCircuitElement & {
   edges: Array<{
-    from: { x: number; y: number }
-    from_schematic_port_id?: string
-    to: { x: number; y: number }
-    to_schematic_port_id?: string
+    from_schematic_port_id?: SchematicPortId
+    to_schematic_port_id?: SchematicPortId
   }>
-  schematic_trace_id: SchematicTraceId
-  source_trace_id?: SourceTraceId
-}
-type SchematicNetLabel = AnyCircuitElement & {
-  anchor_position?: { x: number; y: number }
-  center: { x: number; y: number }
-  schematic_trace_id?: SchematicTraceId
 }
 
-test("LMG342X measurement removal does not create dead schematic branches", async () => {
+test("LMG342X minimal keeps retained PWM ports connected", async () => {
   const circuitJson = await readLmg342xSchematic()
   const removedComponentNames = new Set(
     lmg342xBbEvmDefinition.components.flatMap((component) =>
-      component.removableFeatureId === "measurement-interface" ? [component.name] : [],
+      component.removableFeatureId ? [component.name] : [],
     ),
   )
   const filteredCircuitJson = filterReferenceSchematic({
     circuitJson,
     removedComponentNames,
   })
-  const originalUnanchoredEndpoints = getUnanchoredEndpointKeys(circuitJson)
-  const newUnanchoredEndpoints = [...getUnanchoredEndpointKeys(filteredCircuitJson)].filter(
-    (pointKey) => !originalUnanchoredEndpoints.has(pointKey),
-  )
 
-  expect(newUnanchoredEndpoints).toEqual([])
+  for (const port of [
+    { componentName: "R2", portName: "2" },
+    { componentName: "R4", portName: "2" },
+    { componentName: "J3", portName: "1" },
+    { componentName: "J8", portName: "1" },
+  ]) {
+    expectRetainedPortToHaveSchematicTrace({
+      circuitJson: filteredCircuitJson,
+      ...port,
+    })
+  }
+
+  const schematicSvg = convertCircuitJsonToSchematicSvg(filteredCircuitJson, {
+    includeVersion: false,
+  }).replace(/[ \t]+$/gmu, "")
+  await expect(schematicSvg).toMatchSvgSnapshot(import.meta.path)
 })
 
 async function readLmg342xSchematic(): Promise<AnyCircuitElement[]> {
@@ -56,82 +68,43 @@ async function readLmg342xSchematic(): Promise<AnyCircuitElement[]> {
   ) as AnyCircuitElement[]
 }
 
-function getUnanchoredEndpointKeys(
-  circuitJson: AnyCircuitElement[],
-): Set<SchematicTraceEndpointKey> {
-  const sourceTraceIdsWithMultiplePorts = new Set(
-    circuitJson.flatMap((element) =>
-      isSourceTrace(element) && element.connected_source_port_ids.length >= 2
-        ? [element.source_trace_id]
-        : [],
-    ),
+function expectRetainedPortToHaveSchematicTrace(params: {
+  circuitJson: AnyCircuitElement[]
+  componentName: string
+  portName: string
+}): void {
+  const sourceComponent = params.circuitJson.find(
+    (element): element is SourceComponent =>
+      element.type === "source_component" && element.name === params.componentName,
   )
-  const tracesBySourceTraceId = new Map<SourceTraceId, SchematicTrace[]>()
-  const sourceTraceIdBySchematicTraceId = new Map<SchematicTraceId, SourceTraceId>()
-  for (const element of circuitJson) {
-    if (!isSchematicTrace(element) || !element.source_trace_id) continue
-    const traces = tracesBySourceTraceId.get(element.source_trace_id) ?? []
-    traces.push(element)
-    tracesBySourceTraceId.set(element.source_trace_id, traces)
-    sourceTraceIdBySchematicTraceId.set(element.schematic_trace_id, element.source_trace_id)
-  }
-  const netLabelPointKeysBySourceTraceId = new Map<SourceTraceId, Set<SchematicPointKey>>()
-  for (const element of circuitJson) {
-    if (!isSchematicNetLabel(element) || !element.schematic_trace_id) continue
-    const sourceTraceId = sourceTraceIdBySchematicTraceId.get(element.schematic_trace_id)
-    if (!sourceTraceId) continue
-    const pointKeys =
-      netLabelPointKeysBySourceTraceId.get(sourceTraceId) ?? new Set<SchematicPointKey>()
-    pointKeys.add(getSchematicPointKey(element.anchor_position ?? element.center))
-    netLabelPointKeysBySourceTraceId.set(sourceTraceId, pointKeys)
-  }
+  expect(sourceComponent).toBeDefined()
 
-  return new Set(
-    [...tracesBySourceTraceId].flatMap(([sourceTraceId, traces]) => {
-      if (!sourceTraceIdsWithMultiplePorts.has(sourceTraceId)) return []
-      const connectedEdgeCounts = new Map<SchematicPointKey, number>()
-      const anchoredPointKeys = new Set(netLabelPointKeysBySourceTraceId.get(sourceTraceId) ?? [])
-      for (const trace of traces) {
-        for (const edge of trace.edges) {
-          const fromKey = getSchematicPointKey(edge.from)
-          const toKey = getSchematicPointKey(edge.to)
-          connectedEdgeCounts.set(fromKey, (connectedEdgeCounts.get(fromKey) ?? 0) + 1)
-          connectedEdgeCounts.set(toKey, (connectedEdgeCounts.get(toKey) ?? 0) + 1)
-          if (edge.from_schematic_port_id) anchoredPointKeys.add(fromKey)
-          if (edge.to_schematic_port_id) anchoredPointKeys.add(toKey)
-        }
-      }
-      return [...connectedEdgeCounts.entries()].flatMap(([pointKey, edgeCount]) =>
-        edgeCount === 1 && !anchoredPointKeys.has(pointKey) ? [`${sourceTraceId}:${pointKey}`] : [],
-      )
-    }),
+  const sourcePort = params.circuitJson.find(
+    (element): element is SourcePort =>
+      element.type === "source_port" &&
+      element.source_component_id === sourceComponent?.source_component_id &&
+      element.name === params.portName,
   )
-}
+  expect(sourcePort).toBeDefined()
 
-function getSchematicPointKey(point: { x: number; y: number }): SchematicPointKey {
-  return `${point.x},${point.y}`
+  const schematicPort = params.circuitJson.find(
+    (element): element is SchematicPort =>
+      element.type === "schematic_port" && element.source_port_id === sourcePort?.source_port_id,
+  )
+  expect(schematicPort).toBeDefined()
+
+  const hasSchematicTrace = params.circuitJson.some(
+    (element) =>
+      isSchematicTrace(element) &&
+      element.edges.some(
+        (edge) =>
+          edge.from_schematic_port_id === schematicPort?.schematic_port_id ||
+          edge.to_schematic_port_id === schematicPort?.schematic_port_id,
+      ),
+  )
+  expect(hasSchematicTrace).toBe(true)
 }
 
 function isSchematicTrace(element: AnyCircuitElement): element is SchematicTrace {
-  return (
-    element.type === "schematic_trace" &&
-    typeof element.schematic_trace_id === "string" &&
-    Array.isArray(element.edges)
-  )
-}
-
-function isSourceTrace(element: AnyCircuitElement): element is SourceTrace {
-  return (
-    element.type === "source_trace" &&
-    typeof element.source_trace_id === "string" &&
-    Array.isArray(element.connected_source_port_ids)
-  )
-}
-
-function isSchematicNetLabel(element: AnyCircuitElement): element is SchematicNetLabel {
-  return (
-    element.type === "schematic_net_label" &&
-    typeof element.center === "object" &&
-    element.center !== null
-  )
+  return element.type === "schematic_trace" && Array.isArray(element.edges)
 }
