@@ -50,6 +50,7 @@
     "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#89098c0fe725f05b5cb4ef2226b9c310cd179083",
     "circuit-to-svg": "0.0.441",
     "circuit-json-to-gltf": "0.0.145",
+    "fast-png": "8.0.0",
     "poppygl": "0.0.33",
     "transformation-matrix": "3.1.0",
     "typescript": "5.9.3",
