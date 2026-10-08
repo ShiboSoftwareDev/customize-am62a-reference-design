@@ -5,6 +5,8 @@ import {
   pruneSchematicTraceEdgesAfterPortRemoval,
   type SchematicTraceEdge,
 } from "./prune-unanchored-schematic-trace-edges"
+import { restoreSchematicInlineNetLabelConnections } from "./restore-schematic-inline-net-label-connections"
+import { restoreSchematicNetLabelConnections } from "./restore-schematic-net-label-connections"
 
 type ComponentName = string
 type SchematicPointKey = string
@@ -95,11 +97,17 @@ export function filterReferenceSchematic(params: {
     circuitJson: params.circuitJson,
     removedSourcePortIds,
   })
-  const { removedSchematicTraceIds, updatedSchematicTraces } = updateSchematicTraces({
+  const schematicTraceUpdates = updateSchematicTraces({
     circuitJson: params.circuitJson,
     removedSchematicPortIds,
     removedSourceTraceIds,
   })
+  const { removedSchematicTraceIds, restoredInlineNetLabelIds, updatedSchematicTraces } =
+    restoreSchematicInlineNetLabelConnections({
+      circuitJson: params.circuitJson,
+      removedSchematicPortIds,
+      ...schematicTraceUpdates,
+    })
   const activeSchematicTraceEdges = new Set(
     [...updatedSchematicTraces.values()].flatMap(({ edges }) => edges),
   )
@@ -108,12 +116,21 @@ export function filterReferenceSchematic(params: {
     circuitJson: params.circuitJson,
     removedSourceTraceIds,
   })
-  const removedSchematicNetLabelIds = findRemovedSchematicNetLabelIds({
+  for (const schematicTextId of restoredInlineNetLabelIds) {
+    removedSchematicTextIds.delete(schematicTextId)
+  }
+  const schematicNetLabelRemovals = findRemovedSchematicNetLabelIds({
     activeEdges: activeSchematicTraceEdges,
     circuitJson: params.circuitJson,
     removedSchematicPortIds,
     removedSchematicTraceIds,
   })
+  const { removedSchematicNetLabelIds, updatedSchematicNetLabels } =
+    restoreSchematicNetLabelConnections({
+      circuitJson: params.circuitJson,
+      removedSchematicNetLabelIds: schematicNetLabelRemovals,
+      updatedSchematicTraces,
+    })
   return params.circuitJson.flatMap((element) => {
     if (
       (isSourceComponent(element) && removedSourceComponentIds.has(element.source_component_id)) ||
@@ -132,11 +149,9 @@ export function filterReferenceSchematic(params: {
       const schematicTrace = updatedSchematicTraces.get(element.schematic_trace_id)
       return schematicTrace ? [schematicTrace] : []
     }
-    if (
-      isSchematicNetLabel(element) &&
-      removedSchematicNetLabelIds.has(element.schematic_net_label_id)
-    ) {
-      return []
+    if (isSchematicNetLabel(element)) {
+      if (removedSchematicNetLabelIds.has(element.schematic_net_label_id)) return []
+      return [updatedSchematicNetLabels.get(element.schematic_net_label_id) ?? element]
     }
     if (
       element.type === "schematic_text" &&
