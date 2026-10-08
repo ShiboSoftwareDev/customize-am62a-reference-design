@@ -4,7 +4,7 @@ import { gunzipSync, strFromU8 } from "fflate"
 import { filterReferenceSchematic } from "../lib/evms/filter-reference-schematic"
 import { drv8307EvmDefinition } from "../lib/generated/ti-evms/drv8307evm.generated"
 
-test("DRV8307 hall-interface removal removes JP4 and its ground symbol", async () => {
+test("DRV8307 Hall conditioning removal removes JP4 and its ground symbol", async () => {
   const file = Bun.file(
     new URL("../lib/generated/ti-evms/drv8307evm.schematic.circuit.json.gz", import.meta.url),
   )
@@ -13,7 +13,7 @@ test("DRV8307 hall-interface removal removes JP4 and its ground symbol", async (
   ) as AnyCircuitElement[]
   const removedComponentNames = new Set(
     drv8307EvmDefinition.components.flatMap((component) =>
-      component.removableFeatureId === "hall-interface" ? [component.name] : [],
+      component.removableFeatureId === "single-ended-hall-conditioning" ? [component.name] : [],
     ),
   )
   const filteredCircuitJson = filterReferenceSchematic({

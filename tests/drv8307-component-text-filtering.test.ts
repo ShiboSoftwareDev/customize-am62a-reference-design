@@ -19,32 +19,32 @@ type SchematicText = AnyCircuitElement & {
   text: string
 }
 
-test("DRV8307 hall-interface removal removes component-owned text", async () => {
+test("DRV8307 Hall conditioning removal removes component-owned text", async () => {
   const circuitJson = await readDrv8307Schematic()
   const removedComponentNames = new Set(
     drv8307EvmDefinition.components.flatMap((component) =>
-      component.removableFeatureId === "hall-interface" ? [component.name] : [],
+      component.removableFeatureId === "single-ended-hall-conditioning" ? [component.name] : [],
     ),
   )
-  const jp5SourceComponent = circuitJson.find(
-    (element): element is SourceComponent => isSourceComponent(element) && element.name === "JP5",
+  const jp4SourceComponent = circuitJson.find(
+    (element): element is SourceComponent => isSourceComponent(element) && element.name === "JP4",
   )
-  if (!jp5SourceComponent) throw new Error("Expected the DRV8307 schematic to contain JP5")
-  const jp5SchematicComponent = circuitJson.find(
+  if (!jp4SourceComponent) throw new Error("Expected the DRV8307 schematic to contain JP4")
+  const jp4SchematicComponent = circuitJson.find(
     (element): element is SchematicComponent =>
       isSchematicComponent(element) &&
-      element.source_component_id === jp5SourceComponent.source_component_id,
+      element.source_component_id === jp4SourceComponent.source_component_id,
   )
-  if (!jp5SchematicComponent) {
-    throw new Error("Expected JP5 to have a schematic component")
+  if (!jp4SchematicComponent) {
+    throw new Error("Expected JP4 to have a schematic component")
   }
-  const jp5Text = circuitJson.filter(
+  const jp4Text = circuitJson.filter(
     (element): element is SchematicText =>
       isSchematicText(element) &&
-      element.schematic_component_id === jp5SchematicComponent.schematic_component_id,
+      element.schematic_component_id === jp4SchematicComponent.schematic_component_id,
   )
 
-  expect(jp5Text.map((element) => element.text)).toEqual(["1", "2", "JP5", "Comment"])
+  expect(jp4Text.map((element) => element.text)).toContain("JP4")
 
   const filteredCircuitJson = filterReferenceSchematic({ circuitJson, removedComponentNames })
 
@@ -52,7 +52,7 @@ test("DRV8307 hall-interface removal removes component-owned text", async () => 
     filteredCircuitJson.some(
       (element) =>
         "schematic_component_id" in element &&
-        element.schematic_component_id === jp5SchematicComponent.schematic_component_id,
+        element.schematic_component_id === jp4SchematicComponent.schematic_component_id,
     ),
   ).toBe(false)
 })

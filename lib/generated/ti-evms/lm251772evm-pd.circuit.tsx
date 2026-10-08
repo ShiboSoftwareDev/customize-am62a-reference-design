@@ -3,7 +3,7 @@
 import { Fragment } from "react"
 import "tscircuit"
 
-export type Lm251772EvmPdFeatureId = "test-and-measurement"
+export type Lm251772EvmPdFeatureId = "power-measurement-access" | "control-debug-access" | "usb2any-interface"
 
 export type Lm251772EvmPdProps = {
   removedFeatureIds?: readonly string[]
@@ -11,19 +11,25 @@ export type Lm251772EvmPdProps = {
 
 const featureIdByComponentName: Partial<Record<string, Lm251772EvmPdFeatureId>> =
   {
-  "TP2": "test-and-measurement",
-  "TP1": "test-and-measurement",
-  "TP3": "test-and-measurement",
-  "TP6": "test-and-measurement",
-  "TP8": "test-and-measurement",
-  "TP9": "test-and-measurement",
-  "TP12": "test-and-measurement",
-  "TP13": "test-and-measurement",
-  "TP4": "test-and-measurement",
-  "TP7": "test-and-measurement",
-  "TP10": "test-and-measurement",
-  "TP11": "test-and-measurement",
-  "TP5": "test-and-measurement"
+  "TP2": "power-measurement-access",
+  "TP1": "power-measurement-access",
+  "TP3": "power-measurement-access",
+  "TP6": "power-measurement-access",
+  "J3": "power-measurement-access",
+  "J4": "power-measurement-access",
+  "TP8": "power-measurement-access",
+  "TP9": "control-debug-access",
+  "TP12": "control-debug-access",
+  "TP13": "control-debug-access",
+  "TP4": "power-measurement-access",
+  "TP7": "power-measurement-access",
+  "R39": "usb2any-interface",
+  "R40": "usb2any-interface",
+  "J12": "usb2any-interface",
+  "TP10": "control-debug-access",
+  "J11": "control-debug-access",
+  "TP11": "control-debug-access",
+  "TP5": "power-measurement-access"
 }
 
 const pouredNetSelectors = new Set<string>([
@@ -1124,12 +1130,12 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={-0.8249996199999998} pcbY={-0.2250008199999911} anchorAlignment="center" text="R20" font="tscircuit2024" fontSize={0.4572} color="#ec4899" />
     <silkscreentext pcbX={-2.153706639999996} pcbY={0.26377392000000555} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R20" />
           </footprint>} />
-    <chip name="R39" pcbX={-10.795000000000002} pcbY={36.956999999999994} pcbRotation="270deg" layer="bottom" symbolName="boxresistor_up" schX={-3.8212135247799903} schY={-6.687123668364984} schDisplayValue="2.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "R39", removedFeatureIds }) && (<chip name="R39" pcbX={-10.795000000000002} pcbY={36.956999999999994} pcbRotation="270deg" layer="bottom" symbolName="boxresistor_up" schX={-3.8212135247799903} schY={-6.687123668364984} schDisplayValue="2.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="-0.762mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="0.762mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={180} shape="rotated_rect" />
     <fabricationnotetext pcbX={0.824999620000014} pcbY={0.22500081999999821} anchorAlignment="center" text="R39" font="tscircuit2024" fontSize={0.4572} color="#ec4899" layer="bottom" />
     <silkscreentext pcbX={-1.6656303999999977} pcbY={0.3608425600000018} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="90deg" mirrored={true} layer="bottom" text="R39" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="R42" pcbX={19.938999999999993} pcbY={28.575000000000003} pcbRotation="180deg" layer="top" symbolName="boxresistor_up" schX={1.5284854099119958} schY={-7.706113941639648} schDisplayValue="8.25k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.762mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.762mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={270} shape="rotated_rect" />
@@ -1261,12 +1267,12 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={-0.8249996199999998} pcbY={-0.22500082000000532} anchorAlignment="center" text="R8" font="tscircuit2024" fontSize={0.4572} color="#ec4899" />
     <silkscreentext pcbX={0.6271336200000093} pcbY={1.9413169199999913} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R8" />
           </footprint>} />
-    <chip name="R40" pcbX={-9.271} pcbY={36.956999999999994} pcbRotation="270deg" layer="bottom" symbolName="boxresistor_up" schX={-3.439092172301992} schY={-6.687123668364984} schDisplayValue="2.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "R40", removedFeatureIds }) && (<chip name="R40" pcbX={-9.271} pcbY={36.956999999999994} pcbRotation="270deg" layer="bottom" symbolName="boxresistor_up" schX={-3.439092172301992} schY={-6.687123668364984} schDisplayValue="2.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="-0.762mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="0.762mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="0.889mm" height="0.508mm" ccwRotation={180} shape="rotated_rect" />
     <fabricationnotetext pcbX={0.824999620000014} pcbY={0.22500081999999821} anchorAlignment="center" text="R40" font="tscircuit2024" fontSize={0.4572} color="#ec4899" layer="bottom" />
     <silkscreentext pcbX={-1.667215359999986} pcbY={0.3608425600000018} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="90deg" mirrored={true} layer="bottom" text="R40" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="R4" pcbX={-11.153538779999998} pcbY={8.476000319999997} pcbRotation="180deg" layer="top" symbolName="boxresistor_left" schX={1.6622278832792965} schY={3.3117183881426584} schDisplayValue="5m" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.65000124mm" pcbY="0mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0490000798mm" width="0.70000114mm" height="2.20000068mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.65000124mm" pcbY="0mm" layer="top" solderMaskMargin="0mm" cornerRadius="0.0490000798mm" width="0.70000114mm" height="2.20000068mm" ccwRotation={180} shape="rotated_rect" />
@@ -1922,7 +1928,7 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={0} pcbY={2.691604980000001} anchorAlignment="bottom_left" text="J9" font="tscircuit2024" fontSize={0.49999899999999997} color="#ec4899" layer="bottom" />
     <silkscreentext pcbX={5.885454319999994} pcbY={8.17476902} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="J9" />
           </footprint>} />
-    <chip name="J11" pcbX={45.72} pcbY={30.480000000000004} pcbRotation="0deg" layer="top" schX={-11.527327466419639} schY={-6.241315423807318} symbol={<symbol>
+    {isComponentIncluded({ componentName: "J11", removedFeatureIds }) && (<chip name="J11" pcbX={45.72} pcbY={30.480000000000004} pcbRotation="0deg" layer="top" schX={-11.527327466419639} schY={-6.241315423807318} symbol={<symbol>
       <port name="1" schX={0.3821213524779985} schY={0.06368689207966582} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={-0.06368689207966671} direction="right" pinNumber={2} aliases={["pin2"]} />
       <schematicline x1={0.12737378415933343} y1={0.06368689207966582} x2={0.3821213524779985} y2={0.06368689207966582} strokeWidth={0.05} color="#1f2937" isDashed={false}/>
@@ -1940,7 +1946,7 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <platedhole  portHints={["2"]} pcbX="1.27mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5080000000000098} anchorAlignment="center" text="J11" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={3.092541439999991} pcbY={-0.3608425600000089} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J11" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="J10" pcbX={9.998999560000001} pcbY={-41.33091048} pcbRotation="0deg" layer="bottom" schX={7.578740157480317} schY={-8.151922186197314} symbol={<symbol>
       <port name="-" schX={0.573182028716996} schY={0.4458082445576661} direction="right" pinNumber={1} aliases={["1","pin1"]} schStemLength={0.2547475683186661} />
       <port name="+" schX={0.573182028716996} schY={0.19106067623900014} direction="right" pinNumber={2} aliases={["2","pin2"]} schStemLength={0.2547475683186661} />
@@ -1978,7 +1984,7 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={-1.3969999999999914} pcbY={-0.7620000000000005} anchorAlignment="center" text="J5" font="tscircuit2024" fontSize={1.524} color="#ec4899" />
     <silkscreentext pcbX={-0.5066588799999892} pcbY={6.625742400000007} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J5" />
           </footprint>} />
-    <chip name="J3" pcbX={-46.863} pcbY={-26.416000000000004} pcbRotation="90deg" layer="top" schX={-12.03682260305697} schY={2.738536359425659} symbol={<symbol>
+    {isComponentIncluded({ componentName: "J3", removedFeatureIds }) && (<chip name="J3" pcbX={-46.863} pcbY={-26.416000000000004} pcbRotation="90deg" layer="top" schX={-12.03682260305697} schY={2.738536359425659} symbol={<symbol>
       <port name="5" schX={0.3821213524779985} schY={-0.19106067623899925} direction="right" pinNumber={5} aliases={["pin5"]} />
       <port name="4" schX={0.3821213524779985} schY={-0.06368689207966582} direction="right" pinNumber={4} aliases={["pin4"]} />
       <port name="1" schX={0.3821213524779985} schY={0.3184344603983327} direction="right" pinNumber={1} aliases={["pin1"]} />
@@ -2020,7 +2026,7 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <platedhole  portHints={["6"]} pcbX="6.35mm" pcbY="0mm" outerDiameter="1.64999924mm" holeDiameter="1.15000024mm" shape="circle" />
     <fabricationnotetext pcbX={-1.5239999999999938} pcbY={-0.5079999999999991} anchorAlignment="center" text="J3" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={8.275157440000008} pcbY={0.5040172799999993} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J3" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="J1" pcbX={36.956999999999994} pcbY={-34.544} pcbRotation="0deg" layer="top" schX={12.928439092172303} schY={3.7575266327003245} symbol={<symbol>
       <port name="1" schX={0} schY={0} direction="left" pinNumber={1} aliases={["pin1"]} schStemLength={0.2547475683186661} />
       <schematictext text="J1" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
@@ -2030,7 +2036,7 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <fabricationnotetext pcbX={-1.3969999999999914} pcbY={-0.7620000000000005} anchorAlignment="center" text="J1" font="tscircuit2024" fontSize={1.524} color="#ec4899" />
     <silkscreentext pcbX={-0.4332223999999911} pcbY={6.751157439999993} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J1" />
           </footprint>} />
-    <chip name="J12" pcbX={-17.78} pcbY={39.36999999999999} pcbRotation="0deg" layer="top" schX={-4.7128300138953225} schY={-6.814497452524317} symbol={<symbol>
+    {isComponentIncluded({ componentName: "J12", removedFeatureIds }) && (<chip name="J12" pcbX={-17.78} pcbY={39.36999999999999} pcbRotation="0deg" layer="top" schX={-4.7128300138953225} schY={-6.814497452524317} symbol={<symbol>
       <port name="1" schX={0.5094951366373337} schY={0.25474756831866596} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={-0.5094951366373319} schY={0.25474756831866596} direction="left" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.5094951366373337} schY={0.12737378415933254} direction="right" pinNumber={3} aliases={["pin3"]} />
@@ -2173,8 +2179,8 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <silkscreenline x1={-10.00735616} y1={4.013443840000008} x2={-9.346956159999998} y2={4.013443840000008} strokeWidth={0.17779999999999999} />
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5079999999999956} anchorAlignment="center" text="J12" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={11.282842559999999} pcbY={-0.7845551999999856} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="J12" />
-          </footprint>} />
-    <chip name="J4" pcbX={47.11699999999999} pcbY={-26.21099914} pcbRotation="90deg" layer="top" schX={12.992125984251969} schY={2.738536359425659} symbol={<symbol>
+          </footprint>} />)}
+    {isComponentIncluded({ componentName: "J4", removedFeatureIds }) && (<chip name="J4" pcbX={47.11699999999999} pcbY={-26.21099914} pcbRotation="90deg" layer="top" schX={12.992125984251969} schY={2.738536359425659} symbol={<symbol>
       <port name="5" schX={-0.3821213524779985} schY={-0.19106067623899925} direction="left" pinNumber={5} aliases={["pin5"]} />
       <port name="4" schX={-0.3821213524779985} schY={-0.06368689207966582} direction="left" pinNumber={4} aliases={["pin4"]} />
       <port name="1" schX={-0.3821213524779985} schY={0.3184344603983327} direction="left" pinNumber={1} aliases={["pin1"]} />
@@ -2216,7 +2222,7 @@ export function Lm251772EvmPd(props: Lm251772EvmPdProps) {
     <platedhole  portHints={["1"]} pcbX="-6.35mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.15000024mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="90deg" shape="circular_hole_with_rect_pad" />
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5080000000000098} anchorAlignment="center" text="J4" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={8.452741540000012} pcbY={0.6294323200000065} anchorAlignment="center" fontSize={1.143} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J4" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="D3" pcbX={-4.951001020000007} pcbY={-33.6400013} pcbRotation="180deg" layer="bottom" symbolName="diode_down" schX={8.916164891153313} schY={-6.559749884205651} schDisplayValue="48V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="2.21000066mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="2.74299934mm" height="2.159mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="-2.21000066mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="2.74299934mm" height="2.159mm" ccwRotation={270} shape="rotated_rect" />
