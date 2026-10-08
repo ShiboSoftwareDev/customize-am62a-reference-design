@@ -32,7 +32,7 @@ function Configurator() {
     const seconds = (render.elapsedMs / 1000).toFixed(1)
     if (render.isLoading) return `Loading prebuilt design… ${seconds}s elapsed`
     if (!render.pcbCircuitJson) return "No design available"
-    return `Loaded in ${seconds}s`
+    return `Design data loaded in ${seconds}s`
   }, [render.elapsedMs, render.isLoading, render.pcbCircuitJson])
 
   const exportCircuitJson = () => {
