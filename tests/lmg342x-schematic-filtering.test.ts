@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import type { AnyCircuitElement } from "circuit-json"
 import { gunzipSync, strFromU8 } from "fflate"
 import { filterReferenceSchematic } from "../lib/evms/filter-reference-schematic"
+import { getReferenceSchematicComponentName } from "../lib/evms/get-reference-schematic-component-name"
 import { lmg342xBbEvmDefinition } from "../lib/generated/ti-evms/lmg342x-bb-evm.generated"
 
 type SourceComponent = AnyCircuitElement & {
@@ -28,7 +29,9 @@ test("LMG342X status-indicator removal does not leave orphaned schematic leads",
   const circuitJson = await readLmg342xSchematic()
   const removedComponentNames = new Set(
     lmg342xBbEvmDefinition.components.flatMap((component) =>
-      component.removableFeatureId === "status-indicators" ? [component.name] : [],
+      component.removableFeatureId === "status-indicators"
+        ? [getReferenceSchematicComponentName(component)]
+        : [],
     ),
   )
   const removedSourceComponentIds = new Set(

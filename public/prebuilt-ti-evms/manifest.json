@@ -194,23 +194,23 @@
           ]
         },
         {
-          "elementCount": 4224,
+          "elementCount": 3945,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/remove-status-indicators.circuit.json.gz",
-          "pcbTraceCount": 174,
+          "pcbTraceCount": 165,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 141,
-          "sourceTraceCount": 53,
+          "sourceComponentCount": 132,
+          "sourceTraceCount": 45,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/remove-status-indicators.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 3862,
+          "elementCount": 3588,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 156,
+          "pcbTraceCount": 147,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 124,
-          "sourceTraceCount": 52,
+          "sourceComponentCount": 115,
+          "sourceTraceCount": 44,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/minimal-board.schematic.circuit.json.gz"
           ]

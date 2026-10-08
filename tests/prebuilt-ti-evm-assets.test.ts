@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test"
 import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import { getReferenceSchematicComponentName } from "lib/evms/get-reference-schematic-component-name"
 import { getParameterizedTiEvmDefinition } from "lib/evms/parameterized-ti-evms"
 import { tiEvms } from "lib/ti-evm-catalog"
 
@@ -56,7 +57,7 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
         definition.components.flatMap((component) =>
           component.removableFeatureId !== undefined &&
           variant.removedFeatureIds.includes(component.removableFeatureId)
-            ? [component.name]
+            ? [getReferenceSchematicComponentName(component)]
             : [],
         ),
       )
