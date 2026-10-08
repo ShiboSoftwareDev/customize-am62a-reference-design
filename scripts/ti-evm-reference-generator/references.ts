@@ -11,40 +11,11 @@ const dp83825StatusIndicatorComponents = new Set([
   "R32",
 ])
 
-const dp83825ConfigurationComponents = new Set([
-  "J2",
-  "J3",
-  "J4",
-  "J5",
-  "J6",
-  "J7",
-  "J8",
-  "J9",
-  "J13",
-  "J14",
-  "J16",
-  "J17",
-  "J18",
-  "S1",
-  "R9",
-  "R10",
-  "R11",
-  "R12",
-  "R13",
-  "R14",
-  "R15",
-  "R16",
-  "R17",
-  "R18",
-  "R19",
-])
-
 function getDp83825RemovableFeatureId(componentName: string): string | undefined {
   if (/^(?:U4|D2|J19|Y1|R(?:4[4-9]|5[0-4])|C(?:3\d|40))$/u.test(componentName)) {
     return "usb-mdio-controller"
   }
   if (dp83825StatusIndicatorComponents.has(componentName)) return "status-indicators"
-  if (dp83825ConfigurationComponents.has(componentName)) return "configuration-headers"
   return undefined
 }
 
@@ -84,8 +55,6 @@ const drvHallInterfaceComponents = new Set([
   "JP3",
   "JP4",
   "JP5",
-  "JP6",
-  "JP6a",
   "JP7",
 ])
 
@@ -98,8 +67,10 @@ const lmgStatusIndicators = new Set([
   "5V_EN",
   "R1",
   "R5",
+  "R20",
   "R29",
   "R30",
+  "R31",
 ])
 
 const lmgMeasurementInterface = new Set([
@@ -119,7 +90,6 @@ const lmgMeasurementInterface = new Set([
   "ACMGND",
   "12V",
   "5V",
-  "J14",
   "J15",
 ])
 
@@ -175,8 +145,9 @@ export const referenceInputs: ReferenceInput[] = [
     ],
     outputName: "lm5155evm-fly.generated.ts",
     getRemovableFeatureId: (componentName) => {
-      if (/^TP/u.test(componentName)) return "test-and-measurement"
-      if (/^(?:J4|R26)$/u.test(componentName)) return "configuration-interface"
+      if (/^TP/u.test(componentName) || componentName === "J4") {
+        return "test-and-measurement"
+      }
       return undefined
     },
   },
@@ -193,7 +164,6 @@ export const referenceInputs: ReferenceInput[] = [
     outputName: "lm251772evm-pd.generated.ts",
     getRemovableFeatureId: (componentName) => {
       if (/^TP/u.test(componentName)) return "test-and-measurement"
-      if (/^(?:SH_)?JP/u.test(componentName)) return "configuration-jumpers"
       return undefined
     },
   },

@@ -40,9 +40,7 @@ const featureIdByComponentName: Partial<Record<string, Drv8307EvmFeatureId>> =
   "JP3": "hall-interface",
   "R1": "hall-interface",
   "R10": "hall-interface",
-  "C20": "hall-interface",
-  "JP6a": "hall-interface",
-  "JP6": "hall-interface"
+  "C20": "hall-interface"
 }
 
 const pouredNetSelectors = new Set<string>([
@@ -463,7 +461,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreentext pcbX={-1.0160000000000053} pcbY={-1.524000000000001} anchorAlignment="center" fontSize={1.397} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R24" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002199999955},{"x":1.2000001400000002,"y":-0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955}]} layer="top" />
           </footprint>} />
-    {isComponentIncluded({ componentName: "JP6", removedFeatureIds }) && (<chip name="JP6" pcbX={-40.5638} pcbY={22.697947999999997} pcbRotation="270deg" layer="top" schX={5.163537250151423} schY={-8.245003028467595} symbol={<symbol>
+    <chip name="JP6" pcbX={-40.5638} pcbY={22.697947999999997} pcbRotation="270deg" layer="top" schX={5.163537250151423} schY={-8.245003028467595} symbol={<symbol>
       <port name="1" schX={0.41641429436705124} schY={0} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={-0.41641429436705124} schY={0} direction="left" pinNumber={2} aliases={["pin2"]} />
       <schematicline x1={0.41641429436705124} y1={0} x2={0.1665657177468205} y2={0} strokeWidth={0.05} color="#0000ff" isDashed={false}/>
@@ -489,8 +487,8 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreenline x1={-1.269999999999996} y1={-0.634999999999998} x2={-1.269999999999996} y2={0.6350000000000016} strokeWidth={0.254} />
     <fabricationnotetext pcbX={-0.7366000000000099} pcbY={-0.3048000000000002} anchorAlignment="center" text="JP6" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={-1.524000000000001} pcbY={-1.2699999999999996} anchorAlignment="center" fontSize={1.524} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="JP6" />
-          </footprint>} />)}
-    {isComponentIncluded({ componentName: "JP6a", removedFeatureIds }) && (<chip name="JP6a" pcbX={-32.943799999999996} pcbY={21.427948} pcbRotation="90deg" layer="top" schX={5.455027256208359} schY={-8.494851605087826} symbol={<symbol>
+          </footprint>} />
+    <chip name="JP6a" pcbX={-32.943799999999996} pcbY={21.427948} pcbRotation="90deg" layer="top" schX={5.455027256208359} schY={-8.494851605087826} symbol={<symbol>
       <port name="1" schX={0.12492428831011537} schY={0} direction="right" pinNumber={1} aliases={["pin1"]} schStemLength={0.24984857662023016} />
       <schematictext text="JP6a" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="=PartNumber" schX={-0.1999999999999993} schY={-0.33000000000000007} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
@@ -500,7 +498,7 @@ export function Drv8307Evm(props: Drv8307EvmProps) {
     <silkscreenline x1={0.0699998599999958} y1={2.2979989600000046} x2={2.2800005200000015} y2={2.2979989600000046} strokeWidth={0.254} />
     <silkscreenline x1={0.0699998599999958} y1={2.2979989600000046} x2={0.0699998599999958} y2={0.11799824000000214} strokeWidth={0.254} />
     <silkscreenline x1={2.2800005200000015} y1={2.2979989600000046} x2={2.2800005200000015} y2={0.11799824000000214} strokeWidth={0.254} />
-          </footprint>} />)}
+          </footprint>} />
     {isComponentIncluded({ componentName: "D8", removedFeatureIds }) && (<chip name="D8" pcbX={-25.552684479999996} pcbY={-24.52870634} pcbRotation="90deg" layer="top" symbolName="diode_up" schX={-4.080860084797093} schY={-8.011811023622048} schDisplayValue="10V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.99999854mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="2.00000108mm" height="2.00000108mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="2.00000108mm" pcbY="0mm" layer="top" solderMaskMargin="0.0762mm" width="2.00000108mm" height="2.00000108mm" shape="rect" />

@@ -11,7 +11,9 @@ export type Lmg342xBbEvmProps = {
 
 const featureIdByComponentName: Partial<Record<string, Lmg342xBbEvmFeatureId>> =
   {
+  "R31": "status-indicators",
   "5V_EN": "status-indicators",
+  "R20": "status-indicators",
   "HS_FLT": "status-indicators",
   "12V": "measurement-interface",
   "VAUX": "measurement-interface",
@@ -31,7 +33,6 @@ const featureIdByComponentName: Partial<Record<string, Lmg342xBbEvmFeatureId>> =
   "5V": "measurement-interface",
   "R1": "status-indicators",
   "R5": "status-indicators",
-  "J14": "measurement-interface",
   "HS_OC": "status-indicators",
   "R29": "status-indicators",
   "LS_OC": "status-indicators",
@@ -875,7 +876,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <fabricationnotetext pcbX={-1.3970000000000056} pcbY={-0.7620000000000005} anchorAlignment="center" text="J16" font="tscircuit2024" fontSize={1.524} color="#ec4899" />
     <silkscreentext pcbX={-1.269999999999996} pcbY={6.349999999999994} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J16" />
           </footprint>} />
-    {isComponentIncluded({ componentName: "J14", removedFeatureIds }) && (<chip name="J14" pcbX={-28.341355559999997} pcbY={30.23909116} pcbRotation="270deg" layer="top" schX={-4.458082445576656} schY={0.5094951366373319} symbol={<symbol>
+    <chip name="J14" pcbX={-28.341355559999997} pcbY={30.23909116} pcbRotation="270deg" layer="top" schX={-4.458082445576656} schY={0.5094951366373319} symbol={<symbol>
       <port name="1" schX={0.3821213524779985} schY={-0.12737378415933343} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.3821213524779985} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.3821213524779985} schY={0.12737378415933343} direction="right" pinNumber={3} aliases={["pin3"]} />
@@ -900,7 +901,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <platedhole  portHints={["1"]} pcbX="-2.54mm" pcbY="-0mm" holeShape="circle" padShape="rect" holeDiameter="1.016mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="270deg" shape="circular_hole_with_rect_pad" />
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5080000000000098} anchorAlignment="center" text="J14" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={5.240591499999994} pcbY={-2.003247200000004} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J14" />
-          </footprint>} />)}
+          </footprint>} />
     <chip name="C25" pcbX={43.434} pcbY={-27.415500159999993} pcbRotation="270deg" layer="bottom" symbolName="capacitor_polarized_down" schX={4.075961093098657} schY={-6.642542843909218} schDisplayValue="150uF" pinLabels={{"pin1":["+","1","pin1"],"pin2":["-","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <platedhole  portHints={["2"]} pcbX="-5.00000016mm" pcbY="0mm" outerDiameter="2.99999908mm" holeDiameter="2.20000068mm" shape="circle" />
     <platedhole  portHints={["1"]} pcbX="5.00000016mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="2.20000068mm" rectPadWidth="2.99999908mm" rectPadHeight="2.99999908mm" rectBorderRadius="0.0449999862mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="270deg" shape="circular_hole_with_rect_pad" />
@@ -1821,7 +1822,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <silkscreentext pcbX={-4.2975885600000225} pcbY={-0.5079999999999956} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="R21" />
     <courtyardoutline outline={[{"x":-1.5499994400000077,"y":0.7249998199999936},{"x":-1.5499994400000077,"y":-0.7249998199999936},{"x":1.5500019799999905,"y":-0.7249998199999936},{"x":1.5500019799999905,"y":0.7249998199999936}]} layer="bottom" />
           </footprint>} />
-    <chip name="R20" pcbX={-67.76599604} pcbY={16.573499999999996} pcbRotation="90deg" layer="bottom" symbolName="boxresistor_up" schX={11.591014358499306} schY={-5.85919407132932} schDisplayValue="30k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "R20", removedFeatureIds }) && (<chip name="R20" pcbX={-67.76599604} pcbY={16.573499999999996} pcbRotation="90deg" layer="bottom" symbolName="boxresistor_up" schX={11.591014358499306} schY={-5.85919407132932} schDisplayValue="30k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="1.44999964mm" pcbY="-0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="1.84999884mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="-1.44999964mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="1.84999884mm" shape="rect" />
     <silkscreenline x1={2.400000279999986} y1={1.210000119999993} x2={1.4999995399999904} y2={1.210000119999993} strokeWidth={0.17779999999999999} layer="bottom" />
@@ -1833,7 +1834,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <fabricationnotetext pcbX={1.4750008599999944} pcbY={0.39999919999998923} anchorAlignment="center" text="R20" font="tscircuit2024" fontSize={0.8128} color="#ec4899" layer="bottom" />
     <silkscreentext pcbX={-2.794000000000011} pcbY={-1.2179960400000027} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="R20" />
     <courtyardoutline outline={[{"x":2.350000379999983,"y":1.1750014599999936},{"x":2.350000379999983,"y":-1.1749989200000002},{"x":-2.3500003799999973,"y":-1.1749989200000002},{"x":-2.3500003799999973,"y":1.1750014599999972}]} layer="bottom" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="R19" pcbX={-70.99499644} pcbY={5.521055759999996} pcbRotation="90deg" layer="bottom" symbolName="boxresistor_up" schX={11.208893006021308} schY={-5.85919407132932} schDisplayValue="30k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="1.44999964mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="1.84999884mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="-1.44999964mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="1.84999884mm" shape="rect" />
@@ -1985,7 +1986,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <fabricationnotetext pcbX={1.1637898999999834} pcbY={0.31739586000000486} anchorAlignment="center" text="R9" font="tscircuit2024" fontSize={0.635} color="#ec4899" layer="bottom" />
     <silkscreentext pcbX={1.7779999999999916} pcbY={0.3810000000000002} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="R9" />
           </footprint>} />
-    <chip name="R31" pcbX={-34.404998500000005} pcbY={26.4795} pcbRotation="90deg" layer="top" symbolName="boxresistor_up" schX={-0.2547475683186651} schY={-3.5664659564613252} schDisplayValue="1.6k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "R31", removedFeatureIds }) && (<chip name="R31" pcbX={-34.404998500000005} pcbY={26.4795} pcbRotation="90deg" layer="top" symbolName="boxresistor_up" schX={-0.2547475683186651} schY={-3.5664659564613252} schDisplayValue="1.6k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.80000094mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.95000064mm" height="1.00000054mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.7999984mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.95000064mm" height="1.00000054mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-1.5235478800000095} y1={0.6925564000000008} x2={-0.8636000000000053} y2={0.6925564000000008} strokeWidth={0.17779999999999999} />
@@ -1997,7 +1998,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <fabricationnotetext pcbX={-1.0525988599999891} pcbY={-0.3810000000000002} anchorAlignment="center" text="R31" font="tscircuit2024" fontSize={0.762} color="#ec4899" />
     <silkscreentext pcbX={2.2860000000000014} pcbY={-0.4750003200000066} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R31" />
     <courtyardoutline outline={[{"x":1.5499994400000077,"y":-0.7249998200000078},{"x":1.5499994400000077,"y":0.7249998199999936},{"x":-1.5500019799999905,"y":0.7249998199999936},{"x":-1.5500019799999905,"y":-0.7249998200000078}]} layer="top" />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="R6" pcbX={4.518698099999995} pcbY={33.8455} pcbRotation="270deg" layer="bottom" symbolName="boxresistor_up" schX={-2.92959703566466} schY={1.5284854099119958} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0.80000094mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="0.95000064mm" height="1.00000054mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="-0.7999984mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.0499999mm" width="0.95000064mm" height="1.00000054mm" ccwRotation={180} shape="rotated_rect" />

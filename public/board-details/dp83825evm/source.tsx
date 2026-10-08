@@ -3,14 +3,12 @@ import { Dp83825Evm as GeneratedDp83825Evm } from "../../lib/generated/ti-evms/d
 export type Dp83825EvmProps = {
   removeUsbMdioController?: boolean
   removeStatusIndicators?: boolean
-  removeConfigurationHeaders?: boolean
 }
 
 export function Dp83825Evm(props: Dp83825EvmProps) {
   const removedFeatureIds = [
     props.removeUsbMdioController && "usb-mdio-controller",
     props.removeStatusIndicators && "status-indicators",
-    props.removeConfigurationHeaders && "configuration-headers",
   ].filter((featureId): featureId is string => Boolean(featureId))
 
   return <GeneratedDp83825Evm removedFeatureIds={removedFeatureIds} />

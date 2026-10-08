@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@tscircuit/capacity-autorouter": "0.0.962",
-    "@tscircuit/checks": "0.0.240",
+    "@tscircuit/checks": "0.0.243",
     "@tscircuit/circuit-json-util": "0.0.120",
     "@tscircuit/core": "0.0.2094",
     "@tscircuit/math-utils": "0.0.38",

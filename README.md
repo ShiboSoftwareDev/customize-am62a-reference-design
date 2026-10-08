@@ -16,7 +16,7 @@ Each board also has a shareable detail page linked from the configurator. The pa
 | LM251772EVM-PD | 169-component four-switch buck-boost | 4 | [LM251772EVM-PD](https://www.ti.com/tool/LM251772EVM-PD) |
 | LMG342X-BB-EVM | 157-component 650-V GaN half-bridge platform | 4 | [LMG342X-BB-EVM](https://www.ti.com/tool/LMG342X-BB-EVM) |
 
-Each board exposes a named variant selector, including **Full board**, **Minimal board**, and every meaningful combination of optional subsystems. DP83825EVM has three independent subsystem groups. The other EVMs expose two board-specific, independently removable evaluation subsystems while retaining the required application circuitry and connectors. Every possible combination is prebuilt, for 24 board/configuration artifacts in total.
+Each board exposes a named variant selector, including **Full board**, **Minimal board**, and every meaningful combination of optional subsystems. Only electrically independent evaluation subsystems are removable; required configuration selectors, strap networks, and application circuitry remain populated. Every possible combination is prebuilt, for 16 board/configuration artifacts in total.
 
 ## Run locally
 
@@ -61,7 +61,7 @@ Tests use one focused case per file. They verify catalog provenance, unique opti
 - `scripts/generate-ti-evm-reference-definitions.ts` is the thin entrypoint for the reproducible conversion pipeline. The focused stages under `scripts/ti-evm-reference-generator` own the reference catalog, Altium extraction, pads, teardrops, schematic placement, silkscreen, compatibility lowering, and artifact writing. Generated gzip artifacts use a fixed timestamp so unchanged inputs reproduce byte-for-byte.
 - `scripts/parameterize-generated-board.ts` orchestrates the generated-TSX transformation. Its AST traversal and source template live under `scripts/generated-board-source`; together they add feature conditions, filter removed or non-PCB trace endpoints, prevent imported net names from colliding with component selectors, and carry Altium pad/via teardrop intent into core's trace props.
 - `lib/ti-evm-catalog.ts` owns the five-board catalog and all selectable variants.
-- `scripts/prebuild-ti-evm-assets.ts` renders all 24 combinations through `@tscircuit/core`; generated boards use Core's default autorouter pipeline.
+- `scripts/prebuild-ti-evm-assets.ts` renders all 16 combinations through `@tscircuit/core`; generated boards use Core's default autorouter pipeline.
 - `scripts/prebuild-ti-evm-schematic-assets.ts` applies each variant's component population to the canonical Altium schematic without rerouting or replacing its authored geometry.
 - `app/hooks/use-evm-render.ts` loads the selected prebuilt PCB and schematic in parallel, ignores stale requests, and reuses the parsed result when a variant is selected again.
 - `app/components/DesignViewer.tsx` lazy-loads each viewer, preserves renderer state across variant changes, and starts in Canvas only when the selected board contains geometry unsupported by WebGPU.

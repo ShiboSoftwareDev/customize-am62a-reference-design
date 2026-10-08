@@ -147,11 +147,6 @@ export const tiEvms: TiEvm[] = [
         label: "status indicators",
         description: "Optional link, activity, power, and controller status LEDs.",
       },
-      {
-        id: "configuration-headers",
-        label: "configuration and test headers",
-        description: "Optional strap, rail, reset, interrupt, and compliance-test access points.",
-      },
     ],
   }),
   createEvaluationEvm({
@@ -173,7 +168,7 @@ export const tiEvms: TiEvm[] = [
       {
         id: "hall-interface",
         label: "Hall-sensor interface",
-        description: "Hall input conditioning, selection jumpers, and buffer devices.",
+        description: "Hall input conditioning and buffer devices.",
       },
     ],
   }),
@@ -193,12 +188,6 @@ export const tiEvms: TiEvm[] = [
         label: "test and measurement hardware",
         description: "Optional test points and oscilloscope probe access used during evaluation.",
       },
-      {
-        id: "configuration-interface",
-        label: "configuration interface",
-        description:
-          "Optional evaluation header and population option for controller configuration.",
-      },
     ],
   }),
   createEvaluationEvm({
@@ -217,11 +206,6 @@ export const tiEvms: TiEvm[] = [
         label: "test and measurement hardware",
         description:
           "Thirteen reference test points distributed across the power and control nets.",
-      },
-      {
-        id: "configuration-jumpers",
-        label: "configuration jumpers",
-        description: "Evaluation-only mode, threshold, and control jumper population.",
       },
     ],
   }),
