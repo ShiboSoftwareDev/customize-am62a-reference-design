@@ -40,6 +40,7 @@ import { getTeardropsByNet } from "./teardrops"
 import type {
   ComponentName,
   ComponentRecordIndex,
+  EmbeddedModelIndex,
   PinKeysByComponentRecordIndex,
   ReferenceConversion,
   ReferenceInput,
@@ -70,6 +71,7 @@ export async function createReferenceDefinition(
       return { converterDocument, document: schematicDocument, path: schematicPath }
     }),
   )
+  const referencedEmbeddedModelIndexes = new Set<EmbeddedModelIndex>()
   const projectCircuitJson = convertAltiumProjectToCircuitJson({
     pcb: {
       document: converterPcbDocument,
@@ -78,6 +80,10 @@ export async function createReferenceDefinition(
         includeTraces: false,
         includeVias: false,
         project: parsedProject,
+        resolveEmbeddedModelUrl: ({ embeddedModel }) => {
+          referencedEmbeddedModelIndexes.add(embeddedModel.index)
+          return `/cad-models/ti-evms/${reference.id}/${embeddedModel.index}.step`
+        },
       },
     },
     schematics: schematicDocuments.map(({ converterDocument, path }) => ({
@@ -269,6 +275,19 @@ export async function createReferenceDefinition(
     populatedComponentIndexes,
   })
 
+  const embeddedCadModels = await Promise.all(
+    pcbDocument.embeddedModels.flatMap((embeddedModel) =>
+      referencedEmbeddedModelIndexes.has(embeddedModel.index)
+        ? [
+            embeddedModel.getDecompressedBytes().then((bytes) => ({
+              bytes,
+              modelIndex: embeddedModel.index,
+            })),
+          ]
+        : [],
+    ),
+  )
+
   return {
     definition: {
       id: reference.id,
@@ -292,6 +311,7 @@ export async function createReferenceDefinition(
       standaloneHoles,
       silkscreen,
     },
+    embeddedCadModels,
     projectCircuitJson,
     referenceSchematicCircuitJsons: schematicCircuitJsons,
   }

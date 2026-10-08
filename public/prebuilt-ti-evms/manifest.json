@@ -4,7 +4,7 @@
       "id": "dp83825evm",
       "artifacts": [
         {
-          "elementCount": 6822,
+          "elementCount": 6830,
           "output": "prebuilt-ti-evms/dp83825evm/full-board.circuit.json.gz",
           "pcbTraceCount": 291,
           "source": "Parameterized DP83825EVM tscircuit TSX",
@@ -19,7 +19,7 @@
           ]
         },
         {
-          "elementCount": 5379,
+          "elementCount": 5387,
           "output": "prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller.circuit.json.gz",
           "pcbTraceCount": 230,
           "source": "Parameterized DP83825EVM tscircuit TSX",
@@ -34,7 +34,7 @@
           ]
         },
         {
-          "elementCount": 6605,
+          "elementCount": 6613,
           "output": "prebuilt-ti-evms/dp83825evm/remove-status-indicators.circuit.json.gz",
           "pcbTraceCount": 279,
           "source": "Parameterized DP83825EVM tscircuit TSX",
@@ -49,7 +49,7 @@
           ]
         },
         {
-          "elementCount": 5158,
+          "elementCount": 5166,
           "output": "prebuilt-ti-evms/dp83825evm/minimal-board.circuit.json.gz",
           "pcbTraceCount": 219,
           "source": "Parameterized DP83825EVM tscircuit TSX",
@@ -69,7 +69,7 @@
       "id": "drv8307evm",
       "artifacts": [
         {
-          "elementCount": 3871,
+          "elementCount": 3880,
           "output": "prebuilt-ti-evms/drv8307evm/full-board.circuit.json.gz",
           "pcbTraceCount": 197,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -78,7 +78,7 @@
           "schematicOutputs": ["prebuilt-ti-evms/drv8307evm/full-board.schematic.circuit.json.gz"]
         },
         {
-          "elementCount": 3547,
+          "elementCount": 3556,
           "output": "prebuilt-ti-evms/drv8307evm/remove-onboard-speed-control.circuit.json.gz",
           "pcbTraceCount": 175,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -89,7 +89,7 @@
           ]
         },
         {
-          "elementCount": 2733,
+          "elementCount": 2742,
           "output": "prebuilt-ti-evms/drv8307evm/remove-hall-interface.circuit.json.gz",
           "pcbTraceCount": 128,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -100,7 +100,7 @@
           ]
         },
         {
-          "elementCount": 2392,
+          "elementCount": 2401,
           "output": "prebuilt-ti-evms/drv8307evm/minimal-board.circuit.json.gz",
           "pcbTraceCount": 106,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
@@ -116,7 +116,7 @@
       "id": "lm5155evm-fly",
       "artifacts": [
         {
-          "elementCount": 3033,
+          "elementCount": 3030,
           "output": "prebuilt-ti-evms/lm5155evm-fly/full-board.circuit.json.gz",
           "pcbTraceCount": 149,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -128,7 +128,7 @@
           ]
         },
         {
-          "elementCount": 2763,
+          "elementCount": 2812,
           "output": "prebuilt-ti-evms/lm5155evm-fly/minimal-board.circuit.json.gz",
           "pcbTraceCount": 135,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -145,7 +145,7 @@
       "id": "lm251772evm-pd",
       "artifacts": [
         {
-          "elementCount": 5453,
+          "elementCount": 5440,
           "output": "prebuilt-ti-evms/lm251772evm-pd/full-board.circuit.json.gz",
           "pcbTraceCount": 294,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
@@ -156,7 +156,7 @@
           ]
         },
         {
-          "elementCount": 5218,
+          "elementCount": 5205,
           "output": "prebuilt-ti-evms/lm251772evm-pd/minimal-board.circuit.json.gz",
           "pcbTraceCount": 281,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
