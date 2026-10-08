@@ -187,8 +187,10 @@ export async function createReferenceDefinition(
     if (!componentName) {
       throw new Error(`${reference.name} component ${componentIndex} has no generated name`)
     }
+    const schematicName = componentRecord.designator ?? componentName
     components.push({
       name: componentName,
+      schematicName: schematicName === componentName ? undefined : schematicName,
       value:
         (sourceComponent && "display_value" in sourceComponent
           ? sourceComponent.display_value
@@ -204,9 +206,7 @@ export async function createReferenceDefinition(
         [...pinKeys.entries()].map(([rawPinName, pinKey]) => [pinKey, [rawPinName]]),
       ),
       pads,
-      removableFeatureId: reference.getRemovableFeatureId(
-        componentRecord.designator ?? componentName,
-      ),
+      removableFeatureId: reference.getRemovableFeatureId(schematicName),
       schematic: schematicPlacements.get(componentIndex),
     })
   }

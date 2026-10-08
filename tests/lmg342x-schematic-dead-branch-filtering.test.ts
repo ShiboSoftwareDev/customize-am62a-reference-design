@@ -4,6 +4,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { gunzipSync, strFromU8 } from "fflate"
 import { filterReferenceSchematic } from "../lib/evms/filter-reference-schematic"
+import { getReferenceSchematicComponentName } from "../lib/evms/get-reference-schematic-component-name"
 import { lmg342xBbEvmDefinition } from "../lib/generated/ti-evms/lmg342x-bb-evm.generated"
 
 type SourceComponentId = string
@@ -33,13 +34,36 @@ test("LMG342X minimal keeps retained PWM ports connected", async () => {
   const circuitJson = await readLmg342xSchematic()
   const removedComponentNames = new Set(
     lmg342xBbEvmDefinition.components.flatMap((component) =>
-      component.removableFeatureId ? [component.name] : [],
+      component.removableFeatureId ? [getReferenceSchematicComponentName(component)] : [],
     ),
   )
   const filteredCircuitJson = filterReferenceSchematic({
     circuitJson,
     removedComponentNames,
   })
+
+  for (const componentName of [
+    "12V",
+    "5V",
+    "5V_EN",
+    "HVIN_EN",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R16",
+    "R17",
+    "R18",
+    "R19",
+    "R20",
+  ]) {
+    expect(
+      filteredCircuitJson.some(
+        (element) => isSourceComponent(element) && element.name === componentName,
+      ),
+    ).toBe(false)
+  }
 
   for (const port of [
     { componentName: "R2", portName: "2" },
@@ -103,6 +127,14 @@ function expectRetainedPortToHaveSchematicTrace(params: {
       ),
   )
   expect(hasSchematicTrace).toBe(true)
+}
+
+function isSourceComponent(element: AnyCircuitElement): element is SourceComponent {
+  return (
+    element.type === "source_component" &&
+    typeof element.name === "string" &&
+    typeof element.source_component_id === "string"
+  )
 }
 
 function isSchematicTrace(element: AnyCircuitElement): element is SchematicTrace {
