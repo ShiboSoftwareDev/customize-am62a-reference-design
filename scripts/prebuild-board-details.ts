@@ -1,6 +1,6 @@
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
-import type { CircuitJson } from "circuit-json"
+import type { CadComponent, CircuitJson } from "circuit-json"
 import { convertCircuitJsonToGltf, getBestCameraPosition } from "circuit-json-to-gltf"
 import { convertCircuitJsonToPcbSvg, convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { gunzipSync, strFromU8 } from "fflate"
@@ -77,7 +77,7 @@ function stripTrailingWhitespace(svg: string): string {
 }
 
 async function renderThreeDimensionalPng(circuitJson: CircuitJson): Promise<Uint8Array> {
-  const glb = await convertCircuitJsonToGltf(circuitJson, {
+  const glb = await convertCircuitJsonToGltf(resolveLocalCadModelUrls(circuitJson), {
     boardDrillQuality: "high",
     boardTextureResolution: 2048,
     format: "glb",
@@ -91,4 +91,21 @@ async function renderThreeDimensionalPng(circuitJson: CircuitJson): Promise<Uint
     supersampling: 2,
     width: 1200,
   })
+}
+
+function resolveLocalCadModelUrls(circuitJson: CircuitJson): CircuitJson {
+  return circuitJson.map((element) => {
+    if (element.type !== "cad_component" || !element.model_step_url?.startsWith("/")) {
+      return element
+    }
+
+    return {
+      ...element,
+      model_step_url: resolvePublicUrl(element.model_step_url),
+    } satisfies CadComponent
+  })
+}
+
+function resolvePublicUrl(publicUrl: string): string {
+  return resolve(repositoryRoot, "public", publicUrl.replace(/^\//u, ""))
 }
