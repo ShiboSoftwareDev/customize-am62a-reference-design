@@ -18,7 +18,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/3d-viewer": "0.0.615",
+    "@tscircuit/3d-viewer": "github:tscircuit/3d-viewer#da4a786fa40014e9a33f4c6469a7b829f988af5c",
     "@tscircuit/capacity-autorouter": "0.0.962",
     "@tscircuit/checks": "0.0.243",
     "@tscircuit/circuit-json-util": "0.0.120",
@@ -43,11 +43,11 @@
     "@vitejs/plugin-react": "6.1.2",
     "@tscircuit/mm": "0.0.9",
     "@tscircuit/soup-util": "0.0.41",
-    "altium-to-circuit-json": "github:tscircuit/altium-to-circuit-json#5d15e4dac100649bb864f3ac4f66a6b66dd41c2b",
+    "altium-to-circuit-json": "github:tscircuit/altium-to-circuit-json#ee23e7de979b9387def5d8bc7f1c44ff9c6cd3a2",
     "altiumts": "0.0.87",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.4.2",
-    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#e928abd268f428c08f7e79fe83659e5bfdfb8560",
+    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#bb2b5ed2c239363d8308d2b669552ee954005ef8",
     "circuit-to-svg": "0.0.441",
     "circuit-json-to-gltf": "0.0.145",
     "poppygl": "0.0.33",
@@ -56,6 +56,7 @@
     "vite": "8.3.2"
   },
   "trustedDependencies": [
+    "@tscircuit/3d-viewer",
     "@tscircuit/capacity-autorouter",
     "altium-to-circuit-json",
     "altiumts",

@@ -483,7 +483,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   return (
   <board pcbX={60.1218} pcbY={59.9186} width="85.09mm" height="41.91mm" outline={[{ x: 17.5768, y: 38.9636 }, { x: 17.5768, y: 80.8736 }, { x: 102.6668, y: 80.8736 }, { x: 102.6668, y: 38.9636 }, { x: 17.5768, y: 38.9636 }]} thickness="1.6mm" layers={2} material="fr4" autorouter="auto" autorouterEffortLevel="1x">
-    <chip name="R26" pcbX={-9.906000000000006} pcbY={-10.540999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-10.05297591477536} schY={4.93509726725336} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R26" pcbX={-9.906000000000006} pcbY={-10.540999999999997} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={-10.05297591477536} schY={4.93509726725336} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006199999973} x2={-0.07111999999999341} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -492,7 +492,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={3.683} pcbY={0.5413629000000029} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R26" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002199999955},{"x":-1.200000139999993,"y":0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="T1" pcbX={0} pcbY={2.158999999999999} pcbRotation="90deg" layer="top" schX={2.558939323760999} schY={6.1231762389995374} symbol={<symbol>
+    <chip name="T1" pcbX={0} pcbY={2.158999999999999} pcbRotation="90deg" layer="top" cadModel={null} schX={2.558939323760999} schY={6.1231762389995374} symbol={<symbol>
       <port name="2" schX={-0.9139069013432142} schY={-0.09139069013432177} direction="left" pinNumber={2} aliases={["pin2"]} />
       <port name="7" schX={0.9139069013432177} schY={0.6397348309402524} direction="right" pinNumber={7} aliases={["pin7"]} />
       <port name="5" schX={-0.9139069013432142} schY={0.09139069013432177} direction="left" pinNumber={5} aliases={["pin5"]} />
@@ -564,7 +564,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.5999993399999966} pcbY={-0.39999919999999634} anchorAlignment="center" text="T1" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={-8.73000032000001} pcbY={5.841999999999999} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="T1" />
           </footprint>} />
-    <chip name="R15" pcbX={7.746999999999993} pcbY={-18.542} pcbRotation="270deg" layer="top" symbolName="boxresistor_up" schX={8.042380731820288} schY={0.18278138026864355} schDisplayValue="10.2k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R15" pcbX={7.746999999999993} pcbY={-18.542} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={8.042380731820288} schY={0.18278138026864355} schDisplayValue="10.2k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07111999999999341} y1={-0.3250006199999973} x2={-0.07112000000000052} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -602,7 +602,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.7653000000000034} pcbY={2.4510999999999967} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Q2" />
     <courtyardoutline outline={[{"x":-1.924999960000008,"y":-1.7499990399999987},{"x":1.9249999599999938,"y":-1.7499990399999987},{"x":1.9249999599999938,"y":1.7500015799999957},{"x":-1.924999960000008,"y":1.7500015799999957}]} layer="top" />
           </footprint>} />
-    <chip name="C25" pcbX={-23.241} pcbY={-9.905999999999999} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={-7.128473830477073} schY={-2.467548633626679} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C25" pcbX={-23.241} pcbY={-9.905999999999999} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-7.128473830477073} schY={-2.467548633626679} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006200000044} x2={-0.07112000000000052} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -691,11 +691,11 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-2.000001079999997} pcbY={-0.4999990000000025} anchorAlignment="center" text="J4" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={-7.112000000000002} pcbY={-0.762000000000004} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J4" />
           </footprint>} />)}
-    {isComponentIncluded({ componentName: "TP6", removedFeatureIds }) && (<chip name="TP6" pcbX={28.067} pcbY={-19.202399999999997} pcbRotation="90deg" layer="top" symbolName="testpoint_right" schX={12.685027790643819} schY={3.6556276053728585} schDisplayValue="TP_SM_1MM" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "TP6", removedFeatureIds }) && (<chip name="TP6" pcbX={28.067} pcbY={-19.202399999999997} pcbRotation="90deg" layer="top" cadModel={null} symbolName="testpoint_right" schX={12.685027790643819} schY={3.6556276053728585} schDisplayValue="TP_SM_1MM" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" radius="0.50000027mm" shape="circle" />
     <silkscreentext pcbX={0.658616919999993} pcbY={-0.3802532400000018} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="TP6" />
           </footprint>} />)}
-    <chip name="R9" pcbX={-28.321} pcbY={-6.731000000000002} pcbRotation="180deg" layer="top" symbolName="boxresistor_right" schX={-8.956287633163504} schY={2.0105951829550737} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R9" pcbX={-28.321} pcbY={-6.731000000000002} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_right" schX={-8.956287633163504} schY={2.0105951829550737} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006200000044} x2={-0.07111999999999696} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -704,7 +704,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.0160000000000018} pcbY={-0.7620000000000005} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R9" />
     <courtyardoutline outline={[{"x":1.2000001399999967,"y":-0.5250002200000026},{"x":1.2000001399999967,"y":0.5250002199999955},{"x":-1.2000001399999967,"y":0.5250002199999955},{"x":-1.2000001399999967,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R4" pcbX={-8.128} pcbY={14.224000000000004} pcbRotation="180deg" layer="top" symbolName="boxresistor_up" schX={-1.2794696618805013} schY={4.752315886984716} schDisplayValue="30.1k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R4" pcbX={-8.128} pcbY={14.224000000000004} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-1.2794696618805013} schY={4.752315886984716} schDisplayValue="30.1k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="2.95000172mm" pcbY="0.00000254mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.29999994mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-2.94999918mm" pcbY="0.00000254mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.29999994mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={1.900001280000005} y1={-1.5999993399999966} x2={-1.899998740000001} y2={-1.5999993399999966} strokeWidth={0.19999959999999997} />
@@ -713,7 +713,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={0.7366000000000028} pcbY={-2.2605999999999966} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R4" />
     <courtyardoutline outline={[{"x":-3.849999919999995,"y":1.950001180000001},{"x":3.849999920000002,"y":1.950001180000001},{"x":3.849999920000002,"y":-1.9499986399999898},{"x":-3.849999919999995,"y":-1.9499986399999898}]} layer="top" />
           </footprint>} />
-    <chip name="C16" pcbX={-6.984999999999999} pcbY={11.048999999999992} pcbRotation="0deg" layer="top" symbolName="capacitor_down" schX={-0.3655627605372871} schY={4.660925196850394} schDisplayValue="0.33uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C16" pcbX={-6.984999999999999} pcbY={11.048999999999992} pcbRotation="0deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-0.3655627605372871} schY={4.660925196850394} schDisplayValue="0.33uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.69999914mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.59999934mm" height="1.10000034mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.69999914mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.59999934mm" height="1.10000034mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.9000007400000101} y1={1.0000005400000163} x2={0.900000740000003} y2={1.0000005400000163} strokeWidth={0.16999966} />
@@ -772,7 +772,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-0.2869996800000081} pcbY={2.172997939999995} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="U3" />
     <courtyardoutline outline={[{"x":-1.9249999599999938,"y":-1.7499990400000058},{"x":1.924999960000008,"y":-1.7499990400000058},{"x":1.924999960000008,"y":1.7500015799999957},{"x":-1.9249999599999938,"y":1.7500015799999957}]} layer="top" />
           </footprint>} />
-    <chip name="U2" pcbX={0.3810000000000002} pcbY={-17.145000000000003} pcbRotation="180deg" layer="top" schX={5.666222788327929} schY={-1.462251042149143} symbol={<symbol>
+    <chip name="U2" pcbX={0.3810000000000002} pcbY={-17.145000000000003} pcbRotation="180deg" layer="top" cadModel={null} schX={5.666222788327929} schY={-1.462251042149143} symbol={<symbol>
       <port name="A" schX={1.0966882816118577} schY={0.18278138026864355} direction="right" pinNumber={1} aliases={["1","pin1"]} />
       <port name="K" schX={1.0966882816118577} schY={-0.18278138026864177} direction="right" pinNumber={2} aliases={["2","pin2"]} />
       <port name="C" schX={-1.0966882816118577} schY={0.18278138026864355} direction="left" pinNumber={4} aliases={["4","pin4"]} />
@@ -825,7 +825,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.924999960000001} pcbY={-0.5750001200000057} anchorAlignment="center" text="U2" font="tscircuit2024" fontSize={1.143} color="#ec4899" />
     <silkscreentext pcbX={1.0160000000000053} pcbY={-2.2860000000000014} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="U2" />
           </footprint>} />
-    <chip name="R16" pcbX={-16.67200374} pcbY={-12.192} pcbRotation="180deg" layer="top" symbolName="boxresistor_up" schX={-10.966882816118575} schY={0} schDisplayValue="9.76k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R16" pcbX={-16.67200374} pcbY={-12.192} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-10.966882816118575} schY={0} schDisplayValue="9.76k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006199999973} x2={-0.07112000000000052} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -834,7 +834,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.6945305200000007} pcbY={0.634999999999998} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R16" />
     <courtyardoutline outline={[{"x":1.2000001400000002,"y":-0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R6" pcbX={-16.67200374} pcbY={-10.668} pcbRotation="0deg" layer="top" symbolName="boxresistor_up" schX={-10.966882816118575} schY={3.4728462251042167} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R6" pcbX={-16.67200374} pcbY={-10.668} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-10.966882816118575} schY={3.4728462251042167} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={-0.3250006199999973} x2={0.07112000000000052} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -843,7 +843,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.8130037399999992} pcbY={-0.634999999999998} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R6" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R13" pcbX={14.350999999999992} pcbY={-18.415} pcbRotation="0deg" layer="top" symbolName="boxresistor_up" schX={8.956287633163502} schY={1.2794696618805013} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R13" pcbX={14.350999999999992} pcbY={-18.415} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={8.956287633163502} schY={1.2794696618805013} schDisplayValue="100k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07111999999999341} y1={-0.3250006199999973} x2={0.07112000000000762} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -852,7 +852,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.524000000000001} pcbY={-0.5080000000000027} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R13" />
     <courtyardoutline outline={[{"x":-1.200000139999986,"y":-0.5250002200000026},{"x":-1.200000139999986,"y":0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R1" pcbX={10.54099999999999} pcbY={11.302999999999997} pcbRotation="0deg" layer="top" symbolName="boxresistor_right" schX={4.752315886984714} schY={7.859599351551648} schDisplayValue="15.0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R1" pcbX={10.54099999999999} pcbY={11.302999999999997} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_right" schX={4.752315886984714} schY={7.859599351551648} schDisplayValue="15.0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.44999964mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="2.69999968mm" height="1.29999994mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.44999964mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="2.69999968mm" height="1.29999994mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-2.3164799999999843} y1={-1.5677794399999954} x2={-2.3164799999999843} y2={1.5677794399999954} strokeWidth={0.17779999999999999} />
@@ -865,7 +865,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-0.7619999999999862} pcbY={2.2860000000000014} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R1" />
     <courtyardoutline outline={[{"x":-2.350000379999983,"y":-1.5999993399999966},{"x":-2.350000379999983,"y":1.5999993399999966},{"x":2.3500003799999973,"y":1.5999993399999966},{"x":2.3500003799999973,"y":-1.5999993399999966}]} layer="top" />
           </footprint>} />
-    <chip name="R10" pcbX={-23.291800000000002} pcbY={-7.238999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-2.5589393237610008} schY={2.0105951829550737} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R10" pcbX={-23.291800000000002} pcbY={-7.238999999999997} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={-2.5589393237610008} schY={2.0105951829550737} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000762} y1={-0.3250006199999973} x2={-0.07112000000000052} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -874,7 +874,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-3.3019999999999996} pcbY={-1.0921999999999983} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R10" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002200000026},{"x":-1.200000139999993,"y":0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R18" pcbX={-24.80000374} pcbY={-7.366} pcbRotation="90deg" layer="top" symbolName="boxresistor_up" schX={3.4728462251042167} schY={-0.3655627605372853} schDisplayValue="4.99k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R18" pcbX={-24.80000374} pcbY={-7.366} pcbRotation="90deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={3.4728462251042167} schY={-0.3655627605372853} schDisplayValue="4.99k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={-0.3250006200000044} x2={0.07112000000000762} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -883,7 +883,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-0.16635475999999727} pcbY={0.9023629399999962} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R18" />
     <courtyardoutline outline={[{"x":1.2000001400000002,"y":-0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="R14" pcbX={5.207000000000001} pcbY={-18.415} pcbRotation="270deg" layer="top" symbolName="boxresistor_up" schX={7.128473830477073} schY={0.18278138026864355} schDisplayValue="1.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R14" pcbX={5.207000000000001} pcbY={-18.415} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={7.128473830477073} schY={0.18278138026864355} schDisplayValue="1.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006200000115} x2={-0.07112000000000052} y2={-0.3250006200000115} strokeWidth={0.19999959999999997} />
@@ -892,7 +892,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.7779999999999987} pcbY={-3.3019999999999996} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R14" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000097},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":-0.5250002200000097}]} layer="top" />
           </footprint>} />
-    <chip name="R8" pcbX={-19.888200000000005} pcbY={-4.800600000000003} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-2.5589393237610008} schY={2.7417207040296443} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R8" pcbX={-19.888200000000005} pcbY={-4.800600000000003} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={-2.5589393237610008} schY={2.7417207040296443} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006199999973} x2={-0.07112000000000762} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -901,7 +901,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.7150029200000034} pcbY={0.4661560400000013} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R8" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002200000026},{"x":1.200000139999993,"y":0.5250002200000026},{"x":1.200000139999993,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="R17" pcbX={-18.704003739999997} pcbY={-15.656001199999999} pcbRotation="90deg" layer="top" symbolName="boxresistor_up" schX={-10.05297591477536} schY={0} schDisplayValue="86.6k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R17" pcbX={-18.704003739999997} pcbY={-15.656001199999999} pcbRotation="90deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-10.05297591477536} schY={0} schDisplayValue="86.6k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={-0.3250006199999973} x2={0.07112000000000052} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -910,7 +910,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-3.7749987999999988} pcbY={-0.5430037399999961} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R17" />
     <courtyardoutline outline={[{"x":1.2000001400000002,"y":-0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="R11" pcbX={-23.241} pcbY={-4.1910000000000025} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={0.18278138026864177} schY={2.0105951829550737} schDisplayValue="100" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R11" pcbX={-23.241} pcbY={-4.1910000000000025} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={0.18278138026864177} schY={2.0105951829550737} schDisplayValue="100" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006200000044} x2={-0.07112000000000762} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -919,7 +919,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.600200000000001} pcbY={0.3810000000000002} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R11" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":1.200000139999993,"y":0.5250002199999955},{"x":1.200000139999993,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R19" pcbX={15.112999999999992} pcbY={-13.842999999999996} pcbRotation="270deg" layer="top" symbolName="boxresistor_up" schX={11.880789717461788} schY={-1.096688281611856} schDisplayValue="30.0k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R19" pcbX={15.112999999999992} pcbY={-13.842999999999996} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={11.880789717461788} schY={-1.096688281611856} schDisplayValue="30.0k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006199999973} x2={-0.07111999999999341} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -928,7 +928,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.7779999999999987} pcbY={0.5080000000000098} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R19" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002199999955},{"x":-1.200000139999993,"y":0.5250002200000097},{"x":1.2000001400000002,"y":0.5250002200000097},{"x":1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="R22" pcbX={13.588999999999992} pcbY={-13.842999999999996} pcbRotation="90deg" layer="top" symbolName="boxresistor_up" schX={11.880789717461788} schY={-3.6556276053728576} schDisplayValue="9.76k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R22" pcbX={13.588999999999992} pcbY={-13.842999999999996} pcbRotation="90deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={11.880789717461788} schY={-3.6556276053728576} schDisplayValue="9.76k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={0.3250006199999973} x2={0.07111999999999341} y2={0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -937,7 +937,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.7779999999999987} pcbY={-0.5080000000000098} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R22" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000097},{"x":1.200000139999993,"y":-0.5250002200000097},{"x":1.200000139999993,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="R20" pcbX={-25.308003739999997} pcbY={-9.398000000000003} pcbRotation="180deg" layer="top" symbolName="boxresistor_down" schX={-6.031785548865216} schY={-2.010595182955072} schDisplayValue="1.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R20" pcbX={-25.308003739999997} pcbY={-9.398000000000003} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_down" schX={-6.031785548865216} schY={-2.010595182955072} schDisplayValue="1.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.07112000000000762} y1={-0.3250006200000044} x2={-0.07111999999999341} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -946,7 +946,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={4.028996260000007} pcbY={0.634999999999998} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R20" />
     <courtyardoutline outline={[{"x":1.2000001400000073,"y":-0.5250002200000026},{"x":1.2000001400000073,"y":0.5250002199999955},{"x":-1.200000139999993,"y":0.5250002199999955},{"x":-1.200000139999993,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R21" pcbX={6.984999999999992} pcbY={-12.700000000000003} pcbRotation="180deg" layer="top" symbolName="boxresistor_left" schX={10.418538675312647} schY={-2.558939323761} schDisplayValue="1.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R21" pcbX={6.984999999999992} pcbY={-12.700000000000003} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={10.418538675312647} schY={-2.558939323761} schDisplayValue="1.00k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.07111999999999341} y1={-0.3250006200000044} x2={-0.07112000000000762} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -955,7 +955,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.524000000000001} pcbY={-0.8749995200000029} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="R21" />
     <courtyardoutline outline={[{"x":1.200000139999986,"y":-0.5250002200000026},{"x":1.200000139999986,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R5" pcbX={-16.67200374} pcbY={-9.143999999999998} pcbRotation="0deg" layer="top" symbolName="boxresistor_left" schX={-9.139069013432145} schY={4.203971746178787} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R5" pcbX={-16.67200374} pcbY={-9.143999999999998} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={-9.139069013432145} schY={4.203971746178787} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={-0.3250006200000044} x2={0.07112000000000052} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -981,7 +981,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-2.000001080000004} pcbY={-0.7000011399999977} anchorAlignment="center" text="Q1" font="tscircuit2024" fontSize={1.8499988399999998} color="#ec4899" />
     <silkscreentext pcbX={-0.2540000000000049} pcbY={2.793999999999997} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="Q1" />
           </footprint>} />
-    <chip name="NT1" pcbX={-21.73201394} pcbY={-10.540999999999997} pcbRotation="90deg" layer="top" schX={-3.6556276053728585} schY={-0.18278138026864177} symbol={<symbol>
+    <chip name="NT1" pcbX={-21.73201394} pcbY={-10.540999999999997} pcbRotation="90deg" layer="top" cadModel={null} schX={-3.6556276053728585} schY={-0.18278138026864177} symbol={<symbol>
       <port name="1" schX={-0.3655627605372853} schY={0} direction="left" pinNumber={1} aliases={["pin1"]} schStemLength={0.1827813802686429} />
       <port name="2" schX={0.3655627605372853} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} schStemLength={0.1827813802686429} />
       <schematictext text="NT1" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
@@ -1054,7 +1054,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5079999999999991} anchorAlignment="center" text="J1" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={1.7779999999999987} pcbY={5.080000000000002} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J1" />
           </footprint>} />
-    <chip name="D3" pcbX={-2.6670000000000016} pcbY={12.572999999999993} pcbRotation="270deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/13.step" positionOffset={{ x: 0.00009906000000370341, y: -0.00007746999999369564, z: 1.4152397399999999 }} rotationOffset={{ x: 0, y: 0, z: -270 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} symbolName="diode_right" schX={0.18278138026864177} schY={3.6556276053728585} schDisplayValue="150V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="D3" pcbX={-2.6670000000000016} pcbY={12.572999999999993} pcbRotation="270deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/13.step" positionOffset={{ x: 0.00009906000000370341, y: -0.00007746999999369564, z: 1.4152397399999999 }} rotationOffset={{ x: 0, y: 0, z: -270 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} symbolName="diode_left" schX={0.18278138026864177} schY={3.6556276053728585} schDisplayValue="150V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="2.00000108mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="2.00000108mm" height="2.00000108mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.99999854mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="2.00000108mm" height="2.00000108mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenrect pcbX={-3.40360127000001} pcbY={0} width={0.508} height={3.149602540000005} layer="top" strokeWidth={0.508} filled={true} />
@@ -1064,7 +1064,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={0.5079999999999956} pcbY={3.048000000000002} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="D3" />
     <courtyardoutline outline={[{"x":-3.0499989800000122,"y":1.7499990399999916},{"x":-3.0499989800000122,"y":-1.7500015800000028},{"x":3.050001519999995,"y":-1.7500015800000028},{"x":3.050001519999995,"y":1.7499990399999916}]} layer="top" />
           </footprint>} />
-    <chip name="D2" pcbX={-10.5909999} pcbY={-4.540999300000003} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/4.step" positionOffset={{ x: -0.00007365999999819905, y: 0.00011175999999579744, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} symbolName="diode_right" schX={-1.0966882816118577} schY={6.031785548865216} schDisplayValue="100V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="D2" pcbX={-10.5909999} pcbY={-4.540999300000003} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/4.step" positionOffset={{ x: -0.00007365999999819905, y: 0.00011175999999579744, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} symbolName="diode_left" schX={-1.0966882816118577} schY={6.031785548865216} schDisplayValue="100V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.10000288mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.5999988mm" height="0.5999988mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.0999978mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.5999988mm" height="0.5999988mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenrect pcbX={-1.803379679999992} pcbY={0} width={0.508} height={1.7271999999999998} layer="top" strokeWidth={0.508} filled={true} />
@@ -1107,7 +1107,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.7999989400000018} pcbY={-0.4999990000000025} anchorAlignment="center" text="D1" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={2.9209999999999923} pcbY={-1.0160000000000053} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="D1" />
           </footprint>} />
-    <chip name="C17" pcbX={-20.22800374} pcbY={-7.6708} pcbRotation="0deg" layer="top" symbolName="capacitor_up" schX={-4.386753126447431} schY={4.295362436313109} schDisplayValue="1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C17" pcbX={-20.22800374} pcbY={-7.6708} pcbRotation="0deg" layer="top" cadModel={null} symbolName="capacitor_up" schX={-4.386753126447431} schY={4.295362436313109} schDisplayValue="1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.71120254mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.762mm" height="0.762mm" shape="rect" />
     <smtpad portHints={["1"]} pcbX="-0.71119746mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.762mm" height="0.762mm" shape="rect" />
     <silkscreenline x1={-1.3207999999999984} y1={-0.6096000000000004} x2={-1.3207999999999984} y2={0} strokeWidth={0.17779999999999999} />
@@ -1121,7 +1121,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.1637899000000047} pcbY={-0.31739585999999775} anchorAlignment="center" text="C17" font="tscircuit2024" fontSize={0.635} color="#ec4899" />
     <silkscreentext pcbX={2.517632759999991} pcbY={2.6621994000000058} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C17" />
           </footprint>} />
-    <chip name="C21" pcbX={-16.67200374} pcbY={-13.716000000000001} pcbRotation="0deg" layer="top" symbolName="capacitor_down" schX={-11.698008337193148} schY={0.09139069013432177} schDisplayValue="220pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C21" pcbX={-16.67200374} pcbY={-13.716000000000001} pcbRotation="0deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-11.698008337193148} schY={0.09139069013432177} schDisplayValue="220pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={0.3250006200000044} x2={0.07112000000000052} y2={0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -1130,7 +1130,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.8130037399999992} pcbY={-0.634999999999998} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C21" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="C20" pcbX={13.588999999999992} pcbY={-16.383000000000003} pcbRotation="90deg" layer="top" symbolName="capacitor_down" schX={8.956287633163502} schY={0.2741720704029653} schDisplayValue="4.7uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C20" pcbX={13.588999999999992} pcbY={-16.383000000000003} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={8.956287633163502} schY={0.2741720704029653} schDisplayValue="4.7uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07111999999999341} y1={-0.3250006200000115} x2={0.07112000000000052} y2={-0.3250006200000115} strokeWidth={0.19999959999999997} />
@@ -1139,7 +1139,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.2389053199999935} pcbY={-1.9124650600000024} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C20" />
     <courtyardoutline outline={[{"x":1.2000001400000002,"y":-0.5250002200000097},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":-1.200000139999993,"y":0.5250002199999955},{"x":-1.200000139999993,"y":-0.5250002200000097}]} layer="top" />
           </footprint>} />
-    <chip name="C22" pcbX={-20.22800374} pcbY={-15.656001199999999} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={-8.956287633163504} schY={0.09139069013432177} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C22" pcbX={-20.22800374} pcbY={-15.656001199999999} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-8.956287633163504} schY={0.09139069013432177} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006200000044} x2={-0.07112000000000052} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -1148,7 +1148,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={4.028998800000004} pcbY={0.5430037399999961} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C22" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="C1" pcbX={13.716000000000001} pcbY={9.778999999999996} pcbRotation="90deg" layer="top" symbolName="capacitor_left" schX={5.75761347846225} schY={7.859599351551648} schDisplayValue="680pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C1" pcbX={13.716000000000001} pcbY={9.778999999999996} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_left" schX={5.75761347846225} schY={7.859599351551648} schDisplayValue="680pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.71119746mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.762mm" height="0.762mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.71120254mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.762mm" height="0.762mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={1.3208000000000055} y1={0} x2={1.3208000000000055} y2={-0.6096000000000004} strokeWidth={0.17779999999999999} />
@@ -1162,7 +1162,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.1637898999999976} pcbY={-0.31739585999999065} anchorAlignment="center" text="C1" font="tscircuit2024" fontSize={0.635} color="#ec4899" />
     <silkscreentext pcbX={2.0319999999999965} pcbY={-0.6349999999999909} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C1" />
           </footprint>} />
-    <chip name="C23" pcbX={7.746999999999993} pcbY={-14.971999519999997} pcbRotation="90deg" layer="top" symbolName="capacitor_right" schX={9.778803844372394} schY={-1.8278138026864283} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C23" pcbX={7.746999999999993} pcbY={-14.971999519999997} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_right" schX={9.778803844372394} schY={-1.8278138026864283} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={-0.3250006200000115} x2={0.07112000000000052} y2={-0.3250006200000115} strokeWidth={0.19999959999999997} />
@@ -1171,7 +1171,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={2.525999519999999} pcbY={-2.0320000000000107} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C23" />
     <courtyardoutline outline={[{"x":1.2000001400000002,"y":-0.5250002200000097},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":-0.5250002200000097}]} layer="top" />
           </footprint>} />
-    <chip name="C19" pcbX={-21.871302460000003} pcbY={-5.588000000000001} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={-0.9139069013432142} schY={1.370860352014823} schDisplayValue="470pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C19" pcbX={-21.871302460000003} pcbY={-5.588000000000001} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-0.9139069013432142} schY={1.370860352014823} schDisplayValue="470pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={0.3250006199999973} x2={-0.07112000000000762} y2={0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1180,7 +1180,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-1.524000000000001} pcbY={0.535302460000004} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C19" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":0.5250002200000026},{"x":1.200000139999993,"y":0.5250002200000026},{"x":1.200000139999993,"y":-0.5250002200000026},{"x":-1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="C26" pcbX={-25.308003739999997} pcbY={-10.921999999999997} pcbRotation="0deg" layer="top" symbolName="capacitor_down" schX={-6.031785548865216} schY={-2.8331113941639643} schDisplayValue="0.22uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C26" pcbX={-25.308003739999997} pcbY={-10.921999999999997} pcbRotation="0deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-6.031785548865216} schY={-2.8331113941639643} schDisplayValue="0.22uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={-0.3250006200000044} x2={0.07111999999999341} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -1189,7 +1189,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-4.282996260000004} pcbY={-0.6350000000000051} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C26" />
     <courtyardoutline outline={[{"x":-1.2000001400000073,"y":-0.5250002200000026},{"x":-1.2000001400000073,"y":0.5250002199999955},{"x":1.200000139999993,"y":0.5250002199999955},{"x":1.200000139999993,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="C24" pcbX={6.222999999999992} pcbY={-14.971999519999997} pcbRotation="90deg" layer="top" symbolName="capacitor_right" schX={9.047678323297824} schY={-2.558939323761} schDisplayValue="0.22uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C24" pcbX={6.222999999999992} pcbY={-14.971999519999997} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_right" schX={9.047678323297824} schY={-2.558939323761} schDisplayValue="0.22uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={0.3250006199999973} x2={0.07112000000000052} y2={0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1198,7 +1198,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-0.44931076000000303} pcbY={1.1116817999999853} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C24" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000097},{"x":1.2000001400000002,"y":-0.5250002200000097},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="C18" pcbX={-16.660370540000002} pcbY={-7.619999999999997} pcbRotation="0deg" layer="top" symbolName="capacitor_down" schX={-8.590724872626218} schY={3.7470182955071802} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C18" pcbX={-16.660370540000002} pcbY={-7.619999999999997} pcbRotation="0deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-8.590724872626218} schY={3.7470182955071802} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={0.3250006200000044} x2={0.07112000000000052} y2={0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -1207,7 +1207,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={1.4714601000000016} pcbY={-0.4750003200000066} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C18" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000026},{"x":1.2000001400000002,"y":-0.5250002200000026},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":-1.2000001400000002,"y":0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="C12" pcbX={18.160999999999994} pcbY={0.12700000000000244} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={10.418538675312647} schY={5.940394858730896} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C12" pcbX={18.160999999999994} pcbY={0.12700000000000244} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={10.418538675312647} schY={5.940394858730896} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000762} y1={-0.3250006199999973} x2={-0.07112000000000052} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1216,7 +1216,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={4.064} pcbY={0.7620000000000005} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C12" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002199999955},{"x":-1.200000139999993,"y":0.5250002200000097},{"x":1.2000001400000002,"y":0.5250002200000097},{"x":1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="C11" pcbX={31.877000000000002} pcbY={-3.8100000000000023} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={9.504631773969432} schY={5.940394858730896} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C11" pcbX={31.877000000000002} pcbY={-3.8100000000000023} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={9.504631773969432} schY={5.940394858730896} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006200000115} x2={-0.07112000000000762} y2={-0.3250006200000115} strokeWidth={0.19999959999999997} />
@@ -1225,7 +1225,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={3.683} pcbY={0.5079999999999956} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C11" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002200000097},{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":1.200000139999993,"y":0.5250002199999955},{"x":1.200000139999993,"y":-0.5250002200000097}]} layer="top" />
           </footprint>} />
-    <chip name="C10" pcbX={15.621000000000002} pcbY={0.12700000000000244} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={8.773506252894858} schY={5.940394858730896} schDisplayValue="10uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C10" pcbX={15.621000000000002} pcbY={0.12700000000000244} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={8.773506252894858} schY={5.940394858730896} schDisplayValue="10uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.44999964mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="2.69999968mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="1.44999964mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="2.69999968mm" shape="rect" />
     <silkscreenline x1={-2.3164799999999914} y1={-1.5677794399999954} x2={-2.3164799999999914} y2={1.5677794399999954} strokeWidth={0.17779999999999999} />
@@ -1238,7 +1238,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={5.207000000000001} pcbY={0.7620000000000005} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C10" />
     <courtyardoutline outline={[{"x":-2.3500003799999902,"y":-1.5999993400000108},{"x":-2.3500003799999902,"y":1.5999993399999966},{"x":2.3500003799999973,"y":1.5999993399999966},{"x":2.3500003799999973,"y":-1.5999993400000108}]} layer="top" />
           </footprint>} />
-    <chip name="C9" pcbX={12.06499999999999} pcbY={0.12700000000000244} pcbRotation="270deg" layer="top" symbolName="capacitor_down" schX={8.042380731820288} schY={5.940394858730896} schDisplayValue="10uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C9" pcbX={12.06499999999999} pcbY={0.12700000000000244} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={8.042380731820288} schY={5.940394858730896} schDisplayValue="10uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.44999964mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="2.69999968mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="1.44999964mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.29999994mm" height="2.69999968mm" shape="rect" />
     <silkscreenline x1={-2.3164799999999914} y1={-1.5677794399999954} x2={-2.3164799999999914} y2={1.5677794399999954} strokeWidth={0.17779999999999999} />
@@ -1251,7 +1251,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={4.318000000000005} pcbY={0.2540000000000049} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C9" />
     <courtyardoutline outline={[{"x":-2.3500003799999902,"y":-1.5999993399999966},{"x":-2.3500003799999902,"y":1.5999993400000108},{"x":2.3500003799999973,"y":1.5999993400000108},{"x":2.3500003799999973,"y":-1.5999993399999966}]} layer="top" />
           </footprint>} />
-    <chip name="C8" pcbX={28.067} pcbY={6.984999999999999} pcbRotation="90deg" layer="top" symbolName="capacitor_polarized_down" schX={7.311255210745717} schY={6.004368341824922} schDisplayValue="270uF" pinLabels={{"pin1":["+","1","pin1"],"pin2":["-","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C8" pcbX={28.067} pcbY={6.984999999999999} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_polarized_down" schX={7.311255210745717} schY={6.004368341824922} schDisplayValue="270uF" pinLabels={{"pin1":["+","1","pin1"],"pin2":["-","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="3.99999962mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.99999962mm" height="2.00000108mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-3.99999962mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.99999962mm" height="2.00000108mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={-3.5130003399999907} y1={-5.24999966} x2={5.24999966} y2={-5.24999966} strokeWidth={0.19999959999999997} />
@@ -1265,7 +1265,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.5999993399999966} pcbY={-0.9000007399999959} anchorAlignment="center" text="C8" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={5.715000000000003} pcbY={-3.048000000000002} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C8" />
           </footprint>} />
-    <chip name="C7" pcbX={25.273000000000003} pcbY={-5.4609999999999985} pcbRotation="270deg" layer="top" symbolName="capacitor_polarized_down" schX={6.580129689671143} schY={6.004368341824922} schDisplayValue="270uF" pinLabels={{"pin1":["+","1","pin1"],"pin2":["-","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C7" pcbX={25.273000000000003} pcbY={-5.4609999999999985} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_polarized_down" schX={6.580129689671143} schY={6.004368341824922} schDisplayValue="270uF" pinLabels={{"pin1":["+","1","pin1"],"pin2":["-","2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="3.99999962mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.99999962mm" height="2.00000108mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-3.99999962mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.99999962mm" height="2.00000108mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={5.24999966} y1={-5.24999966} x2={-3.513000339999998} y2={-5.24999966} strokeWidth={0.19999959999999997} />
@@ -1279,7 +1279,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.5999993399999966} pcbY={-0.9000007400000101} anchorAlignment="center" text="C7" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={-5.588000000000001} pcbY={-4.826000000000008} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C7" />
           </footprint>} />
-    <chip name="C4" pcbX={-14.350999999999999} pcbY={10.033000000000001} pcbRotation="180deg" layer="top" symbolName="capacitor_down" schX={-8.956287633163504} schY={6.305957619268181} schDisplayValue="1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C4" pcbX={-14.350999999999999} pcbY={10.033000000000001} pcbRotation="180deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-8.956287633163504} schY={6.305957619268181} schDisplayValue="1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.01600254mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.27mm" height="1.6002mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.01599746mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.27mm" height="1.6002mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={1.8796000000000035} y1={-1.0159999999999911} x2={1.0160000000000053} y2={-1.0159999999999911} strokeWidth={0.17779999999999999} />
@@ -1293,7 +1293,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.6255999999999986} pcbY={-0.4317999999999955} anchorAlignment="center" text="C4" font="tscircuit2024" fontSize={0.889} color="#ec4899" />
     <silkscreentext pcbX={4.318000000000005} pcbY={0.3810000000000002} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C4" />
           </footprint>} />
-    <chip name="C3" pcbX={-14.350999999999999} pcbY={12.074804400000005} pcbRotation="180deg" layer="top" symbolName="capacitor_down" schX={-10.05297591477536} schY={6.305957619268181} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C3" pcbX={-14.350999999999999} pcbY={12.074804400000005} pcbRotation="180deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-10.05297591477536} schY={6.305957619268181} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.01600254mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.27mm" height="1.6002mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.01599746mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.27mm" height="1.6002mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={1.8796000000000035} y1={-1.0159999999999911} x2={1.0160000000000053} y2={-1.0159999999999911} strokeWidth={0.17779999999999999} />
@@ -1307,7 +1307,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.6255999999999986} pcbY={-0.4317999999999955} anchorAlignment="center" text="C3" font="tscircuit2024" fontSize={0.889} color="#ec4899" />
     <silkscreentext pcbX={4.318000000000005} pcbY={0.3908044000000075} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C3" />
           </footprint>} />
-    <chip name="C2" pcbX={-27.051000000000002} pcbY={7.239000000000004} pcbRotation="270deg" layer="top" schX={-6.031785548865216} schY={6.369931102362205} symbol={<symbol>
+    <chip name="C2" pcbX={-27.051000000000002} pcbY={7.239000000000004} pcbRotation="270deg" layer="top" cadModel={null} schX={-6.031785548865216} schY={6.369931102362205} symbol={<symbol>
       <port name="+" schX={0} schY={0.21019858730894114} direction="up" pinNumber={1} aliases={["1","pin1"]} />
       <port name="-" schX={0} schY={-0.3381455534969895} direction="down" pinNumber={2} aliases={["2","pin2"]} />
       <schematicline x1={0} y1={0.027417207040297598} x2={0} y2={0.21019858730894114} strokeWidth={0.01827813802686429} color="#1f2937" isDashed={false}/>
@@ -1334,28 +1334,28 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5080000000000027} anchorAlignment="center" text="C2" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={-5.841999999999999} pcbY={-4.317999999999998} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C2" />
           </footprint>} />
-    <chip name="FID1" pcbX={38.22692379999999} pcbY={-16.636923799999998} pcbRotation="180deg" layer="top" schX={-14.256947660954147} schY={5.300660027790645} symbol={<symbol>
+    <chip name="FID1" pcbX={38.22692379999999} pcbY={-16.636923799999998} pcbRotation="180deg" layer="top" cadModel={null} schX={-14.256947660954147} schY={5.300660027790645} symbol={<symbol>
       <schematictext text="FID1" schX={-0.18278138026864355} schY={-0.3655627605372853} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.1827813802686429} strokeWidth={0.01827813802686429} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.07311255210745717} strokeWidth={0.01827813802686429} color="#c39800" isFilled={true} fillColor="#c39800" isDashed={false} />
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.499999mm" radius="0.50000027mm" shape="circle" />
           </footprint>} />
-    <chip name="FID2" pcbX={38.22692379999999} pcbY={16.63707620000001} pcbRotation="180deg" layer="top" schX={-13.343040759610933} schY={5.300660027790645} symbol={<symbol>
+    <chip name="FID2" pcbX={38.22692379999999} pcbY={16.63707620000001} pcbRotation="180deg" layer="top" cadModel={null} schX={-13.343040759610933} schY={5.300660027790645} symbol={<symbol>
       <schematictext text="FID2" schX={-0.18278138026864355} schY={-0.3655627605372853} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.1827813802686429} strokeWidth={0.01827813802686429} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.07311255210745717} strokeWidth={0.01827813802686429} color="#c39800" isFilled={true} fillColor="#c39800" isDashed={false} />
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.499999mm" radius="0.50000027mm" shape="circle" />
           </footprint>} />
-    <chip name="FID3" pcbX={-37.97307112} pcbY={16.63707620000001} pcbRotation="180deg" layer="top" schX={-12.429133858267718} schY={5.300660027790645} symbol={<symbol>
+    <chip name="FID3" pcbX={-37.97307112} pcbY={16.63707620000001} pcbRotation="180deg" layer="top" cadModel={null} schX={-12.429133858267718} schY={5.300660027790645} symbol={<symbol>
       <schematictext text="FID3" schX={-0.18278138026864355} schY={-0.3655627605372853} anchor="bottom_left" fontSize={0.1827813802686429} color="#1f2937" schRotation={0} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.1827813802686429} strokeWidth={0.01827813802686429} color="#1f2937" isFilled={true} fillColor="#ffffff" isDashed={false} />
       <schematiccircle center={{ x: 0, y: 0 }} radius={0.07311255210745717} strokeWidth={0.01827813802686429} color="#c39800" isFilled={true} fillColor="#c39800" isDashed={false} />
     </symbol>} schDisplayValue="Fiducial" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.499999mm" radius="0.50000027mm" shape="circle" />
           </footprint>} />
-    <chip name="C28" pcbX={0.3810000000000002} pcbY={-7.366} pcbRotation="180deg" layer="top" symbolName="capacitor_left" schX={1.553641732283463} schY={-4.935097267253358} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C28" pcbX={0.3810000000000002} pcbY={-7.366} pcbRotation="180deg" layer="top" cadModel={null} symbolName="capacitor_left" schX={1.553641732283463} schY={-4.935097267253358} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-2.00000108mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.59999934mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.99999854mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.59999934mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.7999984000000069} y1={-1.6999991399999956} x2={-0.8000009399999897} y2={-1.6999991399999956} strokeWidth={0.19999959999999997} />
@@ -1363,7 +1363,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.875000060000005} pcbY={-0.4999989999999954} anchorAlignment="center" text="C28" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={1.2700000000000031} pcbY={3.3019999999999996} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C28" />
           </footprint>} />
-    <chip name="C15" pcbX={-12.2858022} pcbY={-5.688944680000006} pcbRotation="270deg" layer="top" symbolName="capacitor_up" schX={-3.290064844835573} schY={5.209269337656323} schDisplayValue="4.7uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C15" pcbX={-12.2858022} pcbY={-5.688944680000006} pcbRotation="270deg" layer="top" cadModel={null} symbolName="capacitor_up" schX={-3.290064844835573} schY={5.209269337656323} schDisplayValue="4.7uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07111999999999341} y1={0.3250006199999973} x2={-0.07112000000000762} y2={0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1372,7 +1372,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-0.8750020600000141} pcbY={-1.5571978000000044} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C15" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":0.5250002199999955},{"x":1.200000139999993,"y":0.5250002199999955},{"x":1.200000139999993,"y":-0.5250002200000026},{"x":-1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="C6" pcbX={-14.218170700000002} pcbY={14.290700400000006} pcbRotation="180deg" layer="top" symbolName="capacitor_down" schX={-6.945692450208432} schY={6.305957619268181} schDisplayValue="4.7uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C6" pcbX={-14.218170700000002} pcbY={14.290700400000006} pcbRotation="180deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-6.945692450208432} schY={6.305957619268181} schDisplayValue="4.7uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.69999914mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.59999934mm" height="1.10000034mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.69999914mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.59999934mm" height="1.10000034mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.900000740000003} y1={1.000000540000002} x2={-0.900000740000003} y2={1.000000540000002} strokeWidth={0.16999966} />
@@ -1380,7 +1380,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.4999995399999975} pcbY={-0.3999991999999821} anchorAlignment="center" text="C6" font="tscircuit2024" fontSize={0.8128} color="#ec4899" />
     <silkscreentext pcbX={4.450829300000002} pcbY={0.4477004000000022} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C6" />
           </footprint>} />
-    <chip name="C5" pcbX={-14.350999999999999} pcbY={8.001000000000005} pcbRotation="180deg" layer="top" symbolName="capacitor_down" schX={-8.042380731820288} schY={6.305957619268181} schDisplayValue="1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C5" pcbX={-14.350999999999999} pcbY={8.001000000000005} pcbRotation="180deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={-8.042380731820288} schY={6.305957619268181} schDisplayValue="1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="1.01600254mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.27mm" height="1.6002mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-1.01599746mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.27mm" height="1.6002mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={1.8796000000000035} y1={-1.0159999999999911} x2={1.0160000000000053} y2={-1.0159999999999911} strokeWidth={0.17779999999999999} />
@@ -1394,7 +1394,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.6255999999999986} pcbY={-0.4317999999999955} anchorAlignment="center" text="C5" font="tscircuit2024" fontSize={0.889} color="#ec4899" />
     <silkscreentext pcbX={4.445} pcbY={0.6350000000000051} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C5" />
           </footprint>} />
-    <chip name="R2" pcbX={-9.016979679999999} pcbY={-7.016226760000002} pcbRotation="270deg" layer="top" symbolName="boxresistor_left" schX={-2.1933765632237154} schY={6.031785548865216} schDisplayValue="100" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R2" pcbX={-9.016979679999999} pcbY={-7.016226760000002} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_left" schX={-2.1933765632237154} schY={6.031785548865216} schDisplayValue="100" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07111999999999341} y1={-0.3250006200000044} x2={-0.07112000000000052} y2={-0.3250006200000044} strokeWidth={0.19999959999999997} />
@@ -1403,7 +1403,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={3.389774779999996} pcbY={1.0159796799999938} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R2" />
     <courtyardoutline outline={[{"x":-1.2000001400000073,"y":-0.5250002200000026},{"x":-1.2000001400000073,"y":0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R24" pcbX={-23.27600374} pcbY={-15.747999999999998} pcbRotation="90deg" layer="top" symbolName="boxresistor_up" schX={-8.956287633163504} schY={-6.031785548865216} schDisplayValue="9.76k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R24" pcbX={-23.27600374} pcbY={-15.747999999999998} pcbRotation="90deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-8.956287633163504} schY={-6.031785548865216} schDisplayValue="9.76k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={-0.3250006199999973} x2={0.07111999999999341} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1412,7 +1412,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-3.9370000000000047} pcbY={-0.5430037399999961} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R24" />
     <courtyardoutline outline={[{"x":1.200000139999993,"y":-0.5250002199999955},{"x":1.200000139999993,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":0.5250002200000026},{"x":-1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="R23" pcbX={-21.75200374} pcbY={-14.223999999999997} pcbRotation="270deg" layer="top" symbolName="boxresistor_up" schX={-8.956287633163504} schY={-4.752315886984715} schDisplayValue="30.0k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R23" pcbX={-21.75200374} pcbY={-14.223999999999997} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-8.956287633163504} schY={-4.752315886984715} schDisplayValue="30.0k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.85000084mm" shape="rect" />
     <silkscreenline x1={0.07112000000000052} y1={-0.3250006199999973} x2={-0.07111999999999341} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1421,7 +1421,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={5.461000000000006} pcbY={0.5430037399999961} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="R23" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002200000026},{"x":-1.200000139999993,"y":0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="R3" pcbX={-16.67200374} pcbY={-6.0959999999999965} pcbRotation="0deg" layer="top" symbolName="boxresistor_up" schX={-4.386753126447431} schY={5.483441408059289} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R3" pcbX={-16.67200374} pcbY={-6.0959999999999965} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-4.386753126447431} schY={5.483441408059289} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000052} y1={-0.3250006200000115} x2={0.07112000000000052} y2={-0.3250006200000115} strokeWidth={0.19999959999999997} />
@@ -1498,7 +1498,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     </symbol>} schDisplayValue="SJ61A1" obstructsWithinBounds={false} footprint={<footprint>
             <silkscreenpath route={[{"x":-3.9676069999999974,"y":0},{"x":-3.933663572100759,"y":0.5178766339356216},{"x":-3.8324140698652904,"y":1.0268922550820818},{"x":-3.665590900348505,"y":1.5183374650357564},{"x":-3.4360484542329672,"y":1.9838035000000005},{"x":-3.147714266412887,"y":2.415326107064999},{"x":-2.805521814783212,"y":2.805521814783212},{"x":-2.4153261070650025,"y":3.1477142664128905},{"x":-1.983803499999997,"y":3.4360484542329672},{"x":-1.5183374650357564,"y":3.665590900348505},{"x":-1.0268922550820747,"y":3.832414069865294},{"x":-0.5178766339356216,"y":3.9336635721007625},{"x":0,"y":3.967607000000001},{"x":0.5178766339356251,"y":3.9336635721007625},{"x":1.0268922550820818,"y":3.832414069865294},{"x":1.51833746503576,"y":3.665590900348505},{"x":1.9838035000000005,"y":3.4360484542329672},{"x":2.415326107065006,"y":3.1477142664128905},{"x":2.8055218147832157,"y":2.805521814783212},{"x":3.147714266412887,"y":2.415326107064999},{"x":3.4360484542329672,"y":1.9838035000000005},{"x":3.665590900348512,"y":1.5183374650357635},{"x":3.832414069865294,"y":1.0268922550820818},{"x":3.9336635721007625,"y":0.5178766339356216},{"x":3.967607000000001,"y":0},{"x":3.9336635721007625,"y":-0.5178766339356216},{"x":3.832414069865294,"y":-1.0268922550820747},{"x":3.665590900348512,"y":-1.5183374650357564},{"x":3.4360484542329672,"y":-1.9838035000000005},{"x":3.147714266412887,"y":-2.415326107064999},{"x":2.8055218147832157,"y":-2.805521814783212},{"x":2.415326107065006,"y":-3.1477142664128834},{"x":1.983803500000004,"y":-3.43604845423296},{"x":1.51833746503576,"y":-3.665590900348505},{"x":1.0268922550820783,"y":-3.832414069865294},{"x":0.5178766339356251,"y":-3.9336635721007625},{"x":0,"y":-3.967607000000001},{"x":-0.5178766339356251,"y":-3.9336635721007625},{"x":-1.0268922550820783,"y":-3.832414069865294},{"x":-1.5183374650357564,"y":-3.665590900348505},{"x":-1.983803499999997,"y":-3.4360484542329672},{"x":-2.4153261070650025,"y":-3.1477142664128834},{"x":-2.805521814783212,"y":-2.805521814783212},{"x":-3.147714266412887,"y":-2.415326107065006},{"x":-3.43604845423296,"y":-1.9838035000000005},{"x":-3.665590900348505,"y":-1.5183374650357564},{"x":-3.8324140698652904,"y":-1.0268922550820818},{"x":-3.933663572100759,"y":-0.5178766339356216},{"x":-3.9676069999999974,"y":0}]} strokeWidth={0.17779999999999999} layer="bottom" />
           </footprint>} />
-    <chip name="R12" pcbX={-19.431000000000004} pcbY={3.429000000000002} pcbRotation="0deg" layer="top" symbolName="boxresistor_up" schX={1.0966882816118577} schY={1.4622510421491448} schDisplayValue="0.02" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R12" pcbX={-19.431000000000004} pcbY={3.429000000000002} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={1.0966882816118577} schY={1.4622510421491448} schDisplayValue="0.02" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.77499972mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="2.74999958mm" height="0.65000124mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.77499972mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="2.74999958mm" height="0.65000124mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={0} y1={1.899998740000001} x2={1.1000003400000011} y2={1.899998740000001} strokeWidth={0.17779999999999999} />
@@ -1535,7 +1535,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-0.8000009400000039} pcbY={-0.19999959999999106} anchorAlignment="bottom_left" text="TP5" font="tscircuit2024" fontSize={0.49999899999999997} color="#ec4899" />
     <silkscreentext pcbX={-5.537199999999999} pcbY={-0.5334000000000003} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="TP5" />
           </footprint>} />)}
-    <chip name="R7" pcbX={25.145999999999994} pcbY={-19.151600000000002} pcbRotation="0deg" layer="top" symbolName="boxresistor_up" schX={11.880789717461788} schY={3.1072834645669296} schDisplayValue="10.0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R7" pcbX={25.145999999999994} pcbY={-19.151600000000002} pcbRotation="0deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={11.880789717461788} schY={3.1072834645669296} schDisplayValue="10.0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={-0.3250006199999973} x2={0.07112000000000762} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1575,7 +1575,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={0.07620000000000005} pcbY={-1.904999999999994} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="TP8" />
     <silkscreentext pcbX={-1.4478000000000009} pcbY={-1.904999999999994} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="AGND" />
           </footprint>} />)}
-    {isComponentIncluded({ componentName: "TP7", removedFeatureIds }) && (<chip name="TP7" pcbX={21.970999999999997} pcbY={-19.177} pcbRotation="180deg" layer="top" symbolName="testpoint_right" schX={12.685027790643819} schY={2.5589393237610008} schDisplayValue="TP_SM_1MM" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "TP7", removedFeatureIds }) && (<chip name="TP7" pcbX={21.970999999999997} pcbY={-19.177} pcbRotation="180deg" layer="top" cadModel={null} symbolName="testpoint_right" schX={12.685027790643819} schY={2.5589393237610008} schDisplayValue="TP_SM_1MM" pinLabels={{"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" radius="0.50000027mm" shape="circle" />
     <silkscreentext pcbX={2.6670000000000016} pcbY={-0.6674942199999947} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="TP7" />
           </footprint>} />)}
@@ -1584,7 +1584,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.269999999999996} pcbY={-0.2540000000000049} anchorAlignment="center" text="TP9" font="tscircuit2024" fontSize={0.635} color="#ec4899" />
     <silkscreentext pcbX={1.524000000000001} pcbY={-1.6510000000000034} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="TP9" />
           </footprint>} />)}
-    <chip name="C27" pcbX={0.3810000000000002} pcbY={18.161} pcbRotation="180deg" layer="top" symbolName="capacitor_left" schX={1.553641732283463} schY={-4.021190365910143} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C27" pcbX={0.3810000000000002} pcbY={18.161} pcbRotation="180deg" layer="top" cadModel={null} symbolName="capacitor_left" schX={1.553641732283463} schY={-4.021190365910143} schDisplayValue="1000pF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-2.00000108mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.59999934mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.99999854mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="3.40000082mm" height="1.59999934mm" ccwRotation={270} shape="rotated_rect" />
     <silkscreenline x1={0.7999984000000069} y1={-1.6999991399999885} x2={-0.8000009399999897} y2={-1.6999991399999885} strokeWidth={0.19999959999999997} />
@@ -1592,7 +1592,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.875000060000005} pcbY={-0.4999990000000025} anchorAlignment="center" text="C27" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={0.5080000000000027} pcbY={3.3020000000000067} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="C27" />
           </footprint>} />
-    <chip name="NT2" pcbX={-28.067} pcbY={-10.068001199999998} pcbRotation="270deg" layer="top" schX={4.569534506716071} schY={-2.558939323761} symbol={<symbol>
+    <chip name="NT2" pcbX={-28.067} pcbY={-10.068001199999998} pcbRotation="270deg" layer="top" cadModel={null} schX={4.569534506716071} schY={-2.558939323761} symbol={<symbol>
       <port name="1" schX={0} schY={-0.3655627605372862} direction="down" pinNumber={1} aliases={["pin1"]} schStemLength={0.1827813802686429} />
       <port name="2" schX={0} schY={0.3655627605372853} direction="up" pinNumber={2} aliases={["pin2"]} schStemLength={0.1827813802686429} />
       <schematictext text="NT2" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
@@ -1601,7 +1601,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
             <smtpad portHints={["1"]} pcbX="-0.254mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} width="0.254mm" height="0.254mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.254mm" pcbY="0mm" layer="top" coveredWithSolderMask={true} width="0.254mm" height="0.254mm" ccwRotation={270} shape="rotated_rect" />
           </footprint>} />
-    <chip name="C13" pcbX={19.939} pcbY={7.239000000000004} pcbRotation="90deg" layer="top" symbolName="capacitor_down" schX={11.33244557665586} schY={5.940394858730896} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C13" pcbX={19.939} pcbY={7.239000000000004} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={11.33244557665586} schY={5.940394858730896} schDisplayValue="0.1uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={-0.3250006199999973} x2={0.07111999999999341} y2={-0.3250006199999973} strokeWidth={0.19999959999999997} />
@@ -1610,7 +1610,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-4.064} pcbY={-0.6349999999999909} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C13" />
     <courtyardoutline outline={[{"x":1.200000139999986,"y":-0.5250002199999955},{"x":1.200000139999986,"y":0.5250002200000097},{"x":-1.2000001400000002,"y":0.5250002200000097},{"x":-1.2000001400000002,"y":-0.5250002199999955}]} layer="top" />
           </footprint>} />
-    <chip name="C14" pcbX={21.463} pcbY={7.239000000000004} pcbRotation="90deg" layer="top" symbolName="capacitor_down" schX={12.246352477999075} schY={5.940394858730896} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="C14" pcbX={21.463} pcbY={7.239000000000004} pcbRotation="90deg" layer="top" cadModel={null} symbolName="capacitor_down" schX={12.246352477999075} schY={5.940394858730896} schDisplayValue="0.01uF" pinLabels={{"pin1":["1","pin1"],"pin2":["2","pin2"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.6999986mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <smtpad portHints={["1"]} pcbX="-0.70000114mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.85000084mm" height="0.80000094mm" ccwRotation={180} shape="rotated_rect" />
     <silkscreenline x1={-0.07112000000000762} y1={0.3250006200000115} x2={0.07111999999999341} y2={0.3250006200000115} strokeWidth={0.19999959999999997} />
@@ -1619,7 +1619,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={-3.9369999999999976} pcbY={-0.6349999999999909} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C14" />
     <courtyardoutline outline={[{"x":-1.2000001400000002,"y":-0.5250002199999955},{"x":1.200000139999986,"y":-0.5250002199999955},{"x":1.200000139999986,"y":0.5250002200000097},{"x":-1.2000001400000002,"y":0.5250002200000097}]} layer="top" />
           </footprint>} />
-    <chip name="D5" pcbX={-11.632399900000003} pcbY={-10.305999200000002} pcbRotation="270deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/16.step" positionOffset={{ x: 0.00007365999999819905, y: -0.00011176000000290287, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} symbolName="diode_left" schX={-10.235757295044003} schY={4.203971746178787} schDisplayValue="100V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="D5" pcbX={-11.632399900000003} pcbY={-10.305999200000002} pcbRotation="270deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lm5155evm-fly/16.step" positionOffset={{ x: 0.00007365999999819905, y: -0.00011176000000290287, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} symbolName="diode_right" schX={-10.235757295044003} schY={4.203971746178787} schDisplayValue="100V" pinLabels={{"pin2":["A","2","pin2"],"pin1":["K","1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-1.0999978mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.5999988mm" height="0.5999988mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="1.10000288mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.5999988mm" height="0.5999988mm" ccwRotation={90} shape="rotated_rect" />
     <silkscreenrect pcbX={-1.8033949200000023} pcbY={-0.00032003999999830057} width={0.508} height={1.7271999999999998} layer="top" strokeWidth={0.508} filled={true} />
@@ -1630,7 +1630,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <fabricationnotetext pcbX={-1.3999997400000055} pcbY={-0.2750007200000013} anchorAlignment="center" text="D5" font="tscircuit2024" fontSize={0.762} color="#ec4899" />
     <silkscreentext pcbX={3.846880800000001} pcbY={0.5539994000000021} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="D5" />
           </footprint>} />
-    <chip name="R25" pcbX={-6.858000000000004} pcbY={-7.759999720000003} pcbRotation="180deg" layer="top" symbolName="boxresistor_up" schX={-2.5589393237610008} schY={4.93509726725336} schDisplayValue="10.0k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    <chip name="R25" pcbX={-6.858000000000004} pcbY={-7.759999720000003} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={-2.5589393237610008} schY={4.93509726725336} schDisplayValue="10.0k" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.75000104mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.39999974mm" height="1.10000034mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.7499985mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="1.39999974mm" height="1.10000034mm" ccwRotation={270} shape="rotated_rect" />
     <fabricationnotetext pcbX={-1.2000001400000002} pcbY={-0.3250006200000044} anchorAlignment="center" text="R25" font="tscircuit2024" fontSize={0.635} color="#ec4899" />
