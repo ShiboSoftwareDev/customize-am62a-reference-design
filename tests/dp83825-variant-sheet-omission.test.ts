@@ -17,6 +17,6 @@ test("DP83825 USB controller removal omits its empty schematic sheet", () => {
     "HSDC045A_CoverSheet.SchDoc",
   ])
   expect(getTiEvmVariantSchematicCircuitJsonUrls(variant)).not.toContain(
-    "/prebuilt-ti-evms/dp83825evm/remove-usb-mdio-controller.schematic-2.circuit.json.gz",
+    "/prebuilt-ti-evms/dp83825evm/external-mdio-evaluation.schematic-2.circuit.json.gz",
   )
 })

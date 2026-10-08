@@ -1,9 +1,16 @@
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { basename, resolve } from "node:path"
+import {
+  checkDanglingTraces,
+  checkEachPcbPortConnectedToPcbTraces,
+  checkSameNameNetsAreConnected,
+  checkSourceTracesHavePcbTraces,
+  checkTracesAreContiguous,
+} from "@tscircuit/checks"
 import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
 import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
-import { tiEvms } from "../lib/ti-evm-catalog"
+import { tiEvms, type TiEvm, type TiEvmVariant } from "../lib/ti-evm-catalog"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -23,45 +30,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   for (const evm of tiEvms) {
     const evmArtifacts: ManifestArtifact[] = []
     for (const variant of evm.variants) {
-      const result = await evaluateParameterizedTiEvm({
-        evmId: evm.id,
-        options: variant.evmOptions,
-      })
-      const failedComponents = result.circuitJson.filter(
-        ({ type }) => type === "source_failed_to_create_component_error",
-      )
-      if (failedComponents.length > 0) {
-        throw new Error(`${evm.name} ${variant.label} failed to render`)
-      }
-      const routingErrors = result.circuitJson.filter(({ type }) =>
-        [
-          "pcb_trace_error",
-          "pcb_port_not_matched_error",
-          "source_trace_not_connected_error",
-        ].includes(type),
-      )
-      if (routingErrors.length > 0) {
-        throw new Error(
-          `${evm.name} ${variant.label} produced ${routingErrors.length} routing errors`,
-        )
-      }
-      const circuitJson = result.circuitJson
-      const pcbTraceCount = circuitJson.filter(({ type }) => type === "pcb_trace").length
-      if (pcbTraceCount === 0) {
-        throw new Error(`${evm.name} ${variant.label} produced no routed PCB traces`)
-      }
-      const manifestArtifact = await writeCompressedCircuitJson({
-        outputPath: variant.circuitJsonUrl,
-        circuitJson,
-        source: `Parameterized ${evm.name} tscircuit TSX`,
-      })
-      if (variant.schematicCircuitJsonUrls.length === 0) {
-        throw new Error(`${evm.name} ${variant.label} has no schematic artifact URLs`)
-      }
-      manifestArtifact.schematicOutputs = variant.schematicCircuitJsonUrls.map((url) =>
-        url.replace(/^\//u, ""),
-      )
-      evmArtifacts.push(manifestArtifact)
+      evmArtifacts.push(await buildTiEvmVariantArtifact({ evm, variant }))
     }
     boards.push({ id: evm.id, artifacts: evmArtifacts })
     console.log(`Prebuilt ${evmArtifacts.length} ${evm.name} variants`)
@@ -85,6 +54,61 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   console.log(
     `Prebuilt ${boards.reduce((count, board) => count + board.artifacts.length, 0)} variants across ${boards.length} TI EVMs`,
   )
+}
+
+async function buildTiEvmVariantArtifact(params: {
+  evm: TiEvm
+  variant: TiEvmVariant
+}): Promise<ManifestArtifact> {
+  const result = await evaluateParameterizedTiEvm({
+    evmId: params.evm.id,
+    options: params.variant.evmOptions,
+  })
+  const failedComponents = result.circuitJson.filter(
+    ({ type }) => type === "source_failed_to_create_component_error",
+  )
+  if (failedComponents.length > 0) {
+    throw new Error(`${params.evm.name} ${params.variant.label} failed to render`)
+  }
+  const routingErrors = result.circuitJson.filter(({ type }) =>
+    ["pcb_trace_error", "pcb_port_not_matched_error", "source_trace_not_connected_error"].includes(
+      type,
+    ),
+  )
+  if (routingErrors.length > 0) {
+    throw new Error(
+      `${params.evm.name} ${params.variant.label} produced ${routingErrors.length} routing errors`,
+    )
+  }
+  const circuitJson = result.circuitJson
+  const electricalErrors = [
+    ...checkDanglingTraces(circuitJson),
+    ...checkEachPcbPortConnectedToPcbTraces(circuitJson),
+    ...checkSourceTracesHavePcbTraces(circuitJson),
+    ...checkTracesAreContiguous(circuitJson),
+    ...checkSameNameNetsAreConnected(circuitJson),
+  ]
+  if (electricalErrors.length > 0) {
+    throw new Error(
+      `${params.evm.name} ${params.variant.label} failed electrical checks:\n${electricalErrors.map(({ message }) => message).join("\n")}`,
+    )
+  }
+  const pcbTraceCount = circuitJson.filter(({ type }) => type === "pcb_trace").length
+  if (pcbTraceCount === 0) {
+    throw new Error(`${params.evm.name} ${params.variant.label} produced no routed PCB traces`)
+  }
+  const manifestArtifact = await writeCompressedCircuitJson({
+    outputPath: params.variant.circuitJsonUrl,
+    circuitJson,
+    source: `Parameterized ${params.evm.name} tscircuit TSX`,
+  })
+  if (params.variant.schematicCircuitJsonUrls.length === 0) {
+    throw new Error(`${params.evm.name} ${params.variant.label} has no schematic artifact URLs`)
+  }
+  manifestArtifact.schematicOutputs = params.variant.schematicCircuitJsonUrls.map((url) =>
+    url.replace(/^\//u, ""),
+  )
+  return manifestArtifact
 }
 
 async function writeCompressedCircuitJson(artifact: {

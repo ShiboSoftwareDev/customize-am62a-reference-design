@@ -3,7 +3,7 @@
 import { Fragment } from "react"
 import "tscircuit"
 
-export type Lm5155EvmFlyFeatureId = "test-and-measurement"
+export type Lm5155EvmFlyFeatureId = "power-measurement-access" | "control-loop-access"
 
 export type Lm5155EvmFlyProps = {
   removedFeatureIds?: readonly string[]
@@ -11,16 +11,17 @@ export type Lm5155EvmFlyProps = {
 
 const featureIdByComponentName: Partial<Record<string, Lm5155EvmFlyFeatureId>> =
   {
-  "TP5": "test-and-measurement",
-  "TP2": "test-and-measurement",
-  "TP4": "test-and-measurement",
-  "TP1": "test-and-measurement",
-  "TP3": "test-and-measurement",
-  "TP8": "test-and-measurement",
-  "TP9": "test-and-measurement",
-  "TP6": "test-and-measurement",
-  "TP7": "test-and-measurement",
-  "J4": "test-and-measurement"
+  "TP5": "power-measurement-access",
+  "TP2": "power-measurement-access",
+  "TP4": "power-measurement-access",
+  "TP1": "power-measurement-access",
+  "TP3": "power-measurement-access",
+  "TP8": "power-measurement-access",
+  "TP9": "power-measurement-access",
+  "TP6": "control-loop-access",
+  "TP7": "control-loop-access",
+  "J4": "control-loop-access",
+  "J3": "power-measurement-access"
 }
 
 const pouredNetSelectors = new Set<string>([
@@ -611,7 +612,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
     <silkscreentext pcbX={4.064} pcbY={0.5079999999999956} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="90deg" mirrored={false} layer="top" text="C25" />
     <courtyardoutline outline={[{"x":-1.200000139999993,"y":-0.5250002200000026},{"x":-1.200000139999993,"y":0.5250002199999955},{"x":1.2000001400000002,"y":0.5250002199999955},{"x":1.2000001400000002,"y":-0.5250002200000026}]} layer="top" />
           </footprint>} />
-    <chip name="J3" pcbX={-28.194000000000003} pcbY={-0.8890000000000029} pcbRotation="0deg" layer="top" schX={2.1933765632237154} schY={0.3655627605372871} symbol={<symbol>
+    {isComponentIncluded({ componentName: "J3", removedFeatureIds }) && (<chip name="J3" pcbX={-28.194000000000003} pcbY={-0.8890000000000029} pcbRotation="0deg" layer="top" schX={2.1933765632237154} schY={0.3655627605372871} symbol={<symbol>
       <port name="1" schX={-0.5483441408059306} schY={0} direction="left" pinNumber={1} aliases={["pin1"]} schStemLength={0.3655627605372858} />
       <schematictext text="J3" schX={-0.1999999999999993} schY={0.33000000000000007} anchor="bottom_left" fontSize={0.18} color="#006464" schRotation={0} />
       <schematictext text="1040" schX={-0.1999999999999993} schY={-0.33000000000000007} anchor="top_left" fontSize={0.18} color="#006464" schRotation={0} />
@@ -619,7 +620,7 @@ export function Lm5155EvmFly(props: Lm5155EvmFlyProps) {
             <platedhole  portHints={["1"]} pcbX="0mm" pcbY="0mm" outerDiameter="1.905mm" holeDiameter="1.3208mm" shape="circle" />
     <fabricationnotetext pcbX={-1.2699999999999996} pcbY={-0.2539999999999978} anchorAlignment="center" text="J3" font="tscircuit2024" fontSize={0.635} color="#ec4899" />
     <silkscreentext pcbX={-0.8889999999999993} pcbY={-2.2859999999999943} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J3" />
-          </footprint>} />
+          </footprint>} />)}
     {isComponentIncluded({ componentName: "J4", removedFeatureIds }) && (<chip name="J4" pcbX={-31.623} pcbY={-11.811} pcbRotation="270deg" layer="top" schX={-13.525822139879576} schY={-4.935097267253358} symbol={<symbol>
       <port name="5" schX={0.5483441408059289} schY={-0.3655627605372853} direction="right" pinNumber={5} aliases={["pin5"]} />
       <port name="4" schX={0.5483441408059289} schY={-0.18278138026864266} direction="right" pinNumber={4} aliases={["pin4"]} />

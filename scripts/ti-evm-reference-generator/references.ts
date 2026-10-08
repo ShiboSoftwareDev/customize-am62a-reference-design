@@ -1,25 +1,33 @@
 import type { ReferenceInput } from "./types"
 
-const dp83825StatusIndicatorComponents = new Set([
-  "LD1",
+type ComponentName = string
+
+const dp83825PowerIndicatorComponents = new Set<ComponentName>(["LD1", "R4"])
+
+const dp83825PhyStatusIndicatorComponents = new Set<ComponentName>([
   "LD2",
   "LD3",
   "LD4",
-  "R4",
   "R28",
   "R30",
   "R32",
 ])
 
+const dp83825ClockTestAccessComponents = new Set<ComponentName>(["J12", "J15", "R27", "R41"])
+
 function getDp83825RemovableFeatureId(componentName: string): string | undefined {
   if (/^(?:U4|D2|J19|Y1|R(?:4[4-9]|5[0-4])|C(?:3\d|40))$/u.test(componentName)) {
     return "usb-mdio-controller"
   }
-  if (dp83825StatusIndicatorComponents.has(componentName)) return "status-indicators"
+  if (dp83825PowerIndicatorComponents.has(componentName)) return "power-indicator"
+  if (dp83825PhyStatusIndicatorComponents.has(componentName)) {
+    return "phy-status-indicators"
+  }
+  if (dp83825ClockTestAccessComponents.has(componentName)) return "clock-test-access"
   return undefined
 }
 
-const drvSpeedControlComponents = new Set([
+const drvSpeedControlComponents = new Set<ComponentName>([
   "U5",
   "R20",
   "D7",
@@ -32,7 +40,7 @@ const drvSpeedControlComponents = new Set([
   "R21",
 ])
 
-const drvHallInterfaceComponents = new Set([
+const drvSingleEndedHallConditioningComponents = new Set<ComponentName>([
   "U7",
   "U8",
   "U9",
@@ -54,11 +62,48 @@ const drvHallInterfaceComponents = new Set([
   "C20",
   "JP3",
   "JP4",
-  "JP5",
-  "JP7",
 ])
 
-const lmgStatusIndicators = new Set([
+const drvStatusIndicatorComponents = new Set<ComponentName>(["D3", "D4", "R14", "R15"])
+
+const lm5155PowerMeasurementComponents = new Set<ComponentName>([
+  "TP1",
+  "TP2",
+  "TP3",
+  "TP4",
+  "TP5",
+  "TP8",
+  "TP9",
+  "J3",
+])
+
+const lm5155ControlLoopAccessComponents = new Set<ComponentName>(["TP6", "TP7", "J4"])
+
+const lm251772PowerMeasurementComponents = new Set<ComponentName>([
+  "TP1",
+  "TP2",
+  "TP3",
+  "TP4",
+  "TP5",
+  "TP6",
+  "TP7",
+  "TP8",
+  "J3",
+  "J4",
+])
+
+const lm251772ControlDebugComponents = new Set<ComponentName>([
+  "TP9",
+  "TP10",
+  "TP11",
+  "TP12",
+  "TP13",
+  "J11",
+])
+
+const lm251772Usb2AnyComponents = new Set<ComponentName>(["J12", "R39", "R40"])
+
+const lmgStatusIndicators = new Set<ComponentName>([
   "LS_OC",
   "HS_OC",
   "LS_FLT",
@@ -82,25 +127,25 @@ const lmgStatusIndicators = new Set([
   "R31",
 ])
 
-const lmgMeasurementInterface = new Set([
+const lmgLogicMeasurementComponents = new Set<ComponentName>([
   "TACH",
-  "VAUX",
-  "SW",
   "PWM_LS",
   "PWM_HS",
-  "PGND5",
-  "PGND4",
   "LS_FET_PWM",
-  "HVOUT",
-  "HVIN",
   "HS_FET_PWM",
   "AGND2",
   "AGND1",
-  "ACMGND",
-  "12V",
-  "5V",
-  "J15",
 ])
+
+const lmgPowerMeasurementComponents = new Set<ComponentName>([
+  "SW",
+  "PGND5",
+  "PGND4",
+  "HVOUT",
+  "HVIN",
+])
+
+const lmgBiasMeasurementComponents = new Set<ComponentName>(["VAUX", "ACMGND", "12V", "5V"])
 
 export const referenceInputs: ReferenceInput[] = [
   {
@@ -135,7 +180,11 @@ export const referenceInputs: ReferenceInput[] = [
     outputName: "drv8307evm.generated.ts",
     getRemovableFeatureId: (componentName) => {
       if (drvSpeedControlComponents.has(componentName)) return "onboard-speed-control"
-      if (drvHallInterfaceComponents.has(componentName)) return "hall-interface"
+      if (drvSingleEndedHallConditioningComponents.has(componentName)) {
+        return "single-ended-hall-conditioning"
+      }
+      if (/^TP/u.test(componentName)) return "test-points"
+      if (drvStatusIndicatorComponents.has(componentName)) return "status-indicators"
       return undefined
     },
   },
@@ -154,9 +203,8 @@ export const referenceInputs: ReferenceInput[] = [
     ],
     outputName: "lm5155evm-fly.generated.ts",
     getRemovableFeatureId: (componentName) => {
-      if (/^TP/u.test(componentName) || componentName === "J4") {
-        return "test-and-measurement"
-      }
+      if (lm5155PowerMeasurementComponents.has(componentName)) return "power-measurement-access"
+      if (lm5155ControlLoopAccessComponents.has(componentName)) return "control-loop-access"
       return undefined
     },
   },
@@ -172,7 +220,11 @@ export const referenceInputs: ReferenceInput[] = [
     schematicPaths: ["tmp/references/lm251772/Altium_Files/SR135B.SchDoc"],
     outputName: "lm251772evm-pd.generated.ts",
     getRemovableFeatureId: (componentName) => {
-      if (/^TP/u.test(componentName)) return "test-and-measurement"
+      if (lm251772PowerMeasurementComponents.has(componentName)) {
+        return "power-measurement-access"
+      }
+      if (lm251772ControlDebugComponents.has(componentName)) return "control-debug-access"
+      if (lm251772Usb2AnyComponents.has(componentName)) return "usb2any-interface"
       return undefined
     },
   },
@@ -189,7 +241,9 @@ export const referenceInputs: ReferenceInput[] = [
     outputName: "lmg342x-bb-evm.generated.ts",
     getRemovableFeatureId: (componentName) => {
       if (lmgStatusIndicators.has(componentName)) return "status-indicators"
-      if (lmgMeasurementInterface.has(componentName)) return "measurement-interface"
+      if (lmgLogicMeasurementComponents.has(componentName)) return "logic-measurement-access"
+      if (lmgPowerMeasurementComponents.has(componentName)) return "power-measurement-access"
+      if (lmgBiasMeasurementComponents.has(componentName)) return "bias-measurement-access"
       return undefined
     },
   },
