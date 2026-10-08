@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import type { AnyCircuitElement } from "circuit-json"
 import { gunzipSync, gzipSync, strFromU8, strToU8 } from "fflate"
 import { filterReferenceSchematic } from "../lib/evms/filter-reference-schematic"
+import { getReferenceSchematicComponentName } from "../lib/evms/get-reference-schematic-component-name"
 import { getParameterizedTiEvmDefinition } from "../lib/evms/parameterized-ti-evms"
 import { tiEvms } from "../lib/ti-evm-catalog"
 
@@ -27,7 +28,7 @@ export async function prebuildTiEvmSchematicAssets(): Promise<void> {
         definition.components.flatMap((component) =>
           component.removableFeatureId !== undefined &&
           variant.removedFeatureIds.includes(component.removableFeatureId)
-            ? [component.name]
+            ? [getReferenceSchematicComponentName(component)]
             : [],
         ),
       )

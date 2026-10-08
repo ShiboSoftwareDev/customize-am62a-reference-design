@@ -55,6 +55,7 @@ export type ReferenceSchematicPlacement = {
 
 export type ReferenceComponent = {
   name: string
+  schematicName?: string
   value: string
   description: string
   x: number
