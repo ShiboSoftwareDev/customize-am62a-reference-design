@@ -1726,7 +1726,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5080000000000098} anchorAlignment="center" text="J8" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={4.064000000000007} pcbY={1.0159999999999911} anchorAlignment="bottom_left" fontSize={0.762} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J8" />
           </footprint>} />
-    <chip name="J9" pcbX={-1.0159987299999926} pcbY={-24.89199873000507} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/dp83825evm/5.step" positionOffset={{ x: 0, y: 0, z: 4.029999559999999 }} rotationOffset={{ x: 0, y: 0, z: 90 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-9.139069013432145} schY={6.854301760074112} symbol={<symbol>
+    <chip name="J9" pcbX={-1.0159987299999926} pcbY={-24.89199873000507} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/dp83825evm/5.step" positionOffset={{ x: 0, y: 0, z: 4.029999559999999 }} rotationOffset={{ x: 0, y: 0, z: 90 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 281.47471772, y: 403.18518804, z: 0 }} />} schX={-9.139069013432145} schY={6.854301760074112} symbol={<symbol>
       <port name="1" schX={-0.7311255210745724} schY={0.8225162112088924} direction="left" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.7311255210745706} schY={0.8225162112088924} direction="right" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={-0.7311255210745724} schY={0.6397348309402489} direction="left" pinNumber={3} aliases={["pin3"]} />
