@@ -1,4 +1,5 @@
 import type { ParameterizedTiEvmId, ParameterizedTiEvmOptions } from "./evms/parameterized-ti-evms"
+import { tiEvmVariantDefinitions, type TiEvmVariantDefinition } from "./ti-evm-variant-definitions"
 
 export type TiEvmId = ParameterizedTiEvmId
 
@@ -36,12 +37,19 @@ function createVariants(params: {
   evmId: TiEvmId
   features: TiEvmRemovableFeature[]
   schematicSheetCount: number
+  variantDefinitions: TiEvmVariantDefinition[]
 }): TiEvmVariant[] {
-  const combinationCount = 1 << params.features.length
+  const featureIds = new Set(params.features.map(({ id }) => id))
 
-  return Array.from({ length: combinationCount }, (_, mask) => {
-    const removedFeatures = params.features.filter((_, index) => mask & (1 << index))
-    const removedFeatureIds = removedFeatures.map(({ id }) => id)
+  return params.variantDefinitions.map((variantDefinition) => {
+    for (const removedFeatureId of variantDefinition.removedFeatureIds) {
+      if (!featureIds.has(removedFeatureId)) {
+        throw new Error(`${params.evmId} variant references unknown feature: ${removedFeatureId}`)
+      }
+    }
+    const removedFeatures = params.features.filter(({ id }) =>
+      variantDefinition.removedFeatureIds.includes(id),
+    )
     const omittedSchematicSheetIndexes = new Set(
       removedFeatures.flatMap(
         ({ omittedSchematicSheetIndexes }) => omittedSchematicSheetIndexes ?? [],
@@ -51,50 +59,24 @@ function createVariants(params: {
       { length: params.schematicSheetCount },
       (_, schematicSheetIndex) => schematicSheetIndex,
     ).filter((schematicSheetIndex) => !omittedSchematicSheetIndexes.has(schematicSheetIndex))
-    const isFullBoard = mask === 0
-    const isMinimalBoard = mask === combinationCount - 1
-    const id = isFullBoard
-      ? "full-board"
-      : isMinimalBoard
-        ? "minimal-board"
-        : `remove-${removedFeatureIds.join("-")}`
-
-    const circuitJsonUrl = `/prebuilt-ti-evms/${params.evmId}/${id}.circuit.json.gz`
+    const circuitJsonUrl = `/prebuilt-ti-evms/${params.evmId}/${variantDefinition.id}.circuit.json.gz`
 
     return {
-      id,
-      label: createVariantLabel({
-        features: params.features,
-        removedFeatureIds,
-      }),
+      id: variantDefinition.id,
+      label: variantDefinition.label,
       circuitJsonUrl,
       schematicCircuitJsonUrls: Array.from(
         { length: params.schematicSheetCount },
         (_, schematicSheetIndex) =>
-          `/prebuilt-ti-evms/${params.evmId}/${id}${
+          `/prebuilt-ti-evms/${params.evmId}/${variantDefinition.id}${
             schematicSheetIndex === 0 ? ".schematic" : `.schematic-${schematicSheetIndex + 1}`
           }.circuit.json.gz`,
       ),
       visibleSchematicSheetIndexes,
-      removedFeatureIds,
-      evmOptions: { removedFeatureIds },
+      removedFeatureIds: variantDefinition.removedFeatureIds,
+      evmOptions: { removedFeatureIds: variantDefinition.removedFeatureIds },
     }
   })
-}
-
-function createVariantLabel({
-  features,
-  removedFeatureIds,
-}: {
-  features: TiEvmRemovableFeature[]
-  removedFeatureIds: string[]
-}): string {
-  if (removedFeatureIds.length === 0) return "Full board"
-  if (removedFeatureIds.length === features.length) return "Minimal board"
-
-  const includedFeatures = features.filter(({ id }) => !removedFeatureIds.includes(id))
-  const label = includedFeatures.map(({ label: featureLabel }) => featureLabel).join(" + ")
-  return `${label[0].toUpperCase()}${label.slice(1)} only`
 }
 
 function createEvaluationEvm(params: {
@@ -114,6 +96,7 @@ function createEvaluationEvm(params: {
       evmId: params.id,
       features: params.removableFeatures,
       schematicSheetCount: params.schematicSheetLabels.length,
+      variantDefinitions: tiEvmVariantDefinitions[params.id],
     }),
   }
 }
@@ -143,9 +126,19 @@ export const tiEvms: TiEvm[] = [
         omittedSchematicSheetIndexes: [1],
       },
       {
-        id: "status-indicators",
-        label: "status indicators",
-        description: "Optional link, activity, power, and controller status LEDs.",
+        id: "power-indicator",
+        label: "power indicator",
+        description: "Optional board power LED and current-limiting resistor.",
+      },
+      {
+        id: "phy-status-indicators",
+        label: "PHY status indicators",
+        description: "Optional PHY clock, strap, and interface status LEDs.",
+      },
+      {
+        id: "clock-test-access",
+        label: "clock test access",
+        description: "Optional clock output and external reference clock SMA access.",
       },
     ],
   }),
@@ -166,9 +159,19 @@ export const tiEvms: TiEvm[] = [
         description: "TLC555 PWM generator, speed potentiometer, and support components.",
       },
       {
-        id: "hall-interface",
-        label: "Hall-sensor interface",
-        description: "Hall input conditioning and buffer devices.",
+        id: "single-ended-hall-conditioning",
+        label: "single-ended Hall conditioning",
+        description: "Optional conditioning used for single-ended Hall sensors.",
+      },
+      {
+        id: "test-points",
+        label: "test points",
+        description: "Optional test points for Hall, control, fault, and ground signals.",
+      },
+      {
+        id: "status-indicators",
+        label: "status indicators",
+        description: "Optional power and fault LEDs.",
       },
     ],
   }),
@@ -184,9 +187,14 @@ export const tiEvms: TiEvm[] = [
     schematicSheetLabels: ["BMC029A_SCH.SchDoc", "BMC029A-HW.SchDoc"],
     removableFeatures: [
       {
-        id: "test-and-measurement",
-        label: "test and measurement hardware",
-        description: "Optional test points and oscilloscope probe access used during evaluation.",
+        id: "power-measurement-access",
+        label: "power measurement access",
+        description: "Optional input, output, ground, and switch-node probe points.",
+      },
+      {
+        id: "control-loop-access",
+        label: "control and loop access",
+        description: "Optional control-signal header and loop-response injection points.",
       },
     ],
   }),
@@ -202,10 +210,19 @@ export const tiEvms: TiEvm[] = [
     schematicSheetLabels: ["SR135B.SchDoc"],
     removableFeatures: [
       {
-        id: "test-and-measurement",
-        label: "test and measurement hardware",
-        description:
-          "Thirteen reference test points distributed across the power and control nets.",
+        id: "power-measurement-access",
+        label: "power measurement access",
+        description: "Optional power-stage voltage, ground, and switch-node access.",
+      },
+      {
+        id: "control-debug-access",
+        label: "control debug access",
+        description: "Optional controller rail, reset, compensation, soft-start, and CDC access.",
+      },
+      {
+        id: "usb2any-interface",
+        label: "USB2ANY interface",
+        description: "Optional USB2ANY I2C header and its connector-side pull-up resistors.",
       },
     ],
   }),
@@ -221,10 +238,19 @@ export const tiEvms: TiEvm[] = [
     schematicSheetLabels: ["LMG342X_BB_EVM.SchDoc"],
     removableFeatures: [
       {
-        id: "measurement-interface",
-        label: "measurement interface",
-        description:
-          "Evaluation-only PWM, rail, ground, switch-node, and tachometer access points.",
+        id: "logic-measurement-access",
+        label: "logic measurement access",
+        description: "Optional PWM, gate-drive, tachometer, and analog-ground probe points.",
+      },
+      {
+        id: "power-measurement-access",
+        label: "power measurement access",
+        description: "Optional high-voltage input, output, switch-node, and power-ground probes.",
+      },
+      {
+        id: "bias-measurement-access",
+        label: "bias measurement access",
+        description: "Optional 12-V, 5-V, auxiliary, and common-mode ground probes.",
       },
       {
         id: "status-indicators",

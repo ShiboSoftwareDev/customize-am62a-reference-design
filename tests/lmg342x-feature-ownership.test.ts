@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { lmg342xBbEvmDefinition } from "lib/generated/ti-evms/lmg342x-bb-evm.generated"
 
-test("LMG342X retains its PWM selector and removes complete status indicators", () => {
+test("LMG342X separates probe classes and retains its selectors and fan header", () => {
   expect(
     lmg342xBbEvmDefinition.components.find(({ name }) => name === "J14")?.removableFeatureId,
   ).toBeUndefined()
@@ -24,10 +24,13 @@ test("LMG342X retains its PWM selector and removes complete status indicators", 
         ?.removableFeatureId,
     ).toBe("status-indicators")
   }
-  for (const componentName of ["X_12V", "X_5V"]) {
+  for (const componentName of ["X_12V", "X_5V", "VAUX", "ACMGND"]) {
     expect(
       lmg342xBbEvmDefinition.components.find(({ name }) => name === componentName)
         ?.removableFeatureId,
-    ).toBe("measurement-interface")
+    ).toBe("bias-measurement-access")
   }
+  expect(
+    lmg342xBbEvmDefinition.components.find(({ name }) => name === "J15")?.removableFeatureId,
+  ).toBeUndefined()
 })

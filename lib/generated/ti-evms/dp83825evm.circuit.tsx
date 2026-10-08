@@ -3,7 +3,7 @@
 import { Fragment } from "react"
 import "tscircuit"
 
-export type Dp83825EvmFeatureId = "status-indicators" | "usb-mdio-controller"
+export type Dp83825EvmFeatureId = "clock-test-access" | "phy-status-indicators" | "usb-mdio-controller" | "power-indicator"
 
 export type Dp83825EvmProps = {
   removedFeatureIds?: readonly string[]
@@ -11,12 +11,16 @@ export type Dp83825EvmProps = {
 
 const featureIdByComponentName: Partial<Record<string, Dp83825EvmFeatureId>> =
   {
-  "LD4": "status-indicators",
-  "LD2": "status-indicators",
-  "LD3": "status-indicators",
-  "R30": "status-indicators",
-  "R28": "status-indicators",
-  "R32": "status-indicators",
+  "R41": "clock-test-access",
+  "LD4": "phy-status-indicators",
+  "LD2": "phy-status-indicators",
+  "J12": "clock-test-access",
+  "LD3": "phy-status-indicators",
+  "R30": "phy-status-indicators",
+  "R28": "phy-status-indicators",
+  "R32": "phy-status-indicators",
+  "R27": "clock-test-access",
+  "J15": "clock-test-access",
   "D2": "usb-mdio-controller",
   "R54": "usb-mdio-controller",
   "R53": "usb-mdio-controller",
@@ -43,8 +47,8 @@ const featureIdByComponentName: Partial<Record<string, Dp83825EvmFeatureId>> =
   "R47": "usb-mdio-controller",
   "R44": "usb-mdio-controller",
   "R45": "usb-mdio-controller",
-  "LD1": "status-indicators",
-  "R4": "status-indicators"
+  "LD1": "power-indicator",
+  "R4": "power-indicator"
 }
 
 const pouredNetSelectors = new Set<string>([
@@ -2054,7 +2058,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <silkscreenline x1={-8.065000380000015} y1={-1.5999993399999966} x2={-8.065046100000004} y2={10.790008900000004} strokeWidth={0.19999959999999997} layer="bottom" />
     <silkscreenline x1={8.06500037999998} y1={-1.5999993399999966} x2={8.065046099999982} y2={10.790008900000004} strokeWidth={0.19999959999999997} layer="bottom" />
           </footprint>} />
-    <chip name="J12" pcbX={16.256001270000006} pcbY={-23.621998730005075} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/dp83825evm/3.step" positionOffset={{ x: -0.00026669999999739957, y: -11.050097280000003, z: 7.25000074 }} rotationOffset={{ x: 90, y: 0, z: -90 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-2.6503300138953225} schY={-2.2664891153311713} symbol={<symbol>
+    {isComponentIncluded({ componentName: "J12", removedFeatureIds }) && (<chip name="J12" pcbX={16.256001270000006} pcbY={-23.621998730005075} pcbRotation="90deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/dp83825evm/3.step" positionOffset={{ x: -0.00026669999999739957, y: -11.050097280000003, z: 7.25000074 }} rotationOffset={{ x: 90, y: 0, z: -90 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-2.6503300138953225} schY={-2.2664891153311713} symbol={<symbol>
       <port name="1" schX={-0.4569534506716071} schY={0.07311255210745671} direction="left" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.27417207040296354} schY={-0.47523158869847126} direction="down" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={0.09139069013432177} schY={-0.47523158869847126} direction="down" pinNumber={3} aliases={["pin3"]} />
@@ -2087,7 +2091,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <silkscreenline x1={3.149998779999997} y1={1.0900003600000048} x2={3.149998779999997} y2={-1.0900003599999906} strokeWidth={0.19999959999999997} />
     <silkscreenline x1={-1.0900003599999977} y1={-3.14999877999999} x2={1.0900003599999977} y2={-3.14999877999999} strokeWidth={0.19999959999999997} />
     <silkscreenline x1={-1.0900003599999977} y1={3.149998780000004} x2={1.0900003599999977} y2={3.149998780000004} strokeWidth={0.19999959999999997} />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="J13" pcbX={9.652001270000007} pcbY={-11.937998730005077} pcbRotation="270deg" layer="top" cadModel={null} schX={-1.2794696618805013} schY={-3.1072834645669287} symbol={<symbol>
       <port name="1" schX={0.5483441408059289} schY={-0.18278138026864266} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.5483441408059289} schY={0} direction="right" pinNumber={2} aliases={["pin2"]} />
@@ -2140,7 +2144,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <fabricationnotetext pcbX={-1.5239999999999938} pcbY={-0.5079999999999956} anchorAlignment="center" text="J14" font="tscircuit2024" fontSize={0.8635999999999999} color="#ec4899" />
     <silkscreentext pcbX={7.112000000000002} pcbY={0.2539999999999978} anchorAlignment="bottom_left" fontSize={0.762} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J14" />
           </footprint>} />
-    <chip name="J15" pcbX={13.71600127} pcbY={23.622001269994925} pcbRotation="270deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/dp83825evm/2.step" positionOffset={{ x: -1.4210854715202004e-14, y: 0, z: 9.499998779999999 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-13.068868689207969} schY={-7.0188050023158866} symbol={<symbol>
+    {isComponentIncluded({ componentName: "J15", removedFeatureIds }) && (<chip name="J15" pcbX={13.71600127} pcbY={23.622001269994925} pcbRotation="270deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/dp83825evm/2.step" positionOffset={{ x: -1.4210854715202004e-14, y: 0, z: 9.499998779999999 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-13.068868689207969} schY={-7.0188050023158866} symbol={<symbol>
       <port name="1" schX={0.4569534506716071} schY={0.07311255210745671} direction="right" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={-0.27417207040296354} schY={-0.47523158869847215} direction="down" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={-0.09139069013432} schY={-0.47523158869847215} direction="down" pinNumber={3} aliases={["pin3"]} />
@@ -2173,7 +2177,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <silkscreenline x1={1.248910379999998} y1={-3.20000121999999} x2={-1.248910379999998} y2={-3.20000121999999} strokeWidth={0.19999959999999997} />
     <silkscreenline x1={-3.2000012200000043} y1={-1.248910379999998} x2={-3.2000012200000043} y2={1.248910379999998} strokeWidth={0.19999959999999997} />
     <silkscreenline x1={1.248910379999998} y1={3.2000012200000043} x2={-1.248910379999998} y2={3.2000012200000043} strokeWidth={0.19999959999999997} />
-          </footprint>} />
+          </footprint>} />)}
     <chip name="J16" pcbX={-15.747998729999992} pcbY={0.7620012699949257} pcbRotation="180deg" layer="top" cadModel={null} schX={1.005297591477536} schY={-6.214566929133858} symbol={<symbol>
       <port name="1" schX={-0.09139069013432177} schY={-0.5483441408059289} direction="down" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={0.09139069013432177} schY={-0.5483441408059289} direction="down" pinNumber={2} aliases={["pin2"]} />
@@ -2414,7 +2418,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <silkscreenline x1={-1.8796000000000106} y1={1.0160000000000053} x2={-1.8796000000000106} y2={0} strokeWidth={0.17779999999999999} layer="bottom" />
     <silkscreenline x1={-1.0160000000000053} y1={1.0160000000000053} x2={-1.8796000000000106} y2={1.0160000000000053} strokeWidth={0.17779999999999999} layer="bottom" />
           </footprint>} />
-    <chip name="R27" pcbX={16.464001869999997} pcbY={-17.017998730005075} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_right" schX={-4.203971746178787} schY={-2.1933765632237145} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "R27", removedFeatureIds }) && (<chip name="R27" pcbX={16.464001869999997} pcbY={-17.017998730005075} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_right" schX={-4.203971746178787} schY={-2.1933765632237145} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.5999988mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.5999988mm" shape="rect" />
     <smtpad portHints={["2"]} pcbX="0.60000134mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.80000094mm" height="0.5999988mm" shape="rect" />
     <silkscreenline x1={-0.634999999999998} y1={-0.5206999999999908} x2={-1.2192000000000007} y2={-0.5206999999999908} strokeWidth={0.17779999999999999} />
@@ -2426,7 +2430,7 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <fabricationnotetext pcbX={-1.117236779999999} pcbY={-0.3047009399999894} anchorAlignment="center" text="R27" font="tscircuit2024" fontSize={0.6095999999999999} color="#ec4899" />
     <silkscreentext pcbX={-0.5999988000000016} pcbY={-1.986000599999997} anchorAlignment="bottom_left" fontSize={0.889} font="tscircuit2024" pcbRotation="270deg" mirrored={false} layer="top" text="R27" />
     <courtyardoutline outline={[{"x":-1.2500000400000033,"y":-0.5500014399999884},{"x":-1.2500000400000033,"y":0.5499989000000056},{"x":1.2500000400000033,"y":0.5499989000000056},{"x":1.2500000400000033,"y":-0.5500014399999884}]} layer="top" />
-          </footprint>} />
+          </footprint>} />)}
     {isComponentIncluded({ componentName: "R28", removedFeatureIds }) && (<chip name="R28" pcbX={2.3704105500000026} pcbY={-12.999246290005068} pcbRotation="180deg" layer="top" cadModel={null} symbolName="boxresistor_right" schX={2.1933765632237154} schY={-2.1933765632237145} schDisplayValue="470" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="-0.5999988mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.5999988mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="0.60000134mm" pcbY="0mm" layer="top" solderMaskMargin="0.0499999mm" width="0.5999988mm" height="0.80000094mm" ccwRotation={270} shape="rotated_rect" />
@@ -2544,13 +2548,13 @@ export function Dp83825Evm(props: Dp83825EvmProps) {
     <silkscreenline x1={1.2192000000000007} y1={0.5206999999999979} x2={0.6350000000000051} y2={0.5206999999999979} strokeWidth={0.17779999999999999} />
     <courtyardoutline outline={[{"x":-1.250000039999989,"y":-0.5500014400000026},{"x":-1.250000039999989,"y":0.5499988999999985},{"x":1.2500000400000033,"y":0.5499988999999985},{"x":1.2500000400000033,"y":-0.5500014400000026}]} layer="top" />
           </footprint>} />
-    <chip name="R41" pcbX={-3.555998729999992} pcbY={-0.5079987300050703} pcbRotation="180deg" layer="bottom" cadModel={null} symbolName="boxresistor_right" schX={-11.149664196387217} schY={-6.94569245020843} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
+    {isComponentIncluded({ componentName: "R41", removedFeatureIds }) && (<chip name="R41" pcbX={-3.555998729999992} pcbY={-0.5079987300050703} pcbRotation="180deg" layer="bottom" cadModel={null} symbolName="boxresistor_right" schX={-11.149664196387217} schY={-6.94569245020843} schDisplayValue="0" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["1"]} pcbX="0.32999934mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.04826mm" width="0.41999916mm" height="0.45999908mm" ccwRotation={90} shape="rotated_rect" />
     <smtpad portHints={["2"]} pcbX="-0.32999934mm" pcbY="0mm" layer="bottom" solderMaskMargin="0.04826mm" width="0.41999916mm" height="0.45999908mm" ccwRotation={90} shape="rotated_rect" />
     <fabricationnotetext pcbX={0.6603999999999957} pcbY={0.17780000000000484} anchorAlignment="center" text="R41" font="tscircuit2024" fontSize={0.35559999999999997} color="#ec4899" layer="bottom" />
     <silkscreentext pcbX={2.424000740000004} pcbY={-1.0159999999999911} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={true} layer="bottom" text="R41" />
     <courtyardoutline outline={[{"x":0.7500010399999937,"y":0.39999920000001055},{"x":0.7500010399999937,"y":-0.39999919999999634},{"x":-0.7500010400000008,"y":-0.39999919999999634},{"x":-0.7500010400000008,"y":0.39999920000001055}]} layer="bottom" />
-          </footprint>} />
+          </footprint>} />)}
     {isComponentIncluded({ componentName: "R44", removedFeatureIds }) && (<chip name="R44" pcbX={-8.385999229999989} pcbY={23.248799069994917} pcbRotation="270deg" layer="top" cadModel={null} symbolName="boxresistor_up" schX={6.94569245020843} schY={7.4940365910143605} schDisplayValue="470" pinLabels={{"pin2":["2","pin2"],"pin1":["1","pin1"]}} obstructsWithinBounds={false} footprint={<footprint>
             <smtpad portHints={["2"]} pcbX="0.32999934mm" pcbY="0mm" layer="top" solderMaskMargin="0.04826mm" width="0.45999908mm" height="0.41999916mm" shape="rect" />
     <smtpad portHints={["1"]} pcbX="-0.32999934mm" pcbY="0mm" layer="top" solderMaskMargin="0.04826mm" width="0.45999908mm" height="0.41999916mm" shape="rect" />

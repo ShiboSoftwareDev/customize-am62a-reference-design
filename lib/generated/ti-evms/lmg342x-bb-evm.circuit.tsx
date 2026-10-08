@@ -3,7 +3,7 @@
 import { Fragment } from "react"
 import "tscircuit"
 
-export type Lmg342xBbEvmFeatureId = "status-indicators" | "measurement-interface"
+export type Lmg342xBbEvmFeatureId = "status-indicators" | "bias-measurement-access" | "logic-measurement-access" | "power-measurement-access"
 
 export type Lmg342xBbEvmProps = {
   removedFeatureIds?: readonly string[]
@@ -24,22 +24,22 @@ const featureIdByComponentName: Partial<Record<string, Lmg342xBbEvmFeatureId>> =
   "R20": "status-indicators",
   "R10": "status-indicators",
   "HS_FLT": "status-indicators",
-  "12V": "measurement-interface",
-  "VAUX": "measurement-interface",
-  "ACMGND": "measurement-interface",
-  "AGND2": "measurement-interface",
-  "AGND1": "measurement-interface",
-  "HVIN": "measurement-interface",
-  "HVOUT": "measurement-interface",
-  "PGND4": "measurement-interface",
-  "SW": "measurement-interface",
-  "PGND5": "measurement-interface",
-  "PWM_HS": "measurement-interface",
-  "PWM_LS": "measurement-interface",
-  "HS_FET_PWM": "measurement-interface",
-  "LS_FET_PWM": "measurement-interface",
+  "12V": "bias-measurement-access",
+  "VAUX": "bias-measurement-access",
+  "ACMGND": "bias-measurement-access",
+  "AGND2": "logic-measurement-access",
+  "AGND1": "logic-measurement-access",
+  "HVIN": "power-measurement-access",
+  "HVOUT": "power-measurement-access",
+  "PGND4": "power-measurement-access",
+  "SW": "power-measurement-access",
+  "PGND5": "power-measurement-access",
+  "PWM_HS": "logic-measurement-access",
+  "PWM_LS": "logic-measurement-access",
+  "HS_FET_PWM": "logic-measurement-access",
+  "LS_FET_PWM": "logic-measurement-access",
   "LS_FLT": "status-indicators",
-  "5V": "measurement-interface",
+  "5V": "bias-measurement-access",
   "R1": "status-indicators",
   "R5": "status-indicators",
   "HS_OC": "status-indicators",
@@ -47,8 +47,7 @@ const featureIdByComponentName: Partial<Record<string, Lmg342xBbEvmFeatureId>> =
   "LS_OC": "status-indicators",
   "R30": "status-indicators",
   "HVIN_EN": "status-indicators",
-  "J15": "measurement-interface",
-  "TACH": "measurement-interface"
+  "TACH": "logic-measurement-access"
 }
 
 const pouredNetSelectors = new Set<string>([
@@ -607,7 +606,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <silkscreenpath route={[{"x":0.3573881599999993,"y":1.87519056},{"x":0.49863756000002013,"y":1.875188020000003},{"x":0.49863756000002013,"y":2.2224923800000056},{"x":0.3573881599999993,"y":2.2224923800000056},{"x":0.3573881599999993,"y":1.87519056},{"x":0.3573881599999993,"y":1.87519056}]} strokeWidth={0.1} />
     <silkscreenpath route={[{"x":0.8178647600000204,"y":-1.0853673999999955},{"x":0.98700082000002,"y":-1.198001159999997},{"x":0.9728428600000143,"y":-0.9447733199999959},{"x":1.210843400000016,"y":1.6086328000000023},{"x":1.0685551400000008,"y":1.6045180000000059},{"x":0.8178647600000204,"y":-1.0853673999999955},{"x":0.8178647600000204,"y":-1.0853673999999955}]} strokeWidth={0.1} />
           </footprint>} />
-    {isComponentIncluded({ componentName: "J15", removedFeatureIds }) && (<chip name="J15" pcbX={-62.098407679999994} pcbY={23.558499999999995} pcbRotation="180deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lmg342x-bb-evm/17.step" positionOffset={{ x: 2.539999999999999, y: 0, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-9.043538675312645} schY={-1.910606762389996} symbol={<symbol>
+    <chip name="J15" pcbX={-62.098407679999994} pcbY={23.558499999999995} pcbRotation="180deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lmg342x-bb-evm/17.step" positionOffset={{ x: 2.539999999999999, y: 0, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-9.043538675312645} schY={-1.910606762389996} symbol={<symbol>
       <port name="1" schX={-0.3821213524779985} schY={0.12737378415933343} direction="left" pinNumber={1} aliases={["pin1"]} />
       <port name="2" schX={-0.3821213524779985} schY={0} direction="left" pinNumber={2} aliases={["pin2"]} />
       <port name="3" schX={-0.3821213524779985} schY={-0.12737378415933343} direction="left" pinNumber={3} aliases={["pin3"]} />
@@ -632,7 +631,7 @@ export function Lmg342xBbEvm(props: Lmg342xBbEvmProps) {
     <platedhole  portHints={["1"]} pcbX="-2.54mm" pcbY="0mm" holeShape="circle" padShape="rect" holeDiameter="1.016mm" rectPadWidth="1.64999924mm" rectPadHeight="1.64999924mm" rectBorderRadius="0.41249981mm" holeOffsetX="0mm" holeOffsetY="0mm" pcbRotation="180deg" shape="circular_hole_with_rect_pad" />
     <fabricationnotetext pcbX={-1.524000000000001} pcbY={-0.5080000000000098} anchorAlignment="center" text="J15" font="tscircuit2024" fontSize={1.016} color="#ec4899" />
     <silkscreentext pcbX={3.4215908199999987} pcbY={2.793999999999997} anchorAlignment="bottom_left" fontSize={1.016} font="tscircuit2024" pcbRotation="0deg" mirrored={false} layer="top" text="J15" />
-          </footprint>} />)}
+          </footprint>} />
     {isComponentIncluded({ componentName: "TACH", removedFeatureIds }) && (<chip name="TACH" pcbX={-57.81215767999999} pcbY={28.511499999999998} pcbRotation="0deg" layer="top" cadModel={<cadmodel modelUrl="/cad-models/ti-evms/lmg342x-bb-evm/16.step" positionOffset={{ x: -0.012816839999999274, y: -0.0033578799999958164, z: 0 }} rotationOffset={{ x: 0, y: 0, z: 0 }} modelUnitToMmScale={1} modelBoardNormalDirection="z+" modelOriginPosition={{ x: 0, y: 0, z: 0 }} />} schX={-10.113478462251042} schY={-2.0379805465493295} symbol={<symbol>
       <port name="1" schX={0.17832329782306644} schY={0} direction="right" pinNumber={1} aliases={["pin1"]} />
       <schematicline x1={0.050949513663733015} y1={0} x2={0.17832329782306644} y2={0} strokeWidth={0.012737378415933302} color="#1f2937" isDashed={false}/>

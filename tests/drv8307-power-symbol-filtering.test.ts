@@ -28,7 +28,7 @@ test("DRV8307 minimal board removes disconnected power symbols", async () => {
   )
 
   expect(retainedNetLabelIds).not.toContain("schematic_net_label_altium_901")
-  expect(retainedNetLabelIds).not.toContain("schematic_net_label_altium_939")
+  expect(retainedNetLabelIds).toContain("schematic_net_label_altium_939")
   expect(retainedNetLabelIds).not.toContain("schematic_net_label_altium_2371")
   expect(retainedNetLabelIds).toContain("schematic_net_label_altium_900")
   expect(retainedNetLabelIds).toContain("schematic_net_label_altium_938")
