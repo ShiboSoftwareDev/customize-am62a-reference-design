@@ -18,7 +18,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/3d-viewer": "0.0.619",
+    "@tscircuit/3d-viewer": "0.0.620",
     "@tscircuit/capacity-autorouter": "0.0.962",
     "@tscircuit/checks": "0.0.243",
     "@tscircuit/circuit-json-util": "0.0.120",
@@ -44,10 +44,10 @@
     "@tscircuit/mm": "0.0.9",
     "@tscircuit/soup-util": "0.0.41",
     "altium-to-circuit-json": "0.0.105",
-    "altiumts": "0.0.92",
+    "altiumts": "0.0.94",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.4.2",
-    "circuit-json-to-tscircuit": "github:tscircuit/circuit-json-to-tscircuit#b3112d1538d46c531e1827578fcff35523701f4d",
+    "circuit-json-to-tscircuit": "0.0.90",
     "circuit-to-svg": "0.0.441",
     "circuit-json-to-gltf": "0.0.152",
     "fast-png": "8.0.0",
@@ -56,11 +56,7 @@
     "typescript": "5.9.3",
     "vite": "8.3.2"
   },
-  "trustedDependencies": [
-    "@tscircuit/3d-viewer",
-    "@tscircuit/capacity-autorouter",
-    "altium-to-circuit-json",
-    "altiumts",
-    "circuit-json-to-tscircuit"
-  ]
+  "overrides": {
+    "altiumts": "$altiumts"
+  }
 }
