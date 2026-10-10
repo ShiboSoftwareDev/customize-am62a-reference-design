@@ -1,3 +1,4 @@
+import { mkdir } from "node:fs/promises"
 import { resolve } from "node:path"
 import { convertCircuitJsonToTscircuit } from "circuit-json-to-tscircuit"
 import { parameterizeGeneratedBoard } from "../parameterize-generated-board"
@@ -12,11 +13,14 @@ import {
 import type { ComponentName, FeatureId, ReferenceInput } from "./types"
 
 export async function generateReferenceArtifacts(params: {
+  cadModelOutputDirectory: string
   outputDirectory: string
   reference: ReferenceInput
 }): Promise<void> {
-  const { definition, projectCircuitJson, referenceSchematicCircuitJsons } =
+  const { definition, embeddedCadModels, projectCircuitJson, referenceSchematicCircuitJsons } =
     await createReferenceDefinition(params.reference)
+  const cadModelBoardDirectory = resolve(params.cadModelOutputDirectory, params.reference.id)
+  await mkdir(cadModelBoardDirectory, { recursive: true })
 
   await Bun.write(
     resolve(params.outputDirectory, params.reference.outputName),
@@ -24,6 +28,11 @@ export async function generateReferenceArtifacts(params: {
       definition,
       exportName: params.reference.exportName,
     }),
+  )
+  await Promise.all(
+    embeddedCadModels.map(({ bytes, modelIndex }) =>
+      Bun.write(resolve(cadModelBoardDirectory, `${modelIndex}.step`), bytes),
+    ),
   )
 
   const featureIdByComponentName = new Map<ComponentName, FeatureId>(
