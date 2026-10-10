@@ -18,7 +18,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/3d-viewer": "github:tscircuit/3d-viewer#03e7aabced496165f2069f7e28073f1c07a70e10",
+    "@tscircuit/3d-viewer": "0.0.619",
     "@tscircuit/capacity-autorouter": "0.0.962",
     "@tscircuit/checks": "0.0.243",
     "@tscircuit/circuit-json-util": "0.0.120",
