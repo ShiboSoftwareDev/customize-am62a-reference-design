@@ -18,7 +18,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/3d-viewer": "0.0.620",
+    "@tscircuit/3d-viewer": "https://pkg.pr.new/tscircuit/3d-viewer/@tscircuit/3d-viewer@cb9bf0f",
     "@tscircuit/pcb-viewer": "1.11.426",
     "@tscircuit/schematic-viewer": "2.0.100",
     "fflate": "0.8.3",
@@ -34,23 +34,24 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
-    "altium-to-circuit-json": "0.0.105",
+    "altium-to-circuit-json": "https://pkg.pr.new/altium-to-circuit-json@a8a0629",
     "altiumts": "0.0.94",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.4.2",
     "circuit-json": "0.0.525",
     "circuit-json-to-gltf": "0.0.152",
-    "circuit-json-to-tscircuit": "0.0.90",
+    "circuit-json-to-tscircuit": "https://pkg.pr.new/circuit-json-to-tscircuit@298b798",
     "circuit-to-svg": "0.0.445",
     "fast-png": "8.0.0",
     "format-si-unit": "0.0.14",
     "poppygl": "0.0.34",
     "transformation-matrix": "3.1.0",
-    "tscircuit": "0.0.2818",
+    "tscircuit": "https://pkg.pr.new/tscircuit/tscircuit@48a2694",
     "typescript": "5.9.3",
     "vite": "8.3.2"
   },
   "overrides": {
-    "altiumts": "$altiumts"
+    "altiumts": "$altiumts",
+    "@tscircuit/capacity-autorouter": "https://pkg.pr.new/@tscircuit/capacity-autorouter@683e756"
   }
 }
