@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
-import type { AnyCircuitElement } from "circuit-json"
 import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import type { AnyCircuitElement } from "circuit-json"
 import { getTiEvmVariant, tiEvms } from "lib/ti-evm-catalog"
 
 type CadComponentWithStepModel = AnyCircuitElement & {
