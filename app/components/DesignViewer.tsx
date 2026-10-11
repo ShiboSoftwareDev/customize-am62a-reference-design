@@ -13,8 +13,14 @@ async function loadSchematicViewer() {
   return { default: module.SchematicViewer }
 }
 
+async function loadCadViewer() {
+  const module = await import("@tscircuit/3d-viewer")
+  return { default: module.CadViewer }
+}
+
 const PCBViewer = lazy(loadPcbViewer)
 const SchematicViewer = lazy(loadSchematicViewer)
+const CadViewer = lazy(loadCadViewer)
 
 type DesignViewerProps = {
   boardKey: string
@@ -31,7 +37,7 @@ export function DesignViewer({
   schematicSheetLabels,
   isLoading,
 }: DesignViewerProps) {
-  const [activeView, setActiveView] = useState<"pcb" | "schematic">("pcb")
+  const [activeView, setActiveView] = useState<"pcb" | "schematic" | "cad">("pcb")
   const [schematicSheetIndex, setSchematicSheetIndex] = useState(0)
   const [renderedPcbCircuitJson, setRenderedPcbCircuitJson] = useState<AnyCircuitElement[] | null>(
     null,
@@ -77,6 +83,17 @@ export function DesignViewer({
           >
             <span className="tab-dot schematic-dot" /> Schematic
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeView === "cad"}
+            disabled={!pcbCircuitJson}
+            onPointerEnter={() => void loadCadViewer()}
+            onFocus={() => void loadCadViewer()}
+            onClick={() => setActiveView("cad")}
+          >
+            <span className="tab-dot three-dimensional-dot" /> 3D
+          </button>
         </div>
         {activeView === "pcb" && pcbCircuitJson && (
           <p className="hover-hint">
@@ -121,6 +138,10 @@ export function DesignViewer({
               circuitJson={schematicCircuitJson}
               containerStyle={{ height: "100%" }}
             />
+          </Suspense>
+        ) : activeView === "cad" && pcbCircuitJson ? (
+          <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
+            <CadViewer circuitJson={pcbCircuitJson} />
           </Suspense>
         ) : (
           <ViewerLoading label="Loading the reference design…" />

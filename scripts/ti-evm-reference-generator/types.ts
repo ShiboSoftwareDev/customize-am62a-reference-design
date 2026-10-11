@@ -13,6 +13,7 @@ export type SourceComponentId = string
 export type SourcePortId = string
 export type ComponentRecordIndex = number
 export type NetRecordIndex = number
+export type EmbeddedModelIndex = number
 
 export type ComponentNameByRecordIndex = Map<ComponentRecordIndex, ComponentName>
 export type PinKeyByRawPinName = Map<RawPinName, PinKey>
@@ -34,6 +35,10 @@ export type ReferenceInput = {
 
 export type ReferenceConversion = {
   definition: ReferenceEvmDefinition
+  embeddedCadModels: Array<{
+    bytes: Uint8Array
+    modelIndex: EmbeddedModelIndex
+  }>
   projectCircuitJson: AnyCircuitElement[]
   referenceSchematicCircuitJsons: AnyCircuitElement[][]
 }

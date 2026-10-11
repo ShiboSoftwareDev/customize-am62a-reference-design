@@ -201,7 +201,7 @@ button:disabled {
   min-height: 100vh;
   display: grid;
   grid-template-rows: 51px minmax(0, 1fr);
-  background: #0b100d;
+  background: #fff;
 }
 .viewer-toolbar {
   display: flex;
@@ -250,6 +250,9 @@ button:disabled {
 .schematic-dot {
   background: #3d7cea;
 }
+.three-dimensional-dot {
+  background: #66d49a;
+}
 .hover-hint {
   display: flex;
   align-items: center;
@@ -289,7 +292,7 @@ button:disabled {
   min-height: 0;
   height: calc(100vh - 51px);
   overflow: hidden;
-  background: #020504;
+  background: #fff;
 }
 .viewer-canvas > div {
   width: 100%;
