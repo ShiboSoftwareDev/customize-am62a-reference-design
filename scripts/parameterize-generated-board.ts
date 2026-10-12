@@ -154,6 +154,16 @@ function addSupportedCopperPours(params: {
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
 }): Set<NetSelector> {
+  const existingCopperPourNetSelectors = getExistingCopperPourNetSelectors({
+    boardElement: params.boardElement,
+    renamedNets: params.renamedNets,
+    replacements: params.replacements,
+    sourceFile: params.sourceFile,
+  })
+  if (existingCopperPourNetSelectors.size > 0) {
+    return existingCopperPourNetSelectors
+  }
+
   const emittedNetNames = new Set(
     params.boardElement.children.flatMap((child) => {
       if (!ts.isJsxSelfClosingElement(child)) return []
@@ -194,6 +204,49 @@ function addSupportedCopperPours(params: {
     text: `    ${copperPourElements.join("\n    ")}\n  `,
   })
   return pouredNetSelectors
+}
+
+function getExistingCopperPourNetSelectors(params: {
+  boardElement: ts.JsxElement
+  renamedNets: ReadonlyMap<NetName, NetName>
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): Set<NetSelector> {
+  const netSelectors = new Set<NetSelector>()
+  for (const child of params.boardElement.children) {
+    if (!ts.isJsxSelfClosingElement(child)) continue
+    if (child.tagName.getText(params.sourceFile) !== "copperpour") continue
+    addRenamedNetSelectorReplacements({
+      node: child,
+      renamedNets: params.renamedNets,
+      replacements: params.replacements,
+      sourceFile: params.sourceFile,
+    })
+    const connectsTo = getStringAttribute({
+      element: child,
+      name: "connectsTo",
+      sourceFile: params.sourceFile,
+    })
+    const netName = connectsTo?.match(/^net\[name=["'](.+)["']\]$/u)?.[1]
+    if (!netName) continue
+    const renamedNetName = params.renamedNets.get(netName) ?? netName
+    if (renamedNetName !== netName) {
+      const connectsToAttribute = getAttribute({
+        element: child,
+        name: "connectsTo",
+        sourceFile: params.sourceFile,
+      })
+      if (connectsToAttribute?.initializer) {
+        params.replacements.push({
+          start: connectsToAttribute.initializer.getStart(params.sourceFile),
+          end: connectsToAttribute.initializer.getEnd(),
+          text: `{${JSON.stringify(`net[name=${JSON.stringify(renamedNetName)}]`)}}`,
+        })
+      }
+    }
+    netSelectors.add(`net.${renamedNetName}`)
+  }
+  return netSelectors
 }
 
 function extractGeneratedJsxBody(params: {

@@ -9,8 +9,9 @@ test("generated board TSX is parameterized without selector collisions", () => {
       <smtpad portHints={["1"]} />
       <pcbcopperpour shape="polygon" layer="top" points={[]} />
     </footprint>} />
-    <net name="TP1" />
+    <net name={"TP1"} />
     <trace path={[".TP1 > .pin1", ".R1 > .pin1", "net.TP1"]} />
+    <copperpour layer={"top"} connectsTo={"net[name=\\\"TP1\\\"]"} outline={[{"x":0,"y":0},{"x":1,"y":0},{"x":1,"y":1}]} />
   </board>
 )
 export default ExampleBoard`
@@ -48,6 +49,7 @@ export default ExampleBoard`
   expect(result.source).toContain("pcbTeardrops={hasViaTeardrops}")
   expect(result.source).toContain("teardropPortSelectors.has(selector)")
   expect(result.source).toContain("<copperpour")
+  expect(result.source.match(/<copperpour/gu)).toHaveLength(1)
   expect(result.source).not.toContain("renderImportedCopperPours")
   expect(result.source).toContain('net[name=\\"NET_TP1\\"]')
   expect(result.source).not.toContain("<pcbcopperpour")

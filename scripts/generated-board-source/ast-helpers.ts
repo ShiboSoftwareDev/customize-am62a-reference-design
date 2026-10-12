@@ -52,7 +52,10 @@ export function getStringAttribute(params: {
 }): string | undefined {
   const attribute = getAttribute(params)
   if (!attribute?.initializer) return undefined
-  return ts.isStringLiteral(attribute.initializer) ? attribute.initializer.text : undefined
+  if (ts.isStringLiteral(attribute.initializer)) return attribute.initializer.text
+  if (!ts.isJsxExpression(attribute.initializer)) return undefined
+  const expression = attribute.initializer.expression
+  return expression && ts.isStringLiteral(expression) ? expression.text : undefined
 }
 
 export function getAttribute(params: {
