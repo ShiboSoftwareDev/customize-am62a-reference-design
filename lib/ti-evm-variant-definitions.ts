@@ -109,19 +109,9 @@ export const tiEvmVariantDefinitions = {
       removedFeatureIds: ["usb2any-interface"],
     },
     {
-      id: "without-measurement-access",
-      label: "Without measurement access",
-      removedFeatureIds: ["power-measurement-access", "control-debug-access"],
-    },
-    {
       id: "control-debug-only",
       label: "Control debug access only",
       removedFeatureIds: ["power-measurement-access", "usb2any-interface"],
-    },
-    {
-      id: "minimal-board",
-      label: "Minimal board",
-      removedFeatureIds: ["power-measurement-access", "control-debug-access", "usb2any-interface"],
     },
   ],
   "lmg342x-bb-evm": [

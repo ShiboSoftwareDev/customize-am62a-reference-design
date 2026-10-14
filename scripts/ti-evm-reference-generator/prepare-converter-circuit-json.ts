@@ -1,6 +1,4 @@
-import { transformPCBElements } from "@tscircuit/circuit-json-util"
 import type { AnyCircuitElement } from "circuit-json"
-import { compose, rotateDEG, scale, translate } from "transformation-matrix"
 import {
   isPcbBoard,
   isPcbComponent,
@@ -38,9 +36,7 @@ export function prepareConverterCircuitJson(
   projectCircuitJson: AnyCircuitElement[],
 ): AnyCircuitElement[] {
   return deduplicateFootprintPortHints(
-    replaceUnsupportedPcbPrimitives(
-      mirrorBottomFootprintsForCore(removeOffboardPcbComponents(projectCircuitJson)),
-    ),
+    replaceUnsupportedPcbPrimitives(removeOffboardPcbComponents(projectCircuitJson)),
   )
 }
 
@@ -112,30 +108,6 @@ export function getRoutablePortSelectors(circuitJson: AnyCircuitElement[]): Set<
       return portName ? [`.${sourceComponent.name} > .${portName}`] : []
     }),
   )
-}
-
-function mirrorBottomFootprintsForCore(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
-  const mirroredCircuitJson = structuredClone(circuitJson)
-  const bottomComponents = mirroredCircuitJson
-    .filter(isPcbComponent)
-    .filter(({ layer }) => layer === "bottom")
-  for (const component of bottomComponents) {
-    const componentElements = mirroredCircuitJson.filter(
-      (element) =>
-        element.type !== "pcb_component" &&
-        "pcb_component_id" in element &&
-        element.pcb_component_id === component.pcb_component_id,
-    )
-    const reflectAcrossComponentYAxis = compose(
-      translate(component.center.x, component.center.y),
-      rotateDEG(component.rotation),
-      scale(-1, 1),
-      rotateDEG(-component.rotation),
-      translate(-component.center.x, -component.center.y),
-    )
-    transformPCBElements(componentElements, reflectAcrossComponentYAxis)
-  }
-  return mirroredCircuitJson
 }
 
 function replaceUnsupportedPcbPrimitives(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {

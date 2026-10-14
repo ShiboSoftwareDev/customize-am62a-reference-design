@@ -45,18 +45,45 @@ function isComponentIncluded(params: {
   return featureId === undefined || !params.removedFeatureIds.has(featureId)
 }
 
+function isPortSelectorIncluded(params: {
+  removedFeatureIds: ReadonlySet<string>
+  selector: string
+}): boolean {
+  const componentName = /^\\.([^ >]+)\\s*>\\s*\\./u.exec(params.selector)?.[1]
+  return (
+    componentName === undefined ||
+    isComponentIncluded({ componentName, removedFeatureIds: params.removedFeatureIds })
+  )
+}
+
+function ParameterizedNet(props: {
+  connectsTo: string[]
+  name: string
+  removedFeatureIds: ReadonlySet<string>
+}) {
+  const includedPortSelectors = props.connectsTo.filter(
+    (selector) =>
+      isPortSelectorIncluded({ selector, removedFeatureIds: props.removedFeatureIds }) &&
+      routablePortSelectors.has(selector),
+  )
+  if (
+    includedPortSelectors.length < 2 &&
+    !pouredNetSelectors.has(\`net.\${props.name}\`)
+  ) {
+    return null
+  }
+  return <net name={props.name} connectsTo={includedPortSelectors} />
+}
+
 function ParameterizedTrace(props: {
   path: string[]
   removedFeatureIds: ReadonlySet<string>
 }) {
-  const path = props.path.filter((selector) => {
-    const componentName = /^\\.([^ >]+)\\s*>\\s*\\./u.exec(selector)?.[1]
-    return (
-      componentName === undefined ||
-      (routablePortSelectors.has(selector) &&
-        isComponentIncluded({ componentName, removedFeatureIds: props.removedFeatureIds }))
-    )
-  })
+  const path = props.path.filter(
+    (selector) =>
+      isPortSelectorIncluded({ selector, removedFeatureIds: props.removedFeatureIds }) &&
+      (!selector.startsWith(".") || routablePortSelectors.has(selector)),
+  )
   if (path.length < 2) return null
 
   const netSelector = path.find((selector) => selector.startsWith("net."))

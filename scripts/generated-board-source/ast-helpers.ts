@@ -52,7 +52,29 @@ export function getStringAttribute(params: {
 }): string | undefined {
   const attribute = getAttribute(params)
   if (!attribute?.initializer) return undefined
-  return ts.isStringLiteral(attribute.initializer) ? attribute.initializer.text : undefined
+  if (ts.isStringLiteral(attribute.initializer)) return attribute.initializer.text
+  if (
+    ts.isJsxExpression(attribute.initializer) &&
+    attribute.initializer.expression &&
+    ts.isStringLiteral(attribute.initializer.expression)
+  ) {
+    return attribute.initializer.expression.text
+  }
+  return undefined
+}
+
+export function getStringArrayAttribute(params: {
+  element: ts.JsxSelfClosingElement
+  name: string
+  sourceFile: ts.SourceFile
+}): string[] | undefined {
+  const initializer = getAttribute(params)?.initializer
+  if (!initializer || !ts.isJsxExpression(initializer)) return undefined
+  const expression = initializer.expression
+  if (!expression || !ts.isArrayLiteralExpression(expression)) return undefined
+
+  const strings = expression.elements.filter(ts.isStringLiteral).map((element) => element.text)
+  return strings.length === expression.elements.length ? strings : undefined
 }
 
 export function getAttribute(params: {

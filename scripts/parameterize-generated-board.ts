@@ -3,11 +3,15 @@ import {
   addRenamedNetSelectorReplacements,
   applyReplacements,
   findBoardElement,
-  getAttribute,
+  getStringArrayAttribute,
   getStringAttribute,
   type SourceReplacement,
 } from "./generated-board-source/ast-helpers"
 import { createParameterizedBoardSource } from "./generated-board-source/create-parameterized-board-source"
+import {
+  addCanonicalPortSelectorReplacements,
+  getCanonicalPortSelectors,
+} from "./generated-board-source/get-canonical-port-selectors"
 import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
 
 type ComponentName = string
@@ -30,7 +34,7 @@ export function parameterizeGeneratedBoard(params: {
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): ParameterizedBoardSource {
-  const generatedSource = removeLegacyPcbCopperPours({ source: params.generatedSource })
+  const generatedSource = removeGeneratedCopperPours({ source: params.generatedSource })
   const sourceFile = ts.createSourceFile(
     `${params.componentName}.tsx`,
     generatedSource,
@@ -50,10 +54,14 @@ export function parameterizeGeneratedBoard(params: {
     return componentName ? [componentName] : []
   })
   const componentNameSet = new Set<ComponentName>(componentNames)
+  const canonicalPortSelectors = getCanonicalPortSelectors({
+    boardElement,
+    routablePortSelectors: params.routablePortSelectors,
+    sourceFile,
+  })
   const renamedNets = renameNetsMatchingComponentNames({
     boardElement,
     componentNameSet,
-    replacements,
     sourceFile,
   })
   const pouredNetSelectors = addSupportedCopperPours({
@@ -77,7 +85,35 @@ export function parameterizeGeneratedBoard(params: {
       })
       continue
     }
+    if (tagName === "net") {
+      const netName = getStringAttribute({
+        element: child,
+        name: "name",
+        sourceFile,
+      })
+      if (!netName) continue
+      const runtimeNetName = renamedNets.get(netName) ?? netName
+      const portSelectors = (
+        getStringArrayAttribute({
+          element: child,
+          name: "connectsTo",
+          sourceFile,
+        }) ?? []
+      ).map((selector) => canonicalPortSelectors.get(selector) ?? selector)
+      replacements.push({
+        start: child.getStart(sourceFile),
+        end: child.getEnd(),
+        text: `<ParameterizedNet removedFeatureIds={removedFeatureIds} name=${JSON.stringify(runtimeNetName)} connectsTo={${JSON.stringify(portSelectors)}} />`,
+      })
+      continue
+    }
     if (tagName === "trace") {
+      addCanonicalPortSelectorReplacements({
+        canonicalPortSelectors,
+        node: child,
+        replacements,
+        sourceFile,
+      })
       addRenamedNetSelectorReplacements({
         node: child,
         renamedNets,
@@ -123,7 +159,7 @@ export function parameterizeGeneratedBoard(params: {
   }
 }
 
-function removeLegacyPcbCopperPours(params: { source: string }): string {
+function removeGeneratedCopperPours(params: { source: string }): string {
   const sourceFile = ts.createSourceFile(
     "generated-board.tsx",
     params.source,
@@ -133,7 +169,10 @@ function removeLegacyPcbCopperPours(params: { source: string }): string {
   )
   const replacements: SourceReplacement[] = []
   const visit = (node: ts.Node): void => {
-    if (ts.isJsxSelfClosingElement(node) && node.tagName.getText(sourceFile) === "pcbcopperpour") {
+    if (
+      ts.isJsxSelfClosingElement(node) &&
+      ["copperpour", "pcbcopperpour"].includes(node.tagName.getText(sourceFile))
+    ) {
       replacements.push({
         start: node.getFullStart(),
         end: node.getEnd(),
@@ -224,7 +263,6 @@ function extractGeneratedJsxBody(params: {
 function renameNetsMatchingComponentNames(params: {
   boardElement: ts.JsxElement
   componentNameSet: ReadonlySet<ComponentName>
-  replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
 }): Map<NetName, NetName> {
   const renamedNets = new Map<NetName, NetName>()
@@ -240,17 +278,6 @@ function renameNetsMatchingComponentNames(params: {
     if (!netName || !params.componentNameSet.has(netName)) continue
     const renamedNet = `NET_${netName}`
     renamedNets.set(netName, renamedNet)
-    const nameAttribute = getAttribute({
-      element: child,
-      name: "name",
-      sourceFile: params.sourceFile,
-    })
-    if (!nameAttribute?.initializer) continue
-    params.replacements.push({
-      start: nameAttribute.initializer.getStart(params.sourceFile),
-      end: nameAttribute.initializer.getEnd(),
-      text: JSON.stringify(renamedNet),
-    })
   }
   return renamedNets
 }
@@ -289,7 +316,7 @@ function replaceRoutingAttributes(params: {
       ts.isJsxAttribute(attribute) &&
       attribute.name.getText(params.sourceFile) === "routingDisabled",
   )
-  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x"'
+  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x" routeRemaining'
   if (routingDisabledAttribute) {
     params.replacements.push({
       start: routingDisabledAttribute.getStart(params.sourceFile),
