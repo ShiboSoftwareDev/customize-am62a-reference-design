@@ -44,9 +44,14 @@ export function DesignViewer({
   )
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
   const schematicCircuitJson = schematicCircuitJsons[schematicSheetIndex]
+  const webGpuAvailable = typeof navigator !== "undefined" && "gpu" in navigator
   const pcbRenderer = useMemo(
-    () => (pcbCircuitJson ? getPcbRenderer(pcbCircuitJson) : "webgpu"),
-    [pcbCircuitJson],
+    () =>
+      getPcbRenderer({
+        circuitJson: pcbCircuitJson ?? [],
+        webGpuAvailable,
+      }),
+    [pcbCircuitJson, webGpuAvailable],
   )
   const isPcbRendering =
     activeView === "pcb" && pcbCircuitJson !== null && renderedPcbCircuitJson !== pcbCircuitJson

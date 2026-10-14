@@ -26,8 +26,28 @@ test("PCB rendering starts in canvas only when WebGPU cannot preserve the geomet
     },
   ]
 
-  expect(getPcbRenderer(board as AnyCircuitElement[])).toBe("webgpu")
-  expect(getPcbRenderer(fabricationDimension as AnyCircuitElement[])).toBe("webgpu")
-  expect(getPcbRenderer(interpolatedTrace as AnyCircuitElement[])).toBe("canvas")
-  expect(getPcbRenderer(throughPadTrace as AnyCircuitElement[])).toBe("canvas")
+  expect(getPcbRenderer({ circuitJson: board as AnyCircuitElement[], webGpuAvailable: true })).toBe(
+    "webgpu",
+  )
+  expect(
+    getPcbRenderer({
+      circuitJson: fabricationDimension as AnyCircuitElement[],
+      webGpuAvailable: true,
+    }),
+  ).toBe("webgpu")
+  expect(
+    getPcbRenderer({
+      circuitJson: interpolatedTrace as AnyCircuitElement[],
+      webGpuAvailable: true,
+    }),
+  ).toBe("canvas")
+  expect(
+    getPcbRenderer({
+      circuitJson: throughPadTrace as AnyCircuitElement[],
+      webGpuAvailable: true,
+    }),
+  ).toBe("canvas")
+  expect(
+    getPcbRenderer({ circuitJson: board as AnyCircuitElement[], webGpuAvailable: false }),
+  ).toBe("canvas")
 })

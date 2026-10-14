@@ -2,7 +2,15 @@ import type { AnyCircuitElement } from "circuit-json"
 
 export type PcbRenderer = "webgpu" | "canvas"
 
-export function getPcbRenderer(circuitJson: AnyCircuitElement[]): PcbRenderer {
+export function getPcbRenderer({
+  circuitJson,
+  webGpuAvailable,
+}: {
+  circuitJson: AnyCircuitElement[]
+  webGpuAvailable: boolean
+}): PcbRenderer {
+  if (!webGpuAvailable) return "canvas"
+
   for (const element of circuitJson) {
     if (element.type !== "pcb_trace") continue
     if (element.route_thickness_mode === "interpolated") return "canvas"
