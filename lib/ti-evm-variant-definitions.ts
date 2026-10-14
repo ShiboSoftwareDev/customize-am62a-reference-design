@@ -20,11 +20,6 @@ export const tiEvmVariantDefinitions = {
       removedFeatureIds: ["phy-status-indicators"],
     },
     {
-      id: "without-status-indicators",
-      label: "Without status indicators",
-      removedFeatureIds: ["power-indicator", "phy-status-indicators"],
-    },
-    {
       id: "usb-managed-core",
       label: "USB-managed core",
       removedFeatureIds: ["power-indicator", "phy-status-indicators", "clock-test-access"],

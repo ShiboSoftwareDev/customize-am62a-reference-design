@@ -1,5 +1,10 @@
 import ts from "typescript"
-import { getAttribute, getStringAttribute, type SourceReplacement } from "./ast-helpers"
+import {
+  getAttribute,
+  getJsxOpeningLikeElement,
+  getStringAttribute,
+  type SourceReplacement,
+} from "./ast-helpers"
 
 type CanonicalPortSelector = string
 type GeneratedPortSelector = string
@@ -13,16 +18,19 @@ export function getCanonicalPortSelectors(params: {
   const canonicalPortSelectors = new Map<GeneratedPortSelector, CanonicalPortSelector>()
 
   for (const child of params.boardElement.children) {
-    if (!ts.isJsxSelfClosingElement(child)) continue
-    if (child.tagName.getText(params.sourceFile) !== "chip") continue
+    const chipOpeningElement = getChipOpeningElement({
+      child,
+      sourceFile: params.sourceFile,
+    })
+    if (!chipOpeningElement) continue
 
     const componentName = getStringAttribute({
-      element: child,
+      element: chipOpeningElement,
       name: "name",
       sourceFile: params.sourceFile,
     })
     const pinLabels = getObjectAttribute({
-      element: child,
+      element: chipOpeningElement,
       name: "pinLabels",
       sourceFile: params.sourceFile,
     })
@@ -73,7 +81,7 @@ export function addCanonicalPortSelectorReplacements(params: {
 }
 
 function getObjectAttribute(params: {
-  element: ts.JsxSelfClosingElement
+  element: ts.JsxOpeningLikeElement
   name: string
   sourceFile: ts.SourceFile
 }): ts.ObjectLiteralExpression | undefined {
@@ -82,6 +90,14 @@ function getObjectAttribute(params: {
   return initializer.expression && ts.isObjectLiteralExpression(initializer.expression)
     ? initializer.expression
     : undefined
+}
+
+function getChipOpeningElement(params: {
+  child: ts.JsxChild
+  sourceFile: ts.SourceFile
+}): ts.JsxOpeningLikeElement | undefined {
+  const openingElement = getJsxOpeningLikeElement(params.child)
+  return openingElement?.tagName.getText(params.sourceFile) === "chip" ? openingElement : undefined
 }
 
 function getPropertyName(name: ts.PropertyName): string | undefined {

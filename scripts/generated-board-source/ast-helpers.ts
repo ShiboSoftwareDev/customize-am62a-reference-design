@@ -8,6 +8,14 @@ export type SourceReplacement = {
   text: string
 }
 
+export function getJsxOpeningLikeElement(
+  element: ts.JsxChild,
+): ts.JsxOpeningLikeElement | undefined {
+  if (ts.isJsxElement(element)) return element.openingElement
+  if (ts.isJsxSelfClosingElement(element)) return element
+  return undefined
+}
+
 export function findBoardElement(params: {
   node: ts.Node
   sourceFile: ts.SourceFile
@@ -46,7 +54,7 @@ export function addRenamedNetSelectorReplacements(params: {
 }
 
 export function getStringAttribute(params: {
-  element: ts.JsxSelfClosingElement
+  element: ts.JsxOpeningLikeElement
   name: string
   sourceFile: ts.SourceFile
 }): string | undefined {
@@ -64,7 +72,7 @@ export function getStringAttribute(params: {
 }
 
 export function getStringArrayAttribute(params: {
-  element: ts.JsxSelfClosingElement
+  element: ts.JsxOpeningLikeElement
   name: string
   sourceFile: ts.SourceFile
 }): string[] | undefined {
@@ -78,7 +86,7 @@ export function getStringArrayAttribute(params: {
 }
 
 export function getAttribute(params: {
-  element: ts.JsxSelfClosingElement
+  element: ts.JsxOpeningLikeElement
   name: string
   sourceFile: ts.SourceFile
 }): ts.JsxAttribute | undefined {

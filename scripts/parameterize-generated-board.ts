@@ -3,6 +3,7 @@ import {
   addRenamedNetSelectorReplacements,
   applyReplacements,
   findBoardElement,
+  getJsxOpeningLikeElement,
   getStringArrayAttribute,
   getStringAttribute,
   type SourceReplacement,
@@ -19,6 +20,12 @@ type FeatureId = string
 type NetName = string
 type NetSelector = string
 type PortSelector = string
+type GeneratedChipElement = ts.JsxElement | ts.JsxSelfClosingElement
+
+type GeneratedChip = {
+  element: GeneratedChipElement
+  openingElement: ts.JsxOpeningLikeElement
+}
 
 export type ParameterizedBoardSource = {
   componentNames: ComponentName[]
@@ -47,10 +54,13 @@ export function parameterizeGeneratedBoard(params: {
 
   const replacements: SourceReplacement[] = []
   const componentNames = boardElement.children.flatMap((child) => {
-    if (!ts.isJsxSelfClosingElement(child) || child.tagName.getText(sourceFile) !== "chip") {
-      return []
-    }
-    const componentName = getStringAttribute({ element: child, name: "name", sourceFile })
+    const generatedChip = getGeneratedChip({ child, sourceFile })
+    if (!generatedChip) return []
+    const componentName = getStringAttribute({
+      element: generatedChip.openingElement,
+      name: "name",
+      sourceFile,
+    })
     return componentName ? [componentName] : []
   })
   const componentNameSet = new Set<ComponentName>(componentNames)
@@ -73,11 +83,11 @@ export function parameterizeGeneratedBoard(params: {
   })
 
   for (const child of boardElement.children) {
-    if (!ts.isJsxSelfClosingElement(child)) continue
-    const tagName = child.tagName.getText(sourceFile)
-    if (tagName === "chip") {
+    const generatedChip = getGeneratedChip({ child, sourceFile })
+    if (generatedChip) {
       addComponentFeatureCondition({
-        componentElement: child,
+        componentElement: generatedChip.element,
+        componentOpeningElement: generatedChip.openingElement,
         featureIdByComponentName: params.featureIdByComponentName,
         generatedSource,
         replacements,
@@ -85,6 +95,8 @@ export function parameterizeGeneratedBoard(params: {
       })
       continue
     }
+    if (!ts.isJsxSelfClosingElement(child)) continue
+    const tagName = child.tagName.getText(sourceFile)
     if (tagName === "net") {
       const netName = getStringAttribute({
         element: child,
@@ -283,14 +295,15 @@ function renameNetsMatchingComponentNames(params: {
 }
 
 function addComponentFeatureCondition(params: {
-  componentElement: ts.JsxSelfClosingElement
+  componentElement: GeneratedChipElement
+  componentOpeningElement: ts.JsxOpeningLikeElement
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
 }): void {
   const componentName = getStringAttribute({
-    element: params.componentElement,
+    element: params.componentOpeningElement,
     name: "name",
     sourceFile: params.sourceFile,
   })
@@ -304,6 +317,20 @@ function addComponentFeatureCondition(params: {
     end: params.componentElement.getEnd(),
     text: `{isComponentIncluded({ componentName: ${JSON.stringify(componentName)}, removedFeatureIds }) && (${originalElement})}`,
   })
+}
+
+function getGeneratedChip(params: {
+  child: ts.JsxChild
+  sourceFile: ts.SourceFile
+}): GeneratedChip | undefined {
+  const openingElement = getJsxOpeningLikeElement(params.child)
+  if (openingElement?.tagName.getText(params.sourceFile) !== "chip") {
+    return undefined
+  }
+  if (!ts.isJsxElement(params.child) && !ts.isJsxSelfClosingElement(params.child)) {
+    return undefined
+  }
+  return { element: params.child, openingElement }
 }
 
 function replaceRoutingAttributes(params: {
