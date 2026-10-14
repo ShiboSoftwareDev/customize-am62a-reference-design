@@ -9,6 +9,7 @@ type CircuitPoint = { x: number; y: number }
 type SourceComponentId = string
 type SourceNetId = string
 type SourcePortId = string
+type PcbComponentId = string
 type CircuitSourceComponent = AnyCircuitElement & {
   type: "source_component"
   source_component_id: SourceComponentId
@@ -39,11 +40,18 @@ type CircuitPcbBoard = AnyCircuitElement & {
 }
 type CircuitPcbComponent = AnyCircuitElement & {
   type: "pcb_component"
-  pcb_component_id: string
+  pcb_component_id: PcbComponentId
   source_component_id: string
   center: CircuitPoint
   layer: string
   rotation: number
+}
+type CircuitPcbPort = AnyCircuitElement & {
+  type: "pcb_port"
+  pcb_component_id?: PcbComponentId
+  source_port_id: SourcePortId
+  x: number
+  y: number
 }
 type CircuitPcbCopperPour = AnyCircuitElement & {
   type: "pcb_copper_pour"
@@ -341,7 +349,9 @@ function getPadOwnerNames(circuitJson: AnyCircuitElement[]): Map<string, string>
   return new Map(
     circuitJson.filter(isPcbComponent).flatMap((component) => {
       const componentName = sourceComponentNamesById.get(component.source_component_id)
-      return componentName && !/^unnamed_chip\d+$/u.test(componentName)
+      return componentName &&
+        componentName !== "ImportedBoard" &&
+        !/^unnamed_chip\d+$/u.test(componentName)
         ? [[component.pcb_component_id, componentName] as const]
         : []
     }),
@@ -435,22 +445,21 @@ function createPhysicalNetKeys(circuitJson: AnyCircuitElement[]): string[] {
   const sourcePortsById = new Map<SourcePortId, CircuitSourcePort>(
     circuitJson.filter(isSourcePort).map((port) => [port.source_port_id, port]),
   )
-  const physicalSourcePortIds = new Set(
-    circuitJson.flatMap((element) => (element.type === "pcb_port" ? [element.source_port_id] : [])),
-  )
+  const pcbPortKeysBySourcePortId = createPcbPortKeysBySourcePortId(circuitJson)
   const endpointKeysByNet = new Map<SourceNetId, Set<string>>()
   for (const sourceTrace of circuitJson.filter(isSourceTrace)) {
     for (const sourceNetId of sourceTrace.connected_source_net_ids) {
       const endpointKeys = endpointKeysByNet.get(sourceNetId) ?? new Set<string>()
       endpointKeysByNet.set(sourceNetId, endpointKeys)
       for (const sourcePortId of sourceTrace.connected_source_port_ids) {
-        if (!physicalSourcePortIds.has(sourcePortId)) continue
+        const pcbPortKey = pcbPortKeysBySourcePortId.get(sourcePortId)
+        if (!pcbPortKey) continue
         const sourcePort = sourcePortsById.get(sourcePortId)
         const sourceComponent = sourcePort?.source_component_id
           ? sourceComponentsById.get(sourcePort.source_component_id)
           : undefined
         if (!sourcePort || !sourceComponent) continue
-        endpointKeys.add(`${sourceComponent.name}:${sourcePort.pin_number ?? sourcePort.name}`)
+        endpointKeys.add(`${sourceComponent.name}@${pcbPortKey}`)
       }
     }
   }
@@ -461,6 +470,33 @@ function createPhysicalNetKeys(circuitJson: AnyCircuitElement[]): string[] {
         .map((endpointKeys) => [...endpointKeys].sort().join("|")),
     ),
   ].sort()
+}
+
+function createPcbPortKeysBySourcePortId(
+  circuitJson: AnyCircuitElement[],
+): Map<SourcePortId, string> {
+  const pcbPortsByComponentId = new Map<PcbComponentId, CircuitPcbPort[]>()
+  for (const pcbPort of circuitJson.filter(isPcbPort)) {
+    if (!pcbPort.pcb_component_id) continue
+    const componentPorts = pcbPortsByComponentId.get(pcbPort.pcb_component_id) ?? []
+    componentPorts.push(pcbPort)
+    pcbPortsByComponentId.set(pcbPort.pcb_component_id, componentPorts)
+  }
+
+  const pcbPortKeysBySourcePortId = new Map<SourcePortId, string>()
+  for (const componentPorts of pcbPortsByComponentId.values()) {
+    componentPorts.sort(comparePcbPortPositions)
+    for (const [portIndex, pcbPort] of componentPorts.entries()) {
+      pcbPortKeysBySourcePortId.set(pcbPort.source_port_id, String(portIndex + 1))
+    }
+  }
+  return pcbPortKeysBySourcePortId
+}
+
+function comparePcbPortPositions(first: CircuitPcbPort, second: CircuitPcbPort): number {
+  const horizontalDifference = first.x - second.x
+  if (Math.abs(horizontalDifference) > 1e-6) return horizontalDifference
+  return first.y - second.y
 }
 
 function expectNoRoutingErrors(circuitJson: AnyCircuitElement[]): void {
@@ -539,6 +575,10 @@ function isPcbBoard(element: AnyCircuitElement): element is CircuitPcbBoard {
 
 function isPcbComponent(element: AnyCircuitElement): element is CircuitPcbComponent {
   return element.type === "pcb_component"
+}
+
+function isPcbPort(element: AnyCircuitElement): element is CircuitPcbPort {
+  return element.type === "pcb_port"
 }
 
 function isPcbCopperPour(element: AnyCircuitElement): element is CircuitPcbCopperPour {

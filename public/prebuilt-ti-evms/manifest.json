@@ -166,7 +166,7 @@
       "id": "lm5155evm-fly",
       "artifacts": [
         {
-          "elementCount": 3733,
+          "elementCount": 3734,
           "output": "prebuilt-ti-evms/lm5155evm-fly/full-board.circuit.json.gz",
           "pcbTraceCount": 149,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -178,7 +178,7 @@
           ]
         },
         {
-          "elementCount": 3626,
+          "elementCount": 3627,
           "output": "prebuilt-ti-evms/lm5155evm-fly/without-power-measurement.circuit.json.gz",
           "pcbTraceCount": 141,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -190,7 +190,7 @@
           ]
         },
         {
-          "elementCount": 3633,
+          "elementCount": 3634,
           "output": "prebuilt-ti-evms/lm5155evm-fly/without-control-loop-access.circuit.json.gz",
           "pcbTraceCount": 142,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
@@ -202,7 +202,7 @@
           ]
         },
         {
-          "elementCount": 3530,
+          "elementCount": 3531,
           "output": "prebuilt-ti-evms/lm5155evm-fly/minimal-board.circuit.json.gz",
           "pcbTraceCount": 134,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",

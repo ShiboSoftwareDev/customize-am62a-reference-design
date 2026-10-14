@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@tscircuit/3d-viewer": "0.0.622",
-    "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@9656b07",
+    "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@b27b6c4",
     "@tscircuit/pcb-viewer": "1.11.426",
     "@tscircuit/schematic-viewer": "2.0.100",
     "fflate": "0.8.3",
@@ -47,7 +47,7 @@
     "format-si-unit": "0.0.14",
     "poppygl": "0.0.34",
     "transformation-matrix": "3.1.0",
-    "tscircuit": "https://pkg.pr.new/tscircuit/tscircuit@8623781a",
+    "tscircuit": "https://pkg.pr.new/tscircuit/tscircuit@bbf3b971",
     "typescript": "5.9.3",
     "vite": "8.3.2"
   },
