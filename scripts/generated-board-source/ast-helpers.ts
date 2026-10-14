@@ -1,6 +1,7 @@
 import ts from "typescript"
 
 type NetName = string
+type PortSelector = string
 
 export type SourceReplacement = {
   end: number
@@ -45,6 +46,27 @@ export function addRenamedNetSelectorReplacements(params: {
   }
 }
 
+export function addPortSelectorReplacements(params: {
+  node: ts.Node
+  portSelectorReplacements: ReadonlyMap<PortSelector, PortSelector>
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  if (ts.isStringLiteral(params.node)) {
+    const replacement = params.portSelectorReplacements.get(params.node.text)
+    if (replacement) {
+      params.replacements.push({
+        start: params.node.getStart(params.sourceFile),
+        end: params.node.getEnd(),
+        text: JSON.stringify(replacement),
+      })
+    }
+  }
+  for (const childNode of params.node.getChildren(params.sourceFile)) {
+    addPortSelectorReplacements({ ...params, node: childNode })
+  }
+}
+
 export function getStringAttribute(params: {
   element: ts.JsxSelfClosingElement
   name: string
@@ -52,7 +74,12 @@ export function getStringAttribute(params: {
 }): string | undefined {
   const attribute = getAttribute(params)
   if (!attribute?.initializer) return undefined
-  return ts.isStringLiteral(attribute.initializer) ? attribute.initializer.text : undefined
+  if (ts.isStringLiteral(attribute.initializer)) {
+    return attribute.initializer.text
+  }
+  if (!ts.isJsxExpression(attribute.initializer)) return undefined
+  const expression = attribute.initializer.expression
+  return expression && ts.isStringLiteral(expression) ? expression.text : undefined
 }
 
 export function getAttribute(params: {

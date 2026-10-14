@@ -4,11 +4,11 @@
       "id": "dp83825evm",
       "artifacts": [
         {
-          "elementCount": 6841,
+          "elementCount": 8585,
           "output": "prebuilt-ti-evms/dp83825evm/full-board.circuit.json.gz",
           "pcbTraceCount": 291,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 151,
+          "sourceComponentCount": 438,
           "sourceTraceCount": 100,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/full-board.schematic.circuit.json.gz",
@@ -19,12 +19,12 @@
           ]
         },
         {
-          "elementCount": 6791,
+          "elementCount": 8585,
           "output": "prebuilt-ti-evms/dp83825evm/without-power-indicator.circuit.json.gz",
-          "pcbTraceCount": 288,
+          "pcbTraceCount": 291,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 149,
-          "sourceTraceCount": 99,
+          "sourceComponentCount": 438,
+          "sourceTraceCount": 100,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/without-power-indicator.schematic.circuit.json.gz",
             "prebuilt-ti-evms/dp83825evm/without-power-indicator.schematic-2.circuit.json.gz",
@@ -34,12 +34,12 @@
           ]
         },
         {
-          "elementCount": 6652,
+          "elementCount": 8585,
           "output": "prebuilt-ti-evms/dp83825evm/without-phy-status-indicators.circuit.json.gz",
-          "pcbTraceCount": 282,
+          "pcbTraceCount": 291,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 145,
-          "sourceTraceCount": 97,
+          "sourceComponentCount": 438,
+          "sourceTraceCount": 100,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/without-phy-status-indicators.schematic.circuit.json.gz",
             "prebuilt-ti-evms/dp83825evm/without-phy-status-indicators.schematic-2.circuit.json.gz",
@@ -49,12 +49,12 @@
           ]
         },
         {
-          "elementCount": 6607,
+          "elementCount": 8585,
           "output": "prebuilt-ti-evms/dp83825evm/without-status-indicators.circuit.json.gz",
-          "pcbTraceCount": 279,
+          "pcbTraceCount": 291,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 143,
-          "sourceTraceCount": 96,
+          "sourceComponentCount": 438,
+          "sourceTraceCount": 100,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/without-status-indicators.schematic.circuit.json.gz",
             "prebuilt-ti-evms/dp83825evm/without-status-indicators.schematic-2.circuit.json.gz",
@@ -64,12 +64,12 @@
           ]
         },
         {
-          "elementCount": 6411,
+          "elementCount": 8529,
           "output": "prebuilt-ti-evms/dp83825evm/usb-managed-core.circuit.json.gz",
-          "pcbTraceCount": 267,
+          "pcbTraceCount": 281,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 139,
-          "sourceTraceCount": 94,
+          "sourceComponentCount": 436,
+          "sourceTraceCount": 98,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/usb-managed-core.schematic.circuit.json.gz",
             "prebuilt-ti-evms/dp83825evm/usb-managed-core.schematic-2.circuit.json.gz",
@@ -79,12 +79,12 @@
           ]
         },
         {
-          "elementCount": 5316,
+          "elementCount": 8177,
           "output": "prebuilt-ti-evms/dp83825evm/external-mdio-evaluation.circuit.json.gz",
-          "pcbTraceCount": 230,
+          "pcbTraceCount": 265,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 125,
-          "sourceTraceCount": 79,
+          "sourceComponentCount": 436,
+          "sourceTraceCount": 90,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/external-mdio-evaluation.schematic.circuit.json.gz",
             "prebuilt-ti-evms/dp83825evm/external-mdio-evaluation.schematic-2.circuit.json.gz",
@@ -94,12 +94,12 @@
           ]
         },
         {
-          "elementCount": 4897,
+          "elementCount": 8139,
           "output": "prebuilt-ti-evms/dp83825evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 207,
+          "pcbTraceCount": 255,
           "source": "Parameterized DP83825EVM tscircuit TSX",
-          "sourceComponentCount": 113,
-          "sourceTraceCount": 73,
+          "sourceComponentCount": 434,
+          "sourceTraceCount": 88,
           "schematicOutputs": [
             "prebuilt-ti-evms/dp83825evm/minimal-board.schematic.circuit.json.gz",
             "prebuilt-ti-evms/dp83825evm/minimal-board.schematic-2.circuit.json.gz",
@@ -114,65 +114,45 @@
       "id": "drv8307evm",
       "artifacts": [
         {
-          "elementCount": 3934,
+          "elementCount": 4804,
           "output": "prebuilt-ti-evms/drv8307evm/full-board.circuit.json.gz",
           "pcbTraceCount": 197,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 85,
+          "sourceComponentCount": 171,
           "sourceTraceCount": 57,
           "schematicOutputs": ["prebuilt-ti-evms/drv8307evm/full-board.schematic.circuit.json.gz"]
         },
         {
-          "elementCount": 3609,
-          "output": "prebuilt-ti-evms/drv8307evm/external-pwm.circuit.json.gz",
-          "pcbTraceCount": 175,
-          "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 75,
-          "sourceTraceCount": 51,
-          "schematicOutputs": ["prebuilt-ti-evms/drv8307evm/external-pwm.schematic.circuit.json.gz"]
-        },
-        {
-          "elementCount": 2840,
+          "elementCount": 4331,
           "output": "prebuilt-ti-evms/drv8307evm/differential-hall.circuit.json.gz",
-          "pcbTraceCount": 132,
+          "pcbTraceCount": 150,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 67,
-          "sourceTraceCount": 48,
+          "sourceComponentCount": 165,
+          "sourceTraceCount": 49,
           "schematicOutputs": [
             "prebuilt-ti-evms/drv8307evm/differential-hall.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 3861,
+          "elementCount": 4804,
           "output": "prebuilt-ti-evms/drv8307evm/without-status-indicators.circuit.json.gz",
-          "pcbTraceCount": 191,
+          "pcbTraceCount": 197,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 81,
-          "sourceTraceCount": 55,
+          "sourceComponentCount": 171,
+          "sourceTraceCount": 57,
           "schematicOutputs": [
             "prebuilt-ti-evms/drv8307evm/without-status-indicators.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 2499,
+          "elementCount": 4209,
           "output": "prebuilt-ti-evms/drv8307evm/external-pwm-differential-hall.circuit.json.gz",
-          "pcbTraceCount": 110,
+          "pcbTraceCount": 138,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 57,
-          "sourceTraceCount": 42,
+          "sourceComponentCount": 161,
+          "sourceTraceCount": 44,
           "schematicOutputs": [
             "prebuilt-ti-evms/drv8307evm/external-pwm-differential-hall.schematic.circuit.json.gz"
-          ]
-        },
-        {
-          "elementCount": 2211,
-          "output": "prebuilt-ti-evms/drv8307evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 92,
-          "source": "Parameterized DRV8307EVM tscircuit TSX",
-          "sourceComponentCount": 41,
-          "sourceTraceCount": 38,
-          "schematicOutputs": [
-            "prebuilt-ti-evms/drv8307evm/minimal-board.schematic.circuit.json.gz"
           ]
         }
       ]
@@ -181,11 +161,11 @@
       "id": "lm5155evm-fly",
       "artifacts": [
         {
-          "elementCount": 2980,
+          "elementCount": 3965,
           "output": "prebuilt-ti-evms/lm5155evm-fly/full-board.circuit.json.gz",
           "pcbTraceCount": 149,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
-          "sourceComponentCount": 88,
+          "sourceComponentCount": 226,
           "sourceTraceCount": 179,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm5155evm-fly/full-board.schematic.circuit.json.gz",
@@ -193,11 +173,11 @@
           ]
         },
         {
-          "elementCount": 2881,
+          "elementCount": 3866,
           "output": "prebuilt-ti-evms/lm5155evm-fly/without-power-measurement.circuit.json.gz",
           "pcbTraceCount": 141,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
-          "sourceComponentCount": 80,
+          "sourceComponentCount": 218,
           "sourceTraceCount": 171,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm5155evm-fly/without-power-measurement.schematic.circuit.json.gz",
@@ -205,11 +185,11 @@
           ]
         },
         {
-          "elementCount": 2835,
+          "elementCount": 3872,
           "output": "prebuilt-ti-evms/lm5155evm-fly/without-control-loop-access.circuit.json.gz",
           "pcbTraceCount": 142,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
-          "sourceComponentCount": 85,
+          "sourceComponentCount": 223,
           "sourceTraceCount": 172,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm5155evm-fly/without-control-loop-access.schematic.circuit.json.gz",
@@ -217,11 +197,11 @@
           ]
         },
         {
-          "elementCount": 2731,
+          "elementCount": 3777,
           "output": "prebuilt-ti-evms/lm5155evm-fly/minimal-board.circuit.json.gz",
           "pcbTraceCount": 134,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
-          "sourceComponentCount": 77,
+          "sourceComponentCount": 215,
           "sourceTraceCount": 164,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm5155evm-fly/minimal-board.schematic.circuit.json.gz",
@@ -234,69 +214,47 @@
       "id": "lm251772evm-pd",
       "artifacts": [
         {
-          "elementCount": 5368,
+          "elementCount": 6388,
           "output": "prebuilt-ti-evms/lm251772evm-pd/full-board.circuit.json.gz",
           "pcbTraceCount": 294,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
-          "sourceComponentCount": 167,
+          "sourceComponentCount": 288,
           "sourceTraceCount": 61,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm251772evm-pd/full-board.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 5067,
+          "elementCount": 6241,
           "output": "prebuilt-ti-evms/lm251772evm-pd/without-power-measurement.circuit.json.gz",
           "pcbTraceCount": 274,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
-          "sourceComponentCount": 157,
+          "sourceComponentCount": 278,
           "sourceTraceCount": 61,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm251772evm-pd/without-power-measurement.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 5134,
+          "elementCount": 6282,
           "output": "prebuilt-ti-evms/lm251772evm-pd/without-usb2any-interface.circuit.json.gz",
-          "pcbTraceCount": 287,
+          "pcbTraceCount": 290,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
-          "sourceComponentCount": 164,
-          "sourceTraceCount": 60,
+          "sourceComponentCount": 287,
+          "sourceTraceCount": 61,
           "schematicOutputs": [
             "prebuilt-ti-evms/lm251772evm-pd/without-usb2any-interface.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 4934,
-          "output": "prebuilt-ti-evms/lm251772evm-pd/without-measurement-access.circuit.json.gz",
-          "pcbTraceCount": 267,
+          "elementCount": 6136,
+          "output": "prebuilt-ti-evms/lm251772evm-pd/control-debug-only.circuit.json.gz",
+          "pcbTraceCount": 270,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
-          "sourceComponentCount": 151,
+          "sourceComponentCount": 277,
           "sourceTraceCount": 61,
           "schematicOutputs": [
-            "prebuilt-ti-evms/lm251772evm-pd/without-measurement-access.schematic.circuit.json.gz"
-          ]
-        },
-        {
-          "elementCount": 4828,
-          "output": "prebuilt-ti-evms/lm251772evm-pd/control-debug-only.circuit.json.gz",
-          "pcbTraceCount": 267,
-          "source": "Parameterized LM251772EVM-PD tscircuit TSX",
-          "sourceComponentCount": 154,
-          "sourceTraceCount": 60,
-          "schematicOutputs": [
             "prebuilt-ti-evms/lm251772evm-pd/control-debug-only.schematic.circuit.json.gz"
-          ]
-        },
-        {
-          "elementCount": 4710,
-          "output": "prebuilt-ti-evms/lm251772evm-pd/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 260,
-          "source": "Parameterized LM251772EVM-PD tscircuit TSX",
-          "sourceComponentCount": 148,
-          "sourceTraceCount": 60,
-          "schematicOutputs": [
-            "prebuilt-ti-evms/lm251772evm-pd/minimal-board.schematic.circuit.json.gz"
           ]
         }
       ]
@@ -305,89 +263,89 @@
       "id": "lmg342x-bb-evm",
       "artifacts": [
         {
-          "elementCount": 4514,
+          "elementCount": 5258,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/full-board.circuit.json.gz",
           "pcbTraceCount": 192,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 153,
+          "sourceComponentCount": 291,
           "sourceTraceCount": 60,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/full-board.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 4382,
+          "elementCount": 5172,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/without-logic-measurement.circuit.json.gz",
           "pcbTraceCount": 185,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 146,
+          "sourceComponentCount": 284,
           "sourceTraceCount": 59,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/without-logic-measurement.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 4438,
+          "elementCount": 5205,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/without-power-measurement.circuit.json.gz",
           "pcbTraceCount": 187,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 148,
+          "sourceComponentCount": 286,
           "sourceTraceCount": 60,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/without-power-measurement.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 4456,
+          "elementCount": 5205,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/without-bias-measurement.circuit.json.gz",
           "pcbTraceCount": 188,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 149,
+          "sourceComponentCount": 287,
           "sourceTraceCount": 60,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/without-bias-measurement.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 3931,
+          "elementCount": 5258,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/without-status-indicators.circuit.json.gz",
-          "pcbTraceCount": 165,
+          "pcbTraceCount": 192,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 132,
-          "sourceTraceCount": 45,
+          "sourceComponentCount": 291,
+          "sourceTraceCount": 60,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/without-status-indicators.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 4214,
+          "elementCount": 5086,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/without-measurement-access.circuit.json.gz",
           "pcbTraceCount": 176,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 137,
+          "sourceComponentCount": 275,
           "sourceTraceCount": 59,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/without-measurement-access.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 3771,
+          "elementCount": 5163,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/logic-diagnostics-only.circuit.json.gz",
-          "pcbTraceCount": 156,
+          "pcbTraceCount": 183,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 123,
-          "sourceTraceCount": 45,
+          "sourceComponentCount": 282,
+          "sourceTraceCount": 60,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/logic-diagnostics-only.schematic.circuit.json.gz"
           ]
         },
         {
-          "elementCount": 3612,
+          "elementCount": 5086,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 149,
+          "pcbTraceCount": 176,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
-          "sourceComponentCount": 116,
-          "sourceTraceCount": 44,
+          "sourceComponentCount": 275,
+          "sourceTraceCount": 59,
           "schematicOutputs": [
             "prebuilt-ti-evms/lmg342x-bb-evm/minimal-board.schematic.circuit.json.gz"
           ]

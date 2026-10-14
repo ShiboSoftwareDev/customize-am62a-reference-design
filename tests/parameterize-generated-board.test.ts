@@ -9,8 +9,9 @@ test("generated board TSX is parameterized without selector collisions", () => {
       <smtpad portHints={["1"]} />
       <pcbcopperpour shape="polygon" layer="top" points={[]} />
     </footprint>} />
-    <net name="TP1" />
-    <trace path={[".TP1 > .pin1", ".R1 > .pin1", "net.TP1"]} />
+    <net name={"TP1"} connectsTo={[".TP1 > .imported_pcb_port_1", ".R1 > .imported_pcb_port_2"]} />
+    <copperpour layer="top" connectsTo={'net[name="TP1"]'} outline={[]} />
+    <trace path={[".TP1 > .imported_pcb_port_1", ".R1 > .imported_pcb_port_2", "net.TP1"]} />
   </board>
 )
 export default ExampleBoard`
@@ -19,6 +20,10 @@ export default ExampleBoard`
     componentName: "ExampleBoard",
     featureIdByComponentName: new Map([["TP1", "measurement"]]),
     generatedSource,
+    portSelectorReplacements: new Map([
+      [".TP1 > .imported_pcb_port_1", ".TP1 > .pin1"],
+      [".R1 > .imported_pcb_port_2", ".R1 > .pin1"],
+    ]),
     routablePortSelectors: new Set([".TP1 > .pin1", ".R1 > .pin1"]),
     supportedCopperPours: [
       {
@@ -37,9 +42,12 @@ export default ExampleBoard`
   })
 
   expect(result.componentNames).toEqual(["TP1", "R1"])
-  expect(result.source).toContain('autorouter="auto" autorouterEffortLevel="1x"')
+  expect(result.source).toContain('autorouter="auto" autorouterEffortLevel="1x" routeRemaining')
   expect(result.source).not.toContain("autorouterVersion")
   expect(result.source).toContain('name="NET_TP1"')
+  expect(result.source).not.toContain('<net name="NET_TP1" connectsTo=')
+  expect(result.source).not.toContain("imported_pcb_port")
+  expect(result.source).toContain('".TP1 > .pin1"')
   expect(result.source).toContain('"net.NET_TP1"')
   expect(result.source).toContain(
     '{isComponentIncluded({ componentName: "TP1", removedFeatureIds }) && (<chip',
@@ -48,6 +56,7 @@ export default ExampleBoard`
   expect(result.source).toContain("pcbTeardrops={hasViaTeardrops}")
   expect(result.source).toContain("teardropPortSelectors.has(selector)")
   expect(result.source).toContain("<copperpour")
+  expect(result.source.match(/<copperpour/gu)).toHaveLength(1)
   expect(result.source).not.toContain("renderImportedCopperPours")
   expect(result.source).toContain('net[name=\\"NET_TP1\\"]')
   expect(result.source).not.toContain("<pcbcopperpour")

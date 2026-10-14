@@ -1,22 +1,15 @@
-import { transformPCBElements } from "@tscircuit/circuit-json-util"
 import type { AnyCircuitElement } from "circuit-json"
-import { compose, rotateDEG, scale, translate } from "transformation-matrix"
 import {
   isPcbBoard,
   isPcbComponent,
   isPcbPort,
   isSourceComponent,
   isSourcePort,
+  type PcbPortElement,
   type SourceComponentElement,
   type SourcePortElement,
 } from "./circuit-json-elements"
-import type {
-  PcbComponentId,
-  PortHint,
-  PortSelector,
-  SourceComponentId,
-  SourcePortId,
-} from "./types"
+import type { ComponentName, PortSelector, SourceComponentId, SourcePortId } from "./types"
 
 type CircuitPoint = { x: number; y: number }
 
@@ -37,11 +30,7 @@ type PcbOutlineKeepoutElement = AnyCircuitElement & {
 export function prepareConverterCircuitJson(
   projectCircuitJson: AnyCircuitElement[],
 ): AnyCircuitElement[] {
-  return deduplicateFootprintPortHints(
-    replaceUnsupportedPcbPrimitives(
-      mirrorBottomFootprintsForCore(removeOffboardPcbComponents(projectCircuitJson)),
-    ),
-  )
+  return replaceUnsupportedPcbPrimitives(removeOffboardPcbComponents(projectCircuitJson))
 }
 
 function removeOffboardPcbComponents(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
@@ -92,50 +81,56 @@ function hasPhysicalPcbPrimitive(params: {
 }
 
 export function getRoutablePortSelectors(circuitJson: AnyCircuitElement[]): Set<PortSelector> {
+  return new Set(getPortSelectorReplacements(circuitJson).values())
+}
+
+export function getPortSelectorReplacements(
+  circuitJson: AnyCircuitElement[],
+): Map<PortSelector, PortSelector> {
   const sourceComponentsById = new Map<SourceComponentId, SourceComponentElement>(
     circuitJson.filter(isSourceComponent).map((element) => [element.source_component_id, element]),
   )
   const sourcePortsById = new Map<SourcePortId, SourcePortElement>(
     circuitJson.filter(isSourcePort).map((element) => [element.source_port_id, element]),
   )
-  return new Set(
-    circuitJson.flatMap((element) => {
-      if (!isPcbPort(element)) return []
-      const sourcePort = sourcePortsById.get(element.source_port_id)
-      if (!sourcePort?.source_component_id) return []
-      const sourceComponent = sourceComponentsById.get(sourcePort.source_component_id)
-      if (!sourceComponent?.name) return []
-      const portName =
-        sourcePort.pin_number !== undefined
-          ? `pin${sourcePort.pin_number}`
-          : sourcePort.name || sourcePort.port_hints?.[0]
-      return portName ? [`.${sourceComponent.name} > .${portName}`] : []
-    }),
-  )
+  const replacements = new Map<PortSelector, PortSelector>()
+  let importedPcbPortIndex = 0
+  for (const element of circuitJson) {
+    if (!isPcbPort(element)) continue
+    importedPcbPortIndex += 1
+    const canonicalPort = getCanonicalPort({
+      pcbPort: element,
+      sourceComponentsById,
+      sourcePortsById,
+    })
+    if (!canonicalPort) continue
+    replacements.set(
+      `.${canonicalPort.componentName} > .imported_pcb_port_${importedPcbPortIndex}`,
+      canonicalPort.selector,
+    )
+  }
+  return replacements
 }
 
-function mirrorBottomFootprintsForCore(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
-  const mirroredCircuitJson = structuredClone(circuitJson)
-  const bottomComponents = mirroredCircuitJson
-    .filter(isPcbComponent)
-    .filter(({ layer }) => layer === "bottom")
-  for (const component of bottomComponents) {
-    const componentElements = mirroredCircuitJson.filter(
-      (element) =>
-        element.type !== "pcb_component" &&
-        "pcb_component_id" in element &&
-        element.pcb_component_id === component.pcb_component_id,
-    )
-    const reflectAcrossComponentYAxis = compose(
-      translate(component.center.x, component.center.y),
-      rotateDEG(component.rotation),
-      scale(-1, 1),
-      rotateDEG(-component.rotation),
-      translate(-component.center.x, -component.center.y),
-    )
-    transformPCBElements(componentElements, reflectAcrossComponentYAxis)
-  }
-  return mirroredCircuitJson
+function getCanonicalPort(params: {
+  pcbPort: PcbPortElement
+  sourceComponentsById: ReadonlyMap<SourceComponentId, SourceComponentElement>
+  sourcePortsById: ReadonlyMap<SourcePortId, SourcePortElement>
+}): { componentName: ComponentName; selector: PortSelector } | undefined {
+  const sourcePort = params.sourcePortsById.get(params.pcbPort.source_port_id)
+  if (!sourcePort?.source_component_id) return undefined
+  const sourceComponent = params.sourceComponentsById.get(sourcePort.source_component_id)
+  if (!sourceComponent?.name) return undefined
+  const portName =
+    sourcePort.pin_number !== undefined
+      ? `pin${sourcePort.pin_number}`
+      : sourcePort.name || sourcePort.port_hints?.[0]
+  return portName
+    ? {
+        componentName: sourceComponent.name,
+        selector: `.${sourceComponent.name} > .${portName}`,
+      }
+    : undefined
 }
 
 function replaceUnsupportedPcbPrimitives(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
@@ -224,28 +219,4 @@ function isCircuitPoint(candidate: unknown): candidate is CircuitPoint {
 
 function isRecord(candidate: unknown): candidate is Record<string, unknown> {
   return typeof candidate === "object" && candidate !== null
-}
-
-function deduplicateFootprintPortHints(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
-  const usedPortHintsByComponent = new Map<PcbComponentId, Set<PortHint>>()
-  return circuitJson.map((element) => {
-    if (
-      !["pcb_smtpad", "pcb_plated_hole"].includes(element.type) ||
-      !("pcb_component_id" in element) ||
-      typeof element.pcb_component_id !== "string" ||
-      !("port_hints" in element) ||
-      !Array.isArray(element.port_hints)
-    ) {
-      return element
-    }
-    const usedPortHints =
-      usedPortHintsByComponent.get(element.pcb_component_id) ?? new Set<PortHint>()
-    usedPortHintsByComponent.set(element.pcb_component_id, usedPortHints)
-    const portHints = element.port_hints.filter((portHint) => {
-      if (typeof portHint !== "string" || usedPortHints.has(portHint)) return false
-      usedPortHints.add(portHint)
-      return true
-    })
-    return { ...element, port_hints: portHints }
-  })
 }

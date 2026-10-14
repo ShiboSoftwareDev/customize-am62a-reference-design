@@ -7,6 +7,7 @@ import { compressCircuitJson } from "./compress-circuit-json"
 import { createReferenceDefinition } from "./create-reference-definition"
 import { getSupportedCopperPours } from "./get-supported-copper-pours"
 import {
+  getPortSelectorReplacements,
   getRoutablePortSelectors,
   prepareConverterCircuitJson,
 } from "./prepare-converter-circuit-json"
@@ -41,15 +42,17 @@ export async function generateReferenceArtifacts(params: {
       return featureId ? [[element.name, featureId] as const] : []
     }),
   )
-  const generatedSource = convertCircuitJsonToTscircuit(
-    prepareConverterCircuitJson(projectCircuitJson),
-    { componentName: params.reference.componentName },
-  )
+  const converterCircuitJson = prepareConverterCircuitJson(projectCircuitJson)
+  const portSelectorReplacements = getPortSelectorReplacements(converterCircuitJson)
+  const generatedSource = convertCircuitJsonToTscircuit(converterCircuitJson, {
+    componentName: params.reference.componentName,
+  })
   const parameterizedBoard = parameterizeGeneratedBoard({
     componentName: params.reference.componentName,
     featureIdByComponentName,
     generatedSource,
-    routablePortSelectors: getRoutablePortSelectors(projectCircuitJson),
+    portSelectorReplacements,
+    routablePortSelectors: getRoutablePortSelectors(converterCircuitJson),
     supportedCopperPours: getSupportedCopperPours({
       circuitJson: projectCircuitJson,
     }),

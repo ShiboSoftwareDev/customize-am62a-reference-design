@@ -1,6 +1,7 @@
 import ts from "typescript"
 import {
   addRenamedNetSelectorReplacements,
+  addPortSelectorReplacements,
   applyReplacements,
   findBoardElement,
   getAttribute,
@@ -25,12 +26,13 @@ export function parameterizeGeneratedBoard(params: {
   componentName: string
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
+  portSelectorReplacements: ReadonlyMap<PortSelector, PortSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
   supportedCopperPours?: readonly SupportedCopperPour[]
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): ParameterizedBoardSource {
-  const generatedSource = removeLegacyPcbCopperPours({ source: params.generatedSource })
+  const generatedSource = removeGeneratedCopperPours({ source: params.generatedSource })
   const sourceFile = ts.createSourceFile(
     `${params.componentName}.tsx`,
     generatedSource,
@@ -78,6 +80,12 @@ export function parameterizeGeneratedBoard(params: {
       continue
     }
     if (tagName === "trace") {
+      addPortSelectorReplacements({
+        node: child,
+        portSelectorReplacements: params.portSelectorReplacements,
+        replacements,
+        sourceFile,
+      })
       addRenamedNetSelectorReplacements({
         node: child,
         renamedNets,
@@ -88,6 +96,14 @@ export function parameterizeGeneratedBoard(params: {
         start: child.tagName.getStart(sourceFile),
         end: child.tagName.getEnd(),
         text: "ParameterizedTrace removedFeatureIds={removedFeatureIds}",
+      })
+      continue
+    }
+    if (tagName === "net") {
+      removeNetConnectsToAttribute({
+        netElement: child,
+        replacements,
+        sourceFile,
       })
     }
   }
@@ -123,7 +139,25 @@ export function parameterizeGeneratedBoard(params: {
   }
 }
 
-function removeLegacyPcbCopperPours(params: { source: string }): string {
+function removeNetConnectsToAttribute(params: {
+  netElement: ts.JsxSelfClosingElement
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  const connectsToAttribute = getAttribute({
+    element: params.netElement,
+    name: "connectsTo",
+    sourceFile: params.sourceFile,
+  })
+  if (!connectsToAttribute) return
+  params.replacements.push({
+    start: connectsToAttribute.getFullStart(),
+    end: connectsToAttribute.getEnd(),
+    text: "",
+  })
+}
+
+function removeGeneratedCopperPours(params: { source: string }): string {
   const sourceFile = ts.createSourceFile(
     "generated-board.tsx",
     params.source,
@@ -133,7 +167,10 @@ function removeLegacyPcbCopperPours(params: { source: string }): string {
   )
   const replacements: SourceReplacement[] = []
   const visit = (node: ts.Node): void => {
-    if (ts.isJsxSelfClosingElement(node) && node.tagName.getText(sourceFile) === "pcbcopperpour") {
+    if (
+      ts.isJsxSelfClosingElement(node) &&
+      ["copperpour", "pcbcopperpour"].includes(node.tagName.getText(sourceFile))
+    ) {
       replacements.push({
         start: node.getFullStart(),
         end: node.getEnd(),
@@ -289,7 +326,7 @@ function replaceRoutingAttributes(params: {
       ts.isJsxAttribute(attribute) &&
       attribute.name.getText(params.sourceFile) === "routingDisabled",
   )
-  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x"'
+  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x" routeRemaining'
   if (routingDisabledAttribute) {
     params.replacements.push({
       start: routingDisabledAttribute.getStart(params.sourceFile),

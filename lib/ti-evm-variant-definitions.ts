@@ -48,11 +48,6 @@ export const tiEvmVariantDefinitions = {
   drv8307evm: [
     { id: "full-board", label: "Full board", removedFeatureIds: [] },
     {
-      id: "external-pwm",
-      label: "External PWM",
-      removedFeatureIds: ["onboard-speed-control"],
-    },
-    {
       id: "differential-hall",
       label: "Differential Hall inputs",
       removedFeatureIds: ["single-ended-hall-conditioning"],
@@ -66,16 +61,6 @@ export const tiEvmVariantDefinitions = {
       id: "external-pwm-differential-hall",
       label: "External PWM + differential Hall",
       removedFeatureIds: ["onboard-speed-control", "single-ended-hall-conditioning"],
-    },
-    {
-      id: "minimal-board",
-      label: "Minimal board",
-      removedFeatureIds: [
-        "onboard-speed-control",
-        "single-ended-hall-conditioning",
-        "test-points",
-        "status-indicators",
-      ],
     },
   ],
   "lm5155evm-fly": [
@@ -109,19 +94,9 @@ export const tiEvmVariantDefinitions = {
       removedFeatureIds: ["usb2any-interface"],
     },
     {
-      id: "without-measurement-access",
-      label: "Without measurement access",
-      removedFeatureIds: ["power-measurement-access", "control-debug-access"],
-    },
-    {
       id: "control-debug-only",
       label: "Control debug access only",
       removedFeatureIds: ["power-measurement-access", "usb2any-interface"],
-    },
-    {
-      id: "minimal-board",
-      label: "Minimal board",
-      removedFeatureIds: ["power-measurement-access", "control-debug-access", "usb2any-interface"],
     },
   ],
   "lmg342x-bb-evm": [
