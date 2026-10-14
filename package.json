@@ -41,7 +41,7 @@
     "bun-types": "1.4.2",
     "circuit-json": "0.0.525",
     "circuit-json-to-gltf": "0.0.152",
-    "circuit-json-to-tscircuit": "https://pkg.pr.new/circuit-json-to-tscircuit@2e12e89",
+    "circuit-json-to-tscircuit": "https://pkg.pr.new/circuit-json-to-tscircuit@6a75ce5",
     "circuit-to-svg": "0.0.445",
     "fast-png": "8.0.0",
     "format-si-unit": "0.0.14",
