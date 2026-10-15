@@ -11,8 +11,11 @@ test("generated board TSX is parameterized without selector collisions", () => {
     </footprint>} />
     <net name={"TP1"} connectsTo={[".TP1 > .imported_pcb_port_1", ".R1 > .imported_pcb_port_2"]} />
     <net name={"UNROUTED"} />
+    <net name={"SIGNAL"} />
     <pcbtrace route={[{"route_type":"wire","x":0,"y":0,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":0,"width":0.3,"layer":"top"}]} />
+    <pcbtrace route={[{"route_type":"wire","x":0,"y":1,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":1,"width":0.3,"layer":"top"}]} />
     <via pcbX="0mm" pcbY="0mm" holeDiameter="0.2mm" outerDiameter="0.5mm" fromLayer="top" toLayer="bottom" connectsTo={"net.TP1"} />
+    <via pcbX="0mm" pcbY="1mm" holeDiameter="0.2mm" outerDiameter="0.5mm" fromLayer="top" toLayer="bottom" connectsTo={"net.SIGNAL"} />
     <copperpour layer="top" connectsTo={'net[name="TP1"]'} outline={[]} />
     <trace path={[".TP1 > .imported_pcb_port_1", ".R1 > .imported_pcb_port_2", "net.TP1"]} />
   </board>
@@ -24,13 +27,27 @@ export default ExampleBoard`
     featureIdByComponentName: new Map([["TP1", "measurement"]]),
     generatedSource,
     importedRoutingMetadata: {
+      endpointUsageBySourceNetId: new Map([
+        [
+          "source_net_0",
+          { endpointCountByFeatureId: new Map([["measurement", 1]]), requiredEndpointCount: 1 },
+        ],
+        [
+          "source_net_2",
+          { endpointCountByFeatureId: new Map([["measurement", 1]]), requiredEndpointCount: 1 },
+        ],
+      ]),
       pcbTraceMetadataByRoute: new Map([
         [
           '[{"route_type":"wire","x":0,"y":0,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":0,"width":0.3,"layer":"top"}]',
           { sourceNetId: "source_net_0" },
         ],
+        [
+          '[{"route_type":"wire","x":0,"y":1,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":1,"width":0.3,"layer":"top"}]',
+          { sourceNetId: "source_net_2" },
+        ],
       ]),
-      sourceNetIdsWithImportedRouting: new Set(["source_net_0"]),
+      sourceNetIdsWithImportedRouting: new Set(["source_net_0", "source_net_2"]),
     },
     portSelectorReplacements: new Map([
       [".TP1 > .imported_pcb_port_1", ".TP1 > .pin1"],
@@ -55,14 +72,12 @@ export default ExampleBoard`
 
   expect(result.componentNames).toEqual(["TP1", "R1"])
   expect(result.source).toContain(
-    'autorouter="auto" autorouterEffortLevel="1x" routeRemaining={removedFeatureIds.size > 0}',
+    'autorouter="auto" autorouterEffortLevel="1x" routeRemaining={false}',
   )
   expect(result.source).not.toContain("autorouterVersion")
   expect(result.source).toContain('name="NET_TP1"')
   expect(result.source).not.toContain('<net name="NET_TP1" connectsTo=')
-  expect(result.source).toContain(
-    '<net name={"UNROUTED"} routingPhaseIndex={removedFeatureIds.size === 0 ? 0 : undefined}',
-  )
+  expect(result.source).toContain('<net name={"UNROUTED"}')
   expect(result.source).not.toContain("imported_pcb_port")
   expect(result.source).toContain('".TP1 > .pin1"')
   expect(result.source).toContain('"net.NET_TP1"')
@@ -77,7 +92,12 @@ export default ExampleBoard`
   expect(result.source).not.toContain("renderImportedCopperPours")
   expect(result.source).toContain('net[name=\\"NET_TP1\\"]')
   expect(result.source).toContain('source_trace_id: "source_net_0"')
-  expect(result.source).toContain("removedFeatureIds.size === 0")
+  expect(result.source).toContain('source_trace_id: "source_net_2"')
+  expect(result.source).toContain("importedRoutingEndpointUsageBySourceNetId")
+  expect(result.source).toContain('sourceNetId: "source_net_2"')
+  expect(result.source).toContain('"requiredEndpointCount":2')
+  expect(result.source).toContain('"requiredEndpointCount":1')
+  expect(result.source).toContain("isImportedRoutingIncluded")
   expect(result.source).toContain('connectsTo={"net.NET_TP1"}')
   expect(result.source).not.toContain("<pcbcopperpour")
 })

@@ -46,6 +46,7 @@ export async function generateReferenceArtifacts(params: {
   const converterCircuitJson = prepareConverterCircuitJson(projectCircuitJson)
   const importedRoutingMetadata = getImportedRoutingMetadata({
     circuitJson: converterCircuitJson,
+    featureIdByComponentName,
   })
   const portSelectorReplacements = getPortSelectorReplacements(converterCircuitJson)
   const generatedSource = convertCircuitJsonToTscircuit(converterCircuitJson, {

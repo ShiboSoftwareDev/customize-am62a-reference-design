@@ -12,6 +12,7 @@ import { createParameterizedBoardSource } from "./generated-board-source/create-
 import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
 import type {
   ImportedPcbTraceMetadata,
+  ImportedRoutingEndpointUsage,
   ImportedRoutingMetadata,
   PcbTraceRouteKey,
 } from "./ti-evm-reference-generator/get-imported-routing-metadata"
@@ -76,12 +77,21 @@ export function parameterizeGeneratedBoard(params: {
     replacements,
     sourceFile,
   })
+  const pouredSourceNetIds = getPouredSourceNetIds({
+    pouredNetSelectors,
+    sourceNetIdByName,
+  })
+  const importedRoutingEndpointUsageBySourceNetId = getImportedRoutingEndpointUsageBySourceNetId({
+    importedRoutingMetadata: params.importedRoutingMetadata,
+    pouredSourceNetIds,
+  })
   addImportedRoutingReplacements({
     boardElement,
     generatedSource,
     importedRoutingMetadata: params.importedRoutingMetadata,
     renamedNets,
     replacements,
+    sourceNetIdByName,
     sourceFile,
   })
 
@@ -153,6 +163,7 @@ export function parameterizeGeneratedBoard(params: {
     source: createParameterizedBoardSource({
       componentName: params.componentName,
       featureEntries,
+      importedRoutingEndpointUsageBySourceNetId,
       jsxBody,
       pouredNetSelectors,
       routablePortSelectors: params.routablePortSelectors,
@@ -168,6 +179,7 @@ function addImportedRoutingReplacements(params: {
   importedRoutingMetadata: ImportedRoutingMetadata | undefined
   renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
+  sourceNetIdByName: ReadonlyMap<NetName, string>
   sourceFile: ts.SourceFile
 }): void {
   const importedRoutingMetadata = params.importedRoutingMetadata
@@ -181,6 +193,7 @@ function visitImportedRoutingNode(params: {
   node: ts.Node
   renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
+  sourceNetIdByName: ReadonlyMap<NetName, string>
   sourceFile: ts.SourceFile
 }): void {
   if (ts.isJsxSelfClosingElement(params.node)) {
@@ -208,6 +221,7 @@ function visitImportedRoutingNode(params: {
         generatedSource: params.generatedSource,
         renamedNets: params.renamedNets,
         replacements: params.replacements,
+        sourceNetIdByName: params.sourceNetIdByName,
         sourceFile: params.sourceFile,
       })
       return
@@ -280,7 +294,10 @@ function addImportedPcbTraceReplacement(params: {
   params.replacements.push({
     start: params.element.getStart(params.sourceFile),
     end: params.element.getEnd(),
-    text: wrapImportedRoutingElement({ elementSource: attributedElement }),
+    text: wrapImportedRoutingElement({
+      elementSource: attributedElement,
+      sourceNetId: params.sourceNetId,
+    }),
   })
 }
 
@@ -289,6 +306,7 @@ function addImportedViaReplacement(params: {
   generatedSource: string
   renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
+  sourceNetIdByName: ReadonlyMap<NetName, string>
   sourceFile: ts.SourceFile
 }): void {
   const connectsTo = getStringAttribute({
@@ -298,6 +316,7 @@ function addImportedViaReplacement(params: {
   })
   const netName = connectsTo?.startsWith("net.") ? connectsTo.slice("net.".length) : undefined
   const renamedNet = netName ? params.renamedNets.get(netName) : undefined
+  const sourceNetId = netName ? params.sourceNetIdByName.get(netName) : undefined
   const originalElement = params.generatedSource.slice(
     params.element.getStart(params.sourceFile),
     params.element.getEnd(),
@@ -308,12 +327,17 @@ function addImportedViaReplacement(params: {
   params.replacements.push({
     start: params.element.getStart(params.sourceFile),
     end: params.element.getEnd(),
-    text: wrapImportedRoutingElement({ elementSource: emittedElement }),
+    text: sourceNetId
+      ? wrapImportedRoutingElement({ elementSource: emittedElement, sourceNetId })
+      : emittedElement,
   })
 }
 
-function wrapImportedRoutingElement(params: { elementSource: string }): string {
-  return `{removedFeatureIds.size === 0 && (${params.elementSource})}`
+function wrapImportedRoutingElement(params: {
+  elementSource: string
+  sourceNetId: string
+}): string {
+  return `{isImportedRoutingIncluded({ sourceNetId: ${JSON.stringify(params.sourceNetId)}, removedFeatureIds }) && (${params.elementSource})}`
 }
 
 function updateNetRoutingAttributes(params: {
@@ -354,8 +378,41 @@ function updateNetRoutingAttributes(params: {
   params.replacements.push({
     start: params.netElement.getEnd() - 2,
     end: params.netElement.getEnd() - 2,
-    text: "routingPhaseIndex={removedFeatureIds.size === 0 ? 0 : undefined} ",
+    text: "routingPhaseIndex={0} ",
   })
+}
+
+function getPouredSourceNetIds(params: {
+  pouredNetSelectors: ReadonlySet<NetSelector>
+  sourceNetIdByName: ReadonlyMap<NetName, string>
+}): Set<string> {
+  const pouredSourceNetIds = new Set<string>()
+  for (const [netName, sourceNetId] of params.sourceNetIdByName) {
+    if (params.pouredNetSelectors.has(`net.${netName}`)) pouredSourceNetIds.add(sourceNetId)
+  }
+  return pouredSourceNetIds
+}
+
+function getImportedRoutingEndpointUsageBySourceNetId(params: {
+  importedRoutingMetadata: ImportedRoutingMetadata | undefined
+  pouredSourceNetIds: ReadonlySet<string>
+}): Map<string, ImportedRoutingEndpointUsage> {
+  const endpointUsageBySourceNetId = new Map<string, ImportedRoutingEndpointUsage>()
+  if (!params.importedRoutingMetadata) return endpointUsageBySourceNetId
+  for (const sourceNetId of params.importedRoutingMetadata.sourceNetIdsWithImportedRouting) {
+    const endpointUsage = params.pouredSourceNetIds.has(sourceNetId)
+      ? createAlwaysIncludedEndpointUsage()
+      : params.importedRoutingMetadata.endpointUsageBySourceNetId.get(sourceNetId)
+    if (endpointUsage) endpointUsageBySourceNetId.set(sourceNetId, endpointUsage)
+  }
+  return endpointUsageBySourceNetId
+}
+
+function createAlwaysIncludedEndpointUsage(): ImportedRoutingEndpointUsage {
+  return {
+    endpointCountByFeatureId: new Map(),
+    requiredEndpointCount: 2,
+  }
 }
 
 function removeGeneratedCopperPours(params: { source: string }): string {
@@ -534,8 +591,7 @@ function replaceRoutingAttributes(params: {
       ts.isJsxAttribute(attribute) &&
       attribute.name.getText(params.sourceFile) === "routingDisabled",
   )
-  const autorouterAttributes =
-    'autorouter="auto" autorouterEffortLevel="1x" routeRemaining={removedFeatureIds.size > 0}'
+  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x" routeRemaining={false}'
   if (routingDisabledAttribute) {
     params.replacements.push({
       start: routingDisabledAttribute.getStart(params.sourceFile),
