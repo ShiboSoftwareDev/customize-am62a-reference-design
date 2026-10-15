@@ -6,9 +6,13 @@ import type { ParameterizedTiEvmId } from "lib/evms/parameterized-ti-evms"
 import { getTiEvm } from "lib/ti-evm-catalog"
 
 type CircuitPoint = { x: number; y: number }
+type ComponentName = string
+type PcbComponentId = string
 type SourceComponentId = string
 type SourceNetId = string
+type SourcePortAlias = string
 type SourcePortId = string
+type SourcePortReferenceKey = string
 type CircuitSourceComponent = AnyCircuitElement & {
   type: "source_component"
   source_component_id: SourceComponentId
@@ -262,7 +266,7 @@ function expectComponentsMatchSource(params: {
 function getPcbComponentsByName(params: {
   circuitJson: AnyCircuitElement[]
   sourceComponentsById: ReadonlyMap<SourceComponentId, CircuitSourceComponent>
-}): Map<string, CircuitPcbComponent> {
+}): Map<ComponentName, CircuitPcbComponent> {
   return new Map(
     params.circuitJson.filter(isPcbComponent).flatMap((component) => {
       const componentName = params.sourceComponentsById.get(component.source_component_id)?.name
@@ -300,8 +304,17 @@ function expectPadsMatchSource(params: {
 }): void {
   const sourcePads = params.sourceCircuitJson.filter(isPhysicalPad)
   const renderedPads = params.renderedCircuitJson.filter(isPhysicalPad)
-  const sourcePadOwners = getPadOwnerNames(params.sourceCircuitJson)
-  const renderedPadOwners = getPadOwnerNames(params.renderedCircuitJson)
+  const sourceComponentNames = new Set<ComponentName>(
+    params.sourceCircuitJson.filter(isSourceComponent).map(({ name }) => name),
+  )
+  const sourcePadOwners = getPadOwnerNames({
+    circuitJson: params.sourceCircuitJson,
+    sourceComponentNames,
+  })
+  const renderedPadOwners = getPadOwnerNames({
+    circuitJson: params.renderedCircuitJson,
+    sourceComponentNames,
+  })
   const unmatchedRenderedPads = new Set(renderedPads)
   expect(renderedPads).toHaveLength(sourcePads.length)
 
@@ -332,16 +345,19 @@ function expectPadsMatchSource(params: {
   expect(unmatchedRenderedPads.size).toBe(0)
 }
 
-function getPadOwnerNames(circuitJson: AnyCircuitElement[]): Map<string, string> {
-  const sourceComponentNamesById = new Map(
-    circuitJson
+function getPadOwnerNames(params: {
+  circuitJson: AnyCircuitElement[]
+  sourceComponentNames: ReadonlySet<ComponentName>
+}): Map<PcbComponentId, ComponentName> {
+  const sourceComponentNamesById = new Map<SourceComponentId, ComponentName>(
+    params.circuitJson
       .filter(isSourceComponent)
       .map((component) => [component.source_component_id, component.name] as const),
   )
-  return new Map(
-    circuitJson.filter(isPcbComponent).flatMap((component) => {
+  return new Map<PcbComponentId, ComponentName>(
+    params.circuitJson.filter(isPcbComponent).flatMap((component) => {
       const componentName = sourceComponentNamesById.get(component.source_component_id)
-      return componentName && !/^unnamed_chip\d+$/u.test(componentName)
+      return componentName && params.sourceComponentNames.has(componentName)
         ? [[component.pcb_component_id, componentName] as const]
         : []
     }),
@@ -421,36 +437,40 @@ function expectPhysicalConnectivityMatchesSource(params: {
   renderedCircuitJson: AnyCircuitElement[]
   sourceCircuitJson: AnyCircuitElement[]
 }): void {
-  expect(createPhysicalNetKeys(params.renderedCircuitJson)).toEqual(
-    createPhysicalNetKeys(params.sourceCircuitJson),
+  expect(
+    createPhysicalNetKeys({
+      circuitJson: params.renderedCircuitJson,
+      referenceCircuitJson: params.sourceCircuitJson,
+    }),
+  ).toEqual(
+    createPhysicalNetKeys({
+      circuitJson: params.sourceCircuitJson,
+      referenceCircuitJson: params.sourceCircuitJson,
+    }),
   )
 }
 
-function createPhysicalNetKeys(circuitJson: AnyCircuitElement[]): string[] {
-  const sourceComponentsById = new Map<SourceComponentId, CircuitSourceComponent>(
-    circuitJson
-      .filter(isSourceComponent)
-      .map((component) => [component.source_component_id, component]),
+function createPhysicalNetKeys(params: {
+  circuitJson: AnyCircuitElement[]
+  referenceCircuitJson: AnyCircuitElement[]
+}): string[] {
+  const sourcePortReferenceKeyBySourcePortId = getSourcePortReferenceKeyBySourcePortId(params)
+  const physicalSourcePortIds = new Set<SourcePortId>(
+    params.circuitJson.flatMap((element) =>
+      element.type === "pcb_port" && typeof element.source_port_id === "string"
+        ? [element.source_port_id]
+        : [],
+    ),
   )
-  const sourcePortsById = new Map<SourcePortId, CircuitSourcePort>(
-    circuitJson.filter(isSourcePort).map((port) => [port.source_port_id, port]),
-  )
-  const physicalSourcePortIds = new Set(
-    circuitJson.flatMap((element) => (element.type === "pcb_port" ? [element.source_port_id] : [])),
-  )
-  const endpointKeysByNet = new Map<SourceNetId, Set<string>>()
-  for (const sourceTrace of circuitJson.filter(isSourceTrace)) {
+  const endpointKeysByNet = new Map<SourceNetId, Set<SourcePortReferenceKey>>()
+  for (const sourceTrace of params.circuitJson.filter(isSourceTrace)) {
     for (const sourceNetId of sourceTrace.connected_source_net_ids) {
-      const endpointKeys = endpointKeysByNet.get(sourceNetId) ?? new Set<string>()
+      const endpointKeys = endpointKeysByNet.get(sourceNetId) ?? new Set<SourcePortReferenceKey>()
       endpointKeysByNet.set(sourceNetId, endpointKeys)
       for (const sourcePortId of sourceTrace.connected_source_port_ids) {
         if (!physicalSourcePortIds.has(sourcePortId)) continue
-        const sourcePort = sourcePortsById.get(sourcePortId)
-        const sourceComponent = sourcePort?.source_component_id
-          ? sourceComponentsById.get(sourcePort.source_component_id)
-          : undefined
-        if (!sourcePort || !sourceComponent) continue
-        endpointKeys.add(`${sourceComponent.name}:${sourcePort.pin_number ?? sourcePort.name}`)
+        const sourcePortReferenceKey = sourcePortReferenceKeyBySourcePortId.get(sourcePortId)
+        if (sourcePortReferenceKey) endpointKeys.add(sourcePortReferenceKey)
       }
     }
   }
@@ -461,6 +481,86 @@ function createPhysicalNetKeys(circuitJson: AnyCircuitElement[]): string[] {
         .map((endpointKeys) => [...endpointKeys].sort().join("|")),
     ),
   ].sort()
+}
+
+function getSourcePortReferenceKeyBySourcePortId(params: {
+  circuitJson: AnyCircuitElement[]
+  referenceCircuitJson: AnyCircuitElement[]
+}): Map<SourcePortId, SourcePortReferenceKey> {
+  const sourceComponentNameById = new Map<SourceComponentId, ComponentName>(
+    params.circuitJson
+      .filter(isSourceComponent)
+      .map(({ name, source_component_id }) => [source_component_id, name]),
+  )
+  const referenceSourceComponentNameById = new Map<SourceComponentId, ComponentName>(
+    params.referenceCircuitJson
+      .filter(isSourceComponent)
+      .map(({ name, source_component_id }) => [source_component_id, name]),
+  )
+  const referenceSourcePortsByComponentName = new Map<ComponentName, CircuitSourcePort[]>()
+  for (const referenceSourcePort of params.referenceCircuitJson.filter(isSourcePort)) {
+    if (!referenceSourcePort.source_component_id) continue
+    const componentName = referenceSourceComponentNameById.get(
+      referenceSourcePort.source_component_id,
+    )
+    if (!componentName) continue
+    const referenceSourcePorts = referenceSourcePortsByComponentName.get(componentName) ?? []
+    referenceSourcePorts.push(referenceSourcePort)
+    referenceSourcePortsByComponentName.set(componentName, referenceSourcePorts)
+  }
+
+  const sourcePortReferenceKeyBySourcePortId = new Map<SourcePortId, SourcePortReferenceKey>()
+  for (const sourcePort of params.circuitJson.filter(isSourcePort)) {
+    if (!sourcePort.source_component_id) continue
+    const componentName = sourceComponentNameById.get(sourcePort.source_component_id)
+    const referenceSourcePorts = componentName
+      ? referenceSourcePortsByComponentName.get(componentName)
+      : undefined
+    if (!componentName || !referenceSourcePorts) continue
+    const sourcePortAliases = getSourcePortAliases(sourcePort)
+    const referenceSourcePort = [...referenceSourcePorts].sort(
+      (first, second) =>
+        getSourcePortAliasMatchCount({
+          firstAliases: sourcePortAliases,
+          secondAliases: getSourcePortAliases(second),
+        }) -
+        getSourcePortAliasMatchCount({
+          firstAliases: sourcePortAliases,
+          secondAliases: getSourcePortAliases(first),
+        }),
+    )[0]
+    if (!referenceSourcePort) continue
+    sourcePortReferenceKeyBySourcePortId.set(
+      sourcePort.source_port_id,
+      `${componentName}:${referenceSourcePort.source_port_id}`,
+    )
+  }
+  return sourcePortReferenceKeyBySourcePortId
+}
+
+function getSourcePortAliases(sourcePort: CircuitSourcePort): Set<SourcePortAlias> {
+  const sourcePortAliases = new Set<SourcePortAlias>([
+    sourcePort.name,
+    ...(sourcePort.port_hints ?? []),
+  ])
+  if (sourcePort.pin_number !== undefined) {
+    sourcePortAliases.add(String(sourcePort.pin_number))
+    sourcePortAliases.add(`pin${sourcePort.pin_number}`)
+  }
+  return sourcePortAliases
+}
+
+function getSourcePortAliasMatchCount(params: {
+  firstAliases: ReadonlySet<SourcePortAlias>
+  secondAliases: ReadonlySet<SourcePortAlias>
+}): number {
+  let matchCount = 0
+  for (const sourcePortAlias of params.firstAliases) {
+    if (params.secondAliases.has(sourcePortAlias)) {
+      matchCount += 1
+    }
+  }
+  return matchCount
 }
 
 function expectNoRoutingErrors(circuitJson: AnyCircuitElement[]): void {
