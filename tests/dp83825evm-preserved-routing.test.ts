@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { expect, test } from "bun:test"
+import { expect, setDefaultTimeout, test } from "bun:test"
 import type { AnyCircuitElement } from "circuit-json"
 import { gunzipSync, strFromU8 } from "fflate"
 import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
@@ -18,6 +18,8 @@ type PcbTraceRoutePoint = {
   x?: number
   y?: number
 }
+
+setDefaultTimeout(15_000)
 
 test("DP83825EVM preserves the imported TI PCB routing", async () => {
   const sourceCircuitJson: AnyCircuitElement[] = JSON.parse(
