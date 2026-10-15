@@ -10,33 +10,59 @@ type SourceTraceElement = AnyCircuitElement & {
 }
 
 export function getActionableElectricalErrors(params: {
+  baselineImportedErrorSourceNetIds?: ReadonlySet<SourceNetId>
   circuitJson: AnyCircuitElement[]
   electricalErrors: AnyCircuitElement[]
 }): AnyCircuitElement[] {
-  const importedOrPouredSourceNetIds = getImportedOrPouredSourceNetIds(params.circuitJson)
+  const importedOrPouredSourceNetIds = getSourceNetIdsWithImportedCopper(params.circuitJson)
+  for (const sourceNetId of params.baselineImportedErrorSourceNetIds ?? []) {
+    importedOrPouredSourceNetIds.add(sourceNetId)
+  }
   const sourceTracesById = new Map<SourceTraceId, SourceTraceElement>(
     params.circuitJson.filter(isSourceTrace).map((trace) => [trace.source_trace_id, trace]),
   )
 
   return params.electricalErrors.filter((electricalError) => {
-    const sourceTraceId = getErrorSourceTraceId(electricalError)
-    if (!sourceTraceId) return true
-    const sourceNetIds = sourceTraceId.startsWith("source_net_")
-      ? [sourceTraceId]
-      : (sourceTracesById.get(sourceTraceId)?.connected_source_net_ids ?? [])
+    const sourceNetIds = getElectricalErrorSourceNetIds({ electricalError, sourceTracesById })
+    if (sourceNetIds.length === 0) return true
     return !sourceNetIds.some((sourceNetId) => importedOrPouredSourceNetIds.has(sourceNetId))
   })
 }
 
-function getImportedOrPouredSourceNetIds(circuitJson: AnyCircuitElement[]): Set<SourceNetId> {
+export function getImportedSourceNetIdsWithElectricalErrors(params: {
+  circuitJson: AnyCircuitElement[]
+  electricalErrors: AnyCircuitElement[]
+}): Set<SourceNetId> {
+  const importedSourceNetIds = getSourceNetIdsWithImportedCopper(params.circuitJson)
+  const sourceTracesById = new Map<SourceTraceId, SourceTraceElement>(
+    params.circuitJson.filter(isSourceTrace).map((trace) => [trace.source_trace_id, trace]),
+  )
+  return new Set(
+    params.electricalErrors.flatMap((electricalError) =>
+      getElectricalErrorSourceNetIds({ electricalError, sourceTracesById }).filter((sourceNetId) =>
+        importedSourceNetIds.has(sourceNetId),
+      ),
+    ),
+  )
+}
+
+export function getSourceNetIdsWithImportedCopper(
+  circuitJson: AnyCircuitElement[],
+): Set<SourceNetId> {
   const sourceNetIds = new Set<SourceNetId>()
+  const sourceTracesById = new Map<SourceTraceId, SourceTraceElement>(
+    circuitJson.filter(isSourceTrace).map((trace) => [trace.source_trace_id, trace]),
+  )
   for (const element of circuitJson) {
-    if (
-      element.type === "pcb_trace" &&
-      typeof element.source_trace_id === "string" &&
-      element.source_trace_id.startsWith("source_net_")
-    ) {
-      sourceNetIds.add(element.source_trace_id)
+    if (element.type === "pcb_trace" && typeof element.source_trace_id === "string") {
+      if (element.source_trace_id.startsWith("source_net_")) {
+        sourceNetIds.add(element.source_trace_id)
+      } else {
+        for (const sourceNetId of sourceTracesById.get(element.source_trace_id)
+          ?.connected_source_net_ids ?? []) {
+          sourceNetIds.add(sourceNetId)
+        }
+      }
     }
     if (
       element.type === "pcb_copper_pour" &&
@@ -47,6 +73,17 @@ function getImportedOrPouredSourceNetIds(circuitJson: AnyCircuitElement[]): Set<
     }
   }
   return sourceNetIds
+}
+
+function getElectricalErrorSourceNetIds(params: {
+  electricalError: AnyCircuitElement
+  sourceTracesById: ReadonlyMap<SourceTraceId, SourceTraceElement>
+}): SourceNetId[] {
+  const sourceTraceId = getErrorSourceTraceId(params.electricalError)
+  if (!sourceTraceId) return []
+  return sourceTraceId.startsWith("source_net_")
+    ? [sourceTraceId]
+    : (params.sourceTracesById.get(sourceTraceId)?.connected_source_net_ids ?? [])
 }
 
 function getErrorSourceTraceId(error: AnyCircuitElement): SourceTraceId | undefined {

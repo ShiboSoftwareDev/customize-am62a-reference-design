@@ -2,18 +2,11 @@ type ComponentName = string
 type FeatureId = string
 type NetSelector = string
 type PortSelector = string
-type SourceNetId = string
 
 export function createParameterizedBoardSource(params: {
   componentName: string
   featureEntries: Array<readonly [ComponentName, FeatureId]>
-  importedRoutingEndpointUsageBySourceNetId: ReadonlyMap<
-    SourceNetId,
-    {
-      endpointCountByFeatureId: ReadonlyMap<FeatureId, number>
-      requiredEndpointCount: number
-    }
-  >
+  importedRoutingFeatureIds: FeatureId[]
   jsxBody: string
   pouredNetSelectors: ReadonlySet<NetSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
@@ -23,20 +16,7 @@ export function createParameterizedBoardSource(params: {
   const featureIds = [...new Set(params.featureEntries.map(([, featureId]) => featureId))]
   const featureType = featureIds.map((featureId) => JSON.stringify(featureId)).join(" | ")
   const featureMap = JSON.stringify(Object.fromEntries(params.featureEntries), null, 2)
-  const importedRoutingEndpointUsageEntries = [
-    ...params.importedRoutingEndpointUsageBySourceNetId,
-  ].map(([sourceNetId, endpointUsage]) =>
-    JSON.stringify([
-      sourceNetId,
-      {
-        endpointCountByFeatureId: [...endpointUsage.endpointCountByFeatureId],
-        requiredEndpointCount: endpointUsage.requiredEndpointCount,
-      },
-    ]),
-  )
-  const importedRoutingEndpointUsageBySourceNetId = `[
-${importedRoutingEndpointUsageEntries.map((entry) => `  ${entry}`).join(",\n")}
-]`
+  const importedRoutingFeatureIds = JSON.stringify(params.importedRoutingFeatureIds)
   const pouredNetSelectors = JSON.stringify([...params.pouredNetSelectors], null, 2)
   const routablePortSelectors = JSON.stringify([...params.routablePortSelectors], null, 2)
   const teardropPortSelectors = JSON.stringify([...params.teardropPortSelectors], null, 2)
@@ -45,11 +25,7 @@ ${importedRoutingEndpointUsageEntries.map((entry) => `  ${entry}`).join(",\n")}
   return `import { Fragment } from "react"
 import "tscircuit"
 
-type ImportedRoutingEndpointUsage = {
-  endpointCountByFeatureId: readonly (readonly [string, number])[]
-  requiredEndpointCount: number
-}
-type SourceNetId = string
+type FeatureId = string
 
 export type ${params.componentName}FeatureId = ${featureType || "never"}
 
@@ -60,10 +36,7 @@ export type ${params.componentName}Props = {
 const featureIdByComponentName: Partial<Record<string, ${params.componentName}FeatureId>> =
   ${featureMap}
 
-const importedRoutingEndpointUsageBySourceNetId = new Map<
-  SourceNetId,
-  ImportedRoutingEndpointUsage
->(${importedRoutingEndpointUsageBySourceNetId})
+const importedRoutingFeatureIds: readonly FeatureId[] = ${importedRoutingFeatureIds}
 const pouredNetSelectors = new Set<string>(${pouredNetSelectors})
 const routablePortSelectors = new Set<string>(${routablePortSelectors})
 const teardropPortSelectors = new Set<string>(${teardropPortSelectors})
@@ -77,17 +50,24 @@ function isComponentIncluded(params: {
   return featureId === undefined || !params.removedFeatureIds.has(featureId)
 }
 
-function isImportedRoutingIncluded(params: {
-  removedFeatureIds: ReadonlySet<string>
-  sourceNetId: SourceNetId
-}): boolean {
-  const endpointUsage = importedRoutingEndpointUsageBySourceNetId.get(params.sourceNetId)
-  if (!endpointUsage) return true
-  let remainingEndpointCount = endpointUsage.requiredEndpointCount
-  for (const [featureId, endpointCount] of endpointUsage.endpointCountByFeatureId) {
-    if (!params.removedFeatureIds.has(featureId)) remainingEndpointCount += endpointCount
+function getRemovedFeatureCombinationIndex(
+  removedFeatureIds: ReadonlySet<string>,
+): number {
+  let removalCombinationIndex = 0
+  for (const [featureIndex, featureId] of importedRoutingFeatureIds.entries()) {
+    if (removedFeatureIds.has(featureId)) {
+      removalCombinationIndex |= 1 << featureIndex
+    }
   }
-  return remainingEndpointCount >= 2
+  return removalCombinationIndex
+}
+
+function isImportedRoutingElementIncluded(params: {
+  inclusionMask: bigint
+  removedFeatureCombinationIndex: number
+}): boolean {
+  const inclusionBit = 1n << BigInt(params.removedFeatureCombinationIndex)
+  return (params.inclusionMask & inclusionBit) !== 0n
 }
 
 function ParameterizedTrace(props: {
@@ -146,6 +126,7 @@ function ParameterizedTrace(props: {
 
 export function ${params.componentName}(props: ${params.componentName}Props) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
+  const removedFeatureCombinationIndex = getRemovedFeatureCombinationIndex(removedFeatureIds)
   return (${params.jsxBody})
 }
 

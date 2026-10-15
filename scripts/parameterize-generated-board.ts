@@ -12,10 +12,14 @@ import { createParameterizedBoardSource } from "./generated-board-source/create-
 import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
 import type {
   ImportedPcbTraceMetadata,
-  ImportedRoutingEndpointUsage,
   ImportedRoutingMetadata,
-  PcbTraceRouteKey,
 } from "./ti-evm-reference-generator/get-imported-routing-metadata"
+import {
+  getPcbViaKey,
+  type ImportedRoutingInclusionMask,
+  type PcbTraceRouteKey,
+  type PcbViaKey,
+} from "./ti-evm-reference-generator/get-imported-routing-inclusion-masks"
 
 type ComponentName = string
 type FeatureId = string
@@ -77,19 +81,18 @@ export function parameterizeGeneratedBoard(params: {
     replacements,
     sourceFile,
   })
-  const pouredSourceNetIds = getPouredSourceNetIds({
-    pouredNetSelectors,
-    sourceNetIdByName,
-  })
-  const importedRoutingEndpointUsageBySourceNetId = getImportedRoutingEndpointUsageBySourceNetId({
-    importedRoutingMetadata: params.importedRoutingMetadata,
-    pouredSourceNetIds,
-  })
   addImportedRoutingReplacements({
     boardElement,
     generatedSource,
     importedRoutingMetadata: params.importedRoutingMetadata,
     renamedNets,
+    replacements,
+    sourceNetIdByName,
+    sourceFile,
+  })
+  addImportedRoutingBridgeVias({
+    boardElement,
+    importedRoutingMetadata: params.importedRoutingMetadata,
     replacements,
     sourceNetIdByName,
     sourceFile,
@@ -163,7 +166,7 @@ export function parameterizeGeneratedBoard(params: {
     source: createParameterizedBoardSource({
       componentName: params.componentName,
       featureEntries,
-      importedRoutingEndpointUsageBySourceNetId,
+      importedRoutingFeatureIds: params.importedRoutingMetadata?.featureIds ?? [],
       jsxBody,
       pouredNetSelectors,
       routablePortSelectors: params.routablePortSelectors,
@@ -171,6 +174,80 @@ export function parameterizeGeneratedBoard(params: {
       viaTeardropPortSelectors: params.viaTeardropPortSelectors,
     }),
   }
+}
+
+function addImportedRoutingBridgeVias(params: {
+  boardElement: ts.JsxElement
+  importedRoutingMetadata: ImportedRoutingMetadata | undefined
+  replacements: SourceReplacement[]
+  sourceNetIdByName: ReadonlyMap<NetName, string>
+  sourceFile: ts.SourceFile
+}): void {
+  if (!params.importedRoutingMetadata?.bridgeVias.length) return
+  const boardCenter = {
+    x: getNumericJsxAttribute({
+      attributes: params.boardElement.openingElement.attributes,
+      name: "pcbX",
+      sourceFile: params.sourceFile,
+    }),
+    y: getNumericJsxAttribute({
+      attributes: params.boardElement.openingElement.attributes,
+      name: "pcbY",
+      sourceFile: params.sourceFile,
+    }),
+  }
+  const boardCenterX = boardCenter.x
+  const boardCenterY = boardCenter.y
+  if (boardCenterX === undefined || boardCenterY === undefined) {
+    throw new Error("Generated board is missing a numeric PCB center")
+  }
+  const netNameBySourceNetId = new Map(
+    [...params.sourceNetIdByName].map(([netName, sourceNetId]) => [sourceNetId, netName]),
+  )
+  const bridgeViaSource = params.importedRoutingMetadata.bridgeVias
+    .flatMap((bridgeVia) => {
+      const netName = netNameBySourceNetId.get(bridgeVia.sourceNetId)
+      if (!netName) return []
+      const viaSource = `<via pcbX=${JSON.stringify(`${bridgeVia.x - boardCenterX}mm`)} pcbY=${JSON.stringify(`${bridgeVia.y - boardCenterY}mm`)} holeDiameter=${JSON.stringify(`${bridgeVia.holeDiameter}mm`)} outerDiameter=${JSON.stringify(`${bridgeVia.outerDiameter}mm`)} fromLayer="top" toLayer="bottom" connectsTo={${JSON.stringify(`net.${netName}`)}} />`
+      return [
+        wrapImportedRoutingElement({
+          elementSource: viaSource,
+          inclusionMask: bridgeVia.inclusionMask,
+        }),
+      ]
+    })
+    .join("\n")
+  if (!bridgeViaSource) return
+  const insertionPosition = params.boardElement.closingElement.getStart(params.sourceFile)
+  params.replacements.push({
+    start: insertionPosition,
+    end: insertionPosition,
+    text: `${bridgeViaSource}\n`,
+  })
+}
+
+function getNumericJsxAttribute(params: {
+  attributes: ts.JsxAttributes
+  name: string
+  sourceFile: ts.SourceFile
+}): number | undefined {
+  const attribute = params.attributes.properties.find(
+    (candidate) =>
+      ts.isJsxAttribute(candidate) && candidate.name.getText(params.sourceFile) === params.name,
+  )
+  if (!attribute || !ts.isJsxAttribute(attribute) || !attribute.initializer) return undefined
+  if (!ts.isJsxExpression(attribute.initializer)) return undefined
+  const expression = attribute.initializer.expression
+  if (!expression) return undefined
+  if (ts.isNumericLiteral(expression)) return Number(expression.text)
+  if (
+    ts.isPrefixUnaryExpression(expression) &&
+    expression.operator === ts.SyntaxKind.MinusToken &&
+    ts.isNumericLiteral(expression.operand)
+  ) {
+    return -Number(expression.operand.text)
+  }
+  return undefined
 }
 
 function addImportedRoutingReplacements(params: {
@@ -210,6 +287,7 @@ function visitImportedRoutingNode(params: {
           generatedSource: params.generatedSource,
           replacements: params.replacements,
           sourceFile: params.sourceFile,
+          inclusionMask: metadata.inclusionMask,
           sourceNetId: metadata.sourceNetId,
         })
         return
@@ -223,6 +301,7 @@ function visitImportedRoutingNode(params: {
         replacements: params.replacements,
         sourceNetIdByName: params.sourceNetIdByName,
         sourceFile: params.sourceFile,
+        metadataByKey: params.importedRoutingMetadata.viaMetadataByKey,
       })
       return
     }
@@ -279,6 +358,7 @@ function getGeneratedSourceNetIds(params: {
 function addImportedPcbTraceReplacement(params: {
   element: ts.JsxSelfClosingElement
   generatedSource: string
+  inclusionMask: ImportedRoutingInclusionMask
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
   sourceNetId: string
@@ -296,7 +376,7 @@ function addImportedPcbTraceReplacement(params: {
     end: params.element.getEnd(),
     text: wrapImportedRoutingElement({
       elementSource: attributedElement,
-      sourceNetId: params.sourceNetId,
+      inclusionMask: params.inclusionMask,
     }),
   })
 }
@@ -304,6 +384,10 @@ function addImportedPcbTraceReplacement(params: {
 function addImportedViaReplacement(params: {
   element: ts.JsxSelfClosingElement
   generatedSource: string
+  metadataByKey: ReadonlyMap<
+    PcbViaKey,
+    { inclusionMask: ImportedRoutingInclusionMask; sourceNetId: string }
+  >
   renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
   sourceNetIdByName: ReadonlyMap<NetName, string>
@@ -324,20 +408,36 @@ function addImportedViaReplacement(params: {
   const emittedElement = renamedNet
     ? originalElement.replace(JSON.stringify(connectsTo), JSON.stringify(`net.${renamedNet}`))
     : originalElement
+  const pcbX = getMillimeterAttribute({
+    element: params.element,
+    name: "pcbX",
+    sourceFile: params.sourceFile,
+  })
+  const pcbY = getMillimeterAttribute({
+    element: params.element,
+    name: "pcbY",
+    sourceFile: params.sourceFile,
+  })
+  const metadata =
+    sourceNetId !== undefined && pcbX !== undefined && pcbY !== undefined
+      ? params.metadataByKey.get(getPcbViaKey({ sourceNetId, x: pcbX, y: pcbY }))
+      : undefined
+  const inclusionMask = metadata?.inclusionMask
   params.replacements.push({
     start: params.element.getStart(params.sourceFile),
     end: params.element.getEnd(),
-    text: sourceNetId
-      ? wrapImportedRoutingElement({ elementSource: emittedElement, sourceNetId })
-      : emittedElement,
+    text:
+      inclusionMask !== undefined
+        ? wrapImportedRoutingElement({ elementSource: emittedElement, inclusionMask })
+        : emittedElement,
   })
 }
 
 function wrapImportedRoutingElement(params: {
   elementSource: string
-  sourceNetId: string
+  inclusionMask: ImportedRoutingInclusionMask
 }): string {
-  return `{isImportedRoutingIncluded({ sourceNetId: ${JSON.stringify(params.sourceNetId)}, removedFeatureIds }) && (${params.elementSource})}`
+  return `{isImportedRoutingElementIncluded({ inclusionMask: ${params.inclusionMask}n, removedFeatureCombinationIndex }) && (${params.elementSource})}`
 }
 
 function updateNetRoutingAttributes(params: {
@@ -382,37 +482,15 @@ function updateNetRoutingAttributes(params: {
   })
 }
 
-function getPouredSourceNetIds(params: {
-  pouredNetSelectors: ReadonlySet<NetSelector>
-  sourceNetIdByName: ReadonlyMap<NetName, string>
-}): Set<string> {
-  const pouredSourceNetIds = new Set<string>()
-  for (const [netName, sourceNetId] of params.sourceNetIdByName) {
-    if (params.pouredNetSelectors.has(`net.${netName}`)) pouredSourceNetIds.add(sourceNetId)
-  }
-  return pouredSourceNetIds
-}
-
-function getImportedRoutingEndpointUsageBySourceNetId(params: {
-  importedRoutingMetadata: ImportedRoutingMetadata | undefined
-  pouredSourceNetIds: ReadonlySet<string>
-}): Map<string, ImportedRoutingEndpointUsage> {
-  const endpointUsageBySourceNetId = new Map<string, ImportedRoutingEndpointUsage>()
-  if (!params.importedRoutingMetadata) return endpointUsageBySourceNetId
-  for (const sourceNetId of params.importedRoutingMetadata.sourceNetIdsWithImportedRouting) {
-    const endpointUsage = params.pouredSourceNetIds.has(sourceNetId)
-      ? createAlwaysIncludedEndpointUsage()
-      : params.importedRoutingMetadata.endpointUsageBySourceNetId.get(sourceNetId)
-    if (endpointUsage) endpointUsageBySourceNetId.set(sourceNetId, endpointUsage)
-  }
-  return endpointUsageBySourceNetId
-}
-
-function createAlwaysIncludedEndpointUsage(): ImportedRoutingEndpointUsage {
-  return {
-    endpointCountByFeatureId: new Map(),
-    requiredEndpointCount: 2,
-  }
+function getMillimeterAttribute(params: {
+  element: ts.JsxSelfClosingElement
+  name: string
+  sourceFile: ts.SourceFile
+}): number | undefined {
+  const measurement = getStringAttribute(params)
+  if (!measurement?.endsWith("mm")) return undefined
+  const millimeters = Number.parseFloat(measurement.slice(0, -2))
+  return Number.isFinite(millimeters) ? millimeters : undefined
 }
 
 function removeGeneratedCopperPours(params: { source: string }): string {

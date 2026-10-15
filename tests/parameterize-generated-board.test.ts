@@ -27,27 +27,23 @@ export default ExampleBoard`
     featureIdByComponentName: new Map([["TP1", "measurement"]]),
     generatedSource,
     importedRoutingMetadata: {
-      endpointUsageBySourceNetId: new Map([
-        [
-          "source_net_0",
-          { endpointCountByFeatureId: new Map([["measurement", 1]]), requiredEndpointCount: 1 },
-        ],
-        [
-          "source_net_2",
-          { endpointCountByFeatureId: new Map([["measurement", 1]]), requiredEndpointCount: 1 },
-        ],
-      ]),
+      bridgeVias: [],
+      featureIds: ["measurement"],
       pcbTraceMetadataByRoute: new Map([
         [
           '[{"route_type":"wire","x":0,"y":0,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":0,"width":0.3,"layer":"top"}]',
-          { sourceNetId: "source_net_0" },
+          { inclusionMask: 1n, sourceNetId: "source_net_0" },
         ],
         [
           '[{"route_type":"wire","x":0,"y":1,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":1,"width":0.3,"layer":"top"}]',
-          { sourceNetId: "source_net_2" },
+          { inclusionMask: 1n, sourceNetId: "source_net_2" },
         ],
       ]),
       sourceNetIdsWithImportedRouting: new Set(["source_net_0", "source_net_2"]),
+      viaMetadataByKey: new Map([
+        ['["source_net_0",0,0]', { inclusionMask: 1n, sourceNetId: "source_net_0" }],
+        ['["source_net_2",0,1]', { inclusionMask: 1n, sourceNetId: "source_net_2" }],
+      ]),
     },
     portSelectorReplacements: new Map([
       [".TP1 > .imported_pcb_port_1", ".TP1 > .pin1"],
@@ -93,11 +89,11 @@ export default ExampleBoard`
   expect(result.source).toContain('net[name=\\"NET_TP1\\"]')
   expect(result.source).toContain('source_trace_id: "source_net_0"')
   expect(result.source).toContain('source_trace_id: "source_net_2"')
-  expect(result.source).toContain("importedRoutingEndpointUsageBySourceNetId")
-  expect(result.source).toContain('sourceNetId: "source_net_2"')
-  expect(result.source).toContain('"requiredEndpointCount":2')
-  expect(result.source).toContain('"requiredEndpointCount":1')
-  expect(result.source).toContain("isImportedRoutingIncluded")
+  expect(result.source).toContain(
+    'const importedRoutingFeatureIds: readonly FeatureId[] = ["measurement"]',
+  )
+  expect(result.source).toContain("inclusionMask: 1n")
+  expect(result.source).toContain("isImportedRoutingElementIncluded")
   expect(result.source).toContain('connectsTo={"net.NET_TP1"}')
   expect(result.source).not.toContain("<pcbcopperpour")
 })

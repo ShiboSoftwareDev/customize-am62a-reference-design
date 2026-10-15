@@ -1,8 +1,14 @@
 import type { AnyCircuitElement } from "circuit-json"
-import type { ComponentName, FeatureId, SourceComponentId, SourcePortId } from "./types"
+import type { ComponentName, FeatureId, SourceComponentId } from "./types"
+import {
+  type GeneratedSourceNetId,
+  getImportedRoutingInclusionMasks,
+  getPcbViaKey,
+  type ImportedRoutingInclusionMask,
+  type PcbTraceRouteKey,
+  type PcbViaKey,
+} from "./get-imported-routing-inclusion-masks"
 
-export type PcbTraceRouteKey = string
-type GeneratedSourceNetId = string
 type SourceNetId = string
 type SourceTraceId = string
 
@@ -13,7 +19,6 @@ type SourceNetElement = AnyCircuitElement & {
 
 type SourceTraceElement = AnyCircuitElement & {
   connected_source_net_ids?: SourceNetId[]
-  connected_source_port_ids?: SourcePortId[]
   source_trace_id: SourceTraceId
   type: "source_trace"
 }
@@ -24,36 +29,43 @@ type SourceComponentElement = AnyCircuitElement & {
   type: "source_component"
 }
 
-type SourcePortElement = AnyCircuitElement & {
-  source_component_id: SourceComponentId
-  source_port_id: SourcePortId
-  type: "source_port"
-}
-
 type PcbTraceElement = AnyCircuitElement & {
   route: unknown[]
   source_trace_id: SourceTraceId | SourceNetId
   type: "pcb_trace"
 }
 
+type PcbViaElement = AnyCircuitElement & {
+  source_net_id?: SourceNetId
+  source_trace_id?: SourceTraceId
+  type: "pcb_via"
+  x: number
+  y: number
+}
+
 export type ImportedPcbTraceMetadata = {
+  inclusionMask: ImportedRoutingInclusionMask
   sourceNetId: GeneratedSourceNetId
 }
 
-export type ImportedRoutingEndpointUsage = {
-  endpointCountByFeatureId: ReadonlyMap<FeatureId, number>
-  requiredEndpointCount: number
+export type ImportedPcbViaMetadata = {
+  inclusionMask: ImportedRoutingInclusionMask
+  sourceNetId: GeneratedSourceNetId
 }
 
-type MutableImportedRoutingEndpointUsage = {
-  endpointCountByFeatureId: Map<FeatureId, number>
-  requiredEndpointCount: number
+export type ImportedRoutingBridgeViaMetadata = ImportedPcbViaMetadata & {
+  holeDiameter: number
+  outerDiameter: number
+  x: number
+  y: number
 }
 
 export type ImportedRoutingMetadata = {
-  endpointUsageBySourceNetId: ReadonlyMap<GeneratedSourceNetId, ImportedRoutingEndpointUsage>
+  bridgeVias: ImportedRoutingBridgeViaMetadata[]
+  featureIds: FeatureId[]
   pcbTraceMetadataByRoute: ReadonlyMap<PcbTraceRouteKey, ImportedPcbTraceMetadata>
   sourceNetIdsWithImportedRouting: ReadonlySet<GeneratedSourceNetId>
+  viaMetadataByKey: ReadonlyMap<PcbViaKey, ImportedPcbViaMetadata>
 }
 
 export function getImportedRoutingMetadata(params: {
@@ -70,12 +82,24 @@ export function getImportedRoutingMetadata(params: {
     circuitJson: params.circuitJson,
     sourceNetsById,
   })
-  const endpointUsageBySourceNetId = getEndpointUsageBySourceNetId({
+  const sourceNetIdBySourceTraceId = new Map<SourceTraceId, SourceNetId>(
+    [...sourceTracesById.values()].flatMap((sourceTrace) => {
+      const sourceNetId = sourceTrace.connected_source_net_ids?.[0]
+      return sourceNetId ? [[sourceTrace.source_trace_id, sourceNetId]] : []
+    }),
+  )
+  const featureIdBySourceComponentId = getFeatureIdBySourceComponentId({
     circuitJson: params.circuitJson,
     featureIdByComponentName: params.featureIdByComponentName,
+  })
+  const inclusionMasks = getImportedRoutingInclusionMasks({
+    circuitJson: params.circuitJson,
+    featureIdBySourceComponentId,
     generatedSourceNetIdBySourceNetId,
+    sourceNetIdBySourceTraceId,
   })
   const pcbTraceMetadataByRoute = new Map<PcbTraceRouteKey, ImportedPcbTraceMetadata>()
+  const viaMetadataByKey = new Map<PcbViaKey, ImportedPcbViaMetadata>()
 
   for (const pcbTrace of params.circuitJson.filter(isPcbTrace)) {
     const sourceNetId = getSourceNetId({ pcbTrace, sourceTracesById })
@@ -90,64 +114,65 @@ export function getImportedRoutingMetadata(params: {
         `Imported PCB route belongs to both ${existingMetadata.sourceNetId} and ${generatedSourceNetId}`,
       )
     }
-    pcbTraceMetadataByRoute.set(routeKey, { sourceNetId: generatedSourceNetId })
+    pcbTraceMetadataByRoute.set(routeKey, {
+      inclusionMask: inclusionMasks.traceInclusionMaskByRouteKey.get(routeKey) ?? 1n,
+      sourceNetId: generatedSourceNetId,
+    })
+  }
+
+  for (const pcbVia of params.circuitJson.filter(isPcbVia)) {
+    const sourceNetId = getViaSourceNetId({ pcbVia, sourceTracesById })
+    const generatedSourceNetId = sourceNetId
+      ? generatedSourceNetIdBySourceNetId.get(sourceNetId)
+      : undefined
+    if (!generatedSourceNetId) continue
+    const viaKey = getPcbViaKey({
+      sourceNetId: generatedSourceNetId,
+      x: pcbVia.x,
+      y: pcbVia.y,
+    })
+    viaMetadataByKey.set(viaKey, {
+      inclusionMask: inclusionMasks.viaInclusionMaskByViaKey.get(viaKey) ?? 1n,
+      sourceNetId: generatedSourceNetId,
+    })
   }
 
   return {
-    endpointUsageBySourceNetId,
+    bridgeVias: [...inclusionMasks.bridgeViaByViaKey].flatMap(([viaKey, bridgeVia]) => {
+      const generatedSourceNetId = generatedSourceNetIdBySourceNetId.get(bridgeVia.sourceNetId)
+      const inclusionMask = inclusionMasks.bridgeViaInclusionMaskByViaKey.get(viaKey)
+      return generatedSourceNetId && inclusionMask !== undefined
+        ? [
+            {
+              holeDiameter: bridgeVia.holeDiameter,
+              inclusionMask,
+              outerDiameter: bridgeVia.outerDiameter,
+              sourceNetId: generatedSourceNetId,
+              x: bridgeVia.x,
+              y: bridgeVia.y,
+            },
+          ]
+        : []
+    }),
+    featureIds: inclusionMasks.featureIds,
     pcbTraceMetadataByRoute,
     sourceNetIdsWithImportedRouting: new Set(
       [...pcbTraceMetadataByRoute.values()].map(({ sourceNetId }) => sourceNetId),
     ),
+    viaMetadataByKey,
   }
 }
 
-function getEndpointUsageBySourceNetId(params: {
+function getFeatureIdBySourceComponentId(params: {
   circuitJson: AnyCircuitElement[]
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
-  generatedSourceNetIdBySourceNetId: ReadonlyMap<SourceNetId, GeneratedSourceNetId>
-}): Map<GeneratedSourceNetId, ImportedRoutingEndpointUsage> {
-  const sourceComponentsById = new Map<SourceComponentId, SourceComponentElement>(
-    params.circuitJson
-      .filter(isSourceComponent)
-      .map((component) => [component.source_component_id, component]),
+}): Map<SourceComponentId, FeatureId> {
+  return new Map(
+    params.circuitJson.filter(isSourceComponent).flatMap((sourceComponent) => {
+      const featureId = params.featureIdByComponentName.get(sourceComponent.name)
+      return featureId ? [[sourceComponent.source_component_id, featureId]] : []
+    }),
   )
-  const sourcePortsById = new Map<SourcePortId, SourcePortElement>(
-    params.circuitJson.filter(isSourcePort).map((port) => [port.source_port_id, port]),
-  )
-  const endpointUsageBySourceNetId = new Map<
-    GeneratedSourceNetId,
-    MutableImportedRoutingEndpointUsage
-  >()
-
-  for (const sourceTrace of params.circuitJson.filter(isSourceTrace)) {
-    for (const sourceNetId of sourceTrace.connected_source_net_ids ?? []) {
-      const generatedSourceNetId = params.generatedSourceNetIdBySourceNetId.get(sourceNetId)
-      if (!generatedSourceNetId) continue
-      const endpointUsage = endpointUsageBySourceNetId.get(generatedSourceNetId) ?? {
-        endpointCountByFeatureId: new Map<FeatureId, number>(),
-        requiredEndpointCount: 0,
-      }
-      for (const sourcePortId of sourceTrace.connected_source_port_ids ?? []) {
-        const sourcePort = sourcePortsById.get(sourcePortId)
-        const componentName = sourcePort
-          ? sourceComponentsById.get(sourcePort.source_component_id)?.name
-          : undefined
-        const featureId = componentName
-          ? params.featureIdByComponentName.get(componentName)
-          : undefined
-        if (!featureId) {
-          endpointUsage.requiredEndpointCount += 1
-          continue
-        }
-        const currentEndpointCount = endpointUsage.endpointCountByFeatureId.get(featureId) ?? 0
-        endpointUsage.endpointCountByFeatureId.set(featureId, currentEndpointCount + 1)
-      }
-      endpointUsageBySourceNetId.set(generatedSourceNetId, endpointUsage)
-    }
-  }
-
-  return endpointUsageBySourceNetId
 }
 
 function getGeneratedSourceNetIds(params: {
@@ -272,6 +297,16 @@ function getSourceNetId(params: {
   )
 }
 
+function getViaSourceNetId(params: {
+  pcbVia: PcbViaElement
+  sourceTracesById: ReadonlyMap<SourceTraceId, SourceTraceElement>
+}): SourceNetId | undefined {
+  if (params.pcbVia.source_net_id) return params.pcbVia.source_net_id
+  return params.pcbVia.source_trace_id
+    ? params.sourceTracesById.get(params.pcbVia.source_trace_id)?.connected_source_net_ids?.[0]
+    : undefined
+}
+
 function isSourceNet(element: AnyCircuitElement): element is SourceNetElement {
   return element.type === "source_net" && typeof element.source_net_id === "string"
 }
@@ -284,14 +319,6 @@ function isSourceComponent(element: AnyCircuitElement): element is SourceCompone
   )
 }
 
-function isSourcePort(element: AnyCircuitElement): element is SourcePortElement {
-  return (
-    element.type === "source_port" &&
-    typeof element.source_component_id === "string" &&
-    typeof element.source_port_id === "string"
-  )
-}
-
 function isSourceTrace(element: AnyCircuitElement): element is SourceTraceElement {
   return element.type === "source_trace" && typeof element.source_trace_id === "string"
 }
@@ -301,5 +328,11 @@ function isPcbTrace(element: AnyCircuitElement): element is PcbTraceElement {
     element.type === "pcb_trace" &&
     typeof element.source_trace_id === "string" &&
     Array.isArray(element.route)
+  )
+}
+
+function isPcbVia(element: AnyCircuitElement): element is PcbViaElement {
+  return (
+    element.type === "pcb_via" && typeof element.x === "number" && typeof element.y === "number"
   )
 }
