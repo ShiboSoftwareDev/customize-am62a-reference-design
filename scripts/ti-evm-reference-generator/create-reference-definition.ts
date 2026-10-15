@@ -77,8 +77,8 @@ export async function createReferenceDefinition(
       document: converterPcbDocument,
       options: {
         includeCopperAreas: true,
-        includeTraces: false,
-        includeVias: false,
+        includeTraces: true,
+        includeVias: true,
         project: parsedProject,
         resolveEmbeddedModelUrl: ({ embeddedModel }) => {
           referencedEmbeddedModelIndexes.add(embeddedModel.index)

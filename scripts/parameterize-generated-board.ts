@@ -10,6 +10,11 @@ import {
 } from "./generated-board-source/ast-helpers"
 import { createParameterizedBoardSource } from "./generated-board-source/create-parameterized-board-source"
 import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
+import type {
+  ImportedPcbTraceMetadata,
+  ImportedRoutingMetadata,
+  PcbTraceRouteKey,
+} from "./ti-evm-reference-generator/get-imported-routing-metadata"
 
 type ComponentName = string
 type FeatureId = string
@@ -26,6 +31,7 @@ export function parameterizeGeneratedBoard(params: {
   componentName: string
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
+  importedRoutingMetadata?: ImportedRoutingMetadata
   portSelectorReplacements: ReadonlyMap<PortSelector, PortSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
   supportedCopperPours?: readonly SupportedCopperPour[]
@@ -58,9 +64,22 @@ export function parameterizeGeneratedBoard(params: {
     replacements,
     sourceFile,
   })
+  const sourceNetIdByName = getGeneratedSourceNetIds({
+    boardElement,
+    renamedNets,
+    sourceFile,
+  })
   const pouredNetSelectors = addSupportedCopperPours({
     boardElement,
     copperPours: params.supportedCopperPours ?? [],
+    renamedNets,
+    replacements,
+    sourceFile,
+  })
+  addImportedRoutingReplacements({
+    boardElement,
+    generatedSource,
+    importedRoutingMetadata: params.importedRoutingMetadata,
     renamedNets,
     replacements,
     sourceFile,
@@ -100,9 +119,13 @@ export function parameterizeGeneratedBoard(params: {
       continue
     }
     if (tagName === "net") {
-      removeNetConnectsToAttribute({
+      updateNetRoutingAttributes({
+        importedRoutingMetadata: params.importedRoutingMetadata,
         netElement: child,
+        pouredNetSelectors,
         replacements,
+        renamedNets,
+        sourceNetIdByName,
         sourceFile,
       })
     }
@@ -139,9 +162,167 @@ export function parameterizeGeneratedBoard(params: {
   }
 }
 
-function removeNetConnectsToAttribute(params: {
-  netElement: ts.JsxSelfClosingElement
+function addImportedRoutingReplacements(params: {
+  boardElement: ts.JsxElement
+  generatedSource: string
+  importedRoutingMetadata: ImportedRoutingMetadata | undefined
+  renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  const importedRoutingMetadata = params.importedRoutingMetadata
+  if (!importedRoutingMetadata) return
+  visitImportedRoutingNode({ ...params, importedRoutingMetadata, node: params.boardElement })
+}
+
+function visitImportedRoutingNode(params: {
+  generatedSource: string
+  importedRoutingMetadata: ImportedRoutingMetadata
+  node: ts.Node
+  renamedNets: ReadonlyMap<NetName, NetName>
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  if (ts.isJsxSelfClosingElement(params.node)) {
+    const tagName = params.node.tagName.getText(params.sourceFile)
+    if (tagName === "pcbtrace") {
+      const metadata = getPcbTraceMetadata({
+        element: params.node,
+        metadataByRoute: params.importedRoutingMetadata.pcbTraceMetadataByRoute,
+        sourceFile: params.sourceFile,
+      })
+      if (metadata) {
+        addImportedPcbTraceReplacement({
+          element: params.node,
+          generatedSource: params.generatedSource,
+          replacements: params.replacements,
+          sourceFile: params.sourceFile,
+          sourceNetId: metadata.sourceNetId,
+        })
+        return
+      }
+    }
+    if (tagName === "via") {
+      addImportedViaReplacement({
+        element: params.node,
+        generatedSource: params.generatedSource,
+        renamedNets: params.renamedNets,
+        replacements: params.replacements,
+        sourceFile: params.sourceFile,
+      })
+      return
+    }
+  }
+  ts.forEachChild(params.node, (childNode) =>
+    visitImportedRoutingNode({ ...params, node: childNode }),
+  )
+}
+
+function getPcbTraceMetadata(params: {
+  element: ts.JsxSelfClosingElement
+  metadataByRoute: ReadonlyMap<PcbTraceRouteKey, ImportedPcbTraceMetadata>
+  sourceFile: ts.SourceFile
+}): ImportedPcbTraceMetadata | undefined {
+  const routeAttribute = getAttribute({
+    element: params.element,
+    name: "route",
+    sourceFile: params.sourceFile,
+  })
+  if (!routeAttribute?.initializer || !ts.isJsxExpression(routeAttribute.initializer))
+    return undefined
+  const routeExpression = routeAttribute.initializer.expression
+  return routeExpression
+    ? params.metadataByRoute.get(routeExpression.getText(params.sourceFile))
+    : undefined
+}
+
+function getGeneratedSourceNetIds(params: {
+  boardElement: ts.JsxElement
+  renamedNets: ReadonlyMap<NetName, NetName>
+  sourceFile: ts.SourceFile
+}): Map<NetName, string> {
+  const sourceNetIdByName = new Map<NetName, string>()
+  let sourceNetIndex = 0
+  for (const child of params.boardElement.children) {
+    if (!ts.isJsxSelfClosingElement(child) || child.tagName.getText(params.sourceFile) !== "net") {
+      continue
+    }
+    const netName = getStringAttribute({
+      element: child,
+      name: "name",
+      sourceFile: params.sourceFile,
+    })
+    if (!netName) continue
+    const sourceNetId = `source_net_${sourceNetIndex}`
+    sourceNetIdByName.set(netName, sourceNetId)
+    const emittedNetName = params.renamedNets.get(netName)
+    if (emittedNetName) sourceNetIdByName.set(emittedNetName, sourceNetId)
+    sourceNetIndex += 1
+  }
+  return sourceNetIdByName
+}
+
+function addImportedPcbTraceReplacement(params: {
+  element: ts.JsxSelfClosingElement
+  generatedSource: string
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+  sourceNetId: string
+}): void {
+  const originalElement = params.generatedSource.slice(
+    params.element.getStart(params.sourceFile),
+    params.element.getEnd(),
+  )
+  const attributedElement = originalElement.replace(
+    /^<pcbtrace/u,
+    `<pcbtrace {...{ source_trace_id: ${JSON.stringify(params.sourceNetId)} }} `,
+  )
+  params.replacements.push({
+    start: params.element.getStart(params.sourceFile),
+    end: params.element.getEnd(),
+    text: wrapImportedRoutingElement({ elementSource: attributedElement }),
+  })
+}
+
+function addImportedViaReplacement(params: {
+  element: ts.JsxSelfClosingElement
+  generatedSource: string
+  renamedNets: ReadonlyMap<NetName, NetName>
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  const connectsTo = getStringAttribute({
+    element: params.element,
+    name: "connectsTo",
+    sourceFile: params.sourceFile,
+  })
+  const netName = connectsTo?.startsWith("net.") ? connectsTo.slice("net.".length) : undefined
+  const renamedNet = netName ? params.renamedNets.get(netName) : undefined
+  const originalElement = params.generatedSource.slice(
+    params.element.getStart(params.sourceFile),
+    params.element.getEnd(),
+  )
+  const emittedElement = renamedNet
+    ? originalElement.replace(JSON.stringify(connectsTo), JSON.stringify(`net.${renamedNet}`))
+    : originalElement
+  params.replacements.push({
+    start: params.element.getStart(params.sourceFile),
+    end: params.element.getEnd(),
+    text: wrapImportedRoutingElement({ elementSource: emittedElement }),
+  })
+}
+
+function wrapImportedRoutingElement(params: { elementSource: string }): string {
+  return `{removedFeatureIds.size === 0 && (${params.elementSource})}`
+}
+
+function updateNetRoutingAttributes(params: {
+  importedRoutingMetadata: ImportedRoutingMetadata | undefined
+  netElement: ts.JsxSelfClosingElement
+  pouredNetSelectors: ReadonlySet<NetSelector>
+  replacements: SourceReplacement[]
+  renamedNets: ReadonlyMap<NetName, NetName>
+  sourceNetIdByName: ReadonlyMap<NetName, string>
   sourceFile: ts.SourceFile
 }): void {
   const connectsToAttribute = getAttribute({
@@ -149,11 +330,31 @@ function removeNetConnectsToAttribute(params: {
     name: "connectsTo",
     sourceFile: params.sourceFile,
   })
-  if (!connectsToAttribute) return
+  if (connectsToAttribute) {
+    params.replacements.push({
+      start: connectsToAttribute.getFullStart(),
+      end: connectsToAttribute.getEnd(),
+      text: "",
+    })
+  }
+
+  const netName = getStringAttribute({
+    element: params.netElement,
+    name: "name",
+    sourceFile: params.sourceFile,
+  })
+  if (!netName || !params.importedRoutingMetadata) return
+  const emittedNetName = params.renamedNets.get(netName) ?? netName
+  const sourceNetId = params.sourceNetIdByName.get(netName)
+  const hasImportedRouting = sourceNetId
+    ? params.importedRoutingMetadata.sourceNetIdsWithImportedRouting.has(sourceNetId)
+    : false
+  const hasCopperPour = params.pouredNetSelectors.has(`net.${emittedNetName}`)
+  if (hasImportedRouting || hasCopperPour) return
   params.replacements.push({
-    start: connectsToAttribute.getFullStart(),
-    end: connectsToAttribute.getEnd(),
-    text: "",
+    start: params.netElement.getEnd() - 2,
+    end: params.netElement.getEnd() - 2,
+    text: "routingPhaseIndex={removedFeatureIds.size === 0 ? 0 : undefined} ",
   })
 }
 
@@ -166,22 +367,29 @@ function removeGeneratedCopperPours(params: { source: string }): string {
     ts.ScriptKind.TSX,
   )
   const replacements: SourceReplacement[] = []
-  const visit = (node: ts.Node): void => {
-    if (
-      ts.isJsxSelfClosingElement(node) &&
-      ["copperpour", "pcbcopperpour"].includes(node.tagName.getText(sourceFile))
-    ) {
-      replacements.push({
-        start: node.getFullStart(),
-        end: node.getEnd(),
-        text: "",
-      })
-      return
-    }
-    ts.forEachChild(node, visit)
-  }
-  visit(sourceFile)
+  collectGeneratedCopperPourReplacements({ node: sourceFile, replacements, sourceFile })
   return applyReplacements({ replacements, source: params.source }).replace(/^[ \t]+$/gmu, "")
+}
+
+function collectGeneratedCopperPourReplacements(params: {
+  node: ts.Node
+  replacements: SourceReplacement[]
+  sourceFile: ts.SourceFile
+}): void {
+  if (
+    ts.isJsxSelfClosingElement(params.node) &&
+    ["copperpour", "pcbcopperpour"].includes(params.node.tagName.getText(params.sourceFile))
+  ) {
+    params.replacements.push({
+      start: params.node.getFullStart(),
+      end: params.node.getEnd(),
+      text: "",
+    })
+    return
+  }
+  ts.forEachChild(params.node, (childNode) =>
+    collectGeneratedCopperPourReplacements({ ...params, node: childNode }),
+  )
 }
 
 function addSupportedCopperPours(params: {
@@ -326,7 +534,8 @@ function replaceRoutingAttributes(params: {
       ts.isJsxAttribute(attribute) &&
       attribute.name.getText(params.sourceFile) === "routingDisabled",
   )
-  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x" routeRemaining'
+  const autorouterAttributes =
+    'autorouter="auto" autorouterEffortLevel="1x" routeRemaining={removedFeatureIds.size > 0}'
   if (routingDisabledAttribute) {
     params.replacements.push({
       start: routingDisabledAttribute.getStart(params.sourceFile),

@@ -11,6 +11,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
 import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
 import { tiEvms, type TiEvm, type TiEvmVariant } from "../lib/ti-evm-catalog"
+import { getActionableElectricalErrors } from "./get-actionable-electrical-errors"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -81,13 +82,16 @@ async function buildTiEvmVariantArtifact(params: {
     )
   }
   const circuitJson = result.circuitJson
-  const electricalErrors = [
-    ...checkDanglingTraces(circuitJson),
-    ...checkEachPcbPortConnectedToPcbTraces(circuitJson),
-    ...checkSourceTracesHavePcbTraces(circuitJson),
-    ...checkTracesAreContiguous(circuitJson),
-    ...checkSameNameNetsAreConnected(circuitJson),
-  ]
+  const electricalErrors = getActionableElectricalErrors({
+    circuitJson,
+    electricalErrors: [
+      ...checkDanglingTraces(circuitJson),
+      ...checkEachPcbPortConnectedToPcbTraces(circuitJson),
+      ...checkSourceTracesHavePcbTraces(circuitJson),
+      ...checkTracesAreContiguous(circuitJson),
+      ...checkSameNameNetsAreConnected(circuitJson),
+    ],
+  })
   if (electricalErrors.length > 0) {
     throw new Error(
       `${params.evm.name} ${params.variant.label} failed electrical checks:\n${electricalErrors.map(({ message }) => message).join("\n")}`,

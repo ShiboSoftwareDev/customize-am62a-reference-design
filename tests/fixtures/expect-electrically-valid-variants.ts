@@ -1,4 +1,5 @@
 import { expect } from "bun:test"
+import { resolve } from "node:path"
 import {
   checkDanglingTraces,
   checkEachPcbPortConnectedToPcbTraces,
@@ -7,10 +8,10 @@ import {
   checkTracesAreContiguous,
   runAllSchematicChecks,
 } from "@tscircuit/checks"
-import type { AnyCircuitElement } from "circuit-json"
-import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import type { AnyCircuitElement } from "circuit-json"
 import { getTiEvm, type TiEvmId } from "lib/ti-evm-catalog"
+import { getActionableElectricalErrors } from "scripts/get-actionable-electrical-errors"
 
 type ComponentName = string
 
@@ -31,13 +32,16 @@ export async function expectElectricallyValidVariants(
       repositoryRoot,
       publicUrl: variant.circuitJsonUrl,
     })
-    const electricalErrors = [
-      ...checkDanglingTraces(pcbCircuitJson),
-      ...checkEachPcbPortConnectedToPcbTraces(pcbCircuitJson),
-      ...checkSourceTracesHavePcbTraces(pcbCircuitJson),
-      ...checkTracesAreContiguous(pcbCircuitJson),
-      ...checkSameNameNetsAreConnected(pcbCircuitJson),
-    ]
+    const electricalErrors = getActionableElectricalErrors({
+      circuitJson: pcbCircuitJson,
+      electricalErrors: [
+        ...checkDanglingTraces(pcbCircuitJson),
+        ...checkEachPcbPortConnectedToPcbTraces(pcbCircuitJson),
+        ...checkSourceTracesHavePcbTraces(pcbCircuitJson),
+        ...checkTracesAreContiguous(pcbCircuitJson),
+        ...checkSameNameNetsAreConnected(pcbCircuitJson),
+      ],
+    })
     validationErrors.push(...electricalErrors.map((error) => `${variant.id}: ${error.message}`))
 
     const sourceComponentNames = new Set<ComponentName>(

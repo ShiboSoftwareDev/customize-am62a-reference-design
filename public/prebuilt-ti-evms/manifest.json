@@ -4,9 +4,9 @@
       "id": "dp83825evm",
       "artifacts": [
         {
-          "elementCount": 7725,
+          "elementCount": 10393,
           "output": "prebuilt-ti-evms/dp83825evm/full-board.circuit.json.gz",
-          "pcbTraceCount": 291,
+          "pcbTraceCount": 665,
           "source": "Parameterized DP83825EVM tscircuit TSX",
           "sourceComponentCount": 151,
           "sourceTraceCount": 100,
@@ -114,9 +114,9 @@
       "id": "drv8307evm",
       "artifacts": [
         {
-          "elementCount": 4546,
+          "elementCount": 7627,
           "output": "prebuilt-ti-evms/drv8307evm/full-board.circuit.json.gz",
-          "pcbTraceCount": 197,
+          "pcbTraceCount": 685,
           "source": "Parameterized DRV8307EVM tscircuit TSX",
           "sourceComponentCount": 85,
           "sourceTraceCount": 57,
@@ -161,9 +161,9 @@
       "id": "lm5155evm-fly",
       "artifacts": [
         {
-          "elementCount": 3553,
+          "elementCount": 4331,
           "output": "prebuilt-ti-evms/lm5155evm-fly/full-board.circuit.json.gz",
-          "pcbTraceCount": 149,
+          "pcbTraceCount": 203,
           "source": "Parameterized LM5155EVM-FLY tscircuit TSX",
           "sourceComponentCount": 88,
           "sourceTraceCount": 179,
@@ -214,9 +214,9 @@
       "id": "lm251772evm-pd",
       "artifacts": [
         {
-          "elementCount": 6025,
+          "elementCount": 8466,
           "output": "prebuilt-ti-evms/lm251772evm-pd/full-board.circuit.json.gz",
-          "pcbTraceCount": 294,
+          "pcbTraceCount": 1024,
           "source": "Parameterized LM251772EVM-PD tscircuit TSX",
           "sourceComponentCount": 167,
           "sourceTraceCount": 61,
@@ -263,9 +263,9 @@
       "id": "lmg342x-bb-evm",
       "artifacts": [
         {
-          "elementCount": 4844,
+          "elementCount": 7990,
           "output": "prebuilt-ti-evms/lmg342x-bb-evm/full-board.circuit.json.gz",
-          "pcbTraceCount": 192,
+          "pcbTraceCount": 588,
           "source": "Parameterized LMG342X-BB-EVM tscircuit TSX",
           "sourceComponentCount": 153,
           "sourceTraceCount": 60,
