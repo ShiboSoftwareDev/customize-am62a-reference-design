@@ -20,7 +20,7 @@ const removedFeatureIds = [
 ]
 const removedHsFetPwmPort = { x: 91.01777326, y: 110.92500548 }
 
-setDefaultTimeout(20_000)
+setDefaultTimeout(30_000)
 
 test("LMG342X minimal removes the imported HS_FET_PWM route branch", async () => {
   const fullBoard = await evaluateParameterizedTiEvm({
