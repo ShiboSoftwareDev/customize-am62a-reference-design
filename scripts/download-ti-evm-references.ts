@@ -1,40 +1,48 @@
 import { createHash } from "node:crypto"
-import { mkdir } from "node:fs/promises"
+import { mkdir, rm } from "node:fs/promises"
 import { resolve } from "node:path"
 import { unzipSync } from "fflate"
 
-const references = [
+type ReferenceArchive = {
+  name: string
+  url: string
+  sha256: string
+  outputDirectory: string
+  nestedArchivePath?: string
+  stripPrefix?: string
+}
+
+const references: ReferenceArchive[] = [
   {
-    name: "DP83825EVM",
-    url: "https://www.ti.com/lit/zip/SNLR039",
-    sha256: "563481585d9c44e325a46da7891650d70573fa74008de68f80e7fcc9010c388f",
-    outputDirectory: "dp83825",
+    name: "TMDS62LEVM",
+    url: "https://www.ti.com/lit/zip/sprcal9",
+    sha256: "40e6c4d0bea5381bf7b4e0ef26ec4ec9adae156be308e4a3838bd344972b7615",
+    outputDirectory: "tmds62levm",
+    nestedArchivePath:
+      "TMDS62LEVM Design File Package Altium (Rev. B)/PROC180/PROC181E1_1/3_BoardFile/Altium/PROC181E1-1_PRJPCB.zip",
   },
   {
-    name: "DRV8307EVM",
-    url: "https://www.ti.com/lit/zip/slvc565a",
-    sha256: "660117e30c1f12473f18d825a8318a5460a13025a7a6223689ac1f9afd3921d8",
-    outputDirectory: "drv8307",
+    name: "SK-AM62",
+    url: "https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/791/7384.AM62x_5F00_E3_5F00_Altium.zip",
+    sha256: "14f84ba83c82db636b7425a874d599fea2a3cd0b72f365460b943d53ffc26982",
+    outputDirectory: "sk-am62",
   },
   {
-    name: "LM5155EVM-FLY",
-    url: "https://www.ti.com/lit/zip/SNVR499",
-    sha256: "e8a1573658d294c6b47c8cdd8833df2d50302ac242afe88ecb8e60ca2f80b215",
-    outputDirectory: "lm5155fly",
+    name: "BeaglePlay",
+    url: "https://github.com/beagleboard/beagleplay/archive/7a59a98ae27dc4fd9e2bd8975ff90cdb44a366ea.zip",
+    sha256: "6b2b29a35e308237891d91f2c0b131653c0a01700ab8e5345e31bed3ddf2101e",
+    outputDirectory: "beagleplay",
+    stripPrefix:
+      "beagleplay-7a59a98ae27dc4fd9e2bd8975ff90cdb44a366ea/Design/Altium Export/BEAGLEPLAYV020_220915.PrjPcb/",
   },
   {
-    name: "LM251772EVM-PD",
-    url: "https://www.ti.com/lit/zip/slvc869",
-    sha256: "d538f1bb6dc0976a1d0509faf0a9f6a7932fc1e80ed3730740272fb390e8516f",
-    outputDirectory: "lm251772",
+    name: "BeagleBone Black",
+    url: "https://github.com/Circuitco/-BeagleBone-Black-RevA5/raw/master/BeagleBoardBlack_RevA5_Altium.zip",
+    sha256: "7ff2ca881779f51b9fcb83e041bd06125fc2cb91ba5111c8d360b9df1a651413",
+    outputDirectory: "beaglebone-black",
+    nestedArchivePath: "BeagleBoneBlackB3_Altium.zip",
   },
-  {
-    name: "LMG342X-BB-EVM",
-    url: "https://www.ti.com/lit/zip/snoc050",
-    sha256: "3aba23eea3b9c4751d55468e8716a2c95277b9cd581edc9ae8ef4fb058717b09",
-    outputDirectory: "lmg342x",
-  },
-] as const
+]
 
 const referenceRoot = resolve(import.meta.dir, "../tmp/references")
 
@@ -50,18 +58,58 @@ for (const reference of references) {
   }
 
   const outputDirectory = resolve(referenceRoot, reference.outputDirectory)
+  await rm(outputDirectory, { force: true, recursive: true })
   await mkdir(outputDirectory, { recursive: true })
-  for (const [entryName, contents] of Object.entries(unzipSync(archive))) {
-    if (entryName.startsWith("/") || entryName.split("/").includes("..")) {
-      throw new Error(`${reference.name} archive contains an unsafe path: ${entryName}`)
+  const outerEntries = unzipSync(archive)
+  const entries = reference.nestedArchivePath
+    ? unzipNestedArchive({
+        entries: outerEntries,
+        nestedArchivePath: reference.nestedArchivePath,
+        referenceName: reference.name,
+      })
+    : outerEntries
+  await extractArchiveEntries({
+    entries,
+    outputDirectory,
+    referenceName: reference.name,
+    stripPrefix: reference.stripPrefix,
+  })
+  console.log(`${reference.name}: verified and extracted ${sha256}`)
+}
+
+function unzipNestedArchive(params: {
+  entries: Record<string, Uint8Array>
+  nestedArchivePath: string
+  referenceName: string
+}): Record<string, Uint8Array> {
+  const nestedArchive = params.entries[params.nestedArchivePath]
+  if (!nestedArchive) {
+    throw new Error(`${params.referenceName} is missing nested archive ${params.nestedArchivePath}`)
+  }
+  return unzipSync(nestedArchive)
+}
+
+async function extractArchiveEntries(params: {
+  entries: Record<string, Uint8Array>
+  outputDirectory: string
+  referenceName: string
+  stripPrefix?: string
+}): Promise<void> {
+  for (const [entryName, contents] of Object.entries(params.entries)) {
+    if (params.stripPrefix && !entryName.startsWith(params.stripPrefix)) continue
+    const relativeEntryName = params.stripPrefix
+      ? entryName.slice(params.stripPrefix.length)
+      : entryName
+    if (!relativeEntryName) continue
+    if (relativeEntryName.startsWith("/") || relativeEntryName.split("/").includes("..")) {
+      throw new Error(`${params.referenceName} archive contains an unsafe path: ${entryName}`)
     }
-    const outputPath = resolve(outputDirectory, entryName)
-    if (entryName.endsWith("/")) {
+    const outputPath = resolve(params.outputDirectory, relativeEntryName)
+    if (relativeEntryName.endsWith("/")) {
       await mkdir(outputPath, { recursive: true })
       continue
     }
     await mkdir(resolve(outputPath, ".."), { recursive: true })
     await Bun.write(outputPath, contents)
   }
-  console.log(`${reference.name}: verified and extracted ${sha256}`)
 }

@@ -2,19 +2,18 @@ import { expect, test } from "bun:test"
 import { getParameterizedTiEvmDefinition } from "lib/evms/parameterized-ti-evms"
 import { tiEvms } from "lib/ti-evm-catalog"
 
-test("catalog exposes five real TI EVM product references", () => {
+test("catalog exposes four Sitara board references", () => {
   expect(tiEvms.map(({ name }) => name)).toEqual([
-    "DP83825EVM",
-    "DRV8307EVM",
-    "LM5155EVM-FLY",
-    "LM251772EVM-PD",
-    "LMG342X-BB-EVM",
+    "TMDS62LEVM",
+    "SK-AM62",
+    "BeaglePlay",
+    "BeagleBone Black",
   ])
   expect(tiEvms.map(({ schematicSheetLabels }) => schematicSheetLabels.length)).toEqual([
-    5, 1, 2, 1, 1,
+    57, 44, 22, 11,
   ])
   for (const evm of tiEvms) {
-    expect(evm.sourceUrl).toStartWith("https://www.ti.com/tool/")
+    expect(evm.sourceUrl).toStartWith("https://")
     expect(evm.sourcePath).toBe(`boards/${evm.id}/index.circuit.tsx`)
     expect(evm.variants.length).toBeGreaterThanOrEqual(4)
     expect(new Set(evm.variants.map(({ circuitJsonUrl }) => circuitJsonUrl)).size).toBe(

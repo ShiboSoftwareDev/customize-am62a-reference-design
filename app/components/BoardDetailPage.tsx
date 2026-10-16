@@ -31,7 +31,7 @@ export function BoardDetailPage({ evm }: { evm: TiEvm }) {
       <header className="board-detail-header">
         <div>
           <a className="back-link" href="/">
-            ← TI EVM configurator
+            ← Sitara board configurator
           </a>
           <span className="eyebrow">Canonical full-board render</span>
           <h1>{evm.name}</h1>
@@ -39,7 +39,7 @@ export function BoardDetailPage({ evm }: { evm: TiEvm }) {
         </div>
         <div className="board-detail-actions">
           <a href={evm.sourceUrl} rel="noreferrer" target="_blank">
-            Official TI reference ↗
+            Source reference ↗
           </a>
           <a href={`${assetRoot}/source.tsx`}>Download TSX</a>
         </div>
@@ -58,7 +58,7 @@ export function BoardDetailPage({ evm }: { evm: TiEvm }) {
           href={`${assetRoot}/pcb.svg`}
           imageUrl={`${assetRoot}/pcb.svg`}
           title="PCB"
-          description="Reference placement and imported TI copper geometry."
+          description="Reference placement and imported source copper geometry."
           alt={`${evm.name} PCB SVG`}
         />
         {evm.schematicSheetLabels.map((schematicSheetLabel, schematicSheetIndex) => {

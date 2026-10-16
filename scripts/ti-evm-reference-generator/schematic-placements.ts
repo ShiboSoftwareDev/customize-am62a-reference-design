@@ -6,16 +6,23 @@ import {
   isSchematicPort,
   isSourceComponent,
   isSourcePort,
+  type SourceComponentElement,
 } from "./circuit-json-elements"
 import { round } from "./geometry"
 import { createPinKeys } from "./pads"
-import type { ComponentRecordIndex, PinKey } from "./types"
+import type {
+  ComponentName,
+  ComponentNameByRecordIndex,
+  ComponentRecordIndex,
+  PinKey,
+} from "./types"
 
 type PositionedPin = { pinKey: PinKey; x: number; y: number }
 
 export function createSchematicPlacements(params: {
+  componentNames: ComponentNameByRecordIndex
   componentRecords: AltiumComponentRecord[]
-  padRecords: AltiumPadRecord[]
+  padRecordsByComponentIndex: ReadonlyMap<ComponentRecordIndex, AltiumPadRecord[]>
   schematicCircuitJson: AnyCircuitElement[]
 }): Map<ComponentRecordIndex, ReferenceSchematicPlacement> {
   const placements = new Map<ComponentRecordIndex, ReferenceSchematicPlacement>()
@@ -30,18 +37,21 @@ export function createSchematicPlacements(params: {
     params.schematicCircuitJson.filter(isSchematicComponent),
     ({ source_component_id }) => source_component_id,
   )
+  const sourceComponentsByName = new Map<ComponentName, SourceComponentElement>(
+    params.schematicCircuitJson
+      .filter(isSourceComponent)
+      .map((sourceComponent) => [sourceComponent.name, sourceComponent]),
+  )
 
   for (const [componentRecordIndex] of params.componentRecords.entries()) {
-    const sourceComponent = params.schematicCircuitJson
-      .filter(isSourceComponent)
-      .find(({ name }) => name === params.componentRecords[componentRecordIndex].designator)
+    const componentName = params.componentNames.get(componentRecordIndex)
+    if (!componentName) continue
+    const sourceComponent = sourceComponentsByName.get(componentName)
     if (!sourceComponent) continue
     const schematicComponents = schematicComponentsBySource.get(sourceComponent.source_component_id)
     if (!schematicComponents || schematicComponents.length === 0) continue
     const schematicComponent = schematicComponents[0]
-    const componentPads = params.padRecords.filter(
-      ({ componentIndex }) => componentIndex === componentRecordIndex,
-    )
+    const componentPads = params.padRecordsByComponentIndex.get(componentRecordIndex) ?? []
     const pinKeys = createPinKeys(componentPads)
     const sides: Record<"left" | "right" | "top" | "bottom", PositionedPin[]> = {
       left: [],

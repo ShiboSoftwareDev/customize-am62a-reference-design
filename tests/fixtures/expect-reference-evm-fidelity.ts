@@ -83,10 +83,12 @@ type CircuitPcbPlatedHole = AnyCircuitElement & {
 }
 type CircuitPcbSmtPad = AnyCircuitElement & {
   type: "pcb_smtpad"
+  pcb_smtpad_id: string
   pcb_component_id?: string
-  x: number
-  y: number
+  x?: number
+  y?: number
   shape: string
+  points?: CircuitPoint[]
   radius?: number
   width?: number
   height?: number
@@ -334,11 +336,15 @@ function expectPadsMatchSource(params: {
             (candidate.type === "pcb_smtpad" && candidate.layer === sourcePad.layer)),
       )
       .sort(
-        (first, second) => getPointDistance(sourcePad, first) - getPointDistance(sourcePad, second),
+        (first, second) =>
+          getPointDistance(getPhysicalPadCenter(sourcePad), getPhysicalPadCenter(first)) -
+          getPointDistance(getPhysicalPadCenter(sourcePad), getPhysicalPadCenter(second)),
       )[0]
     if (!renderedPad) throw new Error(`Missing converted ${sourcePad.type}`)
-    expect(renderedPad.x).toBeCloseTo(sourcePad.x, 5)
-    expect(renderedPad.y).toBeCloseTo(sourcePad.y, 5)
+    const sourcePadCenter = getPhysicalPadCenter(sourcePad)
+    const renderedPadCenter = getPhysicalPadCenter(renderedPad)
+    expect(renderedPadCenter.x).toBeCloseTo(sourcePadCenter.x, 5)
+    expect(renderedPadCenter.y).toBeCloseTo(sourcePadCenter.y, 5)
     expectPadGeometryMatches({ renderedPad, sourcePad })
     unmatchedRenderedPads.delete(renderedPad)
   }
@@ -377,6 +383,7 @@ function expectPadGeometryMatches(params: {
   const { renderedPad, sourcePad } = params
   if (renderedPad.type !== sourcePad.type) throw new Error("Pad types do not match")
   if (sourcePad.type === "pcb_smtpad" && renderedPad.type === "pcb_smtpad") {
+    expectPolygonPointsMatch({ renderedPad, sourcePad })
     expectSortedDimensionsMatch({
       renderedDimensions: [renderedPad.width, renderedPad.height],
       sourceDimensions: [sourcePad.width, sourcePad.height],
@@ -412,6 +419,50 @@ function expectPadGeometryMatches(params: {
     renderedDimensions: [renderedPad.rect_pad_width, renderedPad.rect_pad_height],
     sourceDimensions: [sourcePad.rect_pad_width, sourcePad.rect_pad_height],
   })
+}
+
+function expectPolygonPointsMatch(params: {
+  renderedPad: CircuitPcbSmtPad
+  sourcePad: CircuitPcbSmtPad
+}): void {
+  if (!params.sourcePad.points) return
+  expect(params.renderedPad.points).toBeDefined()
+  const unmatchedRenderedPoints = new Set(params.renderedPad.points ?? [])
+  expect(unmatchedRenderedPoints.size).toBe(params.sourcePad.points.length)
+  for (const [pointIndex, sourcePoint] of params.sourcePad.points.entries()) {
+    const renderedPoint = [...unmatchedRenderedPoints].sort(
+      (firstPoint, secondPoint) =>
+        getPointDistance(sourcePoint, firstPoint) - getPointDistance(sourcePoint, secondPoint),
+    )[0]
+    if (!renderedPoint) throw new Error("Converted polygon pad is missing a point")
+    expect(
+      renderedPoint.x,
+      `${params.sourcePad.pcb_smtpad_id} polygon point ${pointIndex} x`,
+    ).toBeCloseTo(sourcePoint.x, 5)
+    expect(
+      renderedPoint.y,
+      `${params.sourcePad.pcb_smtpad_id} polygon point ${pointIndex} y`,
+    ).toBeCloseTo(sourcePoint.y, 5)
+    unmatchedRenderedPoints.delete(renderedPoint)
+  }
+  expect(unmatchedRenderedPoints.size).toBe(0)
+}
+
+function getPhysicalPadCenter(pad: PhysicalPad): CircuitPoint {
+  if (typeof pad.x === "number" && typeof pad.y === "number") {
+    return { x: pad.x, y: pad.y }
+  }
+  if (pad.type !== "pcb_smtpad" || !pad.points || pad.points.length === 0) {
+    throw new Error(`Missing center for ${pad.type}`)
+  }
+  const coordinateSum = pad.points.reduce(
+    (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
+    { x: 0, y: 0 },
+  )
+  return {
+    x: coordinateSum.x / pad.points.length,
+    y: coordinateSum.y / pad.points.length,
+  }
 }
 
 function expectSortedDimensionsMatch(params: {

@@ -11,10 +11,11 @@ import {
   AltiumPadRecord,
   type AltiumPcbDocument,
   AltiumPrjPcb,
-  AltiumSchDoc,
+  type AltiumSchDoc,
   parseAltiumBinaryPcbDoc,
   parseAltiumFile,
 } from "altiumts"
+import type { AnyCircuitElement } from "circuit-json"
 import type {
   ReferenceComponent,
   ReferenceNet,
@@ -41,6 +42,7 @@ import type {
   ComponentName,
   ComponentRecordIndex,
   EmbeddedModelIndex,
+  NetRecordIndex,
   PinKeysByComponentRecordIndex,
   ReferenceConversion,
   ReferenceInput,
@@ -60,17 +62,48 @@ export async function createReferenceDefinition(
   if (!(parsedProject instanceof AltiumPrjPcb)) {
     throw new Error(`${reference.name} project file is not an Altium PCB project`)
   }
-  const schematicDocuments = await Promise.all(
-    reference.schematicPaths.map(async (schematicPath) => {
-      const schematicBytes = new Uint8Array(await readFile(schematicPath))
-      const schematicDocument = parseAltiumFile(schematicBytes).document
-      if (!(schematicDocument instanceof AltiumSchDoc)) {
-        throw new Error(`${schematicPath} is not an Altium schematic document`)
-      }
-      const converterDocument = parseAltiumSource(schematicBytes, "schematic") as AltiumSchDoc
-      return { converterDocument, document: schematicDocument, path: schematicPath }
-    }),
+  const pcbCircuitJson = convertAltiumToCircuitJson(pcbBytes, {
+    sourceType: "pcb",
+    pcb: {
+      includeCopperAreas: false,
+      includeCourtyards: false,
+      includeDimensions: false,
+      includeKeepouts: false,
+      includeTraces: false,
+      includeVias: false,
+    },
+  })
+  const componentRecords = (pcbDocument.propertyRecords.get("Components6") ?? []).filter(
+    (record): record is AltiumComponentRecord => record instanceof AltiumComponentRecord,
   )
+  const padRecords = (pcbDocument.primitiveRecords.get("Pads6") ?? []).filter(
+    (record): record is AltiumPadRecord => record instanceof AltiumPadRecord,
+  )
+  const componentNames = createComponentNames({
+    componentRecords,
+    document: pcbDocument,
+  })
+  const padRecordsByComponentIndex = new Map<ComponentRecordIndex, AltiumPadRecord[]>()
+  for (const padRecord of padRecords) {
+    const componentIndex = padRecord.componentIndex
+    if (componentIndex === undefined) continue
+    const componentPads = padRecordsByComponentIndex.get(componentIndex) ?? []
+    componentPads.push(padRecord)
+    padRecordsByComponentIndex.set(componentIndex, componentPads)
+  }
+  const schematicSources: Array<{
+    bytes: Uint8Array
+    document: AltiumSchDoc
+    path: string
+  }> = []
+  for (const schematicPath of reference.schematicPaths) {
+    const schematicBytes = new Uint8Array(await readFile(schematicPath))
+    schematicSources.push({
+      bytes: schematicBytes,
+      document: parseAltiumSource(schematicBytes, "schematic") as AltiumSchDoc,
+      path: schematicPath,
+    })
+  }
   const referencedEmbeddedModelIndexes = new Set<EmbeddedModelIndex>()
   const projectCircuitJson = convertAltiumProjectToCircuitJson({
     pcb: {
@@ -86,42 +119,32 @@ export async function createReferenceDefinition(
         },
       },
     },
-    schematics: schematicDocuments.map(({ converterDocument, path }) => ({
-      document: converterDocument,
-      options: {
-        documentName: basename(path),
-        project: parsedProject,
-        projectName: basename(reference.projectPath),
-        sheetName: reference.name,
-      },
-    })),
-  })
-  const pcbCircuitJson = convertAltiumToCircuitJson(pcbBytes, {
-    sourceType: "pcb",
-    pcb: {
-      includeCopperAreas: false,
-      includeCourtyards: false,
-      includeDimensions: false,
-      includeKeepouts: false,
-      includeTraces: false,
-      includeVias: false,
-    },
-  })
-  const schematicCircuitJsons = await Promise.all(
-    reference.schematicPaths.map(async (schematicPath) => {
-      const schematicBytes = new Uint8Array(await readFile(schematicPath))
-      return convertAltiumToCircuitJson(schematicBytes, {
-        sourceType: "schematic",
-        schematic: {
-          documentName: basename(schematicPath),
-          project: parsedProject,
-          projectName: basename(reference.projectPath),
-          sheetName: reference.name,
-        },
-      })
+    schematics: hasConnectedPcbPads(padRecords)
+      ? []
+      : schematicSources.map((schematicSource) => ({
+          document: schematicSource.document,
+          options: getSchematicConversionOptions({
+            parsedProject,
+            projectPath: reference.projectPath,
+            referenceName: reference.name,
+            schematicPath: schematicSource.path,
+          }),
+        })),
+  }).filter((element) => !element.type.startsWith("schematic_"))
+  console.log(`${reference.name}: converted PCB source`)
+  const schematicCircuitJsons = schematicSources.map((schematicSource) =>
+    convertAltiumToCircuitJson(schematicSource.bytes, {
+      sourceType: "schematic",
+      schematic: getSchematicConversionOptions({
+        parsedProject,
+        projectPath: reference.projectPath,
+        referenceName: reference.name,
+        schematicPath: schematicSource.path,
+      }),
     }),
   )
   const schematicCircuitJson = schematicCircuitJsons.flat()
+  console.log(`${reference.name}: converted ${schematicCircuitJsons.length} schematic sheets`)
   const board = pcbCircuitJson.find(isPcbBoard)
   if (!board) {
     throw new Error(`${reference.name} has no PCB board`)
@@ -130,26 +153,29 @@ export async function createReferenceDefinition(
     throw new Error(`${reference.name} has unsupported ${board.num_layers}-layer stack`)
   }
 
-  const componentRecords = (pcbDocument.propertyRecords.get("Components6") ?? []).filter(
-    (record): record is AltiumComponentRecord => record instanceof AltiumComponentRecord,
-  )
-  const padRecords = (pcbDocument.primitiveRecords.get("Pads6") ?? []).filter(
-    (record): record is AltiumPadRecord => record instanceof AltiumPadRecord,
-  )
   const netRecords = (pcbDocument.propertyRecords.get("Nets6") ?? []).filter(
     (record): record is AltiumNetRecord => record instanceof AltiumNetRecord,
   )
+  const padRecordsByNetIndex = new Map<NetRecordIndex, AltiumPadRecord[]>()
+  for (const padRecord of padRecords) {
+    const netIndex = padRecord.netIndex
+    if (netIndex !== undefined) {
+      const netPads = padRecordsByNetIndex.get(netIndex) ?? []
+      netPads.push(padRecord)
+      padRecordsByNetIndex.set(netIndex, netPads)
+    }
+  }
   const componentElements = new Map(
     pcbCircuitJson
       .filter(isPcbComponent)
       .map((element) => [getTrailingIndex(element.source_component_id), element]),
   )
-  const componentNames = createComponentNames(componentRecords)
   const schematicPlacements = new Map<ComponentRecordIndex, ReferenceSchematicPlacement>()
   for (const sheetCircuitJson of schematicCircuitJsons) {
     for (const [componentIndex, placement] of createSchematicPlacements({
+      componentNames,
       componentRecords,
-      padRecords,
+      padRecordsByComponentIndex,
       schematicCircuitJson: sheetCircuitJson,
     })) {
       if (!schematicPlacements.has(componentIndex)) {
@@ -157,18 +183,19 @@ export async function createReferenceDefinition(
       }
     }
   }
+  console.log(`${reference.name}: mapped schematic placements`)
   const sourceComponents = new Map<ComponentName, SourceComponentElement>(
     schematicCircuitJson.filter(isSourceComponent).map((component) => [component.name, component]),
   )
+  const schematicSheetIndexesByComponentName =
+    getSchematicSheetIndexesByComponentName(schematicCircuitJsons)
 
   const components: ReferenceComponent[] = []
   const componentPinKeys: PinKeysByComponentRecordIndex = new Map()
   for (const [componentIndex, componentRecord] of componentRecords.entries()) {
     const componentElement = componentElements.get(componentIndex)
-    if (!componentElement || componentElement.type !== "pcb_component") continue
-    const ownedPadRecords = padRecords.filter(
-      ({ componentIndex: ownerIndex }) => ownerIndex === componentIndex,
-    )
+    if (componentElement?.type !== "pcb_component") continue
+    const ownedPadRecords = padRecordsByComponentIndex.get(componentIndex) ?? []
     if (ownedPadRecords.length === 0) continue
     const pinKeys = createPinKeys(ownedPadRecords)
     componentPinKeys.set(componentIndex, pinKeys)
@@ -182,11 +209,11 @@ export async function createReferenceDefinition(
         }),
       ),
     )
-    const sourceComponent = sourceComponents.get(componentRecord.designator ?? "")
     const componentName = componentNames.get(componentIndex)
     if (!componentName) {
       throw new Error(`${reference.name} component ${componentIndex} has no generated name`)
     }
+    const sourceComponent = sourceComponents.get(componentName)
     const schematicName = componentRecord.designator ?? componentName
     components.push({
       name: componentName,
@@ -206,10 +233,15 @@ export async function createReferenceDefinition(
         [...pinKeys.entries()].map(([rawPinName, pinKey]) => [pinKey, [rawPinName]]),
       ),
       pads,
-      removableFeatureId: reference.getRemovableFeatureId(schematicName),
+      removableFeatureId: getRemovableFeatureId({
+        componentName: schematicName,
+        reference,
+        schematicSheetIndexesByComponentName,
+      }),
       schematic: schematicPlacements.get(componentIndex),
     })
   }
+  console.log(`${reference.name}: mapped ${components.length} PCB components`)
 
   const populatedComponentIndexes = new Set<ComponentRecordIndex>(componentPinKeys.keys())
   const teardropsByNet = getTeardropsByNet({
@@ -219,7 +251,7 @@ export async function createReferenceDefinition(
     componentPinKeys,
   })
   const nets: ReferenceNet[] = netRecords.flatMap((netRecord, netIndex) => {
-    const endpoints = padRecords.flatMap((padRecord) => {
+    const endpoints = (padRecordsByNetIndex.get(netIndex) ?? []).flatMap((padRecord) => {
       const componentIndex = padRecord.componentIndex
       if (
         padRecord.netIndex !== netIndex ||
@@ -255,6 +287,7 @@ export async function createReferenceDefinition(
       },
     ]
   })
+  console.log(`${reference.name}: mapped ${nets.length} connected nets`)
 
   const standaloneHoles = padRecords.flatMap((padRecord) => {
     if (padRecord.componentIndex !== undefined && padRecord.componentIndex !== 65535) return []
@@ -274,6 +307,7 @@ export async function createReferenceDefinition(
     componentNames,
     populatedComponentIndexes,
   })
+  console.log(`${reference.name}: mapped silkscreen`)
 
   const embeddedCadModels = await Promise.all(
     pcbDocument.embeddedModels.flatMap((embeddedModel) =>
@@ -315,6 +349,58 @@ export async function createReferenceDefinition(
     projectCircuitJson,
     referenceSchematicCircuitJsons: schematicCircuitJsons,
   }
+}
+
+function hasConnectedPcbPads(padRecords: AltiumPadRecord[]): boolean {
+  return padRecords.some(
+    (padRecord) => padRecord.netIndex !== undefined && padRecord.netIndex !== 65535,
+  )
+}
+
+function getSchematicConversionOptions(params: {
+  parsedProject: AltiumPrjPcb
+  projectPath: string
+  referenceName: string
+  schematicPath: string
+}) {
+  return {
+    documentName: basename(params.schematicPath),
+    project: params.parsedProject,
+    projectName: basename(params.projectPath),
+    sheetName: params.referenceName,
+  }
+}
+
+function getSchematicSheetIndexesByComponentName(
+  schematicCircuitJsons: AnyCircuitElement[][],
+): Map<ComponentName, number[]> {
+  const schematicSheetIndexesByComponentName = new Map<ComponentName, number[]>()
+  for (const [schematicSheetIndex, schematicCircuitJson] of schematicCircuitJsons.entries()) {
+    for (const component of schematicCircuitJson.filter(isSourceComponent)) {
+      const sheetIndexes = schematicSheetIndexesByComponentName.get(component.name) ?? []
+      if (!sheetIndexes.includes(schematicSheetIndex)) sheetIndexes.push(schematicSheetIndex)
+      schematicSheetIndexesByComponentName.set(component.name, sheetIndexes)
+    }
+  }
+  return schematicSheetIndexesByComponentName
+}
+
+function getRemovableFeatureId(params: {
+  componentName: ComponentName
+  reference: ReferenceInput
+  schematicSheetIndexesByComponentName: ReadonlyMap<ComponentName, number[]>
+}): string | undefined {
+  const schematicSheetIndexes =
+    params.schematicSheetIndexesByComponentName.get(params.componentName) ?? []
+  if (schematicSheetIndexes.length === 0) return undefined
+
+  const featureIds = schematicSheetIndexes.map(
+    (schematicSheetIndex) =>
+      params.reference.removableFeatureIdBySchematicSheetIndex[schematicSheetIndex],
+  )
+  if (featureIds.some((featureId) => featureId === undefined)) return undefined
+  const uniqueFeatureIds = new Set(featureIds)
+  return uniqueFeatureIds.size === 1 ? featureIds[0] : undefined
 }
 
 function getRecordString(params: { record: AltiumComponentRecord; key: string }): string {

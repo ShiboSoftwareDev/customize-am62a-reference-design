@@ -1,5 +1,5 @@
+import { Circuit } from "@tscircuit/core"
 import type { AnyCircuitElement } from "circuit-json"
-import { Circuit } from "tscircuit"
 import type { BoardRenderResponse } from "../board-render-types"
 import {
   ParameterizedTiEvm,
@@ -13,6 +13,7 @@ export async function evaluateParameterizedTiEvm(request: {
 }): Promise<BoardRenderResponse> {
   const startedAt = performance.now()
   const circuit = new Circuit({ platform: { drcChecksDisabled: true } })
+  circuit.schematicDisabled = true
   circuit.add(<ParameterizedTiEvm evmId={request.evmId} options={request.options} />)
   await circuit.renderUntilSettled()
 

@@ -1,24 +1,55 @@
-import { type AltiumComponentRecord, type AltiumPadRecord, getAltiumPcbPadGeometry } from "altiumts"
+import {
+  type AltiumComponentRecord,
+  type AltiumPadRecord,
+  type AltiumPcbDocument,
+  AltiumTextRecord,
+  getAltiumPcbPadGeometry,
+} from "altiumts"
 import type { ReferencePad } from "../../lib/evms/reference-evm-types"
-import { nearlyEqual, normalizeRotation, round, toIdentifier } from "./geometry"
+import { nearlyEqual, normalizeRotation, round } from "./geometry"
 import type { ComponentNameByRecordIndex, PinKey, PinKeyByRawPinName, RawPinName } from "./types"
 
-export function createComponentNames(
-  componentRecords: AltiumComponentRecord[],
-): ComponentNameByRecordIndex {
+export function createComponentNames(params: {
+  componentRecords: AltiumComponentRecord[]
+  document: AltiumPcbDocument
+}): ComponentNameByRecordIndex {
   const componentNames: ComponentNameByRecordIndex = new Map()
   const usedComponentNames = new Set<string>()
-  for (const [componentRecordIndex, componentRecord] of componentRecords.entries()) {
-    const baseName =
-      toIdentifier(componentRecord.designator ?? `X${componentRecordIndex}`) ||
-      `X${componentRecordIndex}`
-    const componentName = usedComponentNames.has(baseName)
-      ? `${baseName}_${componentRecordIndex}`
-      : baseName
+  for (const [componentRecordIndex, componentRecord] of params.componentRecords.entries()) {
+    const baseName = getComponentDesignator({
+      component: componentRecord,
+      componentIndex: componentRecordIndex,
+      document: params.document,
+    })
+    let componentName = baseName
+    let duplicateSuffix = componentRecordIndex
+    while (usedComponentNames.has(componentName)) {
+      componentName = `${baseName}_${duplicateSuffix}`
+      duplicateSuffix += 1
+    }
     usedComponentNames.add(componentName)
     componentNames.set(componentRecordIndex, componentName)
   }
   return componentNames
+}
+
+function getComponentDesignator(params: {
+  component: AltiumComponentRecord
+  componentIndex: number
+  document: AltiumPcbDocument
+}): string {
+  const componentDesignator = params.component.designator?.trim()
+  if (componentDesignator) return componentDesignator
+
+  for (const record of params.document.getRecordsOwnedByComponent(params.component)) {
+    if (!(record instanceof AltiumTextRecord) || !record.isDesignator) continue
+    const textDesignator = record.text?.trim()
+    if (textDesignator && textDesignator.toLowerCase() !== ".designator") {
+      return textDesignator
+    }
+  }
+
+  return `component_${params.componentIndex}`
 }
 
 export function createPinKeys(padRecords: AltiumPadRecord[]): PinKeyByRawPinName {
