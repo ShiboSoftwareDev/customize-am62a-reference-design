@@ -1,20 +1,10 @@
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { basename, resolve } from "node:path"
-import {
-  checkDanglingTraces,
-  checkEachPcbPortConnectedToPcbTraces,
-  checkSameNameNetsAreConnected,
-  checkSourceTracesHavePcbTraces,
-  checkTracesAreContiguous,
-} from "@tscircuit/checks"
 import type { AnyCircuitElement } from "circuit-json"
 import { gzipSync, strToU8 } from "fflate"
 import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
-import { tiEvms, type TiEvm, type TiEvmVariant } from "../lib/ti-evm-catalog"
-import {
-  getActionableElectricalErrors,
-  getImportedSourceNetIdsWithElectricalErrors,
-} from "./get-actionable-electrical-errors"
+import { type TiEvm, type TiEvmVariant, tiEvms } from "../lib/ti-evm-catalog"
+import { getConvertedCircuitIntegrityErrors } from "./get-converted-circuit-integrity-errors"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -33,16 +23,9 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   await mkdir(outputDirectory, { recursive: true })
   const boards: Array<{ id: string; artifacts: ManifestArtifact[] }> = []
   for (const evm of tiEvms) {
-    const baselineImportedErrorSourceNetIds = await getBaselineImportedErrorSourceNetIds(evm)
     const evmArtifacts: ManifestArtifact[] = []
     for (const variant of evm.variants) {
-      evmArtifacts.push(
-        await buildTiEvmVariantArtifact({
-          baselineImportedErrorSourceNetIds,
-          evm,
-          variant,
-        }),
-      )
+      evmArtifacts.push(await buildTiEvmVariantArtifact({ evm, variant }))
     }
     boards.push({ id: evm.id, artifacts: evmArtifacts })
     console.log(`Prebuilt ${evmArtifacts.length} ${evm.name} variants`)
@@ -52,7 +35,7 @@ export async function prebuildTiEvmAssets(): Promise<void> {
     boards,
     sources: [
       ...tiEvms.map((evm) => ({
-        name: `Texas Instruments ${evm.name}`,
+        name: evm.name,
         url: evm.sourceUrl,
         source: evm.sourcePath,
       })),
@@ -64,12 +47,11 @@ export async function prebuildTiEvmAssets(): Promise<void> {
   )
 
   console.log(
-    `Prebuilt ${boards.reduce((count, board) => count + board.artifacts.length, 0)} variants across ${boards.length} TI EVMs`,
+    `Prebuilt ${boards.reduce((count, board) => count + board.artifacts.length, 0)} variants across ${boards.length} Sitara boards`,
   )
 }
 
 async function buildTiEvmVariantArtifact(params: {
-  baselineImportedErrorSourceNetIds: ReadonlySet<string>
   evm: TiEvm
   variant: TiEvmVariant
 }): Promise<ManifestArtifact> {
@@ -83,25 +65,11 @@ async function buildTiEvmVariantArtifact(params: {
   if (failedComponents.length > 0) {
     throw new Error(`${params.evm.name} ${params.variant.label} failed to render`)
   }
-  const routingErrors = result.circuitJson.filter(({ type }) =>
-    ["pcb_trace_error", "pcb_port_not_matched_error", "source_trace_not_connected_error"].includes(
-      type,
-    ),
-  )
-  if (routingErrors.length > 0) {
-    throw new Error(
-      `${params.evm.name} ${params.variant.label} produced ${routingErrors.length} routing errors`,
-    )
-  }
   const circuitJson = result.circuitJson
-  const electricalErrors = getActionableElectricalErrors({
-    baselineImportedErrorSourceNetIds: params.baselineImportedErrorSourceNetIds,
-    circuitJson,
-    electricalErrors: getElectricalErrors(circuitJson),
-  })
-  if (electricalErrors.length > 0) {
+  const integrityErrors = getConvertedCircuitIntegrityErrors(circuitJson)
+  if (integrityErrors.length > 0) {
     throw new Error(
-      `${params.evm.name} ${params.variant.label} failed electrical checks:\n${electricalErrors.map(({ message }) => message).join("\n")}`,
+      `${params.evm.name} ${params.variant.label} failed converted-circuit integrity checks:\n${integrityErrors.join("\n")}`,
     )
   }
   const pcbTraceCount = circuitJson.filter(({ type }) => type === "pcb_trace").length
@@ -120,31 +88,6 @@ async function buildTiEvmVariantArtifact(params: {
     url.replace(/^\//u, ""),
   )
   return manifestArtifact
-}
-
-async function getBaselineImportedErrorSourceNetIds(evm: TiEvm): Promise<Set<string>> {
-  const fullBoardVariant = evm.variants.find(
-    ({ removedFeatureIds }) => removedFeatureIds.length === 0,
-  )
-  if (!fullBoardVariant) throw new Error(`${evm.name} has no full-board variant`)
-  const fullBoard = await evaluateParameterizedTiEvm({
-    evmId: evm.id,
-    options: fullBoardVariant.evmOptions,
-  })
-  return getImportedSourceNetIdsWithElectricalErrors({
-    circuitJson: fullBoard.circuitJson,
-    electricalErrors: getElectricalErrors(fullBoard.circuitJson),
-  })
-}
-
-function getElectricalErrors(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
-  return [
-    ...checkDanglingTraces(circuitJson),
-    ...checkEachPcbPortConnectedToPcbTraces(circuitJson),
-    ...checkSourceTracesHavePcbTraces(circuitJson),
-    ...checkTracesAreContiguous(circuitJson),
-    ...checkSameNameNetsAreConnected(circuitJson),
-  ]
 }
 
 async function writeCompressedCircuitJson(artifact: {

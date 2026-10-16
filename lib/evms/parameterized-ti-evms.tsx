@@ -1,32 +1,24 @@
-import { Dp83825Evm } from "../generated/ti-evms/dp83825evm.circuit"
-import { dp83825EvmDefinition } from "../generated/ti-evms/dp83825evm.generated"
-import { Drv8307Evm } from "../generated/ti-evms/drv8307evm.circuit"
-import { drv8307EvmDefinition } from "../generated/ti-evms/drv8307evm.generated"
-import { Lm5155EvmFly } from "../generated/ti-evms/lm5155evm-fly.circuit"
-import { lm5155EvmFlyDefinition } from "../generated/ti-evms/lm5155evm-fly.generated"
-import { Lm251772EvmPd } from "../generated/ti-evms/lm251772evm-pd.circuit"
-import { lm251772EvmPdDefinition } from "../generated/ti-evms/lm251772evm-pd.generated"
-import { Lmg342xBbEvm } from "../generated/ti-evms/lmg342x-bb-evm.circuit"
-import { lmg342xBbEvmDefinition } from "../generated/ti-evms/lmg342x-bb-evm.generated"
+import { BeagleBoneBlack } from "../generated/ti-evms/beaglebone-black.circuit"
+import { beagleBoneBlackDefinition } from "../generated/ti-evms/beaglebone-black.generated"
+import { BeaglePlay } from "../generated/ti-evms/beagleplay.circuit"
+import { beaglePlayDefinition } from "../generated/ti-evms/beagleplay.generated"
+import { SkAm62 } from "../generated/ti-evms/sk-am62.circuit"
+import { skAm62Definition } from "../generated/ti-evms/sk-am62.generated"
+import { Tmds62lEvm } from "../generated/ti-evms/tmds62levm.circuit"
+import { tmds62lEvmDefinition } from "../generated/ti-evms/tmds62levm.generated"
 import type { ReferenceEvmDefinition } from "./reference-evm-types"
 
-export type ParameterizedTiEvmId =
-  | "dp83825evm"
-  | "drv8307evm"
-  | "lm5155evm-fly"
-  | "lm251772evm-pd"
-  | "lmg342x-bb-evm"
+export type ParameterizedTiEvmId = "tmds62levm" | "sk-am62" | "beagleplay" | "beaglebone-black"
 
 export type ParameterizedTiEvmOptions = {
   removedFeatureIds: string[]
 }
 
 const definitions: Record<ParameterizedTiEvmId, ReferenceEvmDefinition> = {
-  dp83825evm: dp83825EvmDefinition,
-  drv8307evm: drv8307EvmDefinition,
-  "lm5155evm-fly": lm5155EvmFlyDefinition,
-  "lm251772evm-pd": lm251772EvmPdDefinition,
-  "lmg342x-bb-evm": lmg342xBbEvmDefinition,
+  tmds62levm: tmds62lEvmDefinition,
+  "sk-am62": skAm62Definition,
+  beagleplay: beaglePlayDefinition,
+  "beaglebone-black": beagleBoneBlackDefinition,
 }
 
 export function getParameterizedTiEvmDefinition(
@@ -40,15 +32,13 @@ export function ParameterizedTiEvm(props: {
   options: ParameterizedTiEvmOptions
 }) {
   switch (props.evmId) {
-    case "dp83825evm":
-      return <Dp83825Evm removedFeatureIds={props.options.removedFeatureIds} />
-    case "drv8307evm":
-      return <Drv8307Evm removedFeatureIds={props.options.removedFeatureIds} />
-    case "lm5155evm-fly":
-      return <Lm5155EvmFly removedFeatureIds={props.options.removedFeatureIds} />
-    case "lm251772evm-pd":
-      return <Lm251772EvmPd removedFeatureIds={props.options.removedFeatureIds} />
-    case "lmg342x-bb-evm":
-      return <Lmg342xBbEvm removedFeatureIds={props.options.removedFeatureIds} />
+    case "tmds62levm":
+      return <Tmds62lEvm removedFeatureIds={props.options.removedFeatureIds} />
+    case "sk-am62":
+      return <SkAm62 removedFeatureIds={props.options.removedFeatureIds} />
+    case "beagleplay":
+      return <BeaglePlay removedFeatureIds={props.options.removedFeatureIds} />
+    case "beaglebone-black":
+      return <BeagleBoneBlack removedFeatureIds={props.options.removedFeatureIds} />
   }
 }

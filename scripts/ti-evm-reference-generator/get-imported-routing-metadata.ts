@@ -65,12 +65,14 @@ export type ImportedRoutingMetadata = {
   featureIds: FeatureId[]
   pcbTraceMetadataByRoute: ReadonlyMap<PcbTraceRouteKey, ImportedPcbTraceMetadata>
   sourceNetIdsWithImportedRouting: ReadonlySet<GeneratedSourceNetId>
+  supportedRemovalCombinationIndexes: number[]
   viaMetadataByKey: ReadonlyMap<PcbViaKey, ImportedPcbViaMetadata>
 }
 
 export function getImportedRoutingMetadata(params: {
   circuitJson: AnyCircuitElement[]
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
+  removedFeatureIdCombinations: FeatureId[][]
 }): ImportedRoutingMetadata {
   const sourceNetsById = new Map<SourceNetId, SourceNetElement>(
     params.circuitJson.filter(isSourceNet).map((net) => [net.source_net_id, net]),
@@ -96,6 +98,7 @@ export function getImportedRoutingMetadata(params: {
     circuitJson: params.circuitJson,
     featureIdBySourceComponentId,
     generatedSourceNetIdBySourceNetId,
+    removedFeatureIdCombinations: params.removedFeatureIdCombinations,
     sourceNetIdBySourceTraceId,
   })
   const pcbTraceMetadataByRoute = new Map<PcbTraceRouteKey, ImportedPcbTraceMetadata>()
@@ -159,6 +162,7 @@ export function getImportedRoutingMetadata(params: {
     sourceNetIdsWithImportedRouting: new Set(
       [...pcbTraceMetadataByRoute.values()].map(({ sourceNetId }) => sourceNetId),
     ),
+    supportedRemovalCombinationIndexes: inclusionMasks.supportedRemovalCombinationIndexes,
     viaMetadataByKey,
   }
 }

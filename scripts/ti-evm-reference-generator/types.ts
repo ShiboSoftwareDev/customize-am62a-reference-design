@@ -14,6 +14,7 @@ export type SourcePortId = string
 export type ComponentRecordIndex = number
 export type NetRecordIndex = number
 export type EmbeddedModelIndex = number
+export type SchematicSheetIndex = number
 
 export type ComponentNameByRecordIndex = Map<ComponentRecordIndex, ComponentName>
 export type PinKeyByRawPinName = Map<RawPinName, PinKey>
@@ -30,7 +31,8 @@ export type ReferenceInput = {
   projectPath: string
   schematicPaths: string[]
   outputName: string
-  getRemovableFeatureId: (componentName: ComponentName) => FeatureId | undefined
+  removedFeatureIdCombinations: FeatureId[][]
+  removableFeatureIdBySchematicSheetIndex: Partial<Record<SchematicSheetIndex, FeatureId>>
 }
 
 export type ReferenceConversion = {

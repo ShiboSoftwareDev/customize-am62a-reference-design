@@ -1,250 +1,191 @@
 import type { ReferenceInput } from "./types"
 
-type ComponentName = string
-
-const dp83825PowerIndicatorComponents = new Set<ComponentName>(["LD1", "R4"])
-
-const dp83825PhyStatusIndicatorComponents = new Set<ComponentName>([
-  "LD2",
-  "LD3",
-  "LD4",
-  "R28",
-  "R30",
-  "R32",
-])
-
-const dp83825ClockTestAccessComponents = new Set<ComponentName>(["J12", "J15", "R27", "R41"])
-
-function getDp83825RemovableFeatureId(componentName: string): string | undefined {
-  if (/^(?:U4|D2|J19|Y1|R(?:4[4-9]|5[0-4])|C(?:3\d|40))$/u.test(componentName)) {
-    return "usb-mdio-controller"
-  }
-  if (dp83825PowerIndicatorComponents.has(componentName)) return "power-indicator"
-  if (dp83825PhyStatusIndicatorComponents.has(componentName)) {
-    return "phy-status-indicators"
-  }
-  if (dp83825ClockTestAccessComponents.has(componentName)) return "clock-test-access"
-  return undefined
+function createNumberedSchematicPaths(params: { count: number; directory: string }): string[] {
+  return Array.from(
+    { length: params.count },
+    (_, sheetIndex) => `${params.directory}/${String(sheetIndex + 1).padStart(2, "0")}.SchDoc`,
+  )
 }
 
-const drvSpeedControlComponents = new Set<ComponentName>([
-  "U5",
-  "R20",
-  "D7",
-  "D8",
-  "C3",
-  "C4",
-  "C5",
-  "R12",
-  "R13",
-  "R21",
-])
-
-const drvSingleEndedHallConditioningComponents = new Set<ComponentName>([
-  "U7",
-  "U8",
-  "U9",
-  "U11",
-  "R1",
-  "R2",
-  "R3",
-  "R4",
-  "R5",
-  "R6",
-  "R7",
-  "R8",
-  "R9",
-  "R10",
-  "C6",
-  "C7",
-  "C8",
-  "C9",
-  "C20",
-  "JP3",
-  "JP4",
-])
-
-const drvStatusIndicatorComponents = new Set<ComponentName>(["D3", "D4", "R14", "R15"])
-
-const lm5155PowerMeasurementComponents = new Set<ComponentName>([
-  "TP1",
-  "TP2",
-  "TP3",
-  "TP4",
-  "TP5",
-  "TP8",
-  "TP9",
-  "J3",
-])
-
-const lm5155ControlLoopAccessComponents = new Set<ComponentName>(["TP6", "TP7", "J4"])
-
-const lm251772PowerMeasurementComponents = new Set<ComponentName>([
-  "TP1",
-  "TP2",
-  "TP3",
-  "TP4",
-  "TP5",
-  "TP6",
-  "TP7",
-  "TP8",
-  "J3",
-  "J4",
-])
-
-const lm251772ControlDebugComponents = new Set<ComponentName>([
-  "TP9",
-  "TP10",
-  "TP11",
-  "TP12",
-  "TP13",
-  "J11",
-])
-
-const lm251772Usb2AnyComponents = new Set<ComponentName>(["J12", "R39", "R40"])
-
-const lmgStatusIndicators = new Set<ComponentName>([
-  "LS_OC",
-  "HS_OC",
-  "LS_FLT",
-  "HS_FLT",
-  "HVIN_EN",
-  "5V_EN",
-  "R1",
-  "R5",
-  "R10",
-  "R11",
-  "R12",
-  "R13",
-  "R14",
-  "R16",
-  "R17",
-  "R18",
-  "R19",
-  "R20",
-  "R29",
-  "R30",
-  "R31",
-])
-
-const lmgLogicMeasurementComponents = new Set<ComponentName>([
-  "TACH",
-  "PWM_LS",
-  "PWM_HS",
-  "LS_FET_PWM",
-  "HS_FET_PWM",
-  "AGND2",
-  "AGND1",
-])
-
-const lmgPowerMeasurementComponents = new Set<ComponentName>([
-  "SW",
-  "PGND5",
-  "PGND4",
-  "HVOUT",
-  "HVIN",
-])
-
-const lmgBiasMeasurementComponents = new Set<ComponentName>(["VAUX", "ACMGND", "12V", "5V"])
+const tmds62lSchematicDirectory = "tmp/references/tmds62levm"
+const skAm62SchematicDirectory = "tmp/references/sk-am62/Imported PROC114E3_SCH.PrjPcb"
+const beaglePlaySchematicDirectory = "tmp/references/beagleplay"
+const beagleBoneBlackDirectory = "tmp/references/beaglebone-black/BeagleBoneBlackB3_Altium"
 
 export const referenceInputs: ReferenceInput[] = [
   {
-    id: "dp83825evm",
-    componentName: "Dp83825Evm",
-    exportName: "dp83825EvmDefinition",
-    name: "DP83825EVM",
-    sourceUrl: "https://www.ti.com/tool/DP83825EVM",
-    archiveSha256: "563481585d9c44e325a46da7891650d70573fa74008de68f80e7fcc9010c388f",
-    pcbPath: "tmp/references/dp83825/HSDC045A.PcbDoc",
-    projectPath: "tmp/references/dp83825/HSDC045A.PrjPcb",
-    schematicPaths: [
-      "tmp/references/dp83825/HSDC045A_DP83825.SchDoc",
-      "tmp/references/dp83825/HSDC045A_Coms.SchDoc",
-      "tmp/references/dp83825/HSDC045A_Power.SchDoc",
-      "tmp/references/dp83825/HSDC045A_Hardware.SchDoc",
-      "tmp/references/dp83825/HSDC045A_CoverSheet.SchDoc",
+    id: "tmds62levm",
+    componentName: "Tmds62lEvm",
+    exportName: "tmds62lEvmDefinition",
+    name: "TMDS62LEVM",
+    sourceUrl: "https://www.ti.com/tool/TMDS62LEVM",
+    archiveSha256: "40e6c4d0bea5381bf7b4e0ef26ec4ec9adae156be308e4a3838bd344972b7615",
+    pcbPath: `${tmds62lSchematicDirectory}/PROC181E1-1_BRD_11_3.pcbdoc`,
+    projectPath: `${tmds62lSchematicDirectory}/PROC181E1-1_SCH_With_Design_Updates..Notes_V1.0.PrjPcb`,
+    schematicPaths: createNumberedSchematicPaths({
+      count: 57,
+      directory: tmds62lSchematicDirectory,
+    }),
+    outputName: "tmds62levm.generated.ts",
+    removedFeatureIdCombinations: [
+      [],
+      ["connectivity"],
+      ["multimedia"],
+      ["expansion"],
+      ["debug-instrumentation"],
+      ["connectivity", "multimedia", "expansion", "debug-instrumentation"],
     ],
-    outputName: "dp83825evm.generated.ts",
-    getRemovableFeatureId: getDp83825RemovableFeatureId,
-  },
-  {
-    id: "drv8307evm",
-    componentName: "Drv8307Evm",
-    exportName: "drv8307EvmDefinition",
-    name: "DRV8307EVM",
-    sourceUrl: "https://www.ti.com/tool/DRV8307EVM",
-    archiveSha256: "660117e30c1f12473f18d825a8318a5460a13025a7a6223689ac1f9afd3921d8",
-    pcbPath: "tmp/references/drv8307/Board files/DRV8307EVM RevA.PcbDoc",
-    projectPath: "tmp/references/drv8307/Board files/DRV8307EVM RevA.PrjPcb",
-    schematicPaths: ["tmp/references/drv8307/Board files/DRV8307EVM RevA.SchDoc"],
-    outputName: "drv8307evm.generated.ts",
-    getRemovableFeatureId: (componentName) => {
-      if (drvSpeedControlComponents.has(componentName)) return "onboard-speed-control"
-      if (drvSingleEndedHallConditioningComponents.has(componentName)) {
-        return "single-ended-hall-conditioning"
-      }
-      if (/^TP/u.test(componentName)) return "test-points"
-      if (drvStatusIndicatorComponents.has(componentName)) return "status-indicators"
-      return undefined
+    removableFeatureIdBySchematicSheetIndex: {
+      27: "connectivity",
+      31: "connectivity",
+      32: "connectivity",
+      33: "connectivity",
+      38: "multimedia",
+      39: "multimedia",
+      41: "expansion",
+      42: "expansion",
+      46: "debug-instrumentation",
+      47: "debug-instrumentation",
+      48: "debug-instrumentation",
+      49: "debug-instrumentation",
+      50: "debug-instrumentation",
+      51: "debug-instrumentation",
+      52: "debug-instrumentation",
+      53: "debug-instrumentation",
+      54: "debug-instrumentation",
+      55: "debug-instrumentation",
     },
   },
   {
-    id: "lm5155evm-fly",
-    componentName: "Lm5155EvmFly",
-    exportName: "lm5155EvmFlyDefinition",
-    name: "LM5155EVM-FLY",
-    sourceUrl: "https://www.ti.com/tool/LM5155EVM-FLY",
-    archiveSha256: "e8a1573658d294c6b47c8cdd8833df2d50302ac242afe88ecb8e60ca2f80b215",
-    pcbPath: "tmp/references/lm5155fly/BMC029A.PcbDoc",
-    projectPath: "tmp/references/lm5155fly/BMC029A.PrjPcb",
-    schematicPaths: [
-      "tmp/references/lm5155fly/BMC029A_SCH.SchDoc",
-      "tmp/references/lm5155fly/BMC029A-HW.SchDoc",
+    id: "sk-am62",
+    componentName: "SkAm62",
+    exportName: "skAm62Definition",
+    name: "SK-AM62",
+    sourceUrl: "https://www.ti.com/tool/SK-AM62",
+    archiveSha256: "14f84ba83c82db636b7425a874d599fea2a3cd0b72f365460b943d53ffc26982",
+    pcbPath: "tmp/references/sk-am62/Imported PROC114E3_BRD.PrjPcb/PROC114E3_BRD.PcbDoc",
+    projectPath: `${skAm62SchematicDirectory}/PROC114E3_SCH.PrjPcb`,
+    schematicPaths: createNumberedSchematicPaths({
+      count: 44,
+      directory: skAm62SchematicDirectory,
+    }),
+    outputName: "sk-am62.generated.ts",
+    removedFeatureIdCombinations: [
+      [],
+      ["connectivity"],
+      ["test-debug"],
+      ["expansion"],
+      ["multimedia"],
+      ["connectivity", "test-debug", "expansion", "multimedia"],
     ],
-    outputName: "lm5155evm-fly.generated.ts",
-    getRemovableFeatureId: (componentName) => {
-      if (lm5155PowerMeasurementComponents.has(componentName)) return "power-measurement-access"
-      if (lm5155ControlLoopAccessComponents.has(componentName)) return "control-loop-access"
-      return undefined
+    removableFeatureIdBySchematicSheetIndex: {
+      16: "connectivity",
+      21: "connectivity",
+      22: "connectivity",
+      23: "connectivity",
+      24: "test-debug",
+      26: "test-debug",
+      27: "test-debug",
+      28: "test-debug",
+      29: "test-debug",
+      30: "test-debug",
+      31: "expansion",
+      32: "expansion",
+      33: "expansion",
+      36: "multimedia",
+      37: "multimedia",
+      38: "multimedia",
+      39: "multimedia",
+      40: "multimedia",
     },
   },
   {
-    id: "lm251772evm-pd",
-    componentName: "Lm251772EvmPd",
-    exportName: "lm251772EvmPdDefinition",
-    name: "LM251772EVM-PD",
-    sourceUrl: "https://www.ti.com/tool/LM251772EVM-PD",
-    archiveSha256: "d538f1bb6dc0976a1d0509faf0a9f6a7932fc1e80ed3730740272fb390e8516f",
-    pcbPath: "tmp/references/lm251772/Altium_Files/SR135B.PcbDoc",
-    projectPath: "tmp/references/lm251772/Altium_Files/SR135B.PrjPcb",
-    schematicPaths: ["tmp/references/lm251772/Altium_Files/SR135B.SchDoc"],
-    outputName: "lm251772evm-pd.generated.ts",
-    getRemovableFeatureId: (componentName) => {
-      if (lm251772PowerMeasurementComponents.has(componentName)) {
-        return "power-measurement-access"
-      }
-      if (lm251772ControlDebugComponents.has(componentName)) return "control-debug-access"
-      if (lm251772Usb2AnyComponents.has(componentName)) return "usb2any-interface"
-      return undefined
+    id: "beagleplay",
+    componentName: "BeaglePlay",
+    exportName: "beaglePlayDefinition",
+    name: "BeaglePlay",
+    sourceUrl: "https://www.beagleboard.org/boards/beagleplay",
+    archiveSha256: "6b2b29a35e308237891d91f2c0b131653c0a01700ab8e5345e31bed3ddf2101e",
+    pcbPath: `${beaglePlaySchematicDirectory}/BEAGLEPLAYV020_220915.brd.PcbDoc`,
+    projectPath: `${beaglePlaySchematicDirectory}/BEAGLEPLAYV020_220915.PrjPcb`,
+    schematicPaths: [
+      "001_Revision History.SchDoc",
+      "002_Block Diagram.SchDoc",
+      "003_Power Tree.SchDoc",
+      "004_I2C Usage Diagram.SchDoc",
+      "005_DCDC & PMIC.SchDoc",
+      "006_SoC Power.SchDoc",
+      "007_SoC DCAPs.SchDoc",
+      "008_SoC DDR & DDR4.SchDoc",
+      "009_SoC SDIO & eMMC & SD.SchDoc",
+      "010_SoC RGMII & GBE PHY.SchDoc",
+      "011_SoC RMII & SPE PHY.SchDoc",
+      "012_SoC DDS & HDMI.SchDoc",
+      "013_SoC GPIO 3.3V.SchDoc",
+      "014_SoC GPIO 1.8V & Bootstrap.SchDoc",
+      "015_SoC USB & USB_A & USB_C.SchDoc",
+      "016_SoC Reset & MCU.SchDoc",
+      "017_SoC CSI & OLDI.SchDoc",
+      "018_RTC & ID & DEBUG.SchDoc",
+      "019_CC1352P.SchDoc",
+      "020_WiFi WL1807MOD.SchDoc",
+      "021_BUTTONs & LEDs.SchDoc",
+      "022_GROVE &QWIIC &MikroBus &ADC.SchDoc",
+    ].map((fileName) => `${beaglePlaySchematicDirectory}/${fileName}`),
+    outputName: "beagleplay.generated.ts",
+    removedFeatureIdCombinations: [
+      [],
+      ["wired-networking"],
+      ["display-camera"],
+      ["wireless"],
+      ["user-io"],
+      ["wired-networking", "display-camera", "wireless", "user-io"],
+    ],
+    removableFeatureIdBySchematicSheetIndex: {
+      9: "wired-networking",
+      10: "wired-networking",
+      11: "display-camera",
+      16: "display-camera",
+      18: "wireless",
+      19: "wireless",
+      20: "user-io",
+      21: "user-io",
     },
   },
   {
-    id: "lmg342x-bb-evm",
-    componentName: "Lmg342xBbEvm",
-    exportName: "lmg342xBbEvmDefinition",
-    name: "LMG342X-BB-EVM",
-    sourceUrl: "https://www.ti.com/tool/LMG342X-BB-EVM",
-    archiveSha256: "3aba23eea3b9c4751d55468e8716a2c95277b9cd581edc9ae8ef4fb058717b09",
-    pcbPath: "tmp/references/lmg342x/LMG342X_BB_EVM.PcbDoc",
-    projectPath: "tmp/references/lmg342x/LMG342X_BB_EVM.PrjPcb",
-    schematicPaths: ["tmp/references/lmg342x/LMG342X_BB_EVM.SchDoc"],
-    outputName: "lmg342x-bb-evm.generated.ts",
-    getRemovableFeatureId: (componentName) => {
-      if (lmgStatusIndicators.has(componentName)) return "status-indicators"
-      if (lmgLogicMeasurementComponents.has(componentName)) return "logic-measurement-access"
-      if (lmgPowerMeasurementComponents.has(componentName)) return "power-measurement-access"
-      if (lmgBiasMeasurementComponents.has(componentName)) return "bias-measurement-access"
-      return undefined
+    id: "beaglebone-black",
+    componentName: "BeagleBoneBlack",
+    exportName: "beagleBoneBlackDefinition",
+    name: "BeagleBone Black",
+    sourceUrl: "https://www.beagleboard.org/boards/beaglebone-black",
+    archiveSha256: "7ff2ca881779f51b9fcb83e041bd06125fc2cb91ba5111c8d360b9df1a651413",
+    pcbPath: `${beagleBoneBlackDirectory}/BeagleBone_Black_RevB4.PcbDoc`,
+    projectPath: `${beagleBoneBlackDirectory}/BEAGLEBONEBLACK_REV A5B.PrjPcb`,
+    schematicPaths: [
+      "P01_Title Page.SchDoc",
+      "P02_Power Management.SchDoc",
+      "P03_Processor 1 of 3, JTAG Header.SchDoc",
+      "P04_Processor 2 or 3, USB and Serial.SchDoc",
+      "P05_Processor Page 3 of 3.SchDoc",
+      "P06_LED, Config, & Button.SchDoc",
+      "P07_DDR3 Memory.SchDoc",
+      "P08_eMMC.SchDoc",
+      "P09_Ethernet.SchDoc",
+      "P10_HDMI Framer.SchDoc",
+      "P11_Exp Conn, uSD, and .SchDoc",
+    ].map((fileName) => `${beagleBoneBlackDirectory}/${fileName}`),
+    outputName: "beaglebone-black.generated.ts",
+    removedFeatureIdCombinations: [
+      [],
+      ["emmc"],
+      ["ethernet"],
+      ["hdmi"],
+      ["emmc", "ethernet", "hdmi"],
+    ],
+    removableFeatureIdBySchematicSheetIndex: {
+      7: "emmc",
+      8: "ethernet",
+      9: "hdmi",
     },
   },
 ]

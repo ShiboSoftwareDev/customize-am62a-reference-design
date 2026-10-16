@@ -1,16 +1,20 @@
 import { checkDanglingTraces } from "@tscircuit/checks"
+import { getPrimaryId } from "@tscircuit/circuit-json-util"
 import type { AnyCircuitElement } from "circuit-json"
+import type { ConnectivityMap } from "circuit-json-to-connectivity-map"
 import {
   getImportedRoutingBridgeVias,
-  isBridgeViaRequired,
   type ImportedRoutingBridgeVia,
+  isBridgeViaRequired,
 } from "./get-imported-routing-bridge-vias"
 import type { SourceComponentId } from "./types"
 
 export type DanglingEndpointKey = string
 export type PcbTraceId = string
 export type PcbViaId = string
+type PcbRoutePointKey = string
 type PcbComponentId = string
+type ConnectivityNetId = string
 type SourceNetId = string
 type SourceTraceId = string
 
@@ -42,11 +46,14 @@ export type ImportedPcbVia = AnyCircuitElement &
     type: "pcb_via"
   }
 
+export type IncidentPcbTraceIdsByViaId = ReadonlyMap<PcbViaId, ReadonlySet<PcbTraceId>>
+
 export function getBaselineDanglingEndpointKeys(
   circuitJson: AnyCircuitElement[],
+  connectivityMap: ConnectivityMap,
 ): ReadonlySet<DanglingEndpointKey> {
   return new Set(
-    checkDanglingTraces(circuitJson).map((error) =>
+    checkDanglingTraces(circuitJson, { connMap: connectivityMap }).map((error) =>
       getDanglingEndpointKey({
         center: error.center,
         sourceTraceId: error.source_trace_id,
@@ -63,9 +70,33 @@ export function getImportedPcbVias(circuitJson: AnyCircuitElement[]): ImportedPc
   return circuitJson.filter(isImportedPcbVia)
 }
 
+export function getIncidentPcbTraceIdsByViaId(params: {
+  pcbTraces: ImportedPcbTrace[]
+  pcbVias: ImportedPcbVia[]
+}): IncidentPcbTraceIdsByViaId {
+  const pcbTraceIdsByRoutePoint = new Map<PcbRoutePointKey, Set<PcbTraceId>>()
+  for (const pcbTrace of params.pcbTraces) {
+    for (const routePoint of pcbTrace.route) {
+      const routePointKey = getRoutePointKey(routePoint)
+      const pcbTraceIds = pcbTraceIdsByRoutePoint.get(routePointKey) ?? new Set<PcbTraceId>()
+      pcbTraceIds.add(pcbTrace.pcb_trace_id)
+      pcbTraceIdsByRoutePoint.set(routePointKey, pcbTraceIds)
+    }
+  }
+
+  return new Map(
+    params.pcbVias.map((pcbVia) => [
+      pcbVia.pcb_via_id,
+      pcbTraceIdsByRoutePoint.get(getRoutePointKey(pcbVia)) ?? new Set<PcbTraceId>(),
+    ]),
+  )
+}
+
 export function getIncludedImportedRoutingElementIds(params: {
   baselineDanglingEndpointKeys: ReadonlySet<DanglingEndpointKey>
   circuitJson: AnyCircuitElement[]
+  connectivityMap: ConnectivityMap
+  incidentPcbTraceIdsByViaId: IncidentPcbTraceIdsByViaId
   pcbTraces: ImportedPcbTrace[]
   pcbVias: ImportedPcbVia[]
   removedSourceComponentIds: ReadonlySet<SourceComponentId>
@@ -98,11 +129,14 @@ export function getIncludedImportedRoutingElementIds(params: {
     pcbVias: params.pcbVias,
     removedPcbComponentIds,
   })
+  let pruningPassCount = 0
+  let affectedNetIds: ReadonlySet<ConnectivityNetId> | undefined
 
   while (true) {
+    pruningPassCount += 1
     const includedPcbViaIds = getIncludedPcbViaIds({
       includedPcbTraceIds,
-      pcbTraces: params.pcbTraces,
+      incidentPcbTraceIdsByViaId: params.incidentPcbTraceIdsByViaId,
       pcbVias: params.pcbVias,
     })
     const circuitJsonWithIncludedRouting = getCircuitJsonWithIncludedRouting({
@@ -111,8 +145,17 @@ export function getIncludedImportedRoutingElementIds(params: {
       includedPcbTraceIds,
       includedPcbViaIds,
     })
+    const circuitJsonToCheck = affectedNetIds
+      ? getCircuitJsonForConnectivityNets({
+          circuitJson: circuitJsonWithIncludedRouting,
+          connectivityMap: params.connectivityMap,
+          netIds: affectedNetIds,
+        })
+      : circuitJsonWithIncludedRouting
     const newlyDanglingPcbTraceIds = new Set<PcbTraceId>(
-      checkDanglingTraces(circuitJsonWithIncludedRouting).flatMap((error) => {
+      checkDanglingTraces(circuitJsonToCheck, {
+        connMap: params.connectivityMap,
+      }).flatMap((error) => {
         const danglingEndpointKey = getDanglingEndpointKey({
           center: error.center,
           sourceTraceId: error.source_trace_id,
@@ -123,6 +166,7 @@ export function getIncludedImportedRoutingElementIds(params: {
       }),
     )
     if (newlyDanglingPcbTraceIds.size === 0) {
+      console.log(`Imported routing: completed after ${pruningPassCount} pruning passes`)
       return {
         includedBridgeVias: bridgeVias.filter((bridgeVia) =>
           isBridgeViaRequired({
@@ -138,20 +182,54 @@ export function getIncludedImportedRoutingElementIds(params: {
     for (const pcbTraceId of newlyDanglingPcbTraceIds) {
       includedPcbTraceIds.delete(pcbTraceId)
     }
+    affectedNetIds = getConnectivityNetIdsForTraces({
+      connectivityMap: params.connectivityMap,
+      pcbTraceIds: newlyDanglingPcbTraceIds,
+    })
   }
+}
+
+function getConnectivityNetIdsForTraces(params: {
+  connectivityMap: ConnectivityMap
+  pcbTraceIds: ReadonlySet<PcbTraceId>
+}): ReadonlySet<ConnectivityNetId> | undefined {
+  const netIds = new Set<ConnectivityNetId>()
+  for (const pcbTraceId of params.pcbTraceIds) {
+    const netId = params.connectivityMap.getNetConnectedToId(pcbTraceId)
+    if (!netId) return undefined
+    netIds.add(netId)
+  }
+  return netIds
+}
+
+function getCircuitJsonForConnectivityNets(params: {
+  circuitJson: AnyCircuitElement[]
+  connectivityMap: ConnectivityMap
+  netIds: ReadonlySet<ConnectivityNetId>
+}): AnyCircuitElement[] {
+  return params.circuitJson.filter((element) => {
+    if (element.type === "pcb_board") return true
+    const primaryId = getPrimaryId(element)
+    const sourceNetId =
+      "source_net_id" in element && typeof element.source_net_id === "string"
+        ? element.source_net_id
+        : undefined
+    const netId =
+      (primaryId ? params.connectivityMap.getNetConnectedToId(primaryId) : undefined) ??
+      (sourceNetId ? params.connectivityMap.getNetConnectedToId(sourceNetId) : undefined)
+    return netId !== undefined && params.netIds.has(netId)
+  })
 }
 
 function getIncludedPcbViaIds(params: {
   includedPcbTraceIds: ReadonlySet<PcbTraceId>
-  pcbTraces: ImportedPcbTrace[]
+  incidentPcbTraceIdsByViaId: IncidentPcbTraceIdsByViaId
   pcbVias: ImportedPcbVia[]
 }): Set<PcbViaId> {
   return new Set(
     params.pcbVias.flatMap((pcbVia) => {
-      const incidentTraceIds = getIncidentPcbTraceIds({
-        pcbTraceElements: params.pcbTraces,
-        pcbVia,
-      })
+      const incidentTraceIds =
+        params.incidentPcbTraceIdsByViaId.get(pcbVia.pcb_via_id) ?? new Set<PcbTraceId>()
       return isPcbViaIncluded({
         incidentTraceIds,
         includedPcbTraceIds: params.includedPcbTraceIds,
@@ -172,19 +250,6 @@ function isPcbViaIncluded(params: {
   ).length
   const requiredIncidentTraceCount = Math.min(params.incidentTraceIds.size, 2)
   return includedIncidentTraceCount >= requiredIncidentTraceCount
-}
-
-function getIncidentPcbTraceIds(params: {
-  pcbTraceElements: ImportedPcbTrace[]
-  pcbVia: ImportedPcbVia
-}): Set<PcbTraceId> {
-  return new Set(
-    params.pcbTraceElements.flatMap((pcbTrace) =>
-      pcbTrace.route.some((routePoint) => pointsAreEqual(routePoint, params.pcbVia))
-        ? [pcbTrace.pcb_trace_id]
-        : [],
-    ),
-  )
 }
 
 function getCircuitJsonWithIncludedRouting(params: {
@@ -245,10 +310,8 @@ function getDanglingEndpointKey(params: {
   ])
 }
 
-function pointsAreEqual(firstPoint: Point, secondPoint: Point): boolean {
-  return (
-    Math.abs(firstPoint.x - secondPoint.x) < 1e-6 && Math.abs(firstPoint.y - secondPoint.y) < 1e-6
-  )
+function getRoutePointKey(point: Point): PcbRoutePointKey {
+  return JSON.stringify([roundCoordinate(point.x), roundCoordinate(point.y)])
 }
 
 function roundCoordinate(coordinate: number): number {

@@ -1,6 +1,8 @@
 import type { AnyCircuitElement } from "circuit-json"
+import { getFullConnectivityMapFromCircuitJson } from "circuit-json-to-connectivity-map"
 import {
   getBaselineDanglingEndpointKeys,
+  getIncidentPcbTraceIdsByViaId,
   getImportedPcbTraces,
   getImportedPcbVias,
   getIncludedImportedRoutingElementIds,
@@ -20,6 +22,7 @@ export type ImportedRoutingInclusionMasks = {
   bridgeViaInclusionMaskByViaKey: ReadonlyMap<PcbViaKey, ImportedRoutingInclusionMask>
   bridgeViaByViaKey: ReadonlyMap<PcbViaKey, ImportedRoutingBridgeVia>
   featureIds: FeatureId[]
+  supportedRemovalCombinationIndexes: number[]
   traceInclusionMaskByRouteKey: ReadonlyMap<PcbTraceRouteKey, ImportedRoutingInclusionMask>
   viaInclusionMaskByViaKey: ReadonlyMap<PcbViaKey, ImportedRoutingInclusionMask>
 }
@@ -28,23 +31,46 @@ export function getImportedRoutingInclusionMasks(params: {
   circuitJson: AnyCircuitElement[]
   featureIdBySourceComponentId: ReadonlyMap<SourceComponentId, FeatureId>
   generatedSourceNetIdBySourceNetId: ReadonlyMap<SourceNetId, GeneratedSourceNetId>
+  removedFeatureIdCombinations: FeatureId[][]
   sourceNetIdBySourceTraceId: ReadonlyMap<SourceTraceId, SourceNetId>
 }): ImportedRoutingInclusionMasks {
   const featureIds = [...new Set(params.featureIdBySourceComponentId.values())]
   const pcbTraces = getImportedPcbTraces(params.circuitJson)
   const pcbVias = getImportedPcbVias(params.circuitJson)
-  const baselineDanglingEndpointKeys = getBaselineDanglingEndpointKeys(params.circuitJson)
+  const connectivityMap = getFullConnectivityMapFromCircuitJson(params.circuitJson)
+  const incidentPcbTraceIdsByViaId = getIncidentPcbTraceIdsByViaId({
+    pcbTraces,
+    pcbVias,
+  })
+  const baselineDanglingEndpointKeys = getBaselineDanglingEndpointKeys(
+    params.circuitJson,
+    connectivityMap,
+  )
   const traceInclusionMaskByRouteKey = new Map<PcbTraceRouteKey, ImportedRoutingInclusionMask>()
   const viaInclusionMaskByViaKey = new Map<PcbViaKey, ImportedRoutingInclusionMask>()
   const bridgeViaInclusionMaskByViaKey = new Map<PcbViaKey, ImportedRoutingInclusionMask>()
   const bridgeViaByViaKey = new Map<PcbViaKey, ImportedRoutingBridgeVia>()
-  const removalCombinationCount = 2 ** featureIds.length
+  const knownFeatureIds = new Set(featureIds)
+  for (const removedFeatureIds of params.removedFeatureIdCombinations) {
+    for (const removedFeatureId of removedFeatureIds) {
+      if (!knownFeatureIds.has(removedFeatureId)) {
+        throw new Error(`Unknown imported-routing feature: ${removedFeatureId}`)
+      }
+    }
+  }
+  const supportedRemovalCombinationIndexes = [
+    ...new Set(
+      params.removedFeatureIdCombinations.map((removedFeatureIds) =>
+        getRemovalCombinationIndex({
+          featureIds,
+          removedFeatureIds: new Set(removedFeatureIds),
+        }),
+      ),
+    ),
+  ]
 
-  for (
-    let removalCombinationIndex = 0;
-    removalCombinationIndex < removalCombinationCount;
-    removalCombinationIndex += 1
-  ) {
+  for (const removalCombinationIndex of supportedRemovalCombinationIndexes) {
+    console.log(`Imported routing: evaluating combination ${removalCombinationIndex}`)
     const removedFeatureIds = getRemovedFeatureIds({
       featureIds,
       removalCombinationIndex,
@@ -58,6 +84,8 @@ export function getImportedRoutingInclusionMasks(params: {
       getIncludedImportedRoutingElementIds({
         baselineDanglingEndpointKeys,
         circuitJson: params.circuitJson,
+        connectivityMap,
+        incidentPcbTraceIdsByViaId,
         pcbTraces,
         pcbVias,
         removedSourceComponentIds,
@@ -109,9 +137,23 @@ export function getImportedRoutingInclusionMasks(params: {
     bridgeViaByViaKey,
     bridgeViaInclusionMaskByViaKey,
     featureIds,
+    supportedRemovalCombinationIndexes,
     traceInclusionMaskByRouteKey,
     viaInclusionMaskByViaKey,
   }
+}
+
+function getRemovalCombinationIndex(params: {
+  featureIds: FeatureId[]
+  removedFeatureIds: ReadonlySet<FeatureId>
+}): number {
+  let removalCombinationIndex = 0
+  for (const [featureIndex, featureId] of params.featureIds.entries()) {
+    if (params.removedFeatureIds.has(featureId)) {
+      removalCombinationIndex |= 1 << featureIndex
+    }
+  }
+  return removalCombinationIndex
 }
 
 export function getPcbViaKey(params: {

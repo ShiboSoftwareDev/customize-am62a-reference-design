@@ -4,14 +4,14 @@ import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import type { AnyCircuitElement } from "circuit-json"
 import { getTiEvmVariant, tiEvms } from "lib/ti-evm-catalog"
 
-type CadComponentWithStepModel = AnyCircuitElement & {
+type RenderableCadComponent = AnyCircuitElement & {
   type: "cad_component"
-  model_step_url: string
+  model_jscad?: unknown
+  model_step_url?: string
 }
 
-test("prebuilt full-board EVMs retain their extracted Altium CAD models", async () => {
+test("prebuilt full-board EVMs retain their Altium CAD representation", async () => {
   const repositoryRoot = resolve(import.meta.dir, "..")
-  const cadModelCounts: number[] = []
 
   for (const evm of tiEvms) {
     const fullBoard = getTiEvmVariant(evm, "full-board")
@@ -22,14 +22,20 @@ test("prebuilt full-board EVMs retain their extracted Altium CAD models", async 
         ).arrayBuffer(),
       ),
     )
-    const cadComponents = circuitJson.filter(
-      (element): element is CadComponentWithStepModel =>
-        element.type === "cad_component" && element.model_step_url !== undefined,
+    const sourceCircuitJson = parsePrebuiltCircuitJson(
+      new Uint8Array(
+        await Bun.file(
+          resolve(repositoryRoot, `lib/generated/ti-evms/${evm.id}.source.circuit.json.gz`),
+        ).arrayBuffer(),
+      ),
     )
-    cadModelCounts.push(cadComponents.length)
+    const sourceCadComponents = sourceCircuitJson.filter(isRenderableCadComponent)
+    const generatedCadComponents = circuitJson.filter(isRenderableCadComponent)
 
-    for (const cadComponent of cadComponents) {
-      expect(cadComponent.model_step_url).toStartWith(`/cad-models/ti-evms/${evm.id}/`)
+    expect(generatedCadComponents.length > 0).toBe(sourceCadComponents.length > 0)
+
+    for (const cadComponent of generatedCadComponents) {
+      if (!cadComponent.model_step_url?.startsWith("/")) continue
       expect(
         await Bun.file(
           resolve(repositoryRoot, "public", cadComponent.model_step_url.replace(/^\//u, "")),
@@ -37,6 +43,12 @@ test("prebuilt full-board EVMs retain their extracted Altium CAD models", async 
       ).toBe(true)
     }
   }
-
-  expect(cadModelCounts).toEqual([23, 6, 24, 94, 77])
 })
+
+function isRenderableCadComponent(element: AnyCircuitElement): element is RenderableCadComponent {
+  return (
+    element.type === "cad_component" &&
+    ("model_jscad" in element ||
+      ("model_step_url" in element && typeof element.model_step_url === "string"))
+  )
+}

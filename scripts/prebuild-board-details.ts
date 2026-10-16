@@ -64,7 +64,7 @@ for (const evm of tiEvms) {
   ])
 }
 
-console.log(`Prebuilt PCB, schematic, 3D, and TSX details for ${tiEvms.length} TI EVMs`)
+console.log(`Prebuilt PCB, schematic, 3D, and TSX details for ${tiEvms.length} Sitara boards`)
 
 async function readCompressedCircuitJson(publicUrl: string): Promise<CircuitJson> {
   const inputPath = resolve(repositoryRoot, "public", publicUrl.replace(/^\//u, ""))

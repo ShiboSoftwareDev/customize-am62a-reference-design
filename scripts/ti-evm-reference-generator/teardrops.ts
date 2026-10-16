@@ -21,6 +21,9 @@ export type TeardropConnections = {
   hasViaTeardrops: boolean
 }
 
+type PadRecordsByNetIndex = Map<NetRecordIndex, AltiumPadRecord[]>
+type ViaRecordsByNetIndex = Map<NetRecordIndex, AltiumViaRecord[]>
+
 export function getTeardropsByNet(params: {
   pcbDocument: ReturnType<typeof parseAltiumBinaryPcbDoc>
   padRecords: AltiumPadRecord[]
@@ -37,21 +40,23 @@ export function getTeardropsByNet(params: {
     (record): record is AltiumRegionRecord =>
       record instanceof AltiumRegionRecord && record.getBoolean("TEARDROP") === true,
   )
+  const padRecordsByNetIndex = groupPadsByNetIndex(params.padRecords)
+  const viaRecordsByNetIndex = groupViasByNetIndex(viaRecords)
 
   for (const region of teardropRegions) {
     const netIndex = region.netIndex
     if (netIndex === undefined) continue
     const outlinePoints = region.geometry.outline.points
-    const padContacts = params.padRecords.filter(
+    const netPadRecords = padRecordsByNetIndex.get(netIndex) ?? []
+    const netViaRecords = viaRecordsByNetIndex.get(netIndex) ?? []
+    const padContacts = netPadRecords.filter(
       (padRecord) =>
-        padRecord.netIndex === netIndex &&
         isPadOnRegionLayer({ padRecord, regionLayer: region.layer }) &&
         outlinePoints.some((point) => isPointOnPad({ point, padRecord })),
     )
-    const viaContacts = viaRecords.filter((viaRecord) => {
+    const viaContacts = netViaRecords.filter((viaRecord) => {
       const position = viaRecord.position
       return (
-        viaRecord.netIndex === netIndex &&
         position !== undefined &&
         outlinePoints.some(
           (point) =>
@@ -65,8 +70,8 @@ export function getTeardropsByNet(params: {
         ? { padContacts, viaContacts }
         : getNearestTeardropContact({
             region,
-            padRecords: params.padRecords,
-            viaRecords,
+            padRecords: netPadRecords,
+            viaRecords: netViaRecords,
           })
     const teardrops = teardropsByNet.get(netIndex) ?? {
       endpointKeys: new Set<string>(),
@@ -86,6 +91,30 @@ export function getTeardropsByNet(params: {
   }
 
   return teardropsByNet
+}
+
+function groupPadsByNetIndex(padRecords: AltiumPadRecord[]): PadRecordsByNetIndex {
+  const padRecordsByNetIndex: PadRecordsByNetIndex = new Map()
+  for (const padRecord of padRecords) {
+    const netIndex = padRecord.netIndex
+    if (netIndex === undefined) continue
+    const netPadRecords = padRecordsByNetIndex.get(netIndex) ?? []
+    netPadRecords.push(padRecord)
+    padRecordsByNetIndex.set(netIndex, netPadRecords)
+  }
+  return padRecordsByNetIndex
+}
+
+function groupViasByNetIndex(viaRecords: AltiumViaRecord[]): ViaRecordsByNetIndex {
+  const viaRecordsByNetIndex: ViaRecordsByNetIndex = new Map()
+  for (const viaRecord of viaRecords) {
+    const netIndex = viaRecord.netIndex
+    if (netIndex === undefined) continue
+    const netViaRecords = viaRecordsByNetIndex.get(netIndex) ?? []
+    netViaRecords.push(viaRecord)
+    viaRecordsByNetIndex.set(netIndex, netViaRecords)
+  }
+  return viaRecordsByNetIndex
 }
 
 function isPadOnRegionLayer(params: { padRecord: AltiumPadRecord; regionLayer?: string }): boolean {

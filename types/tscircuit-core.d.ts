@@ -5,6 +5,7 @@ declare module "@tscircuit/core" {
   export class Circuit {
     constructor(options?: { platform?: { drcChecksDisabled?: boolean } })
     _featureMspSchematicTraceRouting: boolean
+    schematicDisabled: boolean
     add(element: ReactNode): void
     renderUntilSettled(): Promise<void>
     getCircuitJson(): AnyCircuitElement[]
