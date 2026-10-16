@@ -1,7 +1,7 @@
 import { setDefaultTimeout, test } from "bun:test"
 import { expectElectricallyValidVariants } from "./fixtures/expect-electrically-valid-variants"
 
-setDefaultTimeout(15_000)
+setDefaultTimeout(30_000)
 
 test("LMG342X variants retain PWM, bias, power, and cooling paths", async () => {
   await expectElectricallyValidVariants({

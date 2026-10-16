@@ -1,5 +1,4 @@
 import { expect, test } from "bun:test"
-import type { AnyCircuitElement } from "circuit-json"
 import { lm5155EvmFlyDefinition } from "lib/generated/ti-evms/lm5155evm-fly.generated"
 import { expectFullBoardSvgSnapshots } from "tests/fixtures/expect-full-board-svg-snapshots"
 
@@ -15,25 +14,12 @@ test("LM5155EVM-FLY full-board PCB and schematic", async () => {
     evmId: "lm5155evm-fly",
     testPath: import.meta.path,
   })
-  const taperedTraces = circuitJson.filter(isTaperedPcbTrace)
-  expect(taperedTraces.length).toBeGreaterThan(0)
+  const importedPcbTraces = circuitJson.filter(
+    (element) =>
+      element.type === "pcb_trace" &&
+      typeof element.source_trace_id === "string" &&
+      element.source_trace_id.startsWith("source_net_"),
+  )
+  expect(importedPcbTraces.length).toBeGreaterThan(0)
+  expect(circuitJson.filter(({ type }) => type === "pcb_copper_pour").length).toBeGreaterThan(0)
 })
-
-function isTaperedPcbTrace(element: AnyCircuitElement): boolean {
-  return (
-    element.type === "pcb_trace" &&
-    Array.isArray(element.route) &&
-    element.route.some(isQuadraticWirePoint)
-  )
-}
-
-function isQuadraticWirePoint(point: unknown): boolean {
-  return (
-    typeof point === "object" &&
-    point !== null &&
-    "route_type" in point &&
-    point.route_type === "wire" &&
-    "width_interpolation_mode" in point &&
-    point.width_interpolation_mode === "quadratic"
-  )
-}

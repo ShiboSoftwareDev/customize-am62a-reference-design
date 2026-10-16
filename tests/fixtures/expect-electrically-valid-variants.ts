@@ -1,4 +1,5 @@
 import { expect } from "bun:test"
+import { resolve } from "node:path"
 import {
   checkDanglingTraces,
   checkEachPcbPortConnectedToPcbTraces,
@@ -7,13 +8,15 @@ import {
   checkTracesAreContiguous,
   runAllSchematicChecks,
 } from "@tscircuit/checks"
-import type { AnyCircuitElement } from "circuit-json"
-import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
+import type { AnyCircuitElement } from "circuit-json"
 import { getTiEvm, type TiEvmId } from "lib/ti-evm-catalog"
+import {
+  getActionableElectricalErrors,
+  getImportedSourceNetIdsWithElectricalErrors,
+} from "scripts/get-actionable-electrical-errors"
 
 type ComponentName = string
-
 type ElectricalVariantExpectation = {
   evmId: TiEvmId
   requiredComponentNames: ComponentName[]
@@ -25,19 +28,29 @@ export async function expectElectricallyValidVariants(
   const repositoryRoot = resolve(import.meta.dir, "../..")
   const evm = getTiEvm(expectation.evmId)
   const validationErrors: string[] = []
+  const fullBoardVariant = evm.variants.find(
+    ({ removedFeatureIds }) => removedFeatureIds.length === 0,
+  )
+  if (!fullBoardVariant) throw new Error(`${evm.name} has no full-board variant`)
+  const fullBoardCircuitJson = await loadCompressedCircuitJson({
+    repositoryRoot,
+    publicUrl: fullBoardVariant.circuitJsonUrl,
+  })
+  const baselineImportedErrorSourceNetIds = getImportedSourceNetIdsWithElectricalErrors({
+    circuitJson: fullBoardCircuitJson,
+    electricalErrors: getElectricalErrors(fullBoardCircuitJson),
+  })
 
   for (const variant of evm.variants) {
     const pcbCircuitJson = await loadCompressedCircuitJson({
       repositoryRoot,
       publicUrl: variant.circuitJsonUrl,
     })
-    const electricalErrors = [
-      ...checkDanglingTraces(pcbCircuitJson),
-      ...checkEachPcbPortConnectedToPcbTraces(pcbCircuitJson),
-      ...checkSourceTracesHavePcbTraces(pcbCircuitJson),
-      ...checkTracesAreContiguous(pcbCircuitJson),
-      ...checkSameNameNetsAreConnected(pcbCircuitJson),
-    ]
+    const electricalErrors = getActionableElectricalErrors({
+      baselineImportedErrorSourceNetIds,
+      circuitJson: pcbCircuitJson,
+      electricalErrors: getElectricalErrors(pcbCircuitJson),
+    })
     validationErrors.push(...electricalErrors.map((error) => `${variant.id}: ${error.message}`))
 
     const sourceComponentNames = new Set<ComponentName>(
@@ -75,6 +88,16 @@ export async function expectElectricallyValidVariants(
   }
 
   expect(validationErrors).toEqual([])
+}
+
+function getElectricalErrors(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
+  return [
+    ...checkDanglingTraces(circuitJson),
+    ...checkEachPcbPortConnectedToPcbTraces(circuitJson),
+    ...checkSourceTracesHavePcbTraces(circuitJson),
+    ...checkTracesAreContiguous(circuitJson),
+    ...checkSameNameNetsAreConnected(circuitJson),
+  ]
 }
 
 function getInvalidSchematicReferences(circuitJson: AnyCircuitElement[]): string[] {

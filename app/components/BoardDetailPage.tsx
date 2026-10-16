@@ -58,7 +58,7 @@ export function BoardDetailPage({ evm }: { evm: TiEvm }) {
           href={`${assetRoot}/pcb.svg`}
           imageUrl={`${assetRoot}/pcb.svg`}
           title="PCB"
-          description="Reference placement and geometry with tscircuit autorouted copper."
+          description="Reference placement and imported TI copper geometry."
           alt={`${evm.name} PCB SVG`}
         />
         {evm.schematicSheetLabels.map((schematicSheetLabel, schematicSheetIndex) => {

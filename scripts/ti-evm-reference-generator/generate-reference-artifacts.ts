@@ -6,6 +6,7 @@ import { isSourceComponent } from "./circuit-json-elements"
 import { compressCircuitJson } from "./compress-circuit-json"
 import { createReferenceDefinition } from "./create-reference-definition"
 import { getSupportedCopperPours } from "./get-supported-copper-pours"
+import { getImportedRoutingMetadata } from "./get-imported-routing-metadata"
 import {
   getPortSelectorReplacements,
   getRoutablePortSelectors,
@@ -43,6 +44,10 @@ export async function generateReferenceArtifacts(params: {
     }),
   )
   const converterCircuitJson = prepareConverterCircuitJson(projectCircuitJson)
+  const importedRoutingMetadata = getImportedRoutingMetadata({
+    circuitJson: converterCircuitJson,
+    featureIdByComponentName,
+  })
   const portSelectorReplacements = getPortSelectorReplacements(converterCircuitJson)
   const generatedSource = convertCircuitJsonToTscircuit(converterCircuitJson, {
     componentName: params.reference.componentName,
@@ -51,6 +56,7 @@ export async function generateReferenceArtifacts(params: {
     componentName: params.reference.componentName,
     featureIdByComponentName,
     generatedSource,
+    importedRoutingMetadata,
     portSelectorReplacements,
     routablePortSelectors: getRoutablePortSelectors(converterCircuitJson),
     supportedCopperPours: getSupportedCopperPours({

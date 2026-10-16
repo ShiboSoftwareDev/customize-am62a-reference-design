@@ -11,12 +11,17 @@ type EvmRenderState = {
   elapsedMs: number
 }
 
+type LoadedEvmRender = {
+  variant: TiEvmVariant
+  pcbCircuitJson: AnyCircuitElement[] | null
+  schematicCircuitJsons: AnyCircuitElement[][]
+}
+
 export function useEvmRender(request: {
   variant: TiEvmVariant
   retryIndex: number
 }): EvmRenderState {
-  const [pcbCircuitJson, setPcbCircuitJson] = useState<AnyCircuitElement[] | null>(null)
-  const [schematicCircuitJsons, setSchematicCircuitJsons] = useState<AnyCircuitElement[][]>([])
+  const [loadedRender, setLoadedRender] = useState<LoadedEvmRender | null>(null)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [elapsedMs, setElapsedMs] = useState(0)
@@ -29,6 +34,11 @@ export function useEvmRender(request: {
     retryIndexRef.current = request.retryIndex
     const startedAt = performance.now()
     const interval = window.setInterval(() => setElapsedMs(performance.now() - startedAt), 100)
+    setLoadedRender({
+      variant: request.variant,
+      pcbCircuitJson: null,
+      schematicCircuitJsons: [],
+    })
     setIsLoading(true)
     setError("")
     setElapsedMs(0)
@@ -49,8 +59,11 @@ export function useEvmRender(request: {
           ),
         ])
         if (requestIndex !== requestIndexRef.current) return
-        setPcbCircuitJson(nextPcbCircuitJson)
-        setSchematicCircuitJsons(nextSchematicCircuitJsons)
+        setLoadedRender({
+          variant: request.variant,
+          pcbCircuitJson: nextPcbCircuitJson,
+          schematicCircuitJsons: nextSchematicCircuitJsons,
+        })
       } catch (loadError) {
         if (requestIndex === requestIndexRef.current) {
           setError(loadError instanceof Error ? loadError.message : String(loadError))
@@ -69,5 +82,21 @@ export function useEvmRender(request: {
     }
   }, [request.variant, request.retryIndex])
 
-  return { pcbCircuitJson, schematicCircuitJsons, error, isLoading, elapsedMs }
+  if (loadedRender?.variant !== request.variant) {
+    return {
+      pcbCircuitJson: null,
+      schematicCircuitJsons: [],
+      error: "",
+      isLoading: true,
+      elapsedMs: 0,
+    }
+  }
+
+  return {
+    pcbCircuitJson: loadedRender.pcbCircuitJson,
+    schematicCircuitJsons: loadedRender.schematicCircuitJsons,
+    error,
+    isLoading,
+    elapsedMs,
+  }
 }

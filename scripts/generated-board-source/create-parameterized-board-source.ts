@@ -6,6 +6,7 @@ type PortSelector = string
 export function createParameterizedBoardSource(params: {
   componentName: string
   featureEntries: Array<readonly [ComponentName, FeatureId]>
+  importedRoutingFeatureIds: FeatureId[]
   jsxBody: string
   pouredNetSelectors: ReadonlySet<NetSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
@@ -15,6 +16,7 @@ export function createParameterizedBoardSource(params: {
   const featureIds = [...new Set(params.featureEntries.map(([, featureId]) => featureId))]
   const featureType = featureIds.map((featureId) => JSON.stringify(featureId)).join(" | ")
   const featureMap = JSON.stringify(Object.fromEntries(params.featureEntries), null, 2)
+  const importedRoutingFeatureIds = JSON.stringify(params.importedRoutingFeatureIds)
   const pouredNetSelectors = JSON.stringify([...params.pouredNetSelectors], null, 2)
   const routablePortSelectors = JSON.stringify([...params.routablePortSelectors], null, 2)
   const teardropPortSelectors = JSON.stringify([...params.teardropPortSelectors], null, 2)
@@ -22,6 +24,8 @@ export function createParameterizedBoardSource(params: {
 
   return `import { Fragment } from "react"
 import "tscircuit"
+
+type FeatureId = string
 
 export type ${params.componentName}FeatureId = ${featureType || "never"}
 
@@ -32,6 +36,7 @@ export type ${params.componentName}Props = {
 const featureIdByComponentName: Partial<Record<string, ${params.componentName}FeatureId>> =
   ${featureMap}
 
+const importedRoutingFeatureIds: readonly FeatureId[] = ${importedRoutingFeatureIds}
 const pouredNetSelectors = new Set<string>(${pouredNetSelectors})
 const routablePortSelectors = new Set<string>(${routablePortSelectors})
 const teardropPortSelectors = new Set<string>(${teardropPortSelectors})
@@ -43,6 +48,26 @@ function isComponentIncluded(params: {
 }): boolean {
   const featureId = featureIdByComponentName[params.componentName]
   return featureId === undefined || !params.removedFeatureIds.has(featureId)
+}
+
+function getRemovedFeatureCombinationIndex(
+  removedFeatureIds: ReadonlySet<string>,
+): number {
+  let removalCombinationIndex = 0
+  for (const [featureIndex, featureId] of importedRoutingFeatureIds.entries()) {
+    if (removedFeatureIds.has(featureId)) {
+      removalCombinationIndex |= 1 << featureIndex
+    }
+  }
+  return removalCombinationIndex
+}
+
+function isImportedRoutingElementIncluded(params: {
+  inclusionMask: bigint
+  removedFeatureCombinationIndex: number
+}): boolean {
+  const inclusionBit = 1n << BigInt(params.removedFeatureCombinationIndex)
+  return (params.inclusionMask & inclusionBit) !== 0n
 }
 
 function ParameterizedTrace(props: {
@@ -101,6 +126,7 @@ function ParameterizedTrace(props: {
 
 export function ${params.componentName}(props: ${params.componentName}Props) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
+  const removedFeatureCombinationIndex = getRemovedFeatureCombinationIndex(removedFeatureIds)
   return (${params.jsxBody})
 }
 
