@@ -141,7 +141,7 @@ export function DesignViewer({
           </Suspense>
         ) : activeView === "cad" && pcbCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
-            <CadViewer key={boardKey} circuitJson={pcbCircuitJson} />
+            <CadViewer circuitJson={pcbCircuitJson} />
           </Suspense>
         ) : (
           <ViewerLoading label="Loading the reference design…" />
