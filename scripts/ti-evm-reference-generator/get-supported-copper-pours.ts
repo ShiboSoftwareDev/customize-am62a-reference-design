@@ -46,7 +46,7 @@ export function getSupportedCopperPours(params: {
   return params.circuitJson
     .filter((element): element is PcbCopperPour => element.type === "pcb_copper_pour")
     .flatMap((copperPour) => {
-      const outline = getSupportedOutline(copperPour)
+      const outline = getSupportedCopperPourOutline(copperPour)
       if (!outline || outline.length < 3) return []
       const sourceNetName = copperPour.source_net_id
         ? sourceNetNamesById.get(copperPour.source_net_id)
@@ -70,7 +70,10 @@ export function getSupportedCopperPours(params: {
     })
 }
 
-function getSupportedOutline(copperPour: PcbCopperPour): CircuitPoint[] | undefined {
+export function getSupportedCopperPourOutline(
+  copperPour: AnyCircuitElement,
+): CircuitPoint[] | undefined {
+  if (!isPcbCopperPour(copperPour)) return undefined
   if (copperPour.shape === "polygon") return copperPour.points
   if (copperPour.shape === "brep") {
     return copperPour.brep_shape?.outer_ring.vertices.map(({ x, y }) => ({ x, y }))
@@ -92,6 +95,18 @@ function getSupportedOutline(copperPour: PcbCopperPour): CircuitPoint[] | undefi
     { x: halfWidth, y: halfHeight },
     { x: -halfWidth, y: halfHeight },
   ].map((point) => applyToPoint(transform, point))
+}
+
+function isPcbCopperPour(element: AnyCircuitElement): element is PcbCopperPour {
+  return (
+    element.type === "pcb_copper_pour" &&
+    "pcb_copper_pour_id" in element &&
+    typeof element.pcb_copper_pour_id === "string" &&
+    "layer" in element &&
+    typeof element.layer === "string" &&
+    "shape" in element &&
+    typeof element.shape === "string"
+  )
 }
 
 function getUnassignedCopperPourNetName(params: {
