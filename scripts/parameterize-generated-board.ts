@@ -1,7 +1,6 @@
 import ts from "typescript"
 import {
   addRenamedNetSelectorReplacements,
-  addPortSelectorReplacements,
   applyReplacements,
   findBoardElement,
   getAttribute,
@@ -37,13 +36,12 @@ export function parameterizeGeneratedBoard(params: {
   featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
   generatedSource: string
   importedRoutingMetadata?: ImportedRoutingMetadata
-  portSelectorReplacements: ReadonlyMap<PortSelector, PortSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
   supportedCopperPours?: readonly SupportedCopperPour[]
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): ParameterizedBoardSource {
-  const generatedSource = removeGeneratedCopperPours({ source: params.generatedSource })
+  const generatedSource = removeUnsupportedPcbCopperPours({ source: params.generatedSource })
   const sourceFile = ts.createSourceFile(
     `${params.componentName}.tsx`,
     generatedSource,
@@ -74,12 +72,9 @@ export function parameterizeGeneratedBoard(params: {
     renamedNets,
     sourceFile,
   })
-  const pouredNetSelectors = addSupportedCopperPours({
-    boardElement,
+  const pouredNetSelectors = getPouredNetSelectors({
     copperPours: params.supportedCopperPours ?? [],
     renamedNets,
-    replacements,
-    sourceFile,
   })
   addImportedRoutingReplacements({
     boardElement,
@@ -112,12 +107,6 @@ export function parameterizeGeneratedBoard(params: {
       continue
     }
     if (tagName === "trace") {
-      addPortSelectorReplacements({
-        node: child,
-        portSelectorReplacements: params.portSelectorReplacements,
-        replacements,
-        sourceFile,
-      })
       addRenamedNetSelectorReplacements({
         node: child,
         renamedNets,
@@ -128,6 +117,15 @@ export function parameterizeGeneratedBoard(params: {
         start: child.tagName.getStart(sourceFile),
         end: child.tagName.getEnd(),
         text: "ParameterizedTrace removedFeatureIds={removedFeatureIds}",
+      })
+      continue
+    }
+    if (tagName === "copperpour") {
+      addRenamedNetSelectorReplacements({
+        node: child,
+        renamedNets,
+        replacements,
+        sourceFile,
       })
       continue
     }
@@ -144,11 +142,6 @@ export function parameterizeGeneratedBoard(params: {
     }
   }
 
-  replaceRoutingAttributes({
-    boardElement,
-    replacements,
-    sourceFile,
-  })
   const parameterizedBody = applyReplacements({
     replacements,
     source: generatedSource,
@@ -170,6 +163,8 @@ export function parameterizeGeneratedBoard(params: {
       jsxBody,
       pouredNetSelectors,
       routablePortSelectors: params.routablePortSelectors,
+      supportedRemovalCombinationIndexes: params.importedRoutingMetadata
+        ?.supportedRemovalCombinationIndexes ?? [0],
       teardropPortSelectors: params.teardropPortSelectors,
       viaTeardropPortSelectors: params.viaTeardropPortSelectors,
     }),
@@ -493,7 +488,7 @@ function getMillimeterAttribute(params: {
   return Number.isFinite(millimeters) ? millimeters : undefined
 }
 
-function removeGeneratedCopperPours(params: { source: string }): string {
+function removeUnsupportedPcbCopperPours(params: { source: string }): string {
   const sourceFile = ts.createSourceFile(
     "generated-board.tsx",
     params.source,
@@ -502,18 +497,22 @@ function removeGeneratedCopperPours(params: { source: string }): string {
     ts.ScriptKind.TSX,
   )
   const replacements: SourceReplacement[] = []
-  collectGeneratedCopperPourReplacements({ node: sourceFile, replacements, sourceFile })
+  collectUnsupportedPcbCopperPourReplacements({
+    node: sourceFile,
+    replacements,
+    sourceFile,
+  })
   return applyReplacements({ replacements, source: params.source }).replace(/^[ \t]+$/gmu, "")
 }
 
-function collectGeneratedCopperPourReplacements(params: {
+function collectUnsupportedPcbCopperPourReplacements(params: {
   node: ts.Node
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
 }): void {
   if (
     ts.isJsxSelfClosingElement(params.node) &&
-    ["copperpour", "pcbcopperpour"].includes(params.node.tagName.getText(params.sourceFile))
+    params.node.tagName.getText(params.sourceFile) === "pcbcopperpour"
   ) {
     params.replacements.push({
       start: params.node.getFullStart(),
@@ -523,57 +522,20 @@ function collectGeneratedCopperPourReplacements(params: {
     return
   }
   ts.forEachChild(params.node, (childNode) =>
-    collectGeneratedCopperPourReplacements({ ...params, node: childNode }),
+    collectUnsupportedPcbCopperPourReplacements({ ...params, node: childNode }),
   )
 }
 
-function addSupportedCopperPours(params: {
-  boardElement: ts.JsxElement
+function getPouredNetSelectors(params: {
   copperPours: readonly SupportedCopperPour[]
   renamedNets: ReadonlyMap<NetName, NetName>
-  replacements: SourceReplacement[]
-  sourceFile: ts.SourceFile
 }): Set<NetSelector> {
-  const emittedNetNames = new Set(
-    params.boardElement.children.flatMap((child) => {
-      if (!ts.isJsxSelfClosingElement(child)) return []
-      if (child.tagName.getText(params.sourceFile) !== "net") return []
-      const netName = getStringAttribute({
-        element: child,
-        name: "name",
-        sourceFile: params.sourceFile,
-      })
-      return netName ? [netName] : []
+  return new Set(
+    params.copperPours.map((copperPour) => {
+      const netName = params.renamedNets.get(copperPour.netName) ?? copperPour.netName
+      return `net.${netName}`
     }),
   )
-  const availableNetNames = new Set(
-    [...emittedNetNames].map((netName) => params.renamedNets.get(netName) ?? netName),
-  )
-  const pouredNetSelectors = new Set<NetSelector>()
-  const copperPourElements = params.copperPours.flatMap((copperPour) => {
-    const netName = params.renamedNets.get(copperPour.netName) ?? copperPour.netName
-    pouredNetSelectors.add(`net.${netName}`)
-    const netSelector = `net[name=${JSON.stringify(netName)}]`
-    const netElement = availableNetNames.has(netName)
-      ? []
-      : [`<net name={${JSON.stringify(netName)}} />`]
-    availableNetNames.add(netName)
-    return [
-      ...netElement,
-      `<copperpour layer={${JSON.stringify(copperPour.layer)}} connectsTo={${JSON.stringify(netSelector)}} outline={${JSON.stringify(copperPour.outline)}} coveredWithSolderMask={${copperPour.coveredWithSolderMask}} />`,
-    ]
-  })
-  if (copperPourElements.length === 0) return pouredNetSelectors
-
-  const closingElementStart = params.boardElement.closingElement.getStart(params.sourceFile)
-  const closingElementLineStart =
-    params.sourceFile.text.lastIndexOf("\n", closingElementStart - 1) + 1
-  params.replacements.push({
-    start: closingElementLineStart,
-    end: closingElementStart,
-    text: `    ${copperPourElements.join("\n    ")}\n  `,
-  })
-  return pouredNetSelectors
 }
 
 function extractGeneratedJsxBody(params: {
@@ -656,32 +618,5 @@ function addComponentFeatureCondition(params: {
     start: params.componentElement.getStart(params.sourceFile),
     end: params.componentElement.getEnd(),
     text: `{isComponentIncluded({ componentName: ${JSON.stringify(componentName)}, removedFeatureIds }) && (${originalElement})}`,
-  })
-}
-
-function replaceRoutingAttributes(params: {
-  boardElement: ts.JsxElement
-  replacements: SourceReplacement[]
-  sourceFile: ts.SourceFile
-}): void {
-  const routingDisabledAttribute = params.boardElement.openingElement.attributes.properties.find(
-    (attribute) =>
-      ts.isJsxAttribute(attribute) &&
-      attribute.name.getText(params.sourceFile) === "routingDisabled",
-  )
-  const autorouterAttributes = 'autorouter="auto" autorouterEffortLevel="1x" routeRemaining={false}'
-  if (routingDisabledAttribute) {
-    params.replacements.push({
-      start: routingDisabledAttribute.getStart(params.sourceFile),
-      end: routingDisabledAttribute.getEnd(),
-      text: autorouterAttributes,
-    })
-    return
-  }
-  const insertionPosition = params.boardElement.openingElement.getEnd() - 1
-  params.replacements.push({
-    start: insertionPosition,
-    end: insertionPosition,
-    text: ` ${autorouterAttributes}`,
   })
 }

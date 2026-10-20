@@ -81,56 +81,36 @@ function hasPhysicalPcbPrimitive(params: {
 }
 
 export function getRoutablePortSelectors(circuitJson: AnyCircuitElement[]): Set<PortSelector> {
-  return new Set(getPortSelectorReplacements(circuitJson).values())
-}
-
-export function getPortSelectorReplacements(
-  circuitJson: AnyCircuitElement[],
-): Map<PortSelector, PortSelector> {
   const sourceComponentsById = new Map<SourceComponentId, SourceComponentElement>(
     circuitJson.filter(isSourceComponent).map((element) => [element.source_component_id, element]),
   )
   const sourcePortsById = new Map<SourcePortId, SourcePortElement>(
     circuitJson.filter(isSourcePort).map((element) => [element.source_port_id, element]),
   )
-  const replacements = new Map<PortSelector, PortSelector>()
+  const selectors = new Set<PortSelector>()
   let importedPcbPortIndex = 0
   for (const element of circuitJson) {
     if (!isPcbPort(element)) continue
     importedPcbPortIndex += 1
-    const canonicalPort = getCanonicalPort({
+    const componentName = getPortComponentName({
       pcbPort: element,
       sourceComponentsById,
       sourcePortsById,
     })
-    if (!canonicalPort) continue
-    replacements.set(
-      `.${canonicalPort.componentName} > .imported_pcb_port_${importedPcbPortIndex}`,
-      canonicalPort.selector,
-    )
+    if (!componentName) continue
+    selectors.add(`.${componentName} > .imported_pcb_port_${importedPcbPortIndex}`)
   }
-  return replacements
+  return selectors
 }
 
-function getCanonicalPort(params: {
+function getPortComponentName(params: {
   pcbPort: PcbPortElement
   sourceComponentsById: ReadonlyMap<SourceComponentId, SourceComponentElement>
   sourcePortsById: ReadonlyMap<SourcePortId, SourcePortElement>
-}): { componentName: ComponentName; selector: PortSelector } | undefined {
+}): ComponentName | undefined {
   const sourcePort = params.sourcePortsById.get(params.pcbPort.source_port_id)
   if (!sourcePort?.source_component_id) return undefined
-  const sourceComponent = params.sourceComponentsById.get(sourcePort.source_component_id)
-  if (!sourceComponent?.name) return undefined
-  const portName =
-    sourcePort.pin_number !== undefined
-      ? `pin${sourcePort.pin_number}`
-      : sourcePort.name || sourcePort.port_hints?.[0]
-  return portName
-    ? {
-        componentName: sourceComponent.name,
-        selector: `.${sourceComponent.name} > .${portName}`,
-      }
-    : undefined
+  return params.sourceComponentsById.get(sourcePort.source_component_id)?.name
 }
 
 function replaceUnsupportedPcbPrimitives(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {

@@ -10,6 +10,7 @@ export function createParameterizedBoardSource(params: {
   jsxBody: string
   pouredNetSelectors: ReadonlySet<NetSelector>
   routablePortSelectors: ReadonlySet<PortSelector>
+  supportedRemovalCombinationIndexes: number[]
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): string {
@@ -19,6 +20,9 @@ export function createParameterizedBoardSource(params: {
   const importedRoutingFeatureIds = JSON.stringify(params.importedRoutingFeatureIds)
   const pouredNetSelectors = JSON.stringify([...params.pouredNetSelectors], null, 2)
   const routablePortSelectors = JSON.stringify([...params.routablePortSelectors], null, 2)
+  const supportedRemovalCombinationIndexes = JSON.stringify(
+    params.supportedRemovalCombinationIndexes,
+  )
   const teardropPortSelectors = JSON.stringify([...params.teardropPortSelectors], null, 2)
   const viaTeardropPortSelectors = JSON.stringify([...params.viaTeardropPortSelectors], null, 2)
 
@@ -37,6 +41,7 @@ const featureIdByComponentName: Partial<Record<string, ${params.componentName}Fe
   ${featureMap}
 
 const importedRoutingFeatureIds: readonly FeatureId[] = ${importedRoutingFeatureIds}
+const supportedRemovalCombinationIndexes = new Set<number>(${supportedRemovalCombinationIndexes})
 const pouredNetSelectors = new Set<string>(${pouredNetSelectors})
 const routablePortSelectors = new Set<string>(${routablePortSelectors})
 const teardropPortSelectors = new Set<string>(${teardropPortSelectors})
@@ -68,6 +73,14 @@ function isImportedRoutingElementIncluded(params: {
 }): boolean {
   const inclusionBit = 1n << BigInt(params.removedFeatureCombinationIndex)
   return (params.inclusionMask & inclusionBit) !== 0n
+}
+
+function getPcbTeardropStart(params: {
+  hasViaTeardrops: boolean
+  selector: string
+}): boolean | undefined {
+  if (teardropPortSelectors.has(params.selector)) return true
+  return params.hasViaTeardrops ? false : undefined
 }
 
 function ParameterizedTrace(props: {
@@ -110,13 +123,7 @@ function ParameterizedTrace(props: {
             from={selector}
             to={netSelector}
             pcbTeardrops={hasViaTeardrops}
-            pcbTeardropStart={
-              teardropPortSelectors.has(selector)
-                ? true
-                : hasViaTeardrops
-                  ? false
-                  : undefined
-            }
+            pcbTeardropStart={getPcbTeardropStart({ hasViaTeardrops, selector })}
           />
         </Fragment>
       ))}
@@ -127,6 +134,9 @@ function ParameterizedTrace(props: {
 export function ${params.componentName}(props: ${params.componentName}Props) {
   const removedFeatureIds = new Set(props.removedFeatureIds ?? [])
   const removedFeatureCombinationIndex = getRemovedFeatureCombinationIndex(removedFeatureIds)
+  if (!supportedRemovalCombinationIndexes.has(removedFeatureCombinationIndex)) {
+    throw new Error("Unsupported removed-feature combination")
+  }
   return (${params.jsxBody})
 }
 

@@ -18,7 +18,7 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
     <aside className="configuration-panel">
       <header className="board-title">
         <span className="eyebrow">Parameterized TSX configurator</span>
-        <h1>TI EVM Configurator</h1>
+        <h1>Sitara Board Configurator</h1>
       </header>
 
       <label className="select-field">

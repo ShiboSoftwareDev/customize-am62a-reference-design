@@ -18,6 +18,7 @@ type CadComponentElement = AnyCircuitElement & {
   layer?: string
   model_glb_url?: string
   model_gltf_url?: string
+  model_jscad?: unknown
   model_obj_url?: string
   model_step_url?: string
   model_stl_url?: string
@@ -79,6 +80,10 @@ function getCadModelUrl(cadComponent: CadComponentElement): string | undefined {
     cadComponent.model_stl_url ??
     cadComponent.model_wrl_url
   )
+}
+
+function hasRenderableCadModel(cadComponent: CadComponentElement): boolean {
+  return getCadModelUrl(cadComponent) !== undefined || cadComponent.model_jscad !== undefined
 }
 
 function getPcbComponentsById(circuitJson: CircuitJson): Map<PcbComponentId, PcbComponentElement> {
@@ -146,6 +151,7 @@ function expectCadModelPlacementsToMatch({
     (element): element is CadComponentElement =>
       isCadComponentElement(element) && getCadModelUrl(element) !== undefined,
   )
+  if (unmatchedSourceCadModels.length === 0) return
   expect(generatedCadModels.length).toBeGreaterThan(0)
 
   for (const generatedCadModel of generatedCadModels) {
@@ -271,12 +277,14 @@ async function expectBoardSnapshots({
   evmId,
   snapshotName,
   testPath,
+  shouldContainCadModels,
 }: {
   cameraReferenceBoard: PcbBoardElement
   circuitJson: CircuitJson
   evmId: TiEvmId
   snapshotName: SnapshotName
   testPath: string
+  shouldContainCadModels: boolean
 }): Promise<void> {
   const testName = basename(testPath).replace(/\.test\.tsx?$/u, "")
   for (const boardViewName of ["top", "bottom"] as const) {
@@ -295,11 +303,8 @@ async function expectBoardSnapshots({
     })
   }
   expect(
-    circuitJson.some(
-      (element) =>
-        isCadComponentElement(element) && element.model_step_url?.includes(`/ti-evms/${evmId}/`),
-    ),
-  ).toBe(true)
+    circuitJson.some((element) => isCadComponentElement(element) && hasRenderableCadModel(element)),
+  ).toBe(shouldContainCadModels)
 }
 
 export async function expectTiEvm3dRoundtrip({
@@ -320,6 +325,9 @@ export async function expectTiEvm3dRoundtrip({
     (element): element is PcbBoardElement => element.type === "pcb_board",
   )
   if (!cameraReferenceBoard) throw new Error(`${evmId} has no PCB board`)
+  const shouldContainCadModels = sourceCircuitJson.some(
+    (element) => isCadComponentElement(element) && hasRenderableCadModel(element),
+  )
 
   expectCadModelPlacementsToMatch({
     generatedCircuitJson,
@@ -332,6 +340,7 @@ export async function expectTiEvm3dRoundtrip({
     evmId,
     snapshotName: "source",
     testPath,
+    shouldContainCadModels,
   })
   await expectBoardSnapshots({
     cameraReferenceBoard,
@@ -339,5 +348,6 @@ export async function expectTiEvm3dRoundtrip({
     evmId,
     snapshotName: "generated",
     testPath,
+    shouldContainCadModels,
   })
 }

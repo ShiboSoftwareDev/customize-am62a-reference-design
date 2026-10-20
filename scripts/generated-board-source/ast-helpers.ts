@@ -1,7 +1,6 @@
 import ts from "typescript"
 
 type NetName = string
-type PortSelector = string
 
 export type SourceReplacement = {
   end: number
@@ -31,13 +30,16 @@ export function addRenamedNetSelectorReplacements(params: {
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
 }): void {
-  if (ts.isStringLiteral(params.node) && params.node.text.startsWith("net.")) {
-    const renamedNet = params.renamedNets.get(params.node.text.slice("net.".length))
-    if (renamedNet) {
+  if (ts.isStringLiteral(params.node)) {
+    const renamedSelector = getRenamedNetSelector({
+      netSelector: params.node.text,
+      renamedNets: params.renamedNets,
+    })
+    if (renamedSelector) {
       params.replacements.push({
         start: params.node.getStart(params.sourceFile),
         end: params.node.getEnd(),
-        text: JSON.stringify(`net.${renamedNet}`),
+        text: JSON.stringify(renamedSelector),
       })
     }
   }
@@ -46,25 +48,21 @@ export function addRenamedNetSelectorReplacements(params: {
   }
 }
 
-export function addPortSelectorReplacements(params: {
-  node: ts.Node
-  portSelectorReplacements: ReadonlyMap<PortSelector, PortSelector>
-  replacements: SourceReplacement[]
-  sourceFile: ts.SourceFile
-}): void {
-  if (ts.isStringLiteral(params.node)) {
-    const replacement = params.portSelectorReplacements.get(params.node.text)
-    if (replacement) {
-      params.replacements.push({
-        start: params.node.getStart(params.sourceFile),
-        end: params.node.getEnd(),
-        text: JSON.stringify(replacement),
-      })
-    }
+function getRenamedNetSelector(params: {
+  netSelector: string
+  renamedNets: ReadonlyMap<NetName, NetName>
+}): string | undefined {
+  if (params.netSelector.startsWith("net.")) {
+    const netName = params.netSelector.slice("net.".length)
+    const renamedNet = params.renamedNets.get(netName)
+    return renamedNet ? `net.${renamedNet}` : undefined
   }
-  for (const childNode of params.node.getChildren(params.sourceFile)) {
-    addPortSelectorReplacements({ ...params, node: childNode })
-  }
+
+  const nameSelectorMatch = /^net\[name=(["'])(.+)\1\]$/u.exec(params.netSelector)
+  const netName = nameSelectorMatch?.[2]
+  if (!netName) return undefined
+  const renamedNet = params.renamedNets.get(netName)
+  return renamedNet ? `net[name=${JSON.stringify(renamedNet)}]` : undefined
 }
 
 export function getStringAttribute(params: {

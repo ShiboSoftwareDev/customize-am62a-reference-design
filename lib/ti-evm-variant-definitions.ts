@@ -7,147 +7,111 @@ export type TiEvmVariantDefinition = {
 }
 
 export const tiEvmVariantDefinitions = {
-  dp83825evm: [
+  tmds62levm: [
     { id: "full-board", label: "Full board", removedFeatureIds: [] },
     {
-      id: "without-power-indicator",
-      label: "Without power indicator",
-      removedFeatureIds: ["power-indicator"],
+      id: "without-connectivity",
+      label: "Without M.2 and Ethernet connectivity",
+      removedFeatureIds: ["connectivity"],
     },
     {
-      id: "without-phy-status-indicators",
-      label: "Without PHY status indicators",
-      removedFeatureIds: ["phy-status-indicators"],
+      id: "without-multimedia",
+      label: "Without HDMI and audio",
+      removedFeatureIds: ["multimedia"],
     },
     {
-      id: "without-status-indicators",
-      label: "Without status indicators",
-      removedFeatureIds: ["power-indicator", "phy-status-indicators"],
+      id: "without-expansion",
+      label: "Without display and control expansion",
+      removedFeatureIds: ["expansion"],
     },
     {
-      id: "usb-managed-core",
-      label: "USB-managed core",
-      removedFeatureIds: ["power-indicator", "phy-status-indicators", "clock-test-access"],
-    },
-    {
-      id: "external-mdio-evaluation",
-      label: "External MDIO evaluation",
-      removedFeatureIds: ["usb-mdio-controller"],
+      id: "without-debug-instrumentation",
+      label: "Without debug and current instrumentation",
+      removedFeatureIds: ["debug-instrumentation"],
     },
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: [
-        "usb-mdio-controller",
-        "power-indicator",
-        "phy-status-indicators",
-        "clock-test-access",
-      ],
+      removedFeatureIds: ["connectivity", "multimedia", "expansion", "debug-instrumentation"],
     },
   ],
-  drv8307evm: [
+  "sk-am62": [
     { id: "full-board", label: "Full board", removedFeatureIds: [] },
     {
-      id: "differential-hall",
-      label: "Differential Hall inputs",
-      removedFeatureIds: ["single-ended-hall-conditioning"],
+      id: "without-connectivity",
+      label: "Without wireless and Ethernet connectivity",
+      removedFeatureIds: ["connectivity"],
     },
     {
-      id: "without-status-indicators",
-      label: "Without status indicators",
-      removedFeatureIds: ["status-indicators"],
+      id: "without-test-debug",
+      label: "Without test and debug",
+      removedFeatureIds: ["test-debug"],
     },
     {
-      id: "external-pwm-differential-hall",
-      label: "External PWM + differential Hall",
-      removedFeatureIds: ["onboard-speed-control", "single-ended-hall-conditioning"],
-    },
-  ],
-  "lm5155evm-fly": [
-    { id: "full-board", label: "Full board", removedFeatureIds: [] },
-    {
-      id: "without-power-measurement",
-      label: "Without power measurement access",
-      removedFeatureIds: ["power-measurement-access"],
+      id: "without-expansion",
+      label: "Without expansion interfaces",
+      removedFeatureIds: ["expansion"],
     },
     {
-      id: "without-control-loop-access",
-      label: "Without control and loop access",
-      removedFeatureIds: ["control-loop-access"],
+      id: "without-multimedia",
+      label: "Without display, camera, and audio",
+      removedFeatureIds: ["multimedia"],
     },
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: ["power-measurement-access", "control-loop-access"],
+      removedFeatureIds: ["connectivity", "test-debug", "expansion", "multimedia"],
     },
   ],
-  "lm251772evm-pd": [
+  beagleplay: [
     { id: "full-board", label: "Full board", removedFeatureIds: [] },
     {
-      id: "without-power-measurement",
-      label: "Without power measurement access",
-      removedFeatureIds: ["power-measurement-access"],
+      id: "without-wired-networking",
+      label: "Without wired networking",
+      removedFeatureIds: ["wired-networking"],
     },
     {
-      id: "without-usb2any-interface",
-      label: "Without USB2ANY interface",
-      removedFeatureIds: ["usb2any-interface"],
+      id: "without-display-camera",
+      label: "Without display and camera",
+      removedFeatureIds: ["display-camera"],
     },
     {
-      id: "control-debug-only",
-      label: "Control debug access only",
-      removedFeatureIds: ["power-measurement-access", "usb2any-interface"],
-    },
-  ],
-  "lmg342x-bb-evm": [
-    { id: "full-board", label: "Full board", removedFeatureIds: [] },
-    {
-      id: "without-logic-measurement",
-      label: "Without logic measurement access",
-      removedFeatureIds: ["logic-measurement-access"],
+      id: "without-wireless",
+      label: "Without wireless connectivity",
+      removedFeatureIds: ["wireless"],
     },
     {
-      id: "without-power-measurement",
-      label: "Without power measurement access",
-      removedFeatureIds: ["power-measurement-access"],
-    },
-    {
-      id: "without-bias-measurement",
-      label: "Without bias measurement access",
-      removedFeatureIds: ["bias-measurement-access"],
-    },
-    {
-      id: "without-status-indicators",
-      label: "Without status indicators",
-      removedFeatureIds: ["status-indicators"],
-    },
-    {
-      id: "without-measurement-access",
-      label: "Without measurement access",
-      removedFeatureIds: [
-        "logic-measurement-access",
-        "power-measurement-access",
-        "bias-measurement-access",
-      ],
-    },
-    {
-      id: "logic-diagnostics-only",
-      label: "Logic diagnostics only",
-      removedFeatureIds: [
-        "power-measurement-access",
-        "bias-measurement-access",
-        "status-indicators",
-      ],
+      id: "without-user-io",
+      label: "Without user I/O and expansion",
+      removedFeatureIds: ["user-io"],
     },
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: [
-        "logic-measurement-access",
-        "power-measurement-access",
-        "bias-measurement-access",
-        "status-indicators",
-      ],
+      removedFeatureIds: ["wired-networking", "display-camera", "wireless", "user-io"],
+    },
+  ],
+  "beaglebone-black": [
+    { id: "full-board", label: "Full board", removedFeatureIds: [] },
+    {
+      id: "without-emmc",
+      label: "Without eMMC storage",
+      removedFeatureIds: ["emmc"],
+    },
+    {
+      id: "without-ethernet",
+      label: "Without Ethernet",
+      removedFeatureIds: ["ethernet"],
+    },
+    {
+      id: "without-hdmi",
+      label: "Without HDMI output",
+      removedFeatureIds: ["hdmi"],
+    },
+    {
+      id: "minimal-board",
+      label: "Minimal board",
+      removedFeatureIds: ["emmc", "ethernet", "hdmi"],
     },
   ],
 } satisfies Record<ParameterizedTiEvmId, TiEvmVariantDefinition[]>
