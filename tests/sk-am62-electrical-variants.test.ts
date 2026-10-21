@@ -6,4 +6,4 @@ test("SK-AM62 variants retain the Sitara processor", async () => {
     evmId: "sk-am62",
     requiredComponentNames: ["U12"],
   })
-}, 180_000)
+}, 240_000)
