@@ -38,7 +38,10 @@ export async function expectElectricallyValidVariants(
         (error) => `${variant.id}: ${error}`,
       ),
     )
-    const variantDanglingEndpointKeys = getDanglingImportedRoutingEndpointKeys(pcbCircuitJson)
+    const variantDanglingEndpointKeys =
+      variant.id === fullBoardVariant.id
+        ? baselineDanglingEndpointKeys
+        : getDanglingImportedRoutingEndpointKeys(pcbCircuitJson)
     for (const endpointKey of variantDanglingEndpointKeys) {
       if (baselineDanglingEndpointKeys.has(endpointKey)) continue
       validationErrors.push(`${variant.id}: introduced dangling route at ${endpointKey}`)

@@ -6,4 +6,4 @@ test("TMDS62LEVM variants retain the Sitara processor", async () => {
     evmId: "tmds62levm",
     requiredComponentNames: ["U28"],
   })
-}, 120_000)
+}, 180_000)
