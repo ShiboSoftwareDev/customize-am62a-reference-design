@@ -52,6 +52,11 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
   for (const evm of tiEvms) {
     const definition = getParameterizedTiEvmDefinition(evm.id)
     for (const variant of evm.variants) {
+      const prebuiltCadScene = Bun.file(
+        resolve(repositoryRoot, "public", variant.prebuiltCadSceneUrl.replace(/^\//u, "")),
+      )
+      expect(await prebuiltCadScene.exists()).toBe(true)
+      expect(prebuiltCadScene.size).toBeGreaterThan(1000)
       const removedComponentNames = new Set(
         definition.components.flatMap((component) =>
           component.removableFeatureId !== undefined &&

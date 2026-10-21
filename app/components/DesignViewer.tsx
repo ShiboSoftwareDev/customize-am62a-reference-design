@@ -25,6 +25,7 @@ const CadViewer = lazy(loadCadViewer)
 type DesignViewerProps = {
   activeView: DesignView
   boardKey: string
+  prebuiltCadSceneUrl: string
   pcbCircuitJson: AnyCircuitElement[] | null
   schematicCircuitJsons: AnyCircuitElement[][]
   schematicSheetLabels: string[]
@@ -37,6 +38,7 @@ export type DesignView = "pcb" | "schematic" | "cad"
 export function DesignViewer({
   activeView,
   boardKey,
+  prebuiltCadSceneUrl,
   pcbCircuitJson,
   schematicCircuitJsons,
   schematicSheetLabels,
@@ -146,9 +148,9 @@ export function DesignViewer({
               containerStyle={{ height: "100%" }}
             />
           </Suspense>
-        ) : activeView === "cad" && pcbCircuitJson ? (
+        ) : activeView === "cad" ? (
           <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
-            <CadViewer circuitJson={pcbCircuitJson} />
+            <CadViewer glbUrl={prebuiltCadSceneUrl} />
           </Suspense>
         ) : (
           <ViewerLoading label="Loading the reference design…" />

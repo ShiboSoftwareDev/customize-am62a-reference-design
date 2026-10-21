@@ -1,1 +1,2 @@
 public/cad-models/**/*.step binary linguist-generated=true
+public/prebuilt-ti-evms/**/*.glb binary linguist-generated=true

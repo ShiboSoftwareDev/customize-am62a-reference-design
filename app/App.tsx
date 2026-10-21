@@ -31,6 +31,7 @@ function Configurator() {
   const render = useEvmRender({
     evm,
     variant,
+    loadCadScenes: activeView === "cad",
     loadSchematics: activeView === "schematic",
     retryIndex,
   })
@@ -69,6 +70,7 @@ function Configurator() {
       <DesignViewer
         activeView={activeView}
         boardKey={evm.id}
+        prebuiltCadSceneUrl={variant.prebuiltCadSceneUrl}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJsons={render.schematicCircuitJsons}
         schematicSheetLabels={getTiEvmVariantSchematicSheetLabels(

@@ -14,6 +14,7 @@ import {
 
 const pcbPreloadPromises = new Map<TiEvmId, Promise<void>>()
 const schematicPreloadPromises = new Map<TiEvmId, Promise<void>>()
+const cadScenePreloadPromises = new Map<TiEvmId, Promise<void>>()
 const schematicPreloadBatchSize = 16
 
 export function preloadTiEvmPcbVariants({ evm }: { evm: TiEvm }): Promise<void> {
@@ -43,6 +44,20 @@ export function preloadTiEvmSchematicVariants({ evm }: { evm: TiEvm }): Promise<
     throw error
   })
   schematicPreloadPromises.set(evm.id, preloadPromise)
+  return preloadPromise
+}
+
+export function preloadTiEvmCadScenes({ evm }: { evm: TiEvm }): Promise<void> {
+  const existingPreload = cadScenePreloadPromises.get(evm.id)
+  if (existingPreload) return existingPreload
+
+  const preloadPromise = preloadCadSceneUrls(
+    evm.variants.map(({ prebuiltCadSceneUrl }) => prebuiltCadSceneUrl),
+  ).catch((error: unknown) => {
+    cadScenePreloadPromises.delete(evm.id)
+    throw error
+  })
+  cadScenePreloadPromises.set(evm.id, preloadPromise)
   return preloadPromise
 }
 
@@ -80,6 +95,16 @@ export function retainTiEvmCircuitJsonCache({ evm }: { evm: TiEvm }): void {
 export function clearTiEvmPreloadCache(): void {
   pcbPreloadPromises.clear()
   schematicPreloadPromises.clear()
+  cadScenePreloadPromises.clear()
+}
+
+async function preloadCadSceneUrls(cadSceneUrls: string[]): Promise<void> {
+  for (const url of cadSceneUrls) {
+    await waitForBrowserIdle()
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(`Prebuilt CAD scene failed to load (${response.status})`)
+    await response.arrayBuffer()
+  }
 }
 
 async function preloadCircuitJsonUrls(circuitJsonUrls: PrebuiltCircuitJsonUrl[]): Promise<void> {
