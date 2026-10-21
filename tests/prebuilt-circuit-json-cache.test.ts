@@ -1,6 +1,7 @@
 import { afterEach, expect, mock, test } from "bun:test"
 import {
   clearPrebuiltCircuitJsonCache,
+  getCachedPrebuiltCircuitJson,
   loadPrebuiltCircuitJson,
 } from "app/load-prebuilt-circuit-json"
 
@@ -32,4 +33,5 @@ test("prebuilt Circuit JSON is fetched and parsed once per asset URL", async () 
   })
   expect(firstLoad).toBe(concurrentLoad)
   expect(firstLoad).toBe(cachedLoad)
+  expect(getCachedPrebuiltCircuitJson({ url: "/board.circuit.json.gz" })).toBe(firstLoad)
 })

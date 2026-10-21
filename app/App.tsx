@@ -1,7 +1,7 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useMemo, useState } from "react"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
-import { DesignViewer } from "app/components/DesignViewer"
+import { DesignViewer, type DesignView } from "app/components/DesignViewer"
 import { BoardDetailPage } from "app/components/BoardDetailPage"
 import { useEvmRender } from "app/hooks/use-evm-render"
 import {
@@ -26,8 +26,14 @@ function Configurator() {
   const evm = getTiEvm(evmId)
   const [variantId, setVariantId] = useState(evm.variants[0].id)
   const [retryIndex, setRetryIndex] = useState(0)
+  const [activeView, setActiveView] = useState<DesignView>("pcb")
   const variant = getTiEvmVariant(evm, variantId)
-  const render = useEvmRender({ variant, retryIndex })
+  const render = useEvmRender({
+    evm,
+    variant,
+    loadSchematics: activeView === "schematic",
+    retryIndex,
+  })
   const statusText = useMemo(() => {
     const seconds = (render.elapsedMs / 1000).toFixed(1)
     if (render.isLoading) return `Loading prebuilt design… ${seconds}s elapsed`
@@ -61,11 +67,16 @@ function Configurator() {
         canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}
       />
       <DesignViewer
+        activeView={activeView}
         boardKey={evm.id}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJsons={render.schematicCircuitJsons}
-        schematicSheetLabels={getTiEvmVariantSchematicSheetLabels(evm, variant)}
+        schematicSheetLabels={getTiEvmVariantSchematicSheetLabels(
+          evm,
+          render.schematicVariant ?? variant,
+        )}
         isLoading={render.isLoading}
+        onActiveViewChange={setActiveView}
       />
     </main>
   )

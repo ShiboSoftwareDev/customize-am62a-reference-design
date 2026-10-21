@@ -23,21 +23,26 @@ const SchematicViewer = lazy(loadSchematicViewer)
 const CadViewer = lazy(loadCadViewer)
 
 type DesignViewerProps = {
+  activeView: DesignView
   boardKey: string
   pcbCircuitJson: AnyCircuitElement[] | null
   schematicCircuitJsons: AnyCircuitElement[][]
   schematicSheetLabels: string[]
   isLoading: boolean
+  onActiveViewChange: (activeView: DesignView) => void
 }
 
+export type DesignView = "pcb" | "schematic" | "cad"
+
 export function DesignViewer({
+  activeView,
   boardKey,
   pcbCircuitJson,
   schematicCircuitJsons,
   schematicSheetLabels,
   isLoading,
+  onActiveViewChange,
 }: DesignViewerProps) {
-  const [activeView, setActiveView] = useState<"pcb" | "schematic" | "cad">("pcb")
   const [schematicSheetIndex, setSchematicSheetIndex] = useState(0)
   const [renderedPcbCircuitJson, setRenderedPcbCircuitJson] = useState<AnyCircuitElement[] | null>(
     null,
@@ -58,7 +63,11 @@ export function DesignViewer({
 
   useEffect(() => {
     setSchematicSheetIndex(0)
-  }, [boardKey, schematicCircuitJsons])
+  }, [boardKey])
+
+  useEffect(() => {
+    if (schematicSheetIndex >= schematicSheetLabels.length) setSchematicSheetIndex(0)
+  }, [schematicSheetIndex, schematicSheetLabels.length])
 
   return (
     <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>
@@ -68,7 +77,7 @@ export function DesignViewer({
             type="button"
             role="tab"
             aria-selected={activeView === "pcb"}
-            onClick={() => setActiveView("pcb")}
+            onClick={() => onActiveViewChange("pcb")}
           >
             <span className="tab-dot pcb-dot" /> PCB
           </button>
@@ -76,10 +85,9 @@ export function DesignViewer({
             type="button"
             role="tab"
             aria-selected={activeView === "schematic"}
-            disabled={!schematicCircuitJson}
             onPointerEnter={() => void loadSchematicViewer()}
             onFocus={() => void loadSchematicViewer()}
-            onClick={() => setActiveView("schematic")}
+            onClick={() => onActiveViewChange("schematic")}
           >
             <span className="tab-dot schematic-dot" /> Schematic
           </button>
@@ -87,10 +95,9 @@ export function DesignViewer({
             type="button"
             role="tab"
             aria-selected={activeView === "cad"}
-            disabled={!pcbCircuitJson}
             onPointerEnter={() => void loadCadViewer()}
             onFocus={() => void loadCadViewer()}
-            onClick={() => setActiveView("cad")}
+            onClick={() => onActiveViewChange("cad")}
           >
             <span className="tab-dot three-dimensional-dot" /> 3D
           </button>
