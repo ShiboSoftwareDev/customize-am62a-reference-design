@@ -14,6 +14,7 @@ export type TiEvmVariant = {
   id: string
   label: string
   circuitJsonUrl: string
+  prebuiltCadSceneUrl: string
   schematicCircuitJsonUrls: string[]
   visibleSchematicSheetIndexes: number[]
   removedFeatureIds: string[]
@@ -65,6 +66,7 @@ function createVariants(params: {
       id: variantDefinition.id,
       label: variantDefinition.label,
       circuitJsonUrl,
+      prebuiltCadSceneUrl: `/prebuilt-ti-evms/${params.evmId}/${variantDefinition.id}.glb`,
       schematicCircuitJsonUrls: Array.from(
         { length: params.schematicSheetCount },
         (_, schematicSheetIndex) =>
