@@ -9,6 +9,7 @@ import {
 } from "./get-included-imported-routing-element-ids"
 import type { ImportedRoutingBridgeVia } from "./get-imported-routing-bridge-vias"
 import type { ImportedPcbVia } from "./get-included-imported-routing-element-ids"
+import { getRoutingConnectivityCheckCircuitJson } from "./get-routing-connectivity-check-circuit-json"
 import type { FeatureId, SourceComponentId } from "./types"
 
 export type GeneratedSourceNetId = string
@@ -35,15 +36,19 @@ export function getImportedRoutingInclusionMasks(params: {
   sourceNetIdBySourceTraceId: ReadonlyMap<SourceTraceId, SourceNetId>
 }): ImportedRoutingInclusionMasks {
   const featureIds = [...new Set(params.featureIdBySourceComponentId.values())]
-  const pcbTraces = getImportedPcbTraces(params.circuitJson)
-  const pcbVias = getImportedPcbVias(params.circuitJson)
-  const connectivityMap = getFullConnectivityMapFromCircuitJson(params.circuitJson)
+  const connectivityCheckCircuitJson = getRoutingConnectivityCheckCircuitJson({
+    circuitJson: params.circuitJson,
+    featureIdBySourceComponentId: params.featureIdBySourceComponentId,
+  })
+  const pcbTraces = getImportedPcbTraces(connectivityCheckCircuitJson)
+  const pcbVias = getImportedPcbVias(connectivityCheckCircuitJson)
+  const connectivityMap = getFullConnectivityMapFromCircuitJson(connectivityCheckCircuitJson)
   const incidentPcbTraceIdsByViaId = getIncidentPcbTraceIdsByViaId({
     pcbTraces,
     pcbVias,
   })
   const baselineDanglingEndpointKeys = getBaselineDanglingEndpointKeys(
-    params.circuitJson,
+    connectivityCheckCircuitJson,
     connectivityMap,
   )
   const traceInclusionMaskByRouteKey = new Map<PcbTraceRouteKey, ImportedRoutingInclusionMask>()
@@ -83,7 +88,7 @@ export function getImportedRoutingInclusionMasks(params: {
     const { includedBridgeVias, includedPcbTraceIds, includedPcbViaIds } =
       getIncludedImportedRoutingElementIds({
         baselineDanglingEndpointKeys,
-        circuitJson: params.circuitJson,
+        circuitJson: connectivityCheckCircuitJson,
         connectivityMap,
         incidentPcbTraceIdsByViaId,
         pcbTraces,

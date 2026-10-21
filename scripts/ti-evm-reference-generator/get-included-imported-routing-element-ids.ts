@@ -53,11 +53,8 @@ export function getBaselineDanglingEndpointKeys(
   connectivityMap: ConnectivityMap,
 ): ReadonlySet<DanglingEndpointKey> {
   return new Set(
-    checkDanglingTraces(circuitJson, { connMap: connectivityMap }).map((error) =>
-      getDanglingEndpointKey({
-        center: error.center,
-        sourceTraceId: error.source_trace_id,
-      }),
+    checkDanglingTraces(circuitJson, { connMap: connectivityMap }).map(
+      ({ pcb_trace_error_id }) => pcb_trace_error_id,
     ),
   )
 }
@@ -156,11 +153,7 @@ export function getIncludedImportedRoutingElementIds(params: {
       checkDanglingTraces(circuitJsonToCheck, {
         connMap: params.connectivityMap,
       }).flatMap((error) => {
-        const danglingEndpointKey = getDanglingEndpointKey({
-          center: error.center,
-          sourceTraceId: error.source_trace_id,
-        })
-        return params.baselineDanglingEndpointKeys.has(danglingEndpointKey)
+        return params.baselineDanglingEndpointKeys.has(error.pcb_trace_error_id)
           ? []
           : [error.pcb_trace_id]
       }),
@@ -297,17 +290,6 @@ function belongsToRemovedComponent(params: {
       typeof element.pcb_component_id === "string" &&
       params.removedPcbComponentIds.has(element.pcb_component_id))
   )
-}
-
-function getDanglingEndpointKey(params: {
-  center: Point
-  sourceTraceId: string
-}): DanglingEndpointKey {
-  return JSON.stringify([
-    params.sourceTraceId,
-    roundCoordinate(params.center.x),
-    roundCoordinate(params.center.y),
-  ])
 }
 
 function getRoutePointKey(point: Point): PcbRoutePointKey {

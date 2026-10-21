@@ -1,12 +1,14 @@
 import { expect } from "bun:test"
 import { resolve } from "node:path"
-import { runAllSchematicChecks } from "@tscircuit/checks"
+import { checkDanglingTraces, runAllSchematicChecks } from "@tscircuit/checks"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import type { AnyCircuitElement } from "circuit-json"
+import { getFullConnectivityMapFromCircuitJson } from "circuit-json-to-connectivity-map"
 import { getTiEvm, type TiEvmId } from "lib/ti-evm-catalog"
 import { getConvertedCircuitIntegrityErrors } from "scripts/get-converted-circuit-integrity-errors"
 
 type ComponentName = string
+type DanglingEndpointKey = string
 type ElectricalVariantExpectation = {
   evmId: TiEvmId
   requiredComponentNames: ComponentName[]
@@ -18,6 +20,13 @@ export async function expectElectricallyValidVariants(
   const repositoryRoot = resolve(import.meta.dir, "../..")
   const evm = getTiEvm(expectation.evmId)
   const validationErrors: string[] = []
+  const fullBoardVariant = evm.variants.find(({ id }) => id === "full-board")
+  if (!fullBoardVariant) throw new Error(`${evm.name} has no full-board variant`)
+  const fullBoardCircuitJson = await loadCompressedCircuitJson({
+    repositoryRoot,
+    publicUrl: fullBoardVariant.circuitJsonUrl,
+  })
+  const baselineDanglingEndpointKeys = getDanglingImportedRoutingEndpointKeys(fullBoardCircuitJson)
 
   for (const variant of evm.variants) {
     const pcbCircuitJson = await loadCompressedCircuitJson({
@@ -29,6 +38,14 @@ export async function expectElectricallyValidVariants(
         (error) => `${variant.id}: ${error}`,
       ),
     )
+    const variantDanglingEndpointKeys =
+      variant.id === fullBoardVariant.id
+        ? baselineDanglingEndpointKeys
+        : getDanglingImportedRoutingEndpointKeys(pcbCircuitJson)
+    for (const endpointKey of variantDanglingEndpointKeys) {
+      if (baselineDanglingEndpointKeys.has(endpointKey)) continue
+      validationErrors.push(`${variant.id}: introduced dangling route at ${endpointKey}`)
+    }
 
     const sourceComponentNames = new Set<ComponentName>(
       pcbCircuitJson.flatMap((element) =>
@@ -65,6 +82,28 @@ export async function expectElectricallyValidVariants(
   }
 
   expect(validationErrors).toEqual([])
+}
+
+function getDanglingImportedRoutingEndpointKeys(
+  circuitJson: AnyCircuitElement[],
+): Set<DanglingEndpointKey> {
+  const netAttributedCircuitJson = circuitJson.filter(
+    (element) => element.type !== "pcb_trace" || typeof element.source_trace_id === "string",
+  )
+  const connectivityMap = getFullConnectivityMapFromCircuitJson(netAttributedCircuitJson)
+  return new Set(
+    checkDanglingTraces(netAttributedCircuitJson, { connMap: connectivityMap }).map((error) =>
+      JSON.stringify([
+        error.source_trace_id,
+        roundCoordinate(error.center.x),
+        roundCoordinate(error.center.y),
+      ]),
+    ),
+  )
+}
+
+function roundCoordinate(coordinate: number): number {
+  return Math.round(coordinate * 1e6) / 1e6
 }
 
 function getInvalidSchematicReferences(circuitJson: AnyCircuitElement[]): string[] {
