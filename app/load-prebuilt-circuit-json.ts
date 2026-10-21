@@ -5,6 +5,7 @@ export type PrebuiltCircuitJsonUrl = string
 
 const circuitJsonCache = new Map<PrebuiltCircuitJsonUrl, Promise<AnyCircuitElement[]>>()
 const resolvedCircuitJsonCache = new Map<PrebuiltCircuitJsonUrl, AnyCircuitElement[]>()
+let retainedCircuitJsonUrls: Set<PrebuiltCircuitJsonUrl> | null = null
 
 export function getCachedPrebuiltCircuitJson({
   url,
@@ -34,7 +35,11 @@ export function loadPrebuiltCircuitJson({
   })
     .then(async (response) => {
       if (!response.ok) throw new Error(`Prebuilt EVM failed to load (${response.status})`)
-      const circuitJson = parsePrebuiltCircuitJson(new Uint8Array(await response.arrayBuffer()))
+      const compressedCircuitJson = new Uint8Array(await response.arrayBuffer())
+      if (!isPrebuiltCircuitJsonUrlRetained(url)) {
+        throw new Error("Prebuilt Circuit JSON load was evicted")
+      }
+      const circuitJson = parsePrebuiltCircuitJson(compressedCircuitJson)
       resolvedCircuitJsonCache.set(url, circuitJson)
       return circuitJson
     })
@@ -47,7 +52,23 @@ export function loadPrebuiltCircuitJson({
   return circuitJsonPromise
 }
 
+export function retainPrebuiltCircuitJsonCache({ urls }: { urls: PrebuiltCircuitJsonUrl[] }): void {
+  retainedCircuitJsonUrls = new Set(urls)
+
+  for (const url of circuitJsonCache.keys()) {
+    if (!retainedCircuitJsonUrls.has(url)) circuitJsonCache.delete(url)
+  }
+  for (const url of resolvedCircuitJsonCache.keys()) {
+    if (!retainedCircuitJsonUrls.has(url)) resolvedCircuitJsonCache.delete(url)
+  }
+}
+
 export function clearPrebuiltCircuitJsonCache(): void {
   circuitJsonCache.clear()
   resolvedCircuitJsonCache.clear()
+  retainedCircuitJsonUrls = null
+}
+
+function isPrebuiltCircuitJsonUrlRetained(url: PrebuiltCircuitJsonUrl): boolean {
+  return retainedCircuitJsonUrls === null || retainedCircuitJsonUrls.has(url)
 }

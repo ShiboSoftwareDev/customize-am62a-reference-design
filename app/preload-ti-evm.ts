@@ -2,6 +2,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import {
   getCachedPrebuiltCircuitJson,
   loadPrebuiltCircuitJson,
+  retainPrebuiltCircuitJsonCache,
   type PrebuiltCircuitJsonUrl,
 } from "app/load-prebuilt-circuit-json"
 import {
@@ -58,6 +59,22 @@ export function getCachedTiEvmVariantSchematics({
   return schematicCircuitJsons.filter(
     (circuitJson): circuitJson is AnyCircuitElement[] => circuitJson !== undefined,
   )
+}
+
+export function retainTiEvmCircuitJsonCache({ evm }: { evm: TiEvm }): void {
+  retainPrebuiltCircuitJsonCache({
+    urls: evm.variants.flatMap((variant) => [
+      variant.circuitJsonUrl,
+      ...getTiEvmVariantSchematicCircuitJsonUrls(variant),
+    ]),
+  })
+
+  for (const evmId of pcbPreloadPromises.keys()) {
+    if (evmId !== evm.id) pcbPreloadPromises.delete(evmId)
+  }
+  for (const evmId of schematicPreloadPromises.keys()) {
+    if (evmId !== evm.id) schematicPreloadPromises.delete(evmId)
+  }
 }
 
 export function clearTiEvmPreloadCache(): void {

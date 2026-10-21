@@ -1,6 +1,8 @@
 import type { AnyCircuitElement } from "circuit-json"
+import { useEffect } from "react"
 import { usePrebuiltPcb } from "app/hooks/use-prebuilt-pcb"
 import { usePrebuiltSchematics } from "app/hooks/use-prebuilt-schematics"
+import { retainTiEvmCircuitJsonCache } from "app/preload-ti-evm"
 import type { TiEvm, TiEvmVariant } from "lib/ti-evm-catalog"
 
 type EvmRenderState = {
@@ -18,6 +20,10 @@ export function useEvmRender(request: {
   loadSchematics: boolean
   retryIndex: number
 }): EvmRenderState {
+  useEffect(() => {
+    retainTiEvmCircuitJsonCache({ evm: request.evm })
+  }, [request.evm])
+
   const pcb = usePrebuiltPcb(request)
   const schematics = usePrebuiltSchematics(request)
 
