@@ -71,7 +71,10 @@ function Configurator() {
         boardKey={evm.id}
         pcbCircuitJson={render.pcbCircuitJson}
         schematicCircuitJsons={render.schematicCircuitJsons}
-        schematicSheetLabels={getTiEvmVariantSchematicSheetLabels(evm, variant)}
+        schematicSheetLabels={getTiEvmVariantSchematicSheetLabels(
+          evm,
+          render.schematicVariant ?? variant,
+        )}
         isLoading={render.isLoading}
         onActiveViewChange={setActiveView}
       />

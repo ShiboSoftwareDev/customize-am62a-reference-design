@@ -13,6 +13,7 @@ import {
 
 const pcbPreloadPromises = new Map<TiEvmId, Promise<void>>()
 const schematicPreloadPromises = new Map<TiEvmId, Promise<void>>()
+const schematicPreloadBatchSize = 16
 
 export function preloadTiEvmPcbVariants({ evm }: { evm: TiEvm }): Promise<void> {
   const existingPreload = pcbPreloadPromises.get(evm.id)
@@ -33,12 +34,13 @@ export function preloadTiEvmSchematicVariants({ evm }: { evm: TiEvm }): Promise<
   if (existingPreload) return existingPreload
 
   const schematicCircuitJsonUrls = evm.variants.flatMap(getTiEvmVariantSchematicCircuitJsonUrls)
-  const preloadPromise = preloadCircuitJsonUrls(schematicCircuitJsonUrls).catch(
-    (error: unknown) => {
-      schematicPreloadPromises.delete(evm.id)
-      throw error
-    },
-  )
+  const preloadPromise = preloadCircuitJsonUrlsInBatches({
+    circuitJsonUrls: schematicCircuitJsonUrls,
+    batchSize: schematicPreloadBatchSize,
+  }).catch((error: unknown) => {
+    schematicPreloadPromises.delete(evm.id)
+    throw error
+  })
   schematicPreloadPromises.set(evm.id, preloadPromise)
   return preloadPromise
 }
@@ -68,6 +70,27 @@ async function preloadCircuitJsonUrls(circuitJsonUrls: PrebuiltCircuitJsonUrl[])
     if (getCachedPrebuiltCircuitJson({ url })) continue
     await waitForBrowserIdle()
     await loadPrebuiltCircuitJson({ url })
+  }
+}
+
+async function preloadCircuitJsonUrlsInBatches({
+  circuitJsonUrls,
+  batchSize,
+}: {
+  circuitJsonUrls: PrebuiltCircuitJsonUrl[]
+  batchSize: number
+}): Promise<void> {
+  for (
+    let batchStartIndex = 0;
+    batchStartIndex < circuitJsonUrls.length;
+    batchStartIndex += batchSize
+  ) {
+    const circuitJsonUrlBatch = circuitJsonUrls.slice(batchStartIndex, batchStartIndex + batchSize)
+    await Promise.all(
+      circuitJsonUrlBatch.map((url) =>
+        getCachedPrebuiltCircuitJson({ url }) ? undefined : loadPrebuiltCircuitJson({ url }),
+      ),
+    )
   }
 }
 

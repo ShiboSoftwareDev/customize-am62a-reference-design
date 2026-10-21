@@ -1,5 +1,9 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { useEffect, useRef, useState } from "react"
+import {
+  getDisplayedSchematics,
+  type DisplayedSchematics,
+} from "app/hooks/get-displayed-schematics"
 import { loadPrebuiltCircuitJson } from "app/load-prebuilt-circuit-json"
 import { getCachedTiEvmVariantSchematics, preloadTiEvmSchematicVariants } from "app/preload-ti-evm"
 import {
@@ -8,11 +12,6 @@ import {
   type TiEvmVariant,
 } from "lib/ti-evm-catalog"
 
-type LoadedSchematics = {
-  variant: TiEvmVariant
-  circuitJsons: AnyCircuitElement[][]
-}
-
 export function usePrebuiltSchematics(request: {
   evm: TiEvm
   variant: TiEvmVariant
@@ -20,10 +19,11 @@ export function usePrebuiltSchematics(request: {
   retryIndex: number
 }): {
   circuitJsons: AnyCircuitElement[][]
+  variant: TiEvmVariant | null
   error: string
   isLoading: boolean
 } {
-  const [loadedSchematics, setLoadedSchematics] = useState<LoadedSchematics | null>(null)
+  const [displayedSchematics, setDisplayedSchematics] = useState<DisplayedSchematics | null>(null)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const requestIndexRef = useRef(0)
@@ -46,8 +46,13 @@ export function usePrebuiltSchematics(request: {
       : getCachedTiEvmVariantSchematics({ variant: request.variant })
     const circuitJsonUrls = getTiEvmVariantSchematicCircuitJsonUrls(request.variant)
 
-    setLoadedSchematics(
-      cachedCircuitJsons ? { variant: request.variant, circuitJsons: cachedCircuitJsons } : null,
+    setDisplayedSchematics((previousSchematics) =>
+      getDisplayedSchematics({
+        evmId: request.evm.id,
+        variant: request.variant,
+        cachedCircuitJsons,
+        previousSchematics,
+      }),
     )
     setError("")
     setIsLoading(!cachedCircuitJsons)
@@ -55,7 +60,11 @@ export function usePrebuiltSchematics(request: {
     void Promise.all(circuitJsonUrls.map((url) => loadPrebuiltCircuitJson({ url, forceReload })))
       .then((circuitJsons) => {
         if (requestIndex !== requestIndexRef.current) return
-        setLoadedSchematics({ variant: request.variant, circuitJsons })
+        setDisplayedSchematics({
+          evmId: request.evm.id,
+          variant: request.variant,
+          circuitJsons,
+        })
       })
       .catch((loadError: unknown) => {
         if (requestIndex !== requestIndexRef.current) return
@@ -71,14 +80,19 @@ export function usePrebuiltSchematics(request: {
   const cachedCircuitJsons = request.loadSchematics
     ? getCachedTiEvmVariantSchematics({ variant: request.variant })
     : undefined
-  const circuitJsons =
-    loadedSchematics?.variant === request.variant
-      ? loadedSchematics.circuitJsons
-      : (cachedCircuitJsons ?? [])
+  const visibleSchematics = request.loadSchematics
+    ? getDisplayedSchematics({
+        evmId: request.evm.id,
+        variant: request.variant,
+        cachedCircuitJsons,
+        previousSchematics: displayedSchematics,
+      })
+    : null
 
   return {
-    circuitJsons,
+    circuitJsons: visibleSchematics?.circuitJsons ?? [],
+    variant: visibleSchematics?.variant ?? null,
     error,
-    isLoading: request.loadSchematics && isLoading && circuitJsons.length === 0,
+    isLoading: request.loadSchematics && isLoading,
   }
 }
