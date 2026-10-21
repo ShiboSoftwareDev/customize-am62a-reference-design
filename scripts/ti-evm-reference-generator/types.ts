@@ -27,6 +27,8 @@ export type ReferenceInput = {
   name: string
   sourceUrl: string
   archiveSha256: string
+  sourceConnectivityArchiveSha256?: string
+  sourcePcbConnectivityPath?: string
   pcbPath: string
   projectPath: string
   schematicPaths: string[]

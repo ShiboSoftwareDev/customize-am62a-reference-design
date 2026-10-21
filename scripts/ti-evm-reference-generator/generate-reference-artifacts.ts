@@ -116,7 +116,7 @@ export function createDefinitionModuleSource(params: {
   return [
     'import { parseReferenceEvmDefinition } from "../../evms/parse-reference-evm-definition"',
     "",
-    "// Generated from the checksum-pinned source Altium release.",
+    "// Generated from checksum-pinned source design files.",
     "// Run scripts/generate-ti-evm-reference-definitions.ts to regenerate.",
     `export const ${params.exportName} = parseReferenceEvmDefinition(${JSON.stringify(JSON.stringify(params.definition))})`,
     "",

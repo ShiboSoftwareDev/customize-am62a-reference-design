@@ -1,6 +1,6 @@
 # Sitara board configurator
 
-A fast, source-backed configurator for four Sitara evaluation and development boards. All four boards follow a reproducible Altium → Circuit JSON → tscircuit TSX pipeline. Feature conditions are added to the generated component TSX, then every selectable PCB population is rendered with `@tscircuit/core` during the build. Matching schematic populations are filtered from the authored Altium Circuit JSON so its symbols, wires, labels, and sheet layout are not replaced by core's automatic schematic layout. The browser loads only checked-in, gzip-compressed artifacts for instant switching.
+A fast, source-backed configurator for four Sitara evaluation and development boards. All four boards follow a reproducible source PCB → Circuit JSON → tscircuit TSX pipeline. Feature conditions are added to the generated component TSX, then every selectable PCB population is rendered with `@tscircuit/core` during the build. Matching schematic populations are filtered from the authored source Circuit JSON so its symbols, wires, labels, and sheet layout are not replaced by core's automatic schematic layout. The browser loads only checked-in, gzip-compressed artifacts for instant switching.
 
 The application does not mutate Circuit JSON at runtime and does not use Altium-viewer output as its board source.
 
@@ -40,7 +40,7 @@ To regenerate the checked-in Circuit JSON and parameterized TSX from TI's origin
 bun run generate:ti-evm-references
 ```
 
-The download step verifies each official archive against its pinned SHA-256 checksum before extraction. The source archives remain untracked. The generated project Circuit JSON, component-level TSX, compact reference definitions, and provenance metadata are committed. The Altium parser and both converters are pinned to exact versions.
+The download step verifies each source archive against its pinned SHA-256 checksum before extraction. The source archives remain untracked. SK-AM62 uses the community Altium conversion for PCB geometry and TI's official Allegro ASCII export for authoritative pad-to-net assignments; the generator rejects missing or inconsistent mappings. The generated project Circuit JSON, component-level TSX, compact reference definitions, and provenance metadata are committed. The Altium parser and both converters are pinned to exact versions.
 
 ## Verify
 

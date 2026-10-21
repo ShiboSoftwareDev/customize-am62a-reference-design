@@ -15,6 +15,8 @@ function isReferenceEvmDefinition(candidate: unknown): candidate is ReferenceEvm
     typeof candidate.name === "string" &&
     typeof candidate.sourceUrl === "string" &&
     typeof candidate.sourceArchiveSha256 === "string" &&
+    isOptionalString(candidate.sourceConnectivityArchiveSha256) &&
+    isOptionalString(candidate.sourcePcbConnectivityPath) &&
     typeof candidate.sourcePcbPath === "string" &&
     isStringArray(candidate.sourceSchematicPaths) &&
     Array.isArray(candidate.outline) &&
@@ -27,6 +29,10 @@ function isReferenceEvmDefinition(candidate: unknown): candidate is ReferenceEvm
     Array.isArray(candidate.standaloneHoles) &&
     Array.isArray(candidate.silkscreen)
   )
+}
+
+function isOptionalString(candidate: unknown): candidate is string | undefined {
+  return candidate === undefined || typeof candidate === "string"
 }
 
 function isRecord(candidate: unknown): candidate is Record<string, unknown> {

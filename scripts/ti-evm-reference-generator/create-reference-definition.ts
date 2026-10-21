@@ -9,7 +9,6 @@ import {
   AltiumComponentRecord,
   AltiumNetRecord,
   AltiumPadRecord,
-  type AltiumPcbDocument,
   AltiumPrjPcb,
   type AltiumSchDoc,
   parseAltiumBinaryPcbDoc,
@@ -21,6 +20,7 @@ import type {
   ReferenceNet,
   ReferenceSchematicPlacement,
 } from "../../lib/evms/reference-evm-types"
+import { applyAllegroPadNetAssignments } from "./apply-allegro-pad-net-assignments"
 import {
   isPcbBoard,
   isPcbComponent,
@@ -55,7 +55,6 @@ export async function createReferenceDefinition(
 ): Promise<ReferenceConversion> {
   const pcbBytes = new Uint8Array(await readFile(reference.pcbPath))
   const pcbDocument = parseAltiumBinaryPcbDoc(pcbBytes)
-  const converterPcbDocument = parseAltiumSource(pcbBytes, "pcb") as AltiumPcbDocument
   const parsedProject = parseAltiumFile(
     new Uint8Array(await readFile(reference.projectPath)),
   ).document
@@ -79,10 +78,21 @@ export async function createReferenceDefinition(
   const padRecords = (pcbDocument.primitiveRecords.get("Pads6") ?? []).filter(
     (record): record is AltiumPadRecord => record instanceof AltiumPadRecord,
   )
+  const hasNativePcbConnectivity = hasConnectedPcbPads(padRecords)
   const componentNames = createComponentNames({
     componentRecords,
     document: pcbDocument,
   })
+  if (reference.sourcePcbConnectivityPath) {
+    const assignedPadCount = applyAllegroPadNetAssignments({
+      allegroAsciiExport: await readFile(reference.sourcePcbConnectivityPath, "utf8"),
+      componentNames,
+      pcbDocument,
+    })
+    console.log(
+      `${reference.name}: restored ${assignedPadCount} pad net assignments from the official connectivity source`,
+    )
+  }
   const padRecordsByComponentIndex = new Map<ComponentRecordIndex, AltiumPadRecord[]>()
   for (const padRecord of padRecords) {
     const componentIndex = padRecord.componentIndex
@@ -107,7 +117,7 @@ export async function createReferenceDefinition(
   const referencedEmbeddedModelIndexes = new Set<EmbeddedModelIndex>()
   const projectCircuitJson = convertAltiumProjectToCircuitJson({
     pcb: {
-      document: converterPcbDocument,
+      document: pcbDocument,
       options: {
         includeCopperAreas: true,
         includeTraces: true,
@@ -119,7 +129,7 @@ export async function createReferenceDefinition(
         },
       },
     },
-    schematics: hasConnectedPcbPads(padRecords)
+    schematics: hasNativePcbConnectivity
       ? []
       : schematicSources.map((schematicSource) => ({
           document: schematicSource.document,
@@ -328,6 +338,11 @@ export async function createReferenceDefinition(
       name: reference.name,
       sourceUrl: reference.sourceUrl,
       sourceArchiveSha256: reference.archiveSha256,
+      sourceConnectivityArchiveSha256: reference.sourceConnectivityArchiveSha256,
+      sourcePcbConnectivityPath: reference.sourcePcbConnectivityPath?.replace(
+        /^tmp\/references\//u,
+        "",
+      ),
       sourcePcbPath: reference.pcbPath.replace(/^tmp\/references\//u, ""),
       sourceSchematicPaths: reference.schematicPaths.map((schematicPath) =>
         schematicPath.replace(/^tmp\/references\//u, ""),

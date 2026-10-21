@@ -106,6 +106,8 @@ export type ReferenceEvmDefinition = {
   name: string
   sourceUrl: string
   sourceArchiveSha256: string
+  sourceConnectivityArchiveSha256?: string
+  sourcePcbConnectivityPath?: string
   sourcePcbPath: string
   sourceSchematicPaths: string[]
   outline: ReferencePoint[]

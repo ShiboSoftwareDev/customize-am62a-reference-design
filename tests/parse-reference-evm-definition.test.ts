@@ -7,6 +7,8 @@ test("generated reference definitions are validated while parsing", () => {
     name: "Example",
     sourceUrl: "https://example.com",
     sourceArchiveSha256: "abc",
+    sourceConnectivityArchiveSha256: "def",
+    sourcePcbConnectivityPath: "board.alg",
     sourcePcbPath: "board.PcbDoc",
     sourceSchematicPaths: ["board.SchDoc"],
     outline: [],
@@ -20,7 +22,9 @@ test("generated reference definitions are validated while parsing", () => {
     silkscreen: [],
   })
 
-  expect(parseReferenceEvmDefinition(serializedDefinition).id).toBe("example")
+  const definition = parseReferenceEvmDefinition(serializedDefinition)
+  expect(definition.id).toBe("example")
+  expect(definition.sourcePcbConnectivityPath).toBe("board.alg")
   expect(() => parseReferenceEvmDefinition("{}")).toThrowError(
     "Generated reference EVM definition is invalid",
   )

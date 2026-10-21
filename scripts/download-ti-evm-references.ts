@@ -28,6 +28,12 @@ const references: ReferenceArchive[] = [
     outputDirectory: "sk-am62",
   },
   {
+    name: "SK-AM62 official connectivity source",
+    url: "https://www.ti.com/lit/zip/sprr448",
+    sha256: "af1c3bad7b67eafea831c773840bbba8fdbad25e0ab9eff32119747ca8cd162b",
+    outputDirectory: "sk-am62-official",
+  },
+  {
     name: "BeaglePlay",
     url: "https://github.com/beagleboard/beagleplay/archive/7a59a98ae27dc4fd9e2bd8975ff90cdb44a366ea.zip",
     sha256: "6b2b29a35e308237891d91f2c0b131653c0a01700ab8e5345e31bed3ddf2101e",
