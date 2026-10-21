@@ -411,7 +411,7 @@
       "id": "sk-am62",
       "artifacts": [
         {
-          "elementCount": 94329,
+          "elementCount": 94064,
           "output": "prebuilt-ti-evms/sk-am62/full-board.circuit.json.gz",
           "pcbTraceCount": 22340,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -465,9 +465,9 @@
           ]
         },
         {
-          "elementCount": 84522,
+          "elementCount": 84348,
           "output": "prebuilt-ti-evms/sk-am62/without-connectivity.circuit.json.gz",
-          "pcbTraceCount": 19650,
+          "pcbTraceCount": 19677,
           "source": "Parameterized SK-AM62 tscircuit TSX",
           "sourceComponentCount": 1136,
           "sourceTraceCount": 829,
@@ -519,7 +519,7 @@
           ]
         },
         {
-          "elementCount": 83688,
+          "elementCount": 83486,
           "output": "prebuilt-ti-evms/sk-am62/without-test-debug.circuit.json.gz",
           "pcbTraceCount": 19888,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -573,9 +573,9 @@
           ]
         },
         {
-          "elementCount": 88528,
+          "elementCount": 88281,
           "output": "prebuilt-ti-evms/sk-am62/without-expansion.circuit.json.gz",
-          "pcbTraceCount": 19689,
+          "pcbTraceCount": 19690,
           "source": "Parameterized SK-AM62 tscircuit TSX",
           "sourceComponentCount": 1298,
           "sourceTraceCount": 895,
@@ -627,9 +627,9 @@
           ]
         },
         {
-          "elementCount": 82868,
+          "elementCount": 82634,
           "output": "prebuilt-ti-evms/sk-am62/without-multimedia.circuit.json.gz",
-          "pcbTraceCount": 17380,
+          "pcbTraceCount": 17381,
           "source": "Parameterized SK-AM62 tscircuit TSX",
           "sourceComponentCount": 1232,
           "sourceTraceCount": 837,
@@ -681,9 +681,9 @@
           ]
         },
         {
-          "elementCount": 57311,
+          "elementCount": 57249,
           "output": "prebuilt-ti-evms/sk-am62/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 10076,
+          "pcbTraceCount": 10105,
           "source": "Parameterized SK-AM62 tscircuit TSX",
           "sourceComponentCount": 638,
           "sourceTraceCount": 377,

@@ -63,6 +63,10 @@ export const referenceInputs: ReferenceInput[] = [
     name: "SK-AM62",
     sourceUrl: "https://www.ti.com/tool/SK-AM62",
     archiveSha256: "14f84ba83c82db636b7425a874d599fea2a3cd0b72f365460b943d53ffc26982",
+    sourceConnectivityArchiveSha256:
+      "af1c3bad7b67eafea831c773840bbba8fdbad25e0ab9eff32119747ca8cd162b",
+    sourcePcbConnectivityPath:
+      "tmp/references/sk-am62-official/SK-AM62 Design files/E3 revision/Assembly/PROC114E3_BRD.alg",
     pcbPath: "tmp/references/sk-am62/Imported PROC114E3_BRD.PrjPcb/PROC114E3_BRD.PcbDoc",
     projectPath: `${skAm62SchematicDirectory}/PROC114E3_SCH.PrjPcb`,
     schematicPaths: createNumberedSchematicPaths({

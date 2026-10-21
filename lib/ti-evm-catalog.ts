@@ -145,7 +145,7 @@ export const tiEvms: TiEvm[] = [
     category: "Sitara AM62x starter kit",
     description:
       "TI's AM62x starter kit with LPDDR4, eMMC and microSD storage, dual Ethernet, Wi-Fi, display, camera, audio, and expansion interfaces.",
-    sourceLabel: "TI SK-AM62 Altium release",
+    sourceLabel: "TI SK-AM62 design release",
     sourceUrl: "https://www.ti.com/tool/SK-AM62",
     sourcePath: "boards/sk-am62/index.circuit.tsx",
     schematicSheetLabels: createNumberedSchematicSheetLabels(44),
