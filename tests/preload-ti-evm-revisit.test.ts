@@ -1,6 +1,10 @@
 import { afterEach, expect, mock, test } from "bun:test"
 import { clearPrebuiltCircuitJsonCache } from "app/load-prebuilt-circuit-json"
-import { clearTiEvmPreloadCache, preloadTiEvmPcbVariants } from "app/preload-ti-evm"
+import {
+  clearTiEvmPreloadCache,
+  preloadTiEvmPcbVariants,
+  retainTiEvmCircuitJsonCache,
+} from "app/preload-ti-evm"
 import { tiEvms } from "lib/ti-evm-catalog"
 
 const originalFetch = globalThis.fetch
@@ -11,17 +15,22 @@ afterEach(() => {
   clearTiEvmPreloadCache()
 })
 
-test("returning to a board reuses its preloaded variants", async () => {
+test("returning from another board reuses preloaded variants", async () => {
   const fetchMock = mock(async (_url: RequestInfo | URL) => Response.json([]))
   Object.defineProperty(globalThis, "fetch", {
     configurable: true,
     value: fetchMock,
     writable: true,
   })
-  const evm = tiEvms[0]
+  const firstBoard = tiEvms[0]
+  const secondBoard = tiEvms[1]
 
-  await preloadTiEvmPcbVariants({ evm })
-  await preloadTiEvmPcbVariants({ evm })
+  retainTiEvmCircuitJsonCache({ evm: firstBoard })
+  await preloadTiEvmPcbVariants({ evm: firstBoard })
+  retainTiEvmCircuitJsonCache({ evm: secondBoard })
+  await preloadTiEvmPcbVariants({ evm: secondBoard })
+  retainTiEvmCircuitJsonCache({ evm: firstBoard })
+  await preloadTiEvmPcbVariants({ evm: firstBoard })
 
-  expect(fetchMock).toHaveBeenCalledTimes(evm.variants.length)
+  expect(fetchMock).toHaveBeenCalledTimes(firstBoard.variants.length + secondBoard.variants.length)
 })
