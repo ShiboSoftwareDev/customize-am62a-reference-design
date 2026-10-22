@@ -30,7 +30,7 @@
     "@biomejs/biome": "2.5.15",
     "@tscircuit/checks": "0.0.245",
     "@tscircuit/circuit-json-util": "0.0.120",
-    "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@ed0f226",
+    "@tscircuit/core": "https://pkg.pr.new/tscircuit/core/@tscircuit/core@2b1ff0b",
     "@tscircuit/math-utils": "0.0.38",
     "@types/node": "26.6.4",
     "@types/react": "19.3.0",
