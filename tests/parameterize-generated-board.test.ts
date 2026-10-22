@@ -16,7 +16,7 @@ test("generated board TSX is parameterized without selector collisions", () => {
     <pcbtrace route={[{"route_type":"wire","x":0,"y":1,"width":0.3,"layer":"top"},{"route_type":"wire","x":1,"y":1,"width":0.3,"layer":"top"}]} />
     <via pcbX="0mm" pcbY="0mm" holeDiameter="0.2mm" outerDiameter="0.5mm" fromLayer="top" toLayer="bottom" connectsTo={"net.TP1"} />
     <via pcbX="0mm" pcbY="1mm" holeDiameter="0.2mm" outerDiameter="0.5mm" fromLayer="top" toLayer="bottom" connectsTo={"net.SIGNAL"} />
-    <copperpour layer="top" connectsTo={'net[name="TP1"]'} outline={[]} padMargin={0} traceMargin={0} clearance={0} boardEdgeMargin={0} cutoutMargin={0} useThermalReliefs={false} />
+    <copperpour layer={"top"} connectsTo={"net[name=\\"TP1\\"]"} outline={[{"x":0,"y":0},{"x":1,"y":0},{"x":1,"y":1}]} padMargin={0} traceMargin={0} clearance={0} boardEdgeMargin={0} cutoutMargin={0} useThermalReliefs={false} />
     <trace path={[".TP1 > .imported_pcb_port_1", ".R1 > .imported_pcb_port_2", "net.TP1"]} />
   </board>
 )
@@ -57,6 +57,7 @@ export default ExampleBoard`
           { x: 1, y: 0 },
           { x: 1, y: 1 },
         ],
+        pcbCopperPourId: "pcb_copper_pour_1",
       },
     ],
     teardropPortSelectors: new Set([".R1 > .pin1"]),

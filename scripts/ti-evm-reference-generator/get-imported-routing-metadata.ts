@@ -1,5 +1,5 @@
 import type { AnyCircuitElement } from "circuit-json"
-import type { ComponentName, FeatureId, SourceComponentId } from "./types"
+import { getFeatureIdBySourceComponentId } from "./get-feature-id-by-source-component-id"
 import {
   type GeneratedSourceNetId,
   getImportedRoutingInclusionMasks,
@@ -8,6 +8,7 @@ import {
   type PcbTraceRouteKey,
   type PcbViaKey,
 } from "./get-imported-routing-inclusion-masks"
+import type { ComponentName, FeatureId } from "./types"
 
 type SourceNetId = string
 type SourceTraceId = string
@@ -21,12 +22,6 @@ type SourceTraceElement = AnyCircuitElement & {
   connected_source_net_ids?: SourceNetId[]
   source_trace_id: SourceTraceId
   type: "source_trace"
-}
-
-type SourceComponentElement = AnyCircuitElement & {
-  name: ComponentName
-  source_component_id: SourceComponentId
-  type: "source_component"
 }
 
 type PcbTraceElement = AnyCircuitElement & {
@@ -167,18 +162,6 @@ export function getImportedRoutingMetadata(params: {
   }
 }
 
-function getFeatureIdBySourceComponentId(params: {
-  circuitJson: AnyCircuitElement[]
-  featureIdByComponentName: ReadonlyMap<ComponentName, FeatureId>
-}): Map<SourceComponentId, FeatureId> {
-  return new Map(
-    params.circuitJson.filter(isSourceComponent).flatMap((sourceComponent) => {
-      const featureId = params.featureIdByComponentName.get(sourceComponent.name)
-      return featureId ? [[sourceComponent.source_component_id, featureId]] : []
-    }),
-  )
-}
-
 function getGeneratedSourceNetIds(params: {
   circuitJson: AnyCircuitElement[]
   sourceNetsById: ReadonlyMap<SourceNetId, SourceNetElement>
@@ -313,14 +296,6 @@ function getViaSourceNetId(params: {
 
 function isSourceNet(element: AnyCircuitElement): element is SourceNetElement {
   return element.type === "source_net" && typeof element.source_net_id === "string"
-}
-
-function isSourceComponent(element: AnyCircuitElement): element is SourceComponentElement {
-  return (
-    element.type === "source_component" &&
-    typeof element.source_component_id === "string" &&
-    typeof element.name === "string"
-  )
 }
 
 function isSourceTrace(element: AnyCircuitElement): element is SourceTraceElement {
