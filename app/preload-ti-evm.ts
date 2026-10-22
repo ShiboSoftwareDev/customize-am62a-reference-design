@@ -15,7 +15,9 @@ import {
 const pcbPreloadPromises = new Map<TiEvmId, Promise<void>>()
 const schematicPreloadPromises = new Map<TiEvmId, Promise<void>>()
 const cadScenePreloadPromises = new Map<TiEvmId, Promise<void>>()
+const retainedCircuitJsonUrlsByEvmId = new Map<TiEvmId, PrebuiltCircuitJsonUrl[]>()
 const schematicPreloadBatchSize = 16
+const retainedEvmCount = 2
 
 export function preloadTiEvmPcbVariants({ evm }: { evm: TiEvm }): Promise<void> {
   const existingPreload = pcbPreloadPromises.get(evm.id)
@@ -77,18 +79,28 @@ export function getCachedTiEvmVariantSchematics({
 }
 
 export function retainTiEvmCircuitJsonCache({ evm }: { evm: TiEvm }): void {
+  const evmCircuitJsonUrls = evm.variants.flatMap((variant) => [
+    variant.circuitJsonUrl,
+    ...getTiEvmVariantSchematicCircuitJsonUrls(variant),
+  ])
+  retainedCircuitJsonUrlsByEvmId.delete(evm.id)
+  retainedCircuitJsonUrlsByEvmId.set(evm.id, evmCircuitJsonUrls)
+
+  while (retainedCircuitJsonUrlsByEvmId.size > retainedEvmCount) {
+    const leastRecentlyUsedEvmId = retainedCircuitJsonUrlsByEvmId.keys().next().value
+    if (leastRecentlyUsedEvmId === undefined) break
+    retainedCircuitJsonUrlsByEvmId.delete(leastRecentlyUsedEvmId)
+  }
+
   retainPrebuiltCircuitJsonCache({
-    urls: evm.variants.flatMap((variant) => [
-      variant.circuitJsonUrl,
-      ...getTiEvmVariantSchematicCircuitJsonUrls(variant),
-    ]),
+    urls: [...retainedCircuitJsonUrlsByEvmId.values()].flat(),
   })
 
   for (const evmId of pcbPreloadPromises.keys()) {
-    if (evmId !== evm.id) pcbPreloadPromises.delete(evmId)
+    if (!retainedCircuitJsonUrlsByEvmId.has(evmId)) pcbPreloadPromises.delete(evmId)
   }
   for (const evmId of schematicPreloadPromises.keys()) {
-    if (evmId !== evm.id) schematicPreloadPromises.delete(evmId)
+    if (!retainedCircuitJsonUrlsByEvmId.has(evmId)) schematicPreloadPromises.delete(evmId)
   }
 }
 
@@ -96,6 +108,7 @@ export function clearTiEvmPreloadCache(): void {
   pcbPreloadPromises.clear()
   schematicPreloadPromises.clear()
   cadScenePreloadPromises.clear()
+  retainedCircuitJsonUrlsByEvmId.clear()
 }
 
 async function preloadCadSceneUrls(cadSceneUrls: string[]): Promise<void> {

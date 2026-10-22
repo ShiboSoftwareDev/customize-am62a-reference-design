@@ -15,21 +15,31 @@ afterEach(() => {
   clearTiEvmPreloadCache()
 })
 
-test("retains parsed Circuit JSON only for the selected board", async () => {
+test("retains parsed Circuit JSON for the current and previous boards", async () => {
   const fetchMock = mock(async () => Response.json([]))
   Object.defineProperty(globalThis, "fetch", {
     configurable: true,
     value: fetchMock,
     writable: true,
   })
-  const firstBoardUrl = tiEvms[0].variants[0].circuitJsonUrl
-  const selectedBoard = tiEvms[1]
-  const selectedBoardUrl = selectedBoard.variants[0].circuitJsonUrl
+  const firstBoard = tiEvms[0]
+  const secondBoard = tiEvms[1]
+  const thirdBoard = tiEvms[2]
+  const firstBoardUrl = firstBoard.variants[0].circuitJsonUrl
+  const secondBoardUrl = secondBoard.variants[0].circuitJsonUrl
+  const thirdBoardUrl = thirdBoard.variants[0].circuitJsonUrl
 
-  await loadPrebuiltCircuitJson({ url: firstBoardUrl })
-  const selectedBoardCircuitJson = await loadPrebuiltCircuitJson({ url: selectedBoardUrl })
-  retainTiEvmCircuitJsonCache({ evm: selectedBoard })
+  const firstBoardCircuitJson = await loadPrebuiltCircuitJson({ url: firstBoardUrl })
+  retainTiEvmCircuitJsonCache({ evm: firstBoard })
+  retainTiEvmCircuitJsonCache({ evm: secondBoard })
+  const secondBoardCircuitJson = await loadPrebuiltCircuitJson({ url: secondBoardUrl })
+
+  expect(getCachedPrebuiltCircuitJson({ url: firstBoardUrl })).toBe(firstBoardCircuitJson)
+  expect(getCachedPrebuiltCircuitJson({ url: secondBoardUrl })).toBe(secondBoardCircuitJson)
+
+  retainTiEvmCircuitJsonCache({ evm: thirdBoard })
+  await loadPrebuiltCircuitJson({ url: thirdBoardUrl })
 
   expect(getCachedPrebuiltCircuitJson({ url: firstBoardUrl })).toBeUndefined()
-  expect(getCachedPrebuiltCircuitJson({ url: selectedBoardUrl })).toBe(selectedBoardCircuitJson)
+  expect(getCachedPrebuiltCircuitJson({ url: secondBoardUrl })).toBe(secondBoardCircuitJson)
 })

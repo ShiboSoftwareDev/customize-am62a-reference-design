@@ -2,6 +2,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 import { getPcbRenderer } from "app/get-pcb-renderer"
 import { useElementHeight } from "app/hooks/use-element-height"
+import { getSelectedSchematicSheet } from "app/components/get-selected-schematic-sheet"
 
 async function loadPcbViewer() {
   const module = await import("@tscircuit/pcb-viewer")
@@ -45,12 +46,18 @@ export function DesignViewer({
   isLoading,
   onActiveViewChange,
 }: DesignViewerProps) {
-  const [schematicSheetIndex, setSchematicSheetIndex] = useState(0)
+  const [requestedSchematicSheetLabel, setRequestedSchematicSheetLabel] = useState<
+    string | undefined
+  >()
   const [renderedPcbCircuitJson, setRenderedPcbCircuitJson] = useState<AnyCircuitElement[] | null>(
     null,
   )
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
-  const schematicCircuitJson = schematicCircuitJsons[schematicSheetIndex]
+  const schematicSheetSelection = getSelectedSchematicSheet({
+    requestedLabel: requestedSchematicSheetLabel,
+    labels: schematicSheetLabels,
+  })
+  const schematicCircuitJson = schematicCircuitJsons[schematicSheetSelection.index]
   const pcbRenderer = useMemo(
     () => (pcbCircuitJson ? getPcbRenderer(pcbCircuitJson) : "webgpu"),
     [pcbCircuitJson],
@@ -64,12 +71,14 @@ export function DesignViewer({
   }, [])
 
   useEffect(() => {
-    setSchematicSheetIndex(0)
+    setRequestedSchematicSheetLabel(undefined)
   }, [boardKey])
 
   useEffect(() => {
-    if (schematicSheetIndex >= schematicSheetLabels.length) setSchematicSheetIndex(0)
-  }, [schematicSheetIndex, schematicSheetLabels.length])
+    if (requestedSchematicSheetLabel !== schematicSheetSelection.label) {
+      setRequestedSchematicSheetLabel(schematicSheetSelection.label)
+    }
+  }, [requestedSchematicSheetLabel, schematicSheetSelection.label])
 
   return (
     <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>
@@ -114,11 +123,11 @@ export function DesignViewer({
             Sheet
             <select
               aria-label="Schematic sheet"
-              value={schematicSheetIndex}
-              onChange={(event) => setSchematicSheetIndex(Number(event.target.value))}
+              value={schematicSheetSelection.label}
+              onChange={(event) => setRequestedSchematicSheetLabel(event.target.value)}
             >
-              {schematicSheetLabels.map((label, index) => (
-                <option key={label} value={index}>
+              {schematicSheetLabels.map((label) => (
+                <option key={label} value={label}>
                   {label}
                 </option>
               ))}
@@ -143,7 +152,7 @@ export function DesignViewer({
         ) : activeView === "schematic" && schematicCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading schematic viewer…" />}>
             <SchematicViewer
-              key={`${boardKey}:${schematicSheetIndex}`}
+              key={`${boardKey}:${schematicSheetSelection.label}`}
               circuitJson={schematicCircuitJson}
               containerStyle={{ height: "100%" }}
             />
