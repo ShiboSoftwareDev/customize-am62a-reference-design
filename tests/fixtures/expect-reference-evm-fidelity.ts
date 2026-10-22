@@ -175,7 +175,9 @@ async function expectCopperPoursAreRendered(params: {
   expect(generatedSource.match(/<copperpour\b/gu)?.length ?? 0).toBe(
     params.sourceCircuitJson.filter(isPcbCopperPour).length,
   )
-  expect(params.renderedCircuitJson.filter(isPcbCopperPour).length).toBeGreaterThan(0)
+  expect(params.renderedCircuitJson.filter(isPcbCopperPour)).toHaveLength(
+    params.sourceCircuitJson.filter(isPcbCopperPour).length,
+  )
 }
 
 function expectNoDanglingCopperPourNets(circuitJson: AnyCircuitElement[]): void {

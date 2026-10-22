@@ -71,7 +71,7 @@
           ]
         },
         {
-          "elementCount": 92882,
+          "elementCount": 92886,
           "output": "prebuilt-ti-evms/tmds62levm/without-connectivity.circuit.json.gz",
           "pcbTraceCount": 20480,
           "source": "Parameterized TMDS62LEVM tscircuit TSX",
@@ -138,7 +138,7 @@
           ]
         },
         {
-          "elementCount": 94916,
+          "elementCount": 94921,
           "output": "prebuilt-ti-evms/tmds62levm/without-multimedia.circuit.json.gz",
           "pcbTraceCount": 20293,
           "source": "Parameterized TMDS62LEVM tscircuit TSX",
@@ -205,7 +205,7 @@
           ]
         },
         {
-          "elementCount": 97842,
+          "elementCount": 97843,
           "output": "prebuilt-ti-evms/tmds62levm/without-expansion.circuit.json.gz",
           "pcbTraceCount": 21092,
           "source": "Parameterized TMDS62LEVM tscircuit TSX",
@@ -272,7 +272,7 @@
           ]
         },
         {
-          "elementCount": 89319,
+          "elementCount": 89326,
           "output": "prebuilt-ti-evms/tmds62levm/without-debug-instrumentation.circuit.json.gz",
           "pcbTraceCount": 19903,
           "source": "Parameterized TMDS62LEVM tscircuit TSX",
@@ -339,7 +339,7 @@
           ]
         },
         {
-          "elementCount": 73299,
+          "elementCount": 73316,
           "output": "prebuilt-ti-evms/tmds62levm/minimal-board.circuit.json.gz",
           "pcbTraceCount": 15127,
           "source": "Parameterized TMDS62LEVM tscircuit TSX",
@@ -411,7 +411,7 @@
       "id": "sk-am62",
       "artifacts": [
         {
-          "elementCount": 94064,
+          "elementCount": 94399,
           "output": "prebuilt-ti-evms/sk-am62/full-board.circuit.json.gz",
           "pcbTraceCount": 22340,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -465,7 +465,7 @@
           ]
         },
         {
-          "elementCount": 84348,
+          "elementCount": 84707,
           "output": "prebuilt-ti-evms/sk-am62/without-connectivity.circuit.json.gz",
           "pcbTraceCount": 19677,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -519,7 +519,7 @@
           ]
         },
         {
-          "elementCount": 83486,
+          "elementCount": 83846,
           "output": "prebuilt-ti-evms/sk-am62/without-test-debug.circuit.json.gz",
           "pcbTraceCount": 19888,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -573,7 +573,7 @@
           ]
         },
         {
-          "elementCount": 88281,
+          "elementCount": 88621,
           "output": "prebuilt-ti-evms/sk-am62/without-expansion.circuit.json.gz",
           "pcbTraceCount": 19690,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -627,7 +627,7 @@
           ]
         },
         {
-          "elementCount": 82634,
+          "elementCount": 82987,
           "output": "prebuilt-ti-evms/sk-am62/without-multimedia.circuit.json.gz",
           "pcbTraceCount": 17381,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -681,7 +681,7 @@
           ]
         },
         {
-          "elementCount": 57249,
+          "elementCount": 57659,
           "output": "prebuilt-ti-evms/sk-am62/minimal-board.circuit.json.gz",
           "pcbTraceCount": 10105,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -740,7 +740,7 @@
       "id": "beagleplay",
       "artifacts": [
         {
-          "elementCount": 116444,
+          "elementCount": 116461,
           "output": "prebuilt-ti-evms/beagleplay/full-board.circuit.json.gz",
           "pcbTraceCount": 12388,
           "source": "Parameterized BeaglePlay tscircuit TSX",
@@ -772,7 +772,7 @@
           ]
         },
         {
-          "elementCount": 111048,
+          "elementCount": 111066,
           "output": "prebuilt-ti-evms/beagleplay/without-wired-networking.circuit.json.gz",
           "pcbTraceCount": 10879,
           "source": "Parameterized BeaglePlay tscircuit TSX",
@@ -804,7 +804,7 @@
           ]
         },
         {
-          "elementCount": 111126,
+          "elementCount": 111145,
           "output": "prebuilt-ti-evms/beagleplay/without-display-camera.circuit.json.gz",
           "pcbTraceCount": 10446,
           "source": "Parameterized BeaglePlay tscircuit TSX",
@@ -836,7 +836,7 @@
           ]
         },
         {
-          "elementCount": 113167,
+          "elementCount": 113184,
           "output": "prebuilt-ti-evms/beagleplay/without-wireless.circuit.json.gz",
           "pcbTraceCount": 11910,
           "source": "Parameterized BeaglePlay tscircuit TSX",
@@ -868,7 +868,7 @@
           ]
         },
         {
-          "elementCount": 113968,
+          "elementCount": 113986,
           "output": "prebuilt-ti-evms/beagleplay/without-user-io.circuit.json.gz",
           "pcbTraceCount": 11712,
           "source": "Parameterized BeaglePlay tscircuit TSX",
@@ -900,7 +900,7 @@
           ]
         },
         {
-          "elementCount": 100004,
+          "elementCount": 100025,
           "output": "prebuilt-ti-evms/beagleplay/minimal-board.circuit.json.gz",
           "pcbTraceCount": 7795,
           "source": "Parameterized BeaglePlay tscircuit TSX",
@@ -937,7 +937,7 @@
       "id": "beaglebone-black",
       "artifacts": [
         {
-          "elementCount": 26568,
+          "elementCount": 26578,
           "output": "prebuilt-ti-evms/beaglebone-black/full-board.circuit.json.gz",
           "pcbTraceCount": 6327,
           "source": "Parameterized BeagleBone Black tscircuit TSX",
@@ -958,7 +958,7 @@
           ]
         },
         {
-          "elementCount": 25140,
+          "elementCount": 25150,
           "output": "prebuilt-ti-evms/beaglebone-black/without-emmc.circuit.json.gz",
           "pcbTraceCount": 6196,
           "source": "Parameterized BeagleBone Black tscircuit TSX",
@@ -979,7 +979,7 @@
           ]
         },
         {
-          "elementCount": 24115,
+          "elementCount": 24125,
           "output": "prebuilt-ti-evms/beaglebone-black/without-ethernet.circuit.json.gz",
           "pcbTraceCount": 5614,
           "source": "Parameterized BeagleBone Black tscircuit TSX",
@@ -1000,7 +1000,7 @@
           ]
         },
         {
-          "elementCount": 24496,
+          "elementCount": 24506,
           "output": "prebuilt-ti-evms/beaglebone-black/without-hdmi.circuit.json.gz",
           "pcbTraceCount": 5795,
           "source": "Parameterized BeagleBone Black tscircuit TSX",
@@ -1021,7 +1021,7 @@
           ]
         },
         {
-          "elementCount": 20635,
+          "elementCount": 20645,
           "output": "prebuilt-ti-evms/beaglebone-black/minimal-board.circuit.json.gz",
           "pcbTraceCount": 4957,
           "source": "Parameterized BeagleBone Black tscircuit TSX",
