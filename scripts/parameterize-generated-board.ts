@@ -1,5 +1,10 @@
 import ts from "typescript"
 import {
+  addCopperPourFeatureCondition,
+  createSupportedCopperPoursByKey,
+  getUnmatchedCopperPourIds,
+} from "./generated-board-source/add-copper-pour-feature-condition"
+import {
   addRenamedNetSelectorReplacements,
   applyReplacements,
   findBoardElement,
@@ -8,17 +13,17 @@ import {
   type SourceReplacement,
 } from "./generated-board-source/ast-helpers"
 import { createParameterizedBoardSource } from "./generated-board-source/create-parameterized-board-source"
-import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
-import type {
-  ImportedPcbTraceMetadata,
-  ImportedRoutingMetadata,
-} from "./ti-evm-reference-generator/get-imported-routing-metadata"
 import {
   getPcbViaKey,
   type ImportedRoutingInclusionMask,
   type PcbTraceRouteKey,
   type PcbViaKey,
 } from "./ti-evm-reference-generator/get-imported-routing-inclusion-masks"
+import type {
+  ImportedPcbTraceMetadata,
+  ImportedRoutingMetadata,
+} from "./ti-evm-reference-generator/get-imported-routing-metadata"
+import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
 
 type ComponentName = string
 type FeatureId = string
@@ -76,6 +81,9 @@ export function parameterizeGeneratedBoard(params: {
     copperPours: params.supportedCopperPours ?? [],
     renamedNets,
   })
+  const supportedCopperPoursByKey = createSupportedCopperPoursByKey({
+    copperPours: params.supportedCopperPours ?? [],
+  })
   addImportedRoutingReplacements({
     boardElement,
     generatedSource,
@@ -121,11 +129,13 @@ export function parameterizeGeneratedBoard(params: {
       continue
     }
     if (tagName === "copperpour") {
-      addRenamedNetSelectorReplacements({
-        node: child,
+      addCopperPourFeatureCondition({
+        copperPourElement: child,
+        generatedSource,
         renamedNets,
         replacements,
         sourceFile,
+        supportedCopperPoursByKey,
       })
       continue
     }
@@ -140,6 +150,11 @@ export function parameterizeGeneratedBoard(params: {
         sourceFile,
       })
     }
+  }
+
+  const unmatchedCopperPourIds = getUnmatchedCopperPourIds(supportedCopperPoursByKey)
+  if (unmatchedCopperPourIds.length > 0) {
+    throw new Error(`Generated TSX is missing copper pours: ${unmatchedCopperPourIds.join(", ")}`)
   }
 
   const parameterizedBody = applyReplacements({

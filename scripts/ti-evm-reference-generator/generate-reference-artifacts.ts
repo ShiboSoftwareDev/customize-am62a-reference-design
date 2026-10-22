@@ -1,12 +1,14 @@
 import { mkdir } from "node:fs/promises"
 import { resolve } from "node:path"
 import { convertCircuitJsonToTscircuit } from "circuit-json-to-tscircuit"
-import { parameterizeGeneratedBoard } from "../parameterize-generated-board"
 import type { ReferenceEvmDefinition } from "../../lib/evms/reference-evm-types"
+import { parameterizeGeneratedBoard } from "../parameterize-generated-board"
 import { compressCircuitJson } from "./compress-circuit-json"
 import { createReferenceDefinition } from "./create-reference-definition"
-import { getSupportedCopperPours } from "./get-supported-copper-pours"
+import { getFeatureIdBySourceComponentId } from "./get-feature-id-by-source-component-id"
 import { getImportedRoutingMetadata } from "./get-imported-routing-metadata"
+import { getRoutingConnectivityCheckCircuitJson } from "./get-routing-connectivity-check-circuit-json"
+import { getSupportedCopperPours } from "./get-supported-copper-pours"
 import {
   getRoutablePortSelectors,
   prepareConverterCircuitJson,
@@ -46,6 +48,10 @@ export async function generateReferenceArtifacts(params: {
       return [[component.schematicName ?? component.name, component.removableFeatureId] as const]
     }),
   )
+  const featureIdBySourceComponentId = getFeatureIdBySourceComponentId({
+    circuitJson: projectCircuitJson,
+    featureIdByComponentName,
+  })
   const converterCircuitJson = prepareConverterCircuitJson(projectCircuitJson)
   const importedRoutingMetadata = getImportedRoutingMetadata({
     circuitJson: converterCircuitJson,
@@ -62,7 +68,11 @@ export async function generateReferenceArtifacts(params: {
     importedRoutingMetadata,
     routablePortSelectors: getRoutablePortSelectors(converterCircuitJson),
     supportedCopperPours: getSupportedCopperPours({
-      circuitJson: projectCircuitJson,
+      circuitJson: getRoutingConnectivityCheckCircuitJson({
+        circuitJson: projectCircuitJson,
+        featureIdBySourceComponentId,
+      }),
+      featureIdBySourceComponentId,
     }),
     teardropPortSelectors: new Set(
       definition.nets.flatMap((net) =>

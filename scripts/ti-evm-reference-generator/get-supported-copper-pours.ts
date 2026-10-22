@@ -1,10 +1,13 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { applyToPoint, compose, rotateDEG, translate } from "transformation-matrix"
+import { isPcbComponent } from "./circuit-json-elements"
+import type { FeatureId, PcbComponentId, SourceComponentId } from "./types"
 
 type CircuitPoint = { x: number; y: number }
 type PcbCopperPour = AnyCircuitElement & {
   type: "pcb_copper_pour"
   pcb_copper_pour_id: string
+  pcb_component_id?: PcbComponentId
   brep_shape?: {
     outer_ring: { vertices: CircuitPoint[] }
   }
@@ -31,10 +34,13 @@ export type SupportedCopperPour = {
   layer: string
   netName: SourceNetName
   outline: CircuitPoint[]
+  pcbCopperPourId: string
+  removableFeatureId?: FeatureId
 }
 
 export function getSupportedCopperPours(params: {
   circuitJson: AnyCircuitElement[]
+  featureIdBySourceComponentId?: ReadonlyMap<SourceComponentId, FeatureId>
 }): SupportedCopperPour[] {
   const sourceNetNamesById = new Map<SourceNetId, SourceNetName>(
     params.circuitJson
@@ -42,6 +48,11 @@ export function getSupportedCopperPours(params: {
       .map((sourceNet) => [sourceNet.source_net_id, sourceNet.name]),
   )
   const existingNetNames = new Set(sourceNetNamesById.values())
+  const sourceComponentIdByPcbComponentId = new Map<PcbComponentId, SourceComponentId>(
+    params.circuitJson
+      .filter(isPcbComponent)
+      .map((pcbComponent) => [pcbComponent.pcb_component_id, pcbComponent.source_component_id]),
+  )
 
   return params.circuitJson
     .filter((element): element is PcbCopperPour => element.type === "pcb_copper_pour")
@@ -65,9 +76,27 @@ export function getSupportedCopperPours(params: {
           layer: copperPour.layer,
           netName,
           outline,
+          pcbCopperPourId: copperPour.pcb_copper_pour_id,
+          removableFeatureId: getCopperPourFeatureId({
+            copperPour,
+            featureIdBySourceComponentId: params.featureIdBySourceComponentId,
+            sourceComponentIdByPcbComponentId,
+          }),
         },
       ]
     })
+}
+
+function getCopperPourFeatureId(params: {
+  copperPour: PcbCopperPour
+  featureIdBySourceComponentId?: ReadonlyMap<SourceComponentId, FeatureId>
+  sourceComponentIdByPcbComponentId: ReadonlyMap<PcbComponentId, SourceComponentId>
+}): FeatureId | undefined {
+  if (!params.copperPour.pcb_component_id) return undefined
+  const sourceComponentId = params.sourceComponentIdByPcbComponentId.get(
+    params.copperPour.pcb_component_id,
+  )
+  return sourceComponentId ? params.featureIdBySourceComponentId?.get(sourceComponentId) : undefined
 }
 
 export function getSupportedCopperPourOutline(
