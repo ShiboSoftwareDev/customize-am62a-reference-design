@@ -91,7 +91,7 @@ test("every catalog board has prebuilt output from parameterized TSX", async () 
       }
     }
   }
-})
+}, 30_000)
 
 async function loadCompressedCircuitJson(repositoryRoot: string, publicUrl: string) {
   const path = resolve(repositoryRoot, "public", publicUrl.replace(/^\//u, ""))

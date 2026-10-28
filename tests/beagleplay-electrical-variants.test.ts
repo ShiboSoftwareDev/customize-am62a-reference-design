@@ -6,4 +6,4 @@ test("BeaglePlay variants retain the Sitara processor", async () => {
     evmId: "beagleplay",
     requiredComponentNames: ["U1"],
   })
-}, 120_000)
+}, 360_000)

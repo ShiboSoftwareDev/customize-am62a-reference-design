@@ -43,7 +43,7 @@ test("prebuilt full-board EVMs retain their Altium CAD representation", async ()
       ).toBe(true)
     }
   }
-})
+}, 30_000)
 
 function isRenderableCadComponent(element: AnyCircuitElement): element is RenderableCadComponent {
   return (

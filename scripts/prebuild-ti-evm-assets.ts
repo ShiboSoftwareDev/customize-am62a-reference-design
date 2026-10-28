@@ -5,6 +5,8 @@ import { gzipSync, strToU8 } from "fflate"
 import { evaluateParameterizedTiEvm } from "../lib/server/evaluate-board"
 import { type TiEvm, type TiEvmVariant, tiEvms } from "../lib/ti-evm-catalog"
 import { getConvertedCircuitIntegrityErrors } from "./get-converted-circuit-integrity-errors"
+import { recomputeCopperPours } from "./prebuild-ti-evm-assets/recompute-copper-pours"
+import { getRecomputedCopperPourDefinitions } from "./prebuild-ti-evm-assets/recomputed-copper-pour-config"
 
 const outputDirectory = resolve(import.meta.dir, "../public/prebuilt-ti-evms")
 
@@ -65,7 +67,16 @@ async function buildTiEvmVariantArtifact(params: {
   if (failedComponents.length > 0) {
     throw new Error(`${params.evm.name} ${params.variant.label} failed to render`)
   }
-  const circuitJson = result.circuitJson
+  const recomputedCopperPours = await recomputeCopperPours({
+    circuitJson: result.circuitJson,
+    definitions: getRecomputedCopperPourDefinitions(params.evm.id),
+  })
+  const circuitJson = recomputedCopperPours.circuitJson
+  if (recomputedCopperPours.generatedPourCount > 0) {
+    console.log(
+      `Recomputed ${recomputedCopperPours.generatedPourCount} ${params.evm.name} ${params.variant.label} copper regions alongside ${recomputedCopperPours.preservedPourCount} imported regions`,
+    )
+  }
   const integrityErrors = getConvertedCircuitIntegrityErrors(circuitJson)
   if (integrityErrors.length > 0) {
     throw new Error(
