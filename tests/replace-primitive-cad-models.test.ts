@@ -7,7 +7,7 @@ test("replaces primitive imported CAD while preserving external models", () => {
   const sourceFootprintByComponentName: SourceFootprintByComponentName = new Map([
     ["U1", "HDR_2X15_PEC15DAAN_S_T_8-6"],
     ["J1", "CON_CUSTOM"],
-    ["J2", "CON_MUSBB5_629105150521_S_R_S_2-7"],
+    ["R1", "RES0402_0-5"],
   ])
   const circuitJson = [
     {
@@ -40,12 +40,11 @@ test("replaces primitive imported CAD while preserving external models", () => {
       type: "source_component",
       source_component_id: "source_component_3",
       ftype: "simple_chip",
-      name: "J2",
+      name: "R1",
     },
     {
       type: "cad_component",
       cad_component_id: "cad_component_3",
-      pcb_component_id: "pcb_component_3",
       source_component_id: "source_component_3",
       model_jscad: {
         type: "colorize",
@@ -64,16 +63,6 @@ test("replaces primitive imported CAD while preserving external models", () => {
         },
       },
     },
-    {
-      type: "pcb_component",
-      pcb_component_id: "pcb_component_3",
-      source_component_id: "source_component_3",
-      center: { x: 0, y: 0 },
-      width: 8,
-      height: 6,
-      layer: "top",
-      rotation: 0,
-    },
   ] satisfies AnyCircuitElement[]
 
   const enriched = replacePrimitiveCadModels({
@@ -86,7 +75,7 @@ test("replaces primitive imported CAD while preserving external models", () => {
   const connectorCadModel = enriched.circuitJson.find(
     (element) => element.type === "cad_component" && element.cad_component_id === "cad_component_2",
   )
-  const stepCadModel = enriched.circuitJson.find(
+  const resistorCadModel = enriched.circuitJson.find(
     (element) => element.type === "cad_component" && element.cad_component_id === "cad_component_3",
   )
 
@@ -97,11 +86,9 @@ test("replaces primitive imported CAD while preserving external models", () => {
     rotation: { x: 0, y: 0, z: 90 },
   })
   expect(connectorCadModel).toMatchObject({ model_glb_url: "/models/connector.glb" })
-  expect(stepCadModel).toMatchObject({
+  expect(resistorCadModel).toMatchObject({
+    footprinter_string: "0402",
     model_jscad: undefined,
-    model_object_fit: "contain_within_bounds",
-    model_step_url: "/cad-models/kicad/USB_Micro-B_Molex_47346-0001.step",
-    size: { x: 8, y: 6, z: 2.94 },
   })
   expect(enriched.summary.enrichedComponentCount).toBe(2)
 })

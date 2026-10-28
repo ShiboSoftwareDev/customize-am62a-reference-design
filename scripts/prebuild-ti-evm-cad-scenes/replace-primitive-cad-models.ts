@@ -1,16 +1,11 @@
 import type { AnyCircuitElement } from "circuit-json"
-import {
-  type CadModelReplacement,
-  getCadModelReplacementForAltiumFootprint,
-} from "./get-cad-model-replacement-for-altium-footprint"
-import { getPrimitiveCadModelSize, type CadModelSize } from "./get-primitive-cad-model-size"
+import { type CadModelReplacement, getCadModelReplacement } from "./get-cad-model-replacement"
 import type { ComponentName, SourceFootprintByComponentName } from "./read-source-footprints"
 
 type SourceComponentId = string
-type PcbComponentId = string
 type CadComponentCountBySourceComponentId = Map<SourceComponentId, number>
-type PcbComponentSizeById = Map<PcbComponentId, Omit<CadModelSize, "z">>
 type SourceComponentElement = AnyCircuitElement & {
+  manufacturer_part_number?: string
   name: ComponentName
   source_component_id: SourceComponentId
   type: "source_component"
@@ -21,20 +16,11 @@ type CadComponentElement = AnyCircuitElement & {
   model_gltf_url?: string
   model_jscad?: unknown
   model_obj_url?: string
-  model_object_fit?: "contain_within_bounds" | "fill_bounds"
   model_step_url?: string
   model_stl_url?: string
-  pcb_component_id?: PcbComponentId
   show_as_bounding_box?: boolean
-  size?: CadModelSize
   source_component_id: SourceComponentId
   type: "cad_component"
-}
-type PcbComponentElement = AnyCircuitElement & {
-  height: number
-  pcb_component_id: PcbComponentId
-  type: "pcb_component"
-  width: number
 }
 
 export type CadModelEnrichmentSummary = {
@@ -49,18 +35,9 @@ export function replacePrimitiveCadModels(params: {
   circuitJson: AnyCircuitElement[]
   summary: CadModelEnrichmentSummary
 } {
-  const sourceComponentNameById = new Map<SourceComponentId, ComponentName>(
+  const sourceComponentById = new Map<SourceComponentId, SourceComponentElement>(
     params.circuitJson.flatMap((element) =>
-      isSourceComponentElement(element)
-        ? [[element.source_component_id, element.name] as const]
-        : [],
-    ),
-  )
-  const pcbComponentSizeById: PcbComponentSizeById = new Map(
-    params.circuitJson.flatMap((element) =>
-      isPcbComponentElement(element)
-        ? [[element.pcb_component_id, { x: element.width, y: element.height }] as const]
-        : [],
+      isSourceComponentElement(element) ? [[element.source_component_id, element] as const] : [],
     ),
   )
   const cadComponentCountBySourceComponentId: CadComponentCountBySourceComponentId = new Map()
@@ -81,12 +58,16 @@ export function replacePrimitiveCadModels(params: {
       return element
     }
 
-    const componentName = sourceComponentNameById.get(element.source_component_id)
-    const sourceFootprint = componentName
-      ? params.sourceFootprintByComponentName.get(componentName)
+    const sourceComponent = sourceComponentById.get(element.source_component_id)
+    const sourceFootprint = sourceComponent
+      ? params.sourceFootprintByComponentName.get(sourceComponent.name)
       : undefined
     const replacement = sourceFootprint
-      ? getCadModelReplacementForAltiumFootprint(sourceFootprint)
+      ? getCadModelReplacement({
+          altiumFootprint: sourceFootprint,
+          componentName: sourceComponent?.name ?? "",
+          manufacturerPartNumber: sourceComponent?.manufacturer_part_number,
+        })
       : undefined
     if (!replacement) {
       retainedPrimitiveComponentCount += 1
@@ -96,9 +77,6 @@ export function replacePrimitiveCadModels(params: {
     enrichedComponentCount += 1
     return applyCadModelReplacement({
       cadComponent: element,
-      pcbComponentSize: element.pcb_component_id
-        ? pcbComponentSizeById.get(element.pcb_component_id)
-        : undefined,
       replacement,
     })
   })
@@ -114,7 +92,6 @@ export function replacePrimitiveCadModels(params: {
 
 function applyCadModelReplacement(params: {
   cadComponent: CadComponentElement
-  pcbComponentSize?: Omit<CadModelSize, "z">
   replacement: CadModelReplacement
 }): CadComponentElement {
   const cadComponentWithoutPrimitive: CadComponentElement = {
@@ -130,18 +107,9 @@ function applyCadModelReplacement(params: {
     }
   }
 
-  const authoredSize =
-    params.cadComponent.size ?? getPrimitiveCadModelSize(params.cadComponent.model_jscad)
-  const footprintSize = authoredSize ?? params.pcbComponentSize
-  const fittedSize = footprintSize
-    ? { ...footprintSize, z: params.replacement.fitHeightMm }
-    : undefined
-
   return {
     ...cadComponentWithoutPrimitive,
-    model_step_url: params.replacement.modelStepUrl,
-    model_object_fit: "contain_within_bounds",
-    size: fittedSize,
+    model_jscad: params.replacement.jscadOperations,
   }
 }
 
@@ -170,13 +138,4 @@ function isSourceComponentElement(element: AnyCircuitElement): element is Source
 
 function isCadComponentElement(element: AnyCircuitElement): element is CadComponentElement {
   return element.type === "cad_component" && typeof element.source_component_id === "string"
-}
-
-function isPcbComponentElement(element: AnyCircuitElement): element is PcbComponentElement {
-  return (
-    element.type === "pcb_component" &&
-    typeof element.pcb_component_id === "string" &&
-    typeof element.width === "number" &&
-    typeof element.height === "number"
-  )
 }
