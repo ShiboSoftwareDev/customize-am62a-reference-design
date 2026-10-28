@@ -7,6 +7,7 @@ test("replaces primitive imported CAD while preserving external models", () => {
   const sourceFootprintByComponentName: SourceFootprintByComponentName = new Map([
     ["U1", "HDR_2X15_PEC15DAAN_S_T_8-6"],
     ["J1", "CON_CUSTOM"],
+    ["J2", "CON_MUSBB5_629105150521_S_R_S_2-7"],
   ])
   const circuitJson = [
     {
@@ -35,6 +36,44 @@ test("replaces primitive imported CAD while preserving external models", () => {
       source_component_id: "source_component_2",
       model_glb_url: "/models/connector.glb",
     },
+    {
+      type: "source_component",
+      source_component_id: "source_component_3",
+      ftype: "simple_chip",
+      name: "J2",
+    },
+    {
+      type: "cad_component",
+      cad_component_id: "cad_component_3",
+      pcb_component_id: "pcb_component_3",
+      source_component_id: "source_component_3",
+      model_jscad: {
+        type: "colorize",
+        shape: {
+          type: "extrudeLinear",
+          options: { height: 3 },
+          shape: {
+            type: "fromPointsGeom2",
+            points: [
+              [-4, -3],
+              [4, -3],
+              [4, 3],
+              [-4, 3],
+            ],
+          },
+        },
+      },
+    },
+    {
+      type: "pcb_component",
+      pcb_component_id: "pcb_component_3",
+      source_component_id: "source_component_3",
+      center: { x: 0, y: 0 },
+      width: 8,
+      height: 6,
+      layer: "top",
+      rotation: 0,
+    },
   ] satisfies AnyCircuitElement[]
 
   const enriched = replacePrimitiveCadModels({
@@ -47,6 +86,9 @@ test("replaces primitive imported CAD while preserving external models", () => {
   const connectorCadModel = enriched.circuitJson.find(
     (element) => element.type === "cad_component" && element.cad_component_id === "cad_component_2",
   )
+  const stepCadModel = enriched.circuitJson.find(
+    (element) => element.type === "cad_component" && element.cad_component_id === "cad_component_3",
+  )
 
   expect(headerCadModel).toMatchObject({
     footprinter_string: "headermodule30_rows2_p2.54mm_male",
@@ -55,5 +97,11 @@ test("replaces primitive imported CAD while preserving external models", () => {
     rotation: { x: 0, y: 0, z: 90 },
   })
   expect(connectorCadModel).toMatchObject({ model_glb_url: "/models/connector.glb" })
-  expect(enriched.summary.enrichedComponentCount).toBe(1)
+  expect(stepCadModel).toMatchObject({
+    model_jscad: undefined,
+    model_object_fit: "contain_within_bounds",
+    model_step_url: "/cad-models/kicad/USB_Micro-B_Molex_47346-0001.step",
+    size: { x: 8, y: 6, z: 2.94 },
+  })
+  expect(enriched.summary.enrichedComponentCount).toBe(2)
 })

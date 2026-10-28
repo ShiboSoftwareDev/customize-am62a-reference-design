@@ -1,9 +1,15 @@
 import type { AnyCircuitElement } from "circuit-json"
-import { getFootprinterModelForAltiumFootprint } from "./get-footprinter-model-for-altium-footprint"
+import {
+  type CadModelReplacement,
+  getCadModelReplacementForAltiumFootprint,
+} from "./get-cad-model-replacement-for-altium-footprint"
+import { getPrimitiveCadModelSize, type CadModelSize } from "./get-primitive-cad-model-size"
 import type { ComponentName, SourceFootprintByComponentName } from "./read-source-footprints"
 
 type SourceComponentId = string
+type PcbComponentId = string
 type CadComponentCountBySourceComponentId = Map<SourceComponentId, number>
+type PcbComponentSizeById = Map<PcbComponentId, Omit<CadModelSize, "z">>
 type SourceComponentElement = AnyCircuitElement & {
   name: ComponentName
   source_component_id: SourceComponentId
@@ -15,11 +21,20 @@ type CadComponentElement = AnyCircuitElement & {
   model_gltf_url?: string
   model_jscad?: unknown
   model_obj_url?: string
+  model_object_fit?: "contain_within_bounds" | "fill_bounds"
   model_step_url?: string
   model_stl_url?: string
+  pcb_component_id?: PcbComponentId
   show_as_bounding_box?: boolean
+  size?: CadModelSize
   source_component_id: SourceComponentId
   type: "cad_component"
+}
+type PcbComponentElement = AnyCircuitElement & {
+  height: number
+  pcb_component_id: PcbComponentId
+  type: "pcb_component"
+  width: number
 }
 
 export type CadModelEnrichmentSummary = {
@@ -38,6 +53,13 @@ export function replacePrimitiveCadModels(params: {
     params.circuitJson.flatMap((element) =>
       isSourceComponentElement(element)
         ? [[element.source_component_id, element.name] as const]
+        : [],
+    ),
+  )
+  const pcbComponentSizeById: PcbComponentSizeById = new Map(
+    params.circuitJson.flatMap((element) =>
+      isPcbComponentElement(element)
+        ? [[element.pcb_component_id, { x: element.width, y: element.height }] as const]
         : [],
     ),
   )
@@ -63,22 +85,22 @@ export function replacePrimitiveCadModels(params: {
     const sourceFootprint = componentName
       ? params.sourceFootprintByComponentName.get(componentName)
       : undefined
-    const footprinterModel = sourceFootprint
-      ? getFootprinterModelForAltiumFootprint(sourceFootprint)
+    const replacement = sourceFootprint
+      ? getCadModelReplacementForAltiumFootprint(sourceFootprint)
       : undefined
-    if (!footprinterModel) {
+    if (!replacement) {
       retainedPrimitiveComponentCount += 1
       return element
     }
 
     enrichedComponentCount += 1
-    const enrichedCadComponent: CadComponentElement = {
-      ...element,
-      footprinter_string: footprinterModel,
-      model_jscad: undefined,
-      show_as_bounding_box: false,
-    }
-    return enrichedCadComponent
+    return applyCadModelReplacement({
+      cadComponent: element,
+      pcbComponentSize: element.pcb_component_id
+        ? pcbComponentSizeById.get(element.pcb_component_id)
+        : undefined,
+      replacement,
+    })
   })
 
   return {
@@ -87,6 +109,39 @@ export function replacePrimitiveCadModels(params: {
       enrichedComponentCount,
       retainedPrimitiveComponentCount,
     },
+  }
+}
+
+function applyCadModelReplacement(params: {
+  cadComponent: CadComponentElement
+  pcbComponentSize?: Omit<CadModelSize, "z">
+  replacement: CadModelReplacement
+}): CadComponentElement {
+  const cadComponentWithoutPrimitive: CadComponentElement = {
+    ...params.cadComponent,
+    model_jscad: undefined,
+    show_as_bounding_box: false,
+  }
+
+  if (params.replacement.kind === "footprinter") {
+    return {
+      ...cadComponentWithoutPrimitive,
+      footprinter_string: params.replacement.footprinterString,
+    }
+  }
+
+  const authoredSize =
+    params.cadComponent.size ?? getPrimitiveCadModelSize(params.cadComponent.model_jscad)
+  const footprintSize = authoredSize ?? params.pcbComponentSize
+  const fittedSize = footprintSize
+    ? { ...footprintSize, z: params.replacement.fitHeightMm }
+    : undefined
+
+  return {
+    ...cadComponentWithoutPrimitive,
+    model_step_url: params.replacement.modelStepUrl,
+    model_object_fit: "contain_within_bounds",
+    size: fittedSize,
   }
 }
 
@@ -115,4 +170,13 @@ function isSourceComponentElement(element: AnyCircuitElement): element is Source
 
 function isCadComponentElement(element: AnyCircuitElement): element is CadComponentElement {
   return element.type === "cad_component" && typeof element.source_component_id === "string"
+}
+
+function isPcbComponentElement(element: AnyCircuitElement): element is PcbComponentElement {
+  return (
+    element.type === "pcb_component" &&
+    typeof element.pcb_component_id === "string" &&
+    typeof element.width === "number" &&
+    typeof element.height === "number"
+  )
 }
