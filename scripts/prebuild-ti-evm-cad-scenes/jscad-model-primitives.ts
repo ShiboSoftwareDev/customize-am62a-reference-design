@@ -1,11 +1,14 @@
 import type { Color, JscadOperation, Vector2D, Vector3D } from "jscad-planner"
 
 export const connectorModelColors = {
+  amberLed: [0.92, 0.42, 0.04] as Color,
   blackPlastic: [0.035, 0.04, 0.05] as Color,
   darkPlastic: [0.08, 0.09, 0.1] as Color,
   gold: [0.83, 0.58, 0.12] as Color,
+  greenLed: [0.08, 0.7, 0.2] as Color,
   metal: [0.58, 0.62, 0.66] as Color,
   silver: [0.74, 0.77, 0.8] as Color,
+  whitePlastic: [0.78, 0.8, 0.76] as Color,
 }
 
 export function createColoredCuboid(params: {

@@ -54,6 +54,18 @@ export function createMiniUsbConnectorCadModel(): JscadOperation[] {
   })
 }
 
+export function createUsbCConnectorCadModel(): JscadOperation[] {
+  return createUsbConnectorCadModel({
+    contactCount: 16,
+    depth: 8.8,
+    height: 3.2,
+    openingHeight: 2.1,
+    openingWidth: 8.4,
+    tongueHeight: 0.5,
+    width: 9.2,
+  })
+}
+
 function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOperation[] {
   const shellWall = Math.min(0.35, dimensions.height * 0.12)
   const shellCenterY = 0

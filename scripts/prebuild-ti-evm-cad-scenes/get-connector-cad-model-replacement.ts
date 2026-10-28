@@ -8,10 +8,6 @@ function getHeaderReplacement(
   componentIdentity: CadModelComponentIdentity,
 ): CadModelReplacement | undefined {
   const normalizedFootprint = componentIdentity.altiumFootprint.toUpperCase()
-  if (normalizedFootprint.includes("FTR-") || normalizedFootprint.includes("PREC")) {
-    return undefined
-  }
-
   const headerDimensions = /^(?:HDR_|HEADER)(\d+)X(\d+)/u.exec(normalizedFootprint)
   if (headerDimensions) {
     const firstDimension = Number(headerDimensions[1])
@@ -45,17 +41,6 @@ function getKnownConnectorReplacement(
   componentIdentity: CadModelComponentIdentity,
 ): CadModelReplacement | undefined {
   const normalizedFootprint = componentIdentity.altiumFootprint.toUpperCase()
-  const normalizedPartNumber = componentIdentity.manufacturerPartNumber?.toUpperCase()
-
-  if (normalizedFootprint.includes("LPJG16314A4NL") || normalizedPartNumber === "LPJG16314A4NL") {
-    return createFootprinterReplacement("rj45_pins14_w15.95mm_h21.25mm")
-  }
-  if (normalizedFootprint === "RJ45_18P_21_23X15_93X13_3MM") {
-    return createFootprinterReplacement("rj45_pins18_w15.93mm_h21.23mm")
-  }
-  if (normalizedFootprint === "RJ45-7499010211A") {
-    return createFootprinterReplacement("rj45_pins14_w16mm_h21.25mm")
-  }
   if (/^BUTTON2_3P_4D55X2D3X1D88MM/u.test(normalizedFootprint)) {
     return createFootprinterReplacement("smdpushbutton_w4.55mm_h2.3mm")
   }

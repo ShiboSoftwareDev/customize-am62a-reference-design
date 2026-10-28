@@ -1,5 +1,10 @@
 import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-model-replacement"
 import { createBgaCadModel, createQfpCadModel } from "./create-integrated-circuit-cad-models"
+import {
+  createTwoTerminalCadModel,
+  type TwoTerminalPackageKind,
+} from "./create-two-terminal-cad-model"
+import { getDimensionedMechanicalPackageReplacement } from "./get-dimensioned-mechanical-package-replacement"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
 
 type ImperialPackageSize =
@@ -56,18 +61,29 @@ function getTwoTerminalPackageReplacement(
   if (!imperialPackageSize) return undefined
 
   if (componentIdentity.componentName.startsWith("C")) {
-    return createFootprinterReplacement(`cap${imperialPackageSize}`)
+    return createTwoTerminalReplacement("capacitor", imperialPackageSize)
   }
   if (/^(?:R|L|FB|FL)/u.test(componentIdentity.componentName)) {
-    return createFootprinterReplacement(imperialPackageSize)
+    const kind = componentIdentity.componentName.startsWith("R") ? "resistor" : "inductor"
+    return createTwoTerminalReplacement(kind, imperialPackageSize)
   }
   if (componentIdentity.componentName.startsWith("LED")) {
-    return createFootprinterReplacement(`led${imperialPackageSize}`)
+    return createTwoTerminalReplacement("led", imperialPackageSize)
   }
   if (componentIdentity.componentName.startsWith("D")) {
-    return createFootprinterReplacement(imperialPackageSize)
+    return createTwoTerminalReplacement("diode", imperialPackageSize)
   }
   return undefined
+}
+
+function createTwoTerminalReplacement(
+  kind: TwoTerminalPackageKind,
+  packageSize: ImperialPackageSize,
+): CadModelReplacement {
+  return {
+    kind: "jscad",
+    jscadOperations: createTwoTerminalCadModel({ kind, packageSize }),
+  }
 }
 
 function getSmallOutlinePackageReplacement(
@@ -133,6 +149,8 @@ function getDiscretePackageReplacement(
     [/^(?:SOD[-_]?323|SOD323)/u, "sod323"],
     [/^(?:SOD[-_]?523|SOD523)/u, "sod523"],
     [/^DO_214AC_SMA/u, "sma"],
+    [/^(?:SOT23-123|TO_SOT23-123|SOT23$)/u, "sot23"],
+    [/^SC70-5/u, "sot23-5"],
   ]
   const exactMapping = exactPackageMappings.find(([pattern]) => pattern.test(normalizedFootprint))
   return exactMapping ? createFootprinterReplacement(exactMapping[1]) : undefined
@@ -165,7 +183,13 @@ function getBallGridPackageReplacement(
       }),
     }
   }
-  const ballGridMatch = /^(?:V?FBGA|BGA)(\d+)/u.exec(normalizedFootprint)
+  if (/^BGA96_T9_P8_/u.test(normalizedFootprint)) {
+    return createBgaReplacement({ bodyLength: 14, bodyWidth: 9, pinCount: 96 })
+  }
+  if (/^AM33XX_15X15/u.test(normalizedFootprint)) {
+    return createBgaReplacement({ bodyLength: 15, bodyWidth: 15, pinCount: 324 })
+  }
+  const ballGridMatch = /^(?:DSBGA|TFBGA|TPBGA|V?FBGA|BGA)(\d+)/u.exec(normalizedFootprint)
   const bodyDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint)
   if (ballGridMatch && bodyDimensions) {
     return {
@@ -178,6 +202,17 @@ function getBallGridPackageReplacement(
     }
   }
   return undefined
+}
+
+function createBgaReplacement(params: {
+  bodyLength: number
+  bodyWidth: number
+  pinCount: number
+}): CadModelReplacement {
+  return {
+    kind: "jscad",
+    jscadOperations: createBgaCadModel(params),
+  }
 }
 
 function getQuadFlatPackageReplacement(
@@ -222,6 +257,7 @@ export function getStandardPackageCadModelReplacement(
     getDiscretePackageReplacement(normalizedFootprint) ??
     getBallGridPackageReplacement(normalizedFootprint) ??
     getQuadFlatPackageReplacement(normalizedFootprint) ??
-    getLandGridPackageReplacement(normalizedFootprint)
+    getLandGridPackageReplacement(normalizedFootprint) ??
+    getDimensionedMechanicalPackageReplacement(componentIdentity)
   )
 }

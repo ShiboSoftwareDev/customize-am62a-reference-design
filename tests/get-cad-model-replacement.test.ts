@@ -2,18 +2,21 @@ import { expect, test } from "bun:test"
 import { getCadModelReplacement } from "../scripts/prebuild-ti-evm-cad-scenes/get-cad-model-replacement"
 
 test("maps standard Altium package identities to reusable CAD models", () => {
-  expect(
-    getCadModelReplacement({
+  for (const componentIdentity of [
+    {
       altiumFootprint: "CAP0201_0-5",
       componentName: "C1",
-    }),
-  ).toEqual({ kind: "footprinter", footprinterString: "cap0201" })
-  expect(
-    getCadModelReplacement({
+    },
+    {
       altiumFootprint: "RES0402_0-5",
       componentName: "R1",
-    }),
-  ).toEqual({ kind: "footprinter", footprinterString: "0402" })
+    },
+  ]) {
+    const replacement = getCadModelReplacement(componentIdentity)
+    expect(replacement?.kind).toBe("jscad")
+    if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
+    expect(replacement.jscadOperations).toHaveLength(3)
+  }
   expect(
     getCadModelReplacement({
       altiumFootprint: "QFN32_19-68_200X200",
@@ -26,6 +29,17 @@ test("maps standard Altium package identities to reusable CAD models", () => {
       componentName: "U2",
     }),
   ).toEqual({ kind: "footprinter", footprinterString: "sot23-5" })
+})
+
+test("omits solid CAD bodies for test pads and assembly markers", () => {
+  for (const componentIdentity of [
+    { altiumFootprint: "TP20_SMD", componentName: "TP1" },
+    { altiumFootprint: "Fiducial10-20", componentName: "FID1" },
+    { altiumFootprint: "MTGH200C125D_PL", componentName: "MTG1" },
+    { altiumFootprint: "PTH_3_125MM_5", componentName: "MH1" },
+  ]) {
+    expect(getCadModelReplacement(componentIdentity)).toEqual({ kind: "none" })
+  }
 })
 
 test("uses package identity instead of broad connector substitutions", () => {
@@ -43,18 +57,15 @@ test("uses package identity instead of broad connector substitutions", () => {
       altiumFootprint: "CON_RJ45-14_LPJG16314A4NL_S_R_T_13-6",
       componentName: "J2",
       manufacturerPartNumber: "LPJG16314A4NL",
-    }),
-  ).toEqual({
-    kind: "footprinter",
-    footprinterString: "rj45_pins14_w15.95mm_h21.25mm",
-  })
+    })?.kind,
+  ).toBe("jscad")
   expect(
     getCadModelReplacement({
       altiumFootprint: "CON_USBC24_2012670_S_R_S_3-9",
       componentName: "J3",
       manufacturerPartNumber: "2012670005",
-    }),
-  ).toEqual({ kind: "footprinter", footprinterString: "usbcmidmount16" })
+    })?.kind,
+  ).toBe("jscad")
   expect(
     getCadModelReplacement({
       altiumFootprint: "CON_USB_CUSTOM",
@@ -68,21 +79,15 @@ test("maps the board-specific Ethernet and USB connector identities", () => {
     getCadModelReplacement({
       altiumFootprint: "RJ45_18P_21_23X15_93X13_3MM",
       componentName: "J24",
-    }),
-  ).toEqual({
-    kind: "footprinter",
-    footprinterString: "rj45_pins18_w15.93mm_h21.23mm",
-  })
+    })?.kind,
+  ).toBe("jscad")
   expect(
     getCadModelReplacement({
       altiumFootprint: "RJ45-7499010211A",
       componentName: "P5",
       manufacturerPartNumber: "7499010211A",
-    }),
-  ).toEqual({
-    kind: "footprinter",
-    footprinterString: "rj45_pins14_w16mm_h21.25mm",
-  })
+    })?.kind,
+  ).toBe("jscad")
   expect(
     getCadModelReplacement({
       altiumFootprint: "USB7P_1R4_14X5R72MM",
@@ -93,8 +98,8 @@ test("maps the board-specific Ethernet and USB connector identities", () => {
     getCadModelReplacement({
       altiumFootprint: "USB2_0_TYPE_C",
       componentName: "J14",
-    }),
-  ).toEqual({ kind: "footprinter", footprinterString: "usbcmidmount16" })
+    })?.kind,
+  ).toBe("jscad")
 })
 
 test("creates detailed connector geometry only for recognized source parts", () => {
@@ -108,6 +113,40 @@ test("creates detailed connector geometry only for recognized source parts", () 
   if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
   expect(replacement.jscadOperations.length).toBeGreaterThan(4)
   expect(replacement.jscadOperations.some((operation) => operation.type === "colorize")).toBe(true)
+})
+
+test("replaces recognizable Sitara board connectors with multi-part models", () => {
+  for (const componentIdentity of [
+    { altiumFootprint: "CON_DC04S019_HDMI", componentName: "J13" },
+    { altiumFootprint: "2199119-4", componentName: "J4" },
+    { altiumFootprint: "3020-14-0200-00", componentName: "J18" },
+    { altiumFootprint: "5019512230", componentName: "J23" },
+    { altiumFootprint: "FPC40_0D5_25_4X5_25X2MM", componentName: "J19" },
+    { altiumFootprint: "JST4P_1D0_RIGHT", componentName: "J7" },
+    { altiumFootprint: "RJ45-7499010211A", componentName: "J1" },
+    { altiumFootprint: "USB2_0_TYPE_C", componentName: "J2" },
+  ]) {
+    const replacement = getCadModelReplacement(componentIdentity)
+    expect(replacement?.kind).toBe("jscad")
+    if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
+    expect(replacement.jscadOperations.length).toBeGreaterThan(4)
+  }
+})
+
+test("replaces prominent Sitara packages with recognizable package models", () => {
+  for (const componentIdentity of [
+    { altiumFootprint: "AM33XX_15X15", componentName: "U5" },
+    { altiumFootprint: "BGA96_T9_P8_10_3X13_3", componentName: "U12" },
+    { altiumFootprint: "MOD100_WL18", componentName: "MOD1" },
+    { altiumFootprint: "L4P_2D54", componentName: "L1" },
+    { altiumFootprint: "SW4SMD_63X161LS", componentName: "SW1" },
+    { altiumFootprint: "XTAL4_126-216SMD", componentName: "Y1" },
+  ]) {
+    const replacement = getCadModelReplacement(componentIdentity)
+    expect(replacement?.kind).toBe("jscad")
+    if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
+    expect(replacement.jscadOperations.length).toBeGreaterThan(1)
+  }
 })
 
 test("replaces dimensioned QFP, BGA, and LGA source extrusions", () => {

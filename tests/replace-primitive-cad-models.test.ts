@@ -8,6 +8,7 @@ test("replaces primitive imported CAD while preserving external models", () => {
     ["U1", "HDR_2X15_PEC15DAAN_S_T_8-6"],
     ["J1", "CON_CUSTOM"],
     ["R1", "RES0402_0-5"],
+    ["TP1", "TP20_SMD"],
   ])
   const circuitJson = [
     {
@@ -63,6 +64,18 @@ test("replaces primitive imported CAD while preserving external models", () => {
         },
       },
     },
+    {
+      type: "source_component",
+      source_component_id: "source_component_4",
+      ftype: "simple_chip",
+      name: "TP1",
+    },
+    {
+      type: "cad_component",
+      cad_component_id: "cad_component_4",
+      source_component_id: "source_component_4",
+      model_jscad: { type: "cuboid", size: [1, 1, 1] },
+    },
   ] satisfies AnyCircuitElement[]
 
   const enriched = replacePrimitiveCadModels({
@@ -78,6 +91,9 @@ test("replaces primitive imported CAD while preserving external models", () => {
   const resistorCadModel = enriched.circuitJson.find(
     (element) => element.type === "cad_component" && element.cad_component_id === "cad_component_3",
   )
+  const testPointCadModel = enriched.circuitJson.find(
+    (element) => element.type === "cad_component" && element.cad_component_id === "cad_component_4",
+  )
 
   expect(headerCadModel).toMatchObject({
     footprinter_string: "headermodule30_rows2_p2.54mm_male",
@@ -87,8 +103,11 @@ test("replaces primitive imported CAD while preserving external models", () => {
   })
   expect(connectorCadModel).toMatchObject({ model_glb_url: "/models/connector.glb" })
   expect(resistorCadModel).toMatchObject({
-    footprinter_string: "0402",
-    model_jscad: undefined,
+    model_jscad: expect.any(Array),
   })
-  expect(enriched.summary.enrichedComponentCount).toBe(2)
+  expect(testPointCadModel).toMatchObject({
+    model_jscad: undefined,
+    show_as_bounding_box: false,
+  })
+  expect(enriched.summary.enrichedComponentCount).toBe(3)
 })

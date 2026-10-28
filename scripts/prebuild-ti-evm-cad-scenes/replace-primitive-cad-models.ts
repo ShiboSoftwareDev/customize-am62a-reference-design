@@ -100,6 +100,8 @@ function applyCadModelReplacement(params: {
     show_as_bounding_box: false,
   }
 
+  if (params.replacement.kind === "none") return cadComponentWithoutPrimitive
+
   if (params.replacement.kind === "footprinter") {
     return {
       ...cadComponentWithoutPrimitive,
