@@ -6,7 +6,7 @@ type ModelYawOffsetDegrees = number
 
 test("aligns board-edge connector openings with their Sitara footprints", () => {
   const expectedYawOffsetByFootprint = new Map<AltiumFootprintName, ModelYawOffsetDegrees>([
-    ["USB7P_1R4_14X5R72MM", -90],
+    ["USB7P_1R4_14X5R72MM", 0],
     ["USB2_0_TYPE_C", -90],
     ["MICRO_SD_ST_TF_003A_16_1X14_5MM", 90],
     ["JST4P_SMD_2_0_90D", 180],

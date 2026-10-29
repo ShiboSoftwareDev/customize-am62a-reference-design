@@ -28,6 +28,11 @@ import {
   createMikroBusSocketCadModel,
   createSmdPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
+import { translate } from "./jscad-model-primitives"
+
+// The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
+// shell by half the depth difference so both rear edges remain aligned.
+const beaglePlayUsbAModelCenterOffsetMillimeters = 5.04
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -40,6 +45,12 @@ function createJscadReplacement(
 function getMicroSdModelYawOffsetDegrees(footprint: string): number {
   if (footprint.startsWith("MICRO_SD_")) return 90
   return 0
+}
+
+function createBeaglePlayUsbAConnectorCadModel() {
+  return createUsbAConnectorCadModel().map((operation) =>
+    translate([0, -beaglePlayUsbAModelCenterOffsetMillimeters, 0], operation),
+  )
 }
 
 export function getMechanicalConnectorCadModelReplacement(
@@ -75,11 +86,12 @@ export function getMechanicalConnectorCadModelReplacement(
   if (
     footprint.includes("629104151") ||
     footprint === "USB_A_SH" ||
-    footprint.startsWith("USB7P_") ||
     partNumber.startsWith("629104151")
   ) {
-    const modelYawOffsetDegrees = footprint.startsWith("USB7P_") ? -90 : 0
-    return createJscadReplacement(createUsbAConnectorCadModel(), modelYawOffsetDegrees)
+    return createJscadReplacement(createUsbAConnectorCadModel())
+  }
+  if (footprint.startsWith("USB7P_")) {
+    return createJscadReplacement(createBeaglePlayUsbAConnectorCadModel())
   }
   if (
     footprint.includes("629105150521") ||
