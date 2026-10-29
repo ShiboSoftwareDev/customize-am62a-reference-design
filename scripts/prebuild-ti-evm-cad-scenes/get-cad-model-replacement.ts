@@ -33,6 +33,14 @@ export type CadModelReplacement =
       /** Rotation around the board normal after applying the PCB component rotation. */
       modelYawOffsetDegrees?: number
     }
+  | {
+      kind: "step"
+      modelStepUrl: string
+      /** Model-local XY offset applied before board-side mirroring and yaw. */
+      modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+      /** Rotation around the board normal after applying the PCB component rotation. */
+      modelYawOffsetDegrees?: number
+    }
 
 export function getCadModelReplacement(
   componentIdentity: CadModelComponentIdentity,

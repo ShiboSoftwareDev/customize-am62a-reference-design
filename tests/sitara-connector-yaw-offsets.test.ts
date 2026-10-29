@@ -11,7 +11,6 @@ test("aligns board-edge connector openings with their Sitara footprints", () => 
     ["MICRO_SD_ST_TF_003A_16_1X14_5MM", 90],
     ["JST4P_SMD_2_0_90D", 180],
     ["USB5MINI_4SHIELDED_SMD-5", -90],
-    ["CONN19_HDMI", 0],
     ["SD-MICRO-SCHA5B0300", 0],
     ["CONN3-PWR-PJ102A", 90],
   ])

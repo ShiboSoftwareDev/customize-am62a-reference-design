@@ -138,7 +138,7 @@ function applyCadModelReplacement(params: {
     model_stl_url: undefined,
     position: getPositionWithModelPlanarOffset({
       modelPlanarOffsetMillimeters:
-        params.replacement.kind === "jscad"
+        params.replacement.kind === "jscad" || params.replacement.kind === "step"
           ? params.replacement.modelPlanarOffsetMillimeters
           : undefined,
       position: importedPrimitivePosition,
@@ -154,6 +154,14 @@ function applyCadModelReplacement(params: {
     return {
       ...cadComponentWithoutPrimitive,
       footprinter_string: params.replacement.footprinterString,
+    }
+  }
+
+  if (params.replacement.kind === "step") {
+    return {
+      ...cadComponentWithoutPrimitive,
+      model_step_url: params.replacement.modelStepUrl,
+      model_unit_to_mm_scale_factor: 1,
     }
   }
 

@@ -11,17 +11,12 @@ import {
   createRj45ConnectorCadModel,
 } from "./create-additional-connector-cad-models"
 import {
-  createAudioJackCadModel,
   createBarrelJackCadModel,
   createCoinCellHolderCadModel,
   createMicroSdConnectorCadModel,
   createRj11ConnectorCadModel,
   createUflConnectorCadModel,
 } from "./create-board-connector-cad-models"
-import {
-  createHdmiAConnectorCadModel,
-  createMicroHdmiConnectorCadModel,
-} from "./create-hdmi-connector-cad-model"
 import {
   createMicroUsbConnectorCadModel,
   createMiniUsbConnectorCadModel,
@@ -32,6 +27,7 @@ import {
   createMikroBusSocketCadModel,
   createSmdPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
+import { externalStepModelUrls } from "./external-step-model-urls"
 
 // The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
 // shell by half the depth difference so both rear edges remain aligned.
@@ -48,6 +44,16 @@ function createJscadReplacement(
   } = {},
 ): CadModelReplacement {
   return { kind: "jscad", jscadOperations, ...options }
+}
+
+function createStepReplacement(
+  modelStepUrl: string,
+  options: {
+    modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+    modelYawOffsetDegrees?: number
+  } = {},
+): CadModelReplacement {
+  return { kind: "step", modelStepUrl, ...options }
 }
 
 function getMicroSdModelYawOffsetDegrees(footprint: string): number {
@@ -70,19 +76,16 @@ export function getMechanicalConnectorCadModelReplacement(
   const partNumber = componentIdentity.manufacturerPartNumber?.toUpperCase() ?? ""
 
   if (footprint === "HEADER10X2_SMD" || footprint.includes("FTR-110-51-D-06")) {
-    return createJscadReplacement(
-      createSmdPinHeaderCadModel({ columnCount: 10, pitch: 1.27, rowCount: 2 }),
-    )
+    return createStepReplacement(externalStepModelUrls.pinHeader2x10P1_27Smd)
+  }
+  if (footprint.includes("PREC010DAAN")) {
+    return createStepReplacement(externalStepModelUrls.pinHeader2x10P2_54ThroughHole)
   }
   if (footprint.includes("54202-T0805ALF")) {
-    return createJscadReplacement(
-      createSmdPinHeaderCadModel({ columnCount: 5, pitch: 2, rowCount: 2 }),
-    )
+    return createStepReplacement(externalStepModelUrls.pinHeader2x05P2Smd)
   }
   if (footprint.includes("TSM-104-02-SV")) {
-    return createJscadReplacement(
-      createSmdPinHeaderCadModel({ columnCount: 4, pitch: 2.54, rowCount: 1 }),
-    )
+    return createStepReplacement(externalStepModelUrls.pinHeader1x04P2_54Smd)
   }
   if (footprint.includes("TSM-105-01-T-TM")) {
     return createJscadReplacement(
@@ -126,13 +129,13 @@ export function getMechanicalConnectorCadModelReplacement(
     })
   }
   if (footprint.includes("10029449") || footprint.includes("HDMI19P")) {
-    return createJscadReplacement(createHdmiAConnectorCadModel())
+    return createStepReplacement(externalStepModelUrls.amphenolHdmiA)
   }
   if (footprint.includes("DC04S019")) {
-    return createJscadReplacement(createHdmiAConnectorCadModel())
+    return createStepReplacement(externalStepModelUrls.amphenolHdmiA)
   }
   if (footprint.includes("CONN19_HDMI")) {
-    return createJscadReplacement(createMicroHdmiConnectorCadModel())
+    return createStepReplacement(externalStepModelUrls.molexMicroHdmiD)
   }
   if (
     footprint.includes("MEM2051") ||
@@ -147,7 +150,7 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createUflConnectorCadModel())
   }
   if (footprint.includes("SJ-43514")) {
-    return createJscadReplacement(createAudioJackCadModel())
+    return createStepReplacement(externalStepModelUrls.cuiSj43514AudioJack)
   }
   if (footprint.includes("PJ102A")) {
     return createJscadReplacement(createBarrelJackCadModel(), {

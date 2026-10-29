@@ -127,7 +127,6 @@ test("creates detailed connector geometry only for recognized source parts", () 
 
 test("replaces recognizable Sitara board connectors with multi-part models", () => {
   for (const componentIdentity of [
-    { altiumFootprint: "CON_DC04S019_HDMI", componentName: "J13" },
     { altiumFootprint: "2199119-4", componentName: "J4" },
     { altiumFootprint: "3020-14-0200-00", componentName: "J18" },
     { altiumFootprint: "5019512230", componentName: "J23" },
@@ -145,8 +144,6 @@ test("replaces recognizable Sitara board connectors with multi-part models", () 
 
 test("uses board-specific geometry for surface-mount and mikroBUS headers", () => {
   for (const [componentName, altiumFootprint] of [
-    ["P2", "HEADER10X2_SMD"],
-    ["J10", "HDR_2X10_FTR-110-51-D-06_S_S_8-7"],
     ["J14", "HDR_5X3_TSM-105-01-T-TM_S_S_9-9"],
     ["J21", "MIKROBUS16_2D54_25_4X22_88X8_5MM"],
   ]) {
