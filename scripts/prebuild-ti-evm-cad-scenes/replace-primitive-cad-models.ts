@@ -1,6 +1,7 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { type CadModelReplacement, getCadModelReplacement } from "./get-cad-model-replacement"
 import type { ComponentName, SourceFootprintByComponentName } from "./read-source-footprints"
+import { getImportedPrimitivePlanarPosition } from "./get-imported-primitive-planar-position"
 
 type SourceComponentId = string
 type CadComponentCountBySourceComponentId = Map<SourceComponentId, number>
@@ -16,9 +17,12 @@ type CadComponentElement = AnyCircuitElement & {
   model_glb_url?: string
   model_gltf_url?: string
   model_jscad?: unknown
+  model_unit_to_mm_scale_factor?: number
   model_obj_url?: string
   model_step_url?: string
   model_stl_url?: string
+  position?: { x: number; y: number; z: number }
+  rotation?: { x: number; y: number; z: number }
   show_as_bounding_box?: boolean
   source_component_id: SourceComponentId
   type: "cad_component"
@@ -113,6 +117,7 @@ function applyCadModelReplacement(params: {
   const cadComponentWithoutPrimitive: CadComponentElement = {
     ...params.cadComponent,
     model_jscad: undefined,
+    position: getReplacementPosition(params.cadComponent),
     rotation: params.pcbComponent
       ? getCanonicalCadRotation({
           modelYawOffsetDegrees,
@@ -134,6 +139,25 @@ function applyCadModelReplacement(params: {
   return {
     ...cadComponentWithoutPrimitive,
     model_jscad: params.replacement.jscadOperations,
+  }
+}
+
+function getReplacementPosition(
+  cadComponent: CadComponentElement,
+): CadComponentElement["position"] {
+  const importedPrimitivePlanarPosition = getImportedPrimitivePlanarPosition({
+    modelJscad: cadComponent.model_jscad,
+    modelUnitToMmScaleFactor: cadComponent.model_unit_to_mm_scale_factor,
+    position: cadComponent.position,
+    rotation: cadComponent.rotation,
+  })
+  if (!importedPrimitivePlanarPosition || !cadComponent.position) {
+    return cadComponent.position
+  }
+
+  return {
+    ...cadComponent.position,
+    ...importedPrimitivePlanarPosition,
   }
 }
 

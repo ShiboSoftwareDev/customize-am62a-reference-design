@@ -5,6 +5,7 @@ import { gunzipSync, strFromU8 } from "fflate"
 import { renderGLTFToPNGFromGLB } from "poppygl"
 import { tiEvms } from "../lib/ti-evm-catalog"
 import { getCadModelReplacement } from "./prebuild-ti-evm-cad-scenes/get-cad-model-replacement"
+import { getImportedPrimitivePlanarPosition } from "./prebuild-ti-evm-cad-scenes/get-imported-primitive-planar-position"
 import {
   readSourceFootprints,
   type SourceFootprint,
@@ -24,6 +25,14 @@ type PcbComponent = AnyCircuitElement & {
   source_component_id: SourceComponentId
   type: "pcb_component"
   width: number
+}
+type CadComponent = AnyCircuitElement & {
+  model_jscad?: unknown
+  model_unit_to_mm_scale_factor?: number
+  position?: { x: number; y: number; z: number }
+  rotation?: { x: number; y: number; z: number }
+  source_component_id: SourceComponentId
+  type: "cad_component"
 }
 type PcbBoard = AnyCircuitElement & {
   center: { x: number; y: number }
@@ -52,6 +61,11 @@ for (const evm of tiEvms) {
       isSourceComponent(element) ? [[element.source_component_id, element] as const] : [],
     ),
   )
+  const cadComponentBySourceComponentId = new Map<SourceComponentId, CadComponent>(
+    circuitJson.flatMap((element) =>
+      isCadComponent(element) ? [[element.source_component_id, element] as const] : [],
+    ),
+  )
   const seenPackageFootprints = new Set<SourceFootprint>()
 
   for (const pcbComponent of circuitJson) {
@@ -74,17 +88,27 @@ for (const evm of tiEvms) {
     }
     seenPackageFootprints.add(footprint)
 
+    const cadComponent = cadComponentBySourceComponentId.get(pcbComponent.source_component_id)
+    const componentCenter =
+      (cadComponent &&
+        getImportedPrimitivePlanarPosition({
+          modelJscad: cadComponent.model_jscad,
+          modelUnitToMmScaleFactor: cadComponent.model_unit_to_mm_scale_factor,
+          position: cadComponent.position,
+          rotation: cadComponent.rotation,
+        })) ||
+      pcbComponent.center
     const focusDistance = Math.max(12, Math.max(pcbComponent.width, pcbComponent.height) * 2.1)
     const boardNormalDirection = pcbComponent.layer === "bottom" ? -1 : 1
     const lookAt: [number, number, number] = [
-      -pcbComponent.center.x,
+      -componentCenter.x,
       boardNormalDirection * 1.5,
-      pcbComponent.center.y,
+      componentCenter.y,
     ]
     const cameraPosition = getComponentCameraPosition({
       boardCenter: pcbBoard.center,
       boardNormalDirection,
-      componentCenter: pcbComponent.center,
+      componentCenter,
       focusDistance,
       isMechanicalComponent,
       lookAt,
@@ -127,6 +151,10 @@ function isPcbComponent(element: AnyCircuitElement): element is PcbComponent {
     typeof element.center?.x === "number" &&
     typeof element.center?.y === "number"
   )
+}
+
+function isCadComponent(element: AnyCircuitElement): element is CadComponent {
+  return element.type === "cad_component" && typeof element.source_component_id === "string"
 }
 
 function isPcbBoard(element: AnyCircuitElement): element is PcbBoard {
