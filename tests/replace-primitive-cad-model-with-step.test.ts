@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test"
 import type { AnyCircuitElement } from "circuit-json"
-import { externalStepModelUrls } from "../scripts/prebuild-ti-evm-cad-scenes/external-step-model-urls"
+import { externalStepModelUrls } from "../scripts/prebuild-ti-evm-cad-scenes/external-cad-model-urls"
 import type { SourceFootprintByComponentName } from "../scripts/prebuild-ti-evm-cad-scenes/read-source-footprints"
 import { replacePrimitiveCadModels } from "../scripts/prebuild-ti-evm-cad-scenes/replace-primitive-cad-models"
 

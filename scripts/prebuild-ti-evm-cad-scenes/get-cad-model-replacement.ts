@@ -26,6 +26,15 @@ export type CadModelReplacement =
       modelYawOffsetDegrees?: number
     }
   | {
+      kind: "glb"
+      modelGlbUrl: string
+      modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+      modelUnitToMmScaleFactor: number
+      modelVerticalOffsetMillimeters?: number
+      /** Rotation around the board normal after applying the PCB component rotation. */
+      modelYawOffsetDegrees?: number
+    }
+  | {
       kind: "jscad"
       jscadOperations: JscadOperation[]
       /** Model-local XY offset applied before board-side mirroring and yaw. */

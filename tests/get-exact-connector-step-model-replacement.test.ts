@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { externalStepModelUrls } from "../scripts/prebuild-ti-evm-cad-scenes/external-step-model-urls"
+import { externalStepModelUrls } from "../scripts/prebuild-ti-evm-cad-scenes/external-cad-model-urls"
 import { getCadModelReplacement } from "../scripts/prebuild-ti-evm-cad-scenes/get-cad-model-replacement"
 
 test("uses exact STEP geometry for recognized Sitara connectors", () => {

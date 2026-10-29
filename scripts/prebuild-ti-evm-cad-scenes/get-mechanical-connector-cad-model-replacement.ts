@@ -7,7 +7,6 @@ import {
   createBoxHeaderCadModel,
   createFpcConnectorCadModel,
   createJstConnectorCadModel,
-  createM2SocketCadModel,
   createRj45ConnectorCadModel,
 } from "./create-additional-connector-cad-models"
 import {
@@ -27,7 +26,7 @@ import {
   createMikroBusSocketCadModel,
   createSmdPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
-import { externalStepModelUrls } from "./external-step-model-urls"
+import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 
 // The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
 // shell by half the depth difference so both rear edges remain aligned.
@@ -35,6 +34,10 @@ const beaglePlayUsbAModelCenterOffsetMillimeters = 5.04
 // The imported USB_A_SH body marks the connector's 5.25 mm rear section.
 // Move the complete 15.8 mm shell outward so their rear edges stay aligned.
 const beagleBoneBlackUsbAModelCenterOffsetMillimeters = 5.275
+// Ultra Librarian's manufacturer model uses meters and retains TE's CAD origin.
+// Center its 8.7 mm depth and place its lowest contact surface on the PCB.
+const te2199119_4ModelCenterOffsetMillimeters = 4
+const te2199119_4ModelBottomOffsetMillimeters = 1.385
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -54,6 +57,18 @@ function createStepReplacement(
   } = {},
 ): CadModelReplacement {
   return { kind: "step", modelStepUrl, ...options }
+}
+
+function createGlbReplacement(
+  modelGlbUrl: string,
+  options: {
+    modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+    modelUnitToMmScaleFactor: number
+    modelVerticalOffsetMillimeters?: number
+    modelYawOffsetDegrees?: number
+  },
+): CadModelReplacement {
+  return { kind: "glb", modelGlbUrl, ...options }
 }
 
 function getMicroSdModelYawOffsetDegrees(footprint: string): number {
@@ -189,7 +204,14 @@ export function getMechanicalConnectorCadModelReplacement(
     })
   }
   if (footprint.includes("2199119")) {
-    return createJscadReplacement(createM2SocketCadModel())
+    return createGlbReplacement(externalGlbModelUrls.te2199119_4M2Socket, {
+      modelPlanarOffsetMillimeters: {
+        x: 0,
+        y: te2199119_4ModelCenterOffsetMillimeters,
+      },
+      modelUnitToMmScaleFactor: 1000,
+      modelVerticalOffsetMillimeters: te2199119_4ModelBottomOffsetMillimeters,
+    })
   }
   if (footprint.includes("3020-14")) {
     return createJscadReplacement(

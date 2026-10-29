@@ -133,13 +133,20 @@ function applyCadModelReplacement(params: {
     model_glb_url: undefined,
     model_gltf_url: undefined,
     model_jscad: undefined,
+    model_unit_to_mm_scale_factor: undefined,
     model_obj_url: undefined,
     model_step_url: undefined,
     model_stl_url: undefined,
-    position: getPositionWithModelPlanarOffset({
+    position: getPositionWithModelOffset({
       modelPlanarOffsetMillimeters:
-        params.replacement.kind === "jscad" || params.replacement.kind === "step"
+        params.replacement.kind === "jscad" ||
+        params.replacement.kind === "step" ||
+        params.replacement.kind === "glb"
           ? params.replacement.modelPlanarOffsetMillimeters
+          : undefined,
+      modelVerticalOffsetMillimeters:
+        params.replacement.kind === "glb"
+          ? params.replacement.modelVerticalOffsetMillimeters
           : undefined,
       position: importedPrimitivePosition,
       rotation,
@@ -165,6 +172,14 @@ function applyCadModelReplacement(params: {
     }
   }
 
+  if (params.replacement.kind === "glb") {
+    return {
+      ...cadComponentWithoutPrimitive,
+      model_glb_url: params.replacement.modelGlbUrl,
+      model_unit_to_mm_scale_factor: params.replacement.modelUnitToMmScaleFactor,
+    }
+  }
+
   return {
     ...cadComponentWithoutPrimitive,
     model_jscad: params.replacement.jscadOperations,
@@ -173,16 +188,21 @@ function applyCadModelReplacement(params: {
 
 // Converts a model-local XY offset into circuit-board coordinates. Bottom-side
 // models first mirror local X around the board normal, then apply their yaw.
-function getPositionWithModelPlanarOffset({
+function getPositionWithModelOffset({
   modelPlanarOffsetMillimeters,
+  modelVerticalOffsetMillimeters = 0,
   position,
   rotation,
 }: {
   modelPlanarOffsetMillimeters?: { x: number; y: number }
+  modelVerticalOffsetMillimeters?: number
   position?: { x: number; y: number; z: number }
   rotation?: { x: number; y: number; z: number }
 }): CadComponentElement["position"] {
-  if (!modelPlanarOffsetMillimeters || !position || !rotation) return position
+  if (!position) return position
+  if (!modelPlanarOffsetMillimeters || !rotation) {
+    return { ...position, z: position.z + modelVerticalOffsetMillimeters }
+  }
   const localOffset = {
     x:
       normalizeDegrees(rotation.y) === 180
@@ -194,7 +214,7 @@ function getPositionWithModelPlanarOffset({
   return {
     x: position.x + boardOffset.x,
     y: position.y + boardOffset.y,
-    z: position.z,
+    z: position.z + modelVerticalOffsetMillimeters,
   }
 }
 

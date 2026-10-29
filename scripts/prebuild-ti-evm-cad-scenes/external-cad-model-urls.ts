@@ -24,3 +24,9 @@ export const externalStepModelUrls = {
     `${kicadPackageBaseUrl}/Connector_PinHeader_2.54mm.3dshapes/` +
     "PinHeader_2x10_P2.54mm_Vertical.step",
 } as const
+
+export const externalGlbModelUrls = {
+  te2199119_4M2Socket:
+    "https://static.ultralibrarian.com/part-previews/3d-models/" +
+    "E72/8E9/789/B39/4182448-c-2199119-4-c-3d.glb",
+} as const

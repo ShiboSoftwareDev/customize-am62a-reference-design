@@ -125,9 +125,8 @@ test("creates detailed connector geometry only for recognized source parts", () 
   expect(replacement.jscadOperations.some((operation) => operation.type === "colorize")).toBe(true)
 })
 
-test("replaces recognizable Sitara board connectors with multi-part models", () => {
+test("replaces recognizable Sitara board connectors with detailed models", () => {
   for (const componentIdentity of [
-    { altiumFootprint: "2199119-4", componentName: "J4" },
     { altiumFootprint: "3020-14-0200-00", componentName: "J18" },
     { altiumFootprint: "5019512230", componentName: "J23" },
     { altiumFootprint: "FPC40_0D5_25_4X5_25X2MM", componentName: "J19" },
@@ -140,6 +139,23 @@ test("replaces recognizable Sitara board connectors with multi-part models", () 
     if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
     expect(replacement.jscadOperations.length).toBeGreaterThan(4)
   }
+})
+
+test("uses the exact TE model for the TMDS62L M.2 socket", () => {
+  expect(
+    getCadModelReplacement({
+      altiumFootprint: "CON_MINIPCI75_2199119-4_S_R_S_3-2_2244",
+      componentName: "J4",
+    }),
+  ).toEqual({
+    kind: "glb",
+    modelGlbUrl:
+      "https://static.ultralibrarian.com/part-previews/3d-models/" +
+      "E72/8E9/789/B39/4182448-c-2199119-4-c-3d.glb",
+    modelPlanarOffsetMillimeters: { x: 0, y: 4 },
+    modelUnitToMmScaleFactor: 1000,
+    modelVerticalOffsetMillimeters: 1.385,
+  })
 })
 
 test("uses board-specific geometry for surface-mount and mikroBUS headers", () => {

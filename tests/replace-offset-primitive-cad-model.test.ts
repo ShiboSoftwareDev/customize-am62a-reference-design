@@ -66,8 +66,14 @@ test("centers a replacement on the imported primitive geometry", () => {
     throw new Error("Replacement CAD component has no position")
   }
 
-  expect(position.x).toBeCloseTo(62.07955072)
+  expect(position.x).toBeCloseTo(58.07955072)
   expect(position.y).toBeCloseTo(121.20891938)
-  expect(position.z).toBe(0.8)
+  expect(position.z).toBeCloseTo(2.185)
   expect(cadComponent?.rotation).toEqual({ x: 0, y: 0, z: 90 })
+  expect(cadComponent).toMatchObject({
+    model_glb_url:
+      "https://static.ultralibrarian.com/part-previews/3d-models/" +
+      "E72/8E9/789/B39/4182448-c-2199119-4-c-3d.glb",
+    model_unit_to_mm_scale_factor: 1000,
+  })
 })

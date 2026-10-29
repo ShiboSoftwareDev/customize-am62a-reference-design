@@ -46,7 +46,6 @@ export function createRj45ConnectorCadModel(params: {
     ...statusLeds,
   ]
 }
-
 export function createFpcConnectorCadModel(params: {
   pinCount: number
   pitch: number
@@ -79,7 +78,6 @@ export function createFpcConnectorCadModel(params: {
     ...contacts,
   ]
 }
-
 export function createBoxHeaderCadModel(params: {
   columnCount: number
   pitch: number
@@ -139,31 +137,6 @@ export function createJstConnectorCadModel(params: {
       center: [0, -2.5, 2.4],
       color: connectorModelColors.darkPlastic,
       size: [width * 0.76, 0.25, 1.8],
-    }),
-    ...contacts,
-  ]
-}
-
-export function createM2SocketCadModel(): JscadOperation[] {
-  const contactCount = 67
-  const contacts = Array.from({ length: contactCount }, (_, contactIndex) =>
-    createColoredCuboid({
-      center: [-10.05 + contactIndex * 0.305, -1.5, 1.9],
-      color: connectorModelColors.gold,
-      size: [0.14, 1.05, 0.12],
-    }),
-  )
-  return [
-    createColoredRoundedCuboid({
-      center: [0, 0, 1.65],
-      color: connectorModelColors.blackPlastic,
-      roundRadius: 0.35,
-      size: [22, 4.2, 3.3],
-    }),
-    createColoredCuboid({
-      center: [0, -1.98, 1.78],
-      color: connectorModelColors.darkPlastic,
-      size: [20.3, 0.28, 1.15],
     }),
     ...contacts,
   ]
