@@ -31,8 +31,15 @@ import {
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
+  modelYawOffsetDegrees = 0,
 ): CadModelReplacement {
-  return { kind: "jscad", jscadOperations }
+  if (modelYawOffsetDegrees === 0) return { kind: "jscad", jscadOperations }
+  return { kind: "jscad", jscadOperations, modelYawOffsetDegrees }
+}
+
+function getMicroSdModelYawOffsetDegrees(footprint: string): number {
+  if (footprint.startsWith("MICRO_SD_")) return 90
+  return 0
 }
 
 export function getMechanicalConnectorCadModelReplacement(
@@ -71,7 +78,8 @@ export function getMechanicalConnectorCadModelReplacement(
     footprint.startsWith("USB7P_") ||
     partNumber.startsWith("629104151")
   ) {
-    return createJscadReplacement(createUsbAConnectorCadModel())
+    const modelYawOffsetDegrees = footprint.startsWith("USB7P_") ? -90 : 0
+    return createJscadReplacement(createUsbAConnectorCadModel(), modelYawOffsetDegrees)
   }
   if (
     footprint.includes("629105150521") ||
@@ -81,7 +89,7 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createMicroUsbConnectorCadModel())
   }
   if (footprint.includes("USB5MINI") || footprint.includes("ST-USB-117")) {
-    return createJscadReplacement(createMiniUsbConnectorCadModel())
+    return createJscadReplacement(createMiniUsbConnectorCadModel(), -90)
   }
   if (footprint.includes("10029449") || footprint.includes("HDMI19P")) {
     return createJscadReplacement(createHdmiAConnectorCadModel())
@@ -97,7 +105,10 @@ export function getMechanicalConnectorCadModelReplacement(
     footprint.includes("MICRO_SD") ||
     footprint.includes("SD-MICRO")
   ) {
-    return createJscadReplacement(createMicroSdConnectorCadModel())
+    return createJscadReplacement(
+      createMicroSdConnectorCadModel(),
+      getMicroSdModelYawOffsetDegrees(footprint),
+    )
   }
   if (footprint.includes("U-FL") || partNumber.startsWith("U.FL-R-SMT")) {
     return createJscadReplacement(createUflConnectorCadModel())
@@ -106,7 +117,7 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createAudioJackCadModel())
   }
   if (footprint.includes("PJ102A")) {
-    return createJscadReplacement(createBarrelJackCadModel())
+    return createJscadReplacement(createBarrelJackCadModel(), 90)
   }
   if (footprint === "BAT-CR1220") {
     return createJscadReplacement(createCoinCellHolderCadModel())
@@ -134,7 +145,8 @@ export function getMechanicalConnectorCadModelReplacement(
     footprint === "USB2_0_TYPE_C" ||
     partNumber === "2012670005"
   ) {
-    return createJscadReplacement(createUsbCConnectorCadModel())
+    const modelYawOffsetDegrees = footprint === "USB2_0_TYPE_C" ? -90 : 0
+    return createJscadReplacement(createUsbCConnectorCadModel(), modelYawOffsetDegrees)
   }
   if (footprint.includes("2199119")) {
     return createJscadReplacement(createM2SocketCadModel())
@@ -161,7 +173,11 @@ export function getMechanicalConnectorCadModelReplacement(
   }
   if (footprint.startsWith("JST4P_")) {
     const pitch = footprint.includes("_1D0_") ? 1 : 2
-    return createJscadReplacement(createJstConnectorCadModel({ pinCount: 4, pitch }))
+    const modelYawOffsetDegrees = footprint.includes("_90D") ? 180 : 0
+    return createJscadReplacement(
+      createJstConnectorCadModel({ pinCount: 4, pitch }),
+      modelYawOffsetDegrees,
+    )
   }
   if (footprint.startsWith("CONNECT10_")) {
     return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 10, pitch: 1.27 }))

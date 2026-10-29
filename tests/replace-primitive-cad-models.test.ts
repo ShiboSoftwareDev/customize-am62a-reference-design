@@ -122,7 +122,7 @@ test("replaces primitive imported CAD while preserving external models", () => {
   expect(enriched.summary.enrichedComponentCount).toBe(3)
 })
 
-test("normalizes replacement rotations from PCB placement", () => {
+test("applies connector axis offsets after normalizing PCB placement", () => {
   const sourceFootprintByComponentName: SourceFootprintByComponentName = new Map([
     ["J1", "USB2_0_TYPE_C"],
     ["J2", "CONN19_HDMI"],
@@ -186,7 +186,7 @@ test("normalizes replacement rotations from PCB placement", () => {
       (element) =>
         element.type === "cad_component" && element.cad_component_id === "cad_component_top",
     ),
-  ).toMatchObject({ rotation: { x: 0, y: 0, z: 270 } })
+  ).toMatchObject({ rotation: { x: 0, y: 0, z: 180 } })
   expect(
     enriched.circuitJson.find(
       (element) =>

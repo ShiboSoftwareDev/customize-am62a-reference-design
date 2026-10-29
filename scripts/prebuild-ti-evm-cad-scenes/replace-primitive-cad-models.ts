@@ -108,11 +108,16 @@ function applyCadModelReplacement(params: {
   pcbComponent?: PcbComponentElement
   replacement: CadModelReplacement
 }): CadComponentElement {
+  const modelYawOffsetDegrees =
+    params.replacement.kind === "jscad" ? params.replacement.modelYawOffsetDegrees : undefined
   const cadComponentWithoutPrimitive: CadComponentElement = {
     ...params.cadComponent,
     model_jscad: undefined,
     rotation: params.pcbComponent
-      ? getCanonicalCadRotation(params.pcbComponent)
+      ? getCanonicalCadRotation({
+          modelYawOffsetDegrees,
+          pcbComponent: params.pcbComponent,
+        })
       : params.cadComponent.rotation,
     show_as_bounding_box: false,
   }
@@ -132,20 +137,24 @@ function applyCadModelReplacement(params: {
   }
 }
 
-function getCanonicalCadRotation(
-  pcbComponent: PcbComponentElement,
-): NonNullable<CadComponentElement["rotation"]> {
+function getCanonicalCadRotation({
+  modelYawOffsetDegrees = 0,
+  pcbComponent,
+}: {
+  modelYawOffsetDegrees?: number
+  pcbComponent: PcbComponentElement
+}): NonNullable<CadComponentElement["rotation"]> {
   if (pcbComponent.layer === "bottom") {
     return {
       x: 0,
       y: 180,
-      z: normalizeDegrees(-pcbComponent.rotation),
+      z: normalizeDegrees(-pcbComponent.rotation + modelYawOffsetDegrees),
     }
   }
   return {
     x: 0,
     y: 0,
-    z: normalizeDegrees(pcbComponent.rotation),
+    z: normalizeDegrees(pcbComponent.rotation + modelYawOffsetDegrees),
   }
 }
 

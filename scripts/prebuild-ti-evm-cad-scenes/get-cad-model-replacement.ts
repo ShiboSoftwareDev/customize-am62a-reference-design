@@ -21,6 +21,8 @@ export type CadModelReplacement =
   | {
       kind: "jscad"
       jscadOperations: JscadOperation[]
+      /** Rotation around the board normal after applying the PCB component rotation. */
+      modelYawOffsetDegrees?: number
     }
 
 export function getCadModelReplacement(

@@ -25,6 +25,10 @@ type PcbComponent = AnyCircuitElement & {
   type: "pcb_component"
   width: number
 }
+type PcbBoard = AnyCircuitElement & {
+  center: { x: number; y: number }
+  type: "pcb_board"
+}
 
 const repositoryRoot = resolve(import.meta.dir, "..")
 const outputRoot = resolve("/tmp/ti-evm-cad-component-qa")
@@ -41,6 +45,8 @@ for (const evm of tiEvms) {
   const sourceFootprints = await readSourceFootprints(
     resolve(repositoryRoot, "lib/generated/ti-evms", `${evm.id}.component-footprints.json`),
   )
+  const pcbBoard = circuitJson.find(isPcbBoard)
+  if (!pcbBoard) throw new Error(`${evm.name} has no PCB board element`)
   const sourceComponentById = new Map<SourceComponentId, SourceComponent>(
     circuitJson.flatMap((element) =>
       isSourceComponent(element) ? [[element.source_component_id, element] as const] : [],
@@ -75,13 +81,17 @@ for (const evm of tiEvms) {
       boardNormalDirection * 1.5,
       pcbComponent.center.y,
     ]
+    const cameraPosition = getComponentCameraPosition({
+      boardCenter: pcbBoard.center,
+      boardNormalDirection,
+      componentCenter: pcbComponent.center,
+      focusDistance,
+      isMechanicalComponent,
+      lookAt,
+    })
     const png = await renderGLTFToPNGFromGLB(glb, {
       backgroundColor: "#07100c",
-      camPos: [
-        lookAt[0] - focusDistance * 0.75,
-        lookAt[1] + boardNormalDirection * focusDistance * 0.65,
-        lookAt[2] + focusDistance * 0.75,
-      ],
+      camPos: cameraPosition,
       fov: 40,
       height: 500,
       lookAt,
@@ -117,6 +127,50 @@ function isPcbComponent(element: AnyCircuitElement): element is PcbComponent {
     typeof element.center?.x === "number" &&
     typeof element.center?.y === "number"
   )
+}
+
+function isPcbBoard(element: AnyCircuitElement): element is PcbBoard {
+  return (
+    element.type === "pcb_board" &&
+    typeof element.center?.x === "number" &&
+    typeof element.center?.y === "number"
+  )
+}
+
+function getComponentCameraPosition({
+  boardCenter,
+  boardNormalDirection,
+  componentCenter,
+  focusDistance,
+  isMechanicalComponent,
+  lookAt,
+}: {
+  boardCenter: { x: number; y: number }
+  boardNormalDirection: number
+  componentCenter: { x: number; y: number }
+  focusDistance: number
+  isMechanicalComponent: boolean
+  lookAt: [number, number, number]
+}): [number, number, number] {
+  const boardEdgeDirection = {
+    x: componentCenter.x - boardCenter.x,
+    y: componentCenter.y - boardCenter.y,
+  }
+  const distanceFromBoardCenter = Math.hypot(boardEdgeDirection.x, boardEdgeDirection.y)
+
+  if (isMechanicalComponent && distanceFromBoardCenter > 0) {
+    return [
+      lookAt[0] - (boardEdgeDirection.x / distanceFromBoardCenter) * focusDistance,
+      lookAt[1] + boardNormalDirection * focusDistance * 0.35,
+      lookAt[2] + (boardEdgeDirection.y / distanceFromBoardCenter) * focusDistance,
+    ]
+  }
+
+  return [
+    lookAt[0] - focusDistance * 0.75,
+    lookAt[1] + boardNormalDirection * focusDistance * 0.65,
+    lookAt[2] + focusDistance * 0.75,
+  ]
 }
 
 async function readCompressedCircuitJson(publicUrl: string): Promise<CircuitJson> {
