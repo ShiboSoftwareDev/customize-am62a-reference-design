@@ -1,11 +1,5 @@
-import type { JscadOperation, Vector2D } from "jscad-planner"
-import {
-  colorize,
-  connectorModelColors,
-  createColoredCuboid,
-  subtract,
-  translate,
-} from "./jscad-model-primitives"
+import type { JscadOperation } from "jscad-planner"
+import { connectorModelColors, createColoredCuboid } from "./jscad-model-primitives"
 
 export function createHdmiAConnectorCadModel(): JscadOperation[] {
   return createHdmiConnectorCadModel({
@@ -34,33 +28,35 @@ function createHdmiConnectorCadModel(params: {
   lowerWidth: number
   upperWidth: number
 }): JscadOperation[] {
-  const outerProfile: Vector2D[] = [
-    [-params.lowerWidth / 2, 0],
-    [-params.upperWidth / 2, params.height * 0.32],
-    [-params.upperWidth / 2, params.height],
-    [params.upperWidth / 2, params.height],
-    [params.upperWidth / 2, params.height * 0.32],
-    [params.lowerWidth / 2, 0],
-  ]
-  const innerProfile = outerProfile.map(
-    ([x, z]) => [x * 0.86, z * 0.72 + params.height * 0.14] as Vector2D,
-  )
-  const extrudeProfile = (points: Vector2D[]): JscadOperation => ({
-    type: "rotateX",
-    angle: Math.PI / 2,
-    shape: {
-      type: "extrudeLinear",
-      options: { height: params.depth },
-      shape: { type: "fromPointsGeom2", points },
-    },
-  })
-  const shell = colorize(
-    connectorModelColors.metal,
-    translate(
-      [0, params.depth / 2, 0],
-      subtract([extrudeProfile(outerProfile), extrudeProfile(innerProfile)]),
+  const shellWallThickness = Math.max(0.28, params.height * 0.07)
+  const shell = [
+    createColoredCuboid({
+      center: [0, params.depth / 2, params.height - shellWallThickness / 2],
+      color: connectorModelColors.metal,
+      size: [params.upperWidth, params.depth, shellWallThickness],
+    }),
+    ...([-1, 1] as const).map((side) =>
+      createColoredCuboid({
+        center: [
+          (side * (params.upperWidth - shellWallThickness)) / 2,
+          params.depth / 2,
+          params.height / 2,
+        ],
+        color: connectorModelColors.metal,
+        size: [shellWallThickness, params.depth, params.height],
+      }),
     ),
-  )
+    createColoredCuboid({
+      center: [0, params.depth - shellWallThickness / 2, params.height / 2],
+      color: connectorModelColors.metal,
+      size: [params.upperWidth, shellWallThickness, params.height],
+    }),
+    createColoredCuboid({
+      center: [0, params.depth / 2, shellWallThickness / 2],
+      color: connectorModelColors.metal,
+      size: [params.lowerWidth, params.depth, shellWallThickness],
+    }),
+  ]
   const tongueHeight = params.height * 0.16
   const tongueCenterZ = params.height * 0.39
   const tongue = createColoredCuboid({
@@ -80,5 +76,5 @@ function createHdmiConnectorCadModel(params: {
       size: [contactSpacing * 0.45, params.depth * 0.38, 0.05],
     }),
   )
-  return [shell, tongue, ...contacts]
+  return [...shell, tongue, ...contacts]
 }

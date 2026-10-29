@@ -133,6 +133,20 @@ test("replaces recognizable Sitara board connectors with multi-part models", () 
   }
 })
 
+test("uses board-specific geometry for surface-mount and mikroBUS headers", () => {
+  for (const [componentName, altiumFootprint] of [
+    ["P2", "HEADER10X2_SMD"],
+    ["J10", "HDR_2X10_FTR-110-51-D-06_S_S_8-7"],
+    ["J14", "HDR_5X3_TSM-105-01-T-TM_S_S_9-9"],
+    ["J21", "MIKROBUS16_2D54_25_4X22_88X8_5MM"],
+  ]) {
+    const replacement = getCadModelReplacement({ altiumFootprint, componentName })
+    expect(replacement?.kind).toBe("jscad")
+    if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
+    expect(replacement.jscadOperations.length).toBeGreaterThan(2)
+  }
+})
+
 test("replaces prominent Sitara packages with recognizable package models", () => {
   for (const componentIdentity of [
     { altiumFootprint: "AM33XX_15X15", componentName: "U5" },

@@ -4,6 +4,7 @@ import type { ComponentName, SourceFootprintByComponentName } from "./read-sourc
 
 type SourceComponentId = string
 type CadComponentCountBySourceComponentId = Map<SourceComponentId, number>
+type PcbComponentBySourceComponentId = Map<SourceComponentId, PcbComponentElement>
 type SourceComponentElement = AnyCircuitElement & {
   manufacturer_part_number?: string
   name: ComponentName
@@ -21,6 +22,12 @@ type CadComponentElement = AnyCircuitElement & {
   show_as_bounding_box?: boolean
   source_component_id: SourceComponentId
   type: "cad_component"
+}
+type PcbComponentElement = AnyCircuitElement & {
+  layer: "bottom" | "top"
+  rotation: number
+  source_component_id: SourceComponentId
+  type: "pcb_component"
 }
 
 export type CadModelEnrichmentSummary = {
@@ -41,6 +48,11 @@ export function replacePrimitiveCadModels(params: {
     ),
   )
   const cadComponentCountBySourceComponentId: CadComponentCountBySourceComponentId = new Map()
+  const pcbComponentBySourceComponentId: PcbComponentBySourceComponentId = new Map(
+    params.circuitJson.flatMap((element) =>
+      isPcbComponentElement(element) ? [[element.source_component_id, element] as const] : [],
+    ),
+  )
   for (const element of params.circuitJson) {
     if (!isCadComponentElement(element)) continue
     const currentCount = cadComponentCountBySourceComponentId.get(element.source_component_id) ?? 0
@@ -77,6 +89,7 @@ export function replacePrimitiveCadModels(params: {
     enrichedComponentCount += 1
     return applyCadModelReplacement({
       cadComponent: element,
+      pcbComponent: pcbComponentBySourceComponentId.get(element.source_component_id),
       replacement,
     })
   })
@@ -92,11 +105,15 @@ export function replacePrimitiveCadModels(params: {
 
 function applyCadModelReplacement(params: {
   cadComponent: CadComponentElement
+  pcbComponent?: PcbComponentElement
   replacement: CadModelReplacement
 }): CadComponentElement {
   const cadComponentWithoutPrimitive: CadComponentElement = {
     ...params.cadComponent,
     model_jscad: undefined,
+    rotation: params.pcbComponent
+      ? getCanonicalCadRotation(params.pcbComponent)
+      : params.cadComponent.rotation,
     show_as_bounding_box: false,
   }
 
@@ -113,6 +130,27 @@ function applyCadModelReplacement(params: {
     ...cadComponentWithoutPrimitive,
     model_jscad: params.replacement.jscadOperations,
   }
+}
+
+function getCanonicalCadRotation(
+  pcbComponent: PcbComponentElement,
+): NonNullable<CadComponentElement["rotation"]> {
+  if (pcbComponent.layer === "bottom") {
+    return {
+      x: 0,
+      y: 180,
+      z: normalizeDegrees(-pcbComponent.rotation),
+    }
+  }
+  return {
+    x: 0,
+    y: 0,
+    z: normalizeDegrees(pcbComponent.rotation),
+  }
+}
+
+function normalizeDegrees(angleDegrees: number): number {
+  return ((angleDegrees % 360) + 360) % 360
 }
 
 function hasReusableCadModel(cadComponent: CadComponentElement): boolean {
@@ -140,4 +178,13 @@ function isSourceComponentElement(element: AnyCircuitElement): element is Source
 
 function isCadComponentElement(element: AnyCircuitElement): element is CadComponentElement {
   return element.type === "cad_component" && typeof element.source_component_id === "string"
+}
+
+function isPcbComponentElement(element: AnyCircuitElement): element is PcbComponentElement {
+  return (
+    element.type === "pcb_component" &&
+    typeof element.source_component_id === "string" &&
+    (element.layer === "top" || element.layer === "bottom") &&
+    typeof element.rotation === "number"
+  )
 }

@@ -24,6 +24,10 @@ import {
   createUsbAConnectorCadModel,
   createUsbCConnectorCadModel,
 } from "./create-usb-connector-cad-model"
+import {
+  createMikroBusSocketCadModel,
+  createSmdPinHeaderCadModel,
+} from "./create-pin-header-cad-models"
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -36,6 +40,30 @@ export function getMechanicalConnectorCadModelReplacement(
 ): CadModelReplacement | undefined {
   const footprint = componentIdentity.altiumFootprint.toUpperCase()
   const partNumber = componentIdentity.manufacturerPartNumber?.toUpperCase() ?? ""
+
+  if (footprint === "HEADER10X2_SMD" || footprint.includes("FTR-110-51-D-06")) {
+    return createJscadReplacement(
+      createSmdPinHeaderCadModel({ columnCount: 10, pitch: 1.27, rowCount: 2 }),
+    )
+  }
+  if (footprint.includes("54202-T0805ALF")) {
+    return createJscadReplacement(
+      createSmdPinHeaderCadModel({ columnCount: 5, pitch: 2, rowCount: 2 }),
+    )
+  }
+  if (footprint.includes("TSM-104-02-SV")) {
+    return createJscadReplacement(
+      createSmdPinHeaderCadModel({ columnCount: 4, pitch: 2.54, rowCount: 1 }),
+    )
+  }
+  if (footprint.includes("TSM-105-01-T-TM")) {
+    return createJscadReplacement(
+      createSmdPinHeaderCadModel({ columnCount: 5, pitch: 2.54, rowCount: 3 }),
+    )
+  }
+  if (footprint.startsWith("MIKROBUS16_")) {
+    return createJscadReplacement(createMikroBusSocketCadModel())
+  }
 
   if (
     footprint.includes("629104151") ||
