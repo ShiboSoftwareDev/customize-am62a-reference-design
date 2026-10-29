@@ -17,12 +17,14 @@ export function createSmdPinHeaderCadModel(params: {
   const bodyHeight = 2.25
   const pinHeight = 6.4
   const pinWidth = Math.min(0.5, params.pitch * 0.32)
+  const solderTailLength = Math.max(1.35, params.pitch * 0.9)
   const pins = createPinGrid({
     columnCount: params.columnCount,
     pitch: params.pitch,
     pinHeight,
     pinWidth,
     rowCount: params.rowCount,
+    solderTailLength,
   })
 
   return [
@@ -85,18 +87,27 @@ function createPinGrid(params: {
   pinWidth: number
   pitch: number
   rowCount: number
+  solderTailLength: number
 }): JscadOperation[] {
   return Array.from({ length: params.columnCount * params.rowCount }, (_, pinIndex) => {
     const columnIndex = pinIndex % params.columnCount
     const rowIndex = Math.floor(pinIndex / params.columnCount)
-    return createColoredCuboid({
-      center: [
-        (columnIndex - (params.columnCount - 1) / 2) * params.pitch,
-        (rowIndex - (params.rowCount - 1) / 2) * params.pitch,
-        params.pinHeight / 2,
-      ],
-      color: connectorModelColors.gold,
-      size: [params.pinWidth, params.pinWidth, params.pinHeight],
-    })
-  })
+    const x = (columnIndex - (params.columnCount - 1) / 2) * params.pitch
+    const y = (rowIndex - (params.rowCount - 1) / 2) * params.pitch
+    const rowSide = rowIndex < params.rowCount / 2 ? -1 : 1
+    const solderTailCenterY = y + (rowSide * params.solderTailLength) / 2
+
+    return [
+      createColoredCuboid({
+        center: [x, y, params.pinHeight / 2],
+        color: connectorModelColors.gold,
+        size: [params.pinWidth, params.pinWidth, params.pinHeight],
+      }),
+      createColoredCuboid({
+        center: [x, solderTailCenterY, 0.12],
+        color: connectorModelColors.gold,
+        size: [params.pinWidth, params.solderTailLength, 0.24],
+      }),
+    ]
+  }).flat()
 }

@@ -110,7 +110,37 @@ export function createAudioJackCadModel(): JscadOperation[] {
     radius: 1.62,
     rotation: [Math.PI / 2, 0, 0],
   })
-  return [body, opening, socket]
+  const terminalTabs = [
+    createColoredCuboid({
+      center: [-2.7, -1.8, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 2.2, 0.24],
+    }),
+    createColoredCuboid({
+      center: [2.7, -1.8, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 2.2, 0.24],
+    }),
+    createColoredCuboid({
+      center: [-2.7, 3.5, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 1.6, 0.24],
+    }),
+    createColoredCuboid({
+      center: [2.7, 3.5, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 1.6, 0.24],
+    }),
+  ]
+  const boardGuides = [-1, 1].map((side) =>
+    createColoredCylinder({
+      center: [side * 1.9, 3.8, -0.45],
+      color: connectorModelColors.blackPlastic,
+      height: 0.9,
+      radius: 0.48,
+    }),
+  )
+  return [body, opening, socket, ...terminalTabs, ...boardGuides]
 }
 
 export function createBarrelJackCadModel(): JscadOperation[] {

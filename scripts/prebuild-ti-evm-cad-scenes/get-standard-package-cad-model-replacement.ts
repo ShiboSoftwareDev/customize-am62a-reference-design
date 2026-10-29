@@ -123,7 +123,7 @@ function getSmallOutlinePackageReplacement(
     return createFootprinterReplacement("ssop8_p0.65mm")
   }
   if (/^SO8-/u.test(normalizedFootprint)) {
-    return createFootprinterReplacement("soic8_p1.27mm")
+    return createFootprinterReplacement("soic8_p1.27mm", 90)
   }
   return undefined
 }

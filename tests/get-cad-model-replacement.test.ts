@@ -29,6 +29,16 @@ test("maps standard Altium package identities to reusable CAD models", () => {
       componentName: "U2",
     }),
   ).toEqual({ kind: "footprinter", footprinterString: "sot23-5" })
+  expect(
+    getCadModelReplacement({
+      altiumFootprint: "SO8-25X75",
+      componentName: "U4",
+    }),
+  ).toEqual({
+    footprinterString: "soic8_p1.27mm",
+    kind: "footprinter",
+    modelYawOffsetDegrees: 90,
+  })
 })
 
 test("omits solid CAD bodies for test pads and assembly markers", () => {
@@ -143,7 +153,7 @@ test("uses board-specific geometry for surface-mount and mikroBUS headers", () =
     const replacement = getCadModelReplacement({ altiumFootprint, componentName })
     expect(replacement?.kind).toBe("jscad")
     if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
-    expect(replacement.jscadOperations.length).toBeGreaterThan(2)
+    expect(replacement.jscadOperations.length).toBeGreaterThan(4)
   }
 })
 

@@ -1,5 +1,11 @@
-import type { JscadOperation } from "jscad-planner"
-import { connectorModelColors, createColoredCuboid } from "./jscad-model-primitives"
+import type { JscadOperation, Vector2D } from "jscad-planner"
+import {
+  colorize,
+  connectorModelColors,
+  createColoredCuboid,
+  subtract,
+  translate,
+} from "./jscad-model-primitives"
 
 export function createHdmiAConnectorCadModel(): JscadOperation[] {
   return createHdmiConnectorCadModel({
@@ -29,34 +35,23 @@ function createHdmiConnectorCadModel(params: {
   upperWidth: number
 }): JscadOperation[] {
   const shellWallThickness = Math.max(0.28, params.height * 0.07)
-  const shell = [
-    createColoredCuboid({
-      center: [0, params.depth / 2, params.height - shellWallThickness / 2],
-      color: connectorModelColors.metal,
-      size: [params.upperWidth, params.depth, shellWallThickness],
-    }),
-    ...([-1, 1] as const).map((side) =>
-      createColoredCuboid({
-        center: [
-          (side * (params.upperWidth - shellWallThickness)) / 2,
-          params.depth / 2,
-          params.height / 2,
-        ],
-        color: connectorModelColors.metal,
-        size: [shellWallThickness, params.depth, params.height],
-      }),
-    ),
-    createColoredCuboid({
-      center: [0, params.depth - shellWallThickness / 2, params.height / 2],
-      color: connectorModelColors.metal,
-      size: [params.upperWidth, shellWallThickness, params.height],
-    }),
-    createColoredCuboid({
-      center: [0, params.depth / 2, shellWallThickness / 2],
-      color: connectorModelColors.metal,
-      size: [params.lowerWidth, params.depth, shellWallThickness],
-    }),
-  ]
+  const outerProfile = createConnectorProfile({
+    height: params.height,
+    lowerWidth: params.lowerWidth,
+    upperWidth: params.upperWidth,
+  })
+  const innerProfile = createConnectorProfile({
+    height: params.height - shellWallThickness * 2,
+    lowerWidth: params.lowerWidth - shellWallThickness * 2,
+    upperWidth: params.upperWidth - shellWallThickness * 2,
+    verticalOffset: shellWallThickness,
+  })
+  const outerShell = extrudeProfileAlongDepth({ depth: params.depth, profile: outerProfile })
+  const innerOpening = extrudeProfileAlongDepth({
+    depth: params.depth - shellWallThickness,
+    profile: innerProfile,
+  })
+  const shell = colorize(connectorModelColors.metal, subtract([outerShell, innerOpening]))
   const tongueHeight = params.height * 0.16
   const tongueCenterZ = params.height * 0.39
   const tongue = createColoredCuboid({
@@ -76,5 +71,38 @@ function createHdmiConnectorCadModel(params: {
       size: [contactSpacing * 0.45, params.depth * 0.38, 0.05],
     }),
   )
-  return [...shell, tongue, ...contacts]
+  const rearInsulator = createColoredCuboid({
+    center: [0, params.depth - shellWallThickness * 1.5, params.height / 2],
+    color: connectorModelColors.darkPlastic,
+    size: [params.lowerWidth * 0.9, shellWallThickness, params.height * 0.7],
+  })
+  return [shell, rearInsulator, tongue, ...contacts]
+}
+
+function createConnectorProfile(params: {
+  height: number
+  lowerWidth: number
+  upperWidth: number
+  verticalOffset?: number
+}): Vector2D[] {
+  const verticalOffset = params.verticalOffset ?? 0
+  return [
+    [-params.lowerWidth / 2, verticalOffset],
+    [params.lowerWidth / 2, verticalOffset],
+    [params.upperWidth / 2, verticalOffset + params.height],
+    [-params.upperWidth / 2, verticalOffset + params.height],
+  ]
+}
+
+function extrudeProfileAlongDepth(params: { depth: number; profile: Vector2D[] }): JscadOperation {
+  const extrudedProfile: JscadOperation = {
+    type: "extrudeLinear",
+    options: { height: params.depth },
+    shape: { type: "fromPointsGeom2", points: params.profile },
+  }
+  return translate([0, params.depth, 0], {
+    type: "rotateX",
+    angle: Math.PI / 2,
+    shape: extrudedProfile,
+  })
 }
