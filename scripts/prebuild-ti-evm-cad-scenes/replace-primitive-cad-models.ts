@@ -41,6 +41,7 @@ export type CadModelEnrichmentSummary = {
 
 export function replacePrimitiveCadModels(params: {
   circuitJson: AnyCircuitElement[]
+  excludedComponentNames?: ReadonlySet<ComponentName>
   sourceFootprintByComponentName: SourceFootprintByComponentName
 }): {
   circuitJson: AnyCircuitElement[]
@@ -67,6 +68,11 @@ export function replacePrimitiveCadModels(params: {
 
   const enrichedCircuitJson = params.circuitJson.map((element) => {
     if (!isCadComponentElement(element)) return element
+    const sourceComponent = sourceComponentById.get(element.source_component_id)
+    if (sourceComponent && params.excludedComponentNames?.has(sourceComponent.name)) {
+      enrichedComponentCount += 1
+      return applyCadModelReplacement({ cadComponent: element, replacement: { kind: "none" } })
+    }
     if (hasReusableCadModel(element)) return element
     if (!hasPrimitiveCadModel(element)) return element
     if (cadComponentCountBySourceComponentId.get(element.source_component_id) !== 1) {
@@ -74,7 +80,6 @@ export function replacePrimitiveCadModels(params: {
       return element
     }
 
-    const sourceComponent = sourceComponentById.get(element.source_component_id)
     const sourceFootprint = sourceComponent
       ? params.sourceFootprintByComponentName.get(sourceComponent.name)
       : undefined
@@ -113,10 +118,16 @@ function applyCadModelReplacement(params: {
   replacement: CadModelReplacement
 }): CadComponentElement {
   const modelYawOffsetDegrees =
-    params.replacement.kind === "jscad" ? params.replacement.modelYawOffsetDegrees : undefined
+    params.replacement.kind === "none" ? undefined : params.replacement.modelYawOffsetDegrees
   const cadComponentWithoutPrimitive: CadComponentElement = {
     ...params.cadComponent,
+    footprinter_string: undefined,
+    model_glb_url: undefined,
+    model_gltf_url: undefined,
     model_jscad: undefined,
+    model_obj_url: undefined,
+    model_step_url: undefined,
+    model_stl_url: undefined,
     position: getReplacementPosition(params.cadComponent),
     rotation: params.pcbComponent
       ? getCanonicalCadRotation({

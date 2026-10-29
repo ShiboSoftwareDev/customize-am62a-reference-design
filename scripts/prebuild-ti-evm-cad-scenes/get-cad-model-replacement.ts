@@ -17,6 +17,8 @@ export type CadModelReplacement =
   | {
       kind: "footprinter"
       footprinterString: string
+      /** Rotation around the board normal after applying the PCB component rotation. */
+      modelYawOffsetDegrees?: number
     }
   | {
       kind: "jscad"

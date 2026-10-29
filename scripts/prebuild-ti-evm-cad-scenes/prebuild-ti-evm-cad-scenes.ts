@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "../../app/parse-prebuilt-circuit-json"
 import { tiEvms } from "../../lib/ti-evm-catalog"
 import { convertCircuitJsonToCadScene } from "./convert-circuit-json-to-cad-scene"
+import { getDnpComponentNames } from "./get-dnp-component-names"
 import { readSourceFootprints } from "./read-source-footprints"
 import { replacePrimitiveCadModels } from "./replace-primitive-cad-models"
 
@@ -56,6 +57,7 @@ async function buildTiEvmCadScene(cadSceneBuild: CadSceneBuild): Promise<void> {
   )
   const enrichedCadModels = replacePrimitiveCadModels({
     circuitJson,
+    excludedComponentNames: getDnpComponentNames(cadSceneBuild.evmId),
     sourceFootprintByComponentName,
   })
   const cadScene = await convertCircuitJsonToCadScene({
