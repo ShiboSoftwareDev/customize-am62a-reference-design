@@ -91,7 +91,7 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createUsbAConnectorCadModel())
   }
   if (footprint.startsWith("USB7P_")) {
-    return createJscadReplacement(createBeaglePlayUsbAConnectorCadModel())
+    return createJscadReplacement(createBeaglePlayUsbAConnectorCadModel(), -90)
   }
   if (
     footprint.includes("629105150521") ||
