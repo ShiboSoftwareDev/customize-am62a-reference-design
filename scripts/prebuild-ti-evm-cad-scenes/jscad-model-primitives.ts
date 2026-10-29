@@ -72,9 +72,14 @@ export function createColoredPrism(params: {
     const angle = (pointIndex * 2 * Math.PI) / params.sideCount
     return [Math.cos(angle) * params.radius, Math.sin(angle) * params.radius] as Vector2D
   })
+  const prismBasePosition: Vector3D = [
+    params.center[0],
+    params.center[1],
+    params.center[2] - params.height / 2,
+  ]
   return colorize(
     params.color,
-    translate(params.center, {
+    translate(prismBasePosition, {
       type: "extrudeLinear",
       options: { height: params.height },
       shape: { type: "fromPointsGeom2", points },
