@@ -10,6 +10,11 @@ export type CadModelComponentIdentity = {
   manufacturerPartNumber?: string
 }
 
+export type CadModelPlanarOffsetMillimeters = {
+  x: number
+  y: number
+}
+
 export type CadModelReplacement =
   | {
       kind: "none"
@@ -23,6 +28,8 @@ export type CadModelReplacement =
   | {
       kind: "jscad"
       jscadOperations: JscadOperation[]
+      /** Model-local XY offset applied before board-side mirroring and yaw. */
+      modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
       /** Rotation around the board normal after applying the PCB component rotation. */
       modelYawOffsetDegrees?: number
     }

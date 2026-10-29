@@ -1,4 +1,5 @@
 import type { AnyCircuitElement } from "circuit-json"
+import { applyToPoint, rotateDEG } from "transformation-matrix"
 import { type CadModelReplacement, getCadModelReplacement } from "./get-cad-model-replacement"
 import type { ComponentName, SourceFootprintByComponentName } from "./read-source-footprints"
 import { getImportedPrimitivePlanarPosition } from "./get-imported-primitive-planar-position"
@@ -119,6 +120,13 @@ function applyCadModelReplacement(params: {
 }): CadComponentElement {
   const modelYawOffsetDegrees =
     params.replacement.kind === "none" ? undefined : params.replacement.modelYawOffsetDegrees
+  const rotation = params.pcbComponent
+    ? getCanonicalCadRotation({
+        modelYawOffsetDegrees,
+        pcbComponent: params.pcbComponent,
+      })
+    : params.cadComponent.rotation
+  const importedPrimitivePosition = getReplacementPosition(params.cadComponent)
   const cadComponentWithoutPrimitive: CadComponentElement = {
     ...params.cadComponent,
     footprinter_string: undefined,
@@ -128,13 +136,15 @@ function applyCadModelReplacement(params: {
     model_obj_url: undefined,
     model_step_url: undefined,
     model_stl_url: undefined,
-    position: getReplacementPosition(params.cadComponent),
-    rotation: params.pcbComponent
-      ? getCanonicalCadRotation({
-          modelYawOffsetDegrees,
-          pcbComponent: params.pcbComponent,
-        })
-      : params.cadComponent.rotation,
+    position: getPositionWithModelPlanarOffset({
+      modelPlanarOffsetMillimeters:
+        params.replacement.kind === "jscad"
+          ? params.replacement.modelPlanarOffsetMillimeters
+          : undefined,
+      position: importedPrimitivePosition,
+      rotation,
+    }),
+    rotation,
     show_as_bounding_box: false,
   }
 
@@ -150,6 +160,33 @@ function applyCadModelReplacement(params: {
   return {
     ...cadComponentWithoutPrimitive,
     model_jscad: params.replacement.jscadOperations,
+  }
+}
+
+// Converts a model-local XY offset into circuit-board coordinates. Bottom-side
+// models first mirror local X around the board normal, then apply their yaw.
+function getPositionWithModelPlanarOffset({
+  modelPlanarOffsetMillimeters,
+  position,
+  rotation,
+}: {
+  modelPlanarOffsetMillimeters?: { x: number; y: number }
+  position?: { x: number; y: number; z: number }
+  rotation?: { x: number; y: number; z: number }
+}): CadComponentElement["position"] {
+  if (!modelPlanarOffsetMillimeters || !position || !rotation) return position
+  const localOffset = {
+    x:
+      normalizeDegrees(rotation.y) === 180
+        ? -modelPlanarOffsetMillimeters.x
+        : modelPlanarOffsetMillimeters.x,
+    y: modelPlanarOffsetMillimeters.y,
+  }
+  const boardOffset = applyToPoint(rotateDEG(rotation.z), localOffset)
+  return {
+    x: position.x + boardOffset.x,
+    y: position.y + boardOffset.y,
+    z: position.z,
   }
 }
 

@@ -34,6 +34,7 @@ function getHeaderReplacement(
   if (singleInlinePinCount) {
     return createFootprinterReplacement({
       footprinterString: `headermodule${singleInlinePinCount}_p2.54mm_male`,
+      modelYawOffsetDegrees: 90,
     })
   }
 
