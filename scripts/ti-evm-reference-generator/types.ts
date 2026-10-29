@@ -2,6 +2,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import type { ReferenceEvmDefinition } from "../../lib/evms/reference-evm-types"
 
 export type ComponentName = string
+export type SourceFootprint = string
 export type FeatureId = string
 export type NetName = string
 export type PcbComponentId = string
@@ -19,6 +20,7 @@ export type SchematicSheetIndex = number
 export type ComponentNameByRecordIndex = Map<ComponentRecordIndex, ComponentName>
 export type PinKeyByRawPinName = Map<RawPinName, PinKey>
 export type PinKeysByComponentRecordIndex = Map<ComponentRecordIndex, PinKeyByRawPinName>
+export type SourceFootprintByComponentName = Map<ComponentName, SourceFootprint>
 
 export type ReferenceInput = {
   id: string
@@ -45,4 +47,5 @@ export type ReferenceConversion = {
   }>
   projectCircuitJson: AnyCircuitElement[]
   referenceSchematicCircuitJsons: AnyCircuitElement[][]
+  sourceFootprintByComponentName: SourceFootprintByComponentName
 }

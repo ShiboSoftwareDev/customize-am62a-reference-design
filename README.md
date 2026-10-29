@@ -32,7 +32,7 @@ bun run prebuild:ti-evms
 
 The prebuild imports the generated components directly, renders every PCB population with `new Circuit()` and `renderUntilSettled()`, rejects failed components, routing errors, and zero-trace PCB output, applies the same feature selection to the authored schematic, compresses both Circuit JSON artifacts under `public/prebuilt-ti-evms`, and records source and element counts in the manifest. It does not use `eval`, a web worker, or browser-side circuit generation.
 
-The same command regenerates `public/board-details` from each full-board Circuit JSON. The detail artifacts are static so the browser does not rerun SVG or 3D rendering.
+The same command regenerates `public/board-details` from each full-board Circuit JSON. The detail artifacts are static, and the 3D preview is rendered from the same prebuilt GLB used by the interactive viewer, so the browser does not rerun SVG or 3D rendering.
 
 To regenerate the checked-in Circuit JSON and parameterized TSX from TI's original Altium files:
 
@@ -62,6 +62,8 @@ Tests use one focused case per file. They verify catalog provenance, unique opti
 - `lib/ti-evm-catalog.ts` owns the four-board catalog and all selectable variants.
 - `scripts/prebuild-ti-evm-assets.ts` renders all 23 curated variants through `@tscircuit/core`; the generated TSX retains the imported Altium routes and prunes routes attached only to omitted subsystems.
 - `scripts/prebuild-ti-evm-schematic-assets.ts` applies each variant's component population to the canonical Altium schematic without rerouting or replacing its authored geometry.
+- `scripts/prebuild-ti-evm-cad-scenes.ts` upgrades imported primitive CAD bodies only when the source Altium footprint has an unambiguous reusable package model. Known packages receive material-aware geometry, while test pads and assembly markers do not become fake solids. Unknown, ambiguous, and multi-body source geometry is preserved. Every resulting GLB is generated during the prebuild and checked in; the browser never resolves or converts package models.
+- `lib/generated/ti-evms/*.component-footprints.json` records the source footprint identity used by the selective CAD enrichment stage. The map is regenerated from the checksum-pinned reference archives rather than maintained by hand.
 - `app/hooks/use-evm-render.ts` loads the selected prebuilt PCB and schematic in parallel, ignores stale requests, and reuses the parsed result when a variant is selected again.
 - `app/components/DesignViewer.tsx` lazy-loads each viewer, preserves renderer state across variant changes, and starts in Canvas only when the selected board contains geometry unsupported by WebGPU.
 - `vercel.json` gives prebuilt Circuit JSON a short browser cache while Vercel automatically edge-caches the static files for each deployment.

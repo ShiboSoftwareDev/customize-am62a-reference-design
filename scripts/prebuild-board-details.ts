@@ -1,7 +1,7 @@
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
-import type { CadComponent, CircuitJson } from "circuit-json"
-import { convertCircuitJsonToGltf, getBestCameraPosition } from "circuit-json-to-gltf"
+import type { CircuitJson } from "circuit-json"
+import { getBestCameraPosition } from "circuit-json-to-gltf"
 import { convertCircuitJsonToPcbSvg, convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { gunzipSync, strFromU8 } from "fflate"
 import { renderGLTFToPNGFromGLB } from "poppygl"
@@ -46,7 +46,10 @@ for (const evm of tiEvms) {
       }),
     ),
   )
-  const threeDimensionalPng = await renderThreeDimensionalPng(circuitJson)
+  const threeDimensionalPng = await renderThreeDimensionalPng({
+    circuitJson,
+    prebuiltCadSceneUrl: fullBoard.prebuiltCadSceneUrl,
+  })
 
   await Promise.all([
     writeFile(resolve(outputDirectory, "pcb.svg"), pcbSvg),
@@ -76,33 +79,18 @@ function stripTrailingWhitespace(svg: string): string {
   return svg.replace(/[ \t]+$/gmu, "")
 }
 
-async function renderThreeDimensionalPng(circuitJson: CircuitJson): Promise<Uint8Array> {
-  const glb = await convertCircuitJsonToGltf(resolveLocalCadModelUrls(circuitJson), {
-    boardDrillQuality: "high",
-    boardTextureResolution: 2048,
-    format: "glb",
-  })
-  if (!(glb instanceof ArrayBuffer)) throw new Error("3D conversion did not return a GLB")
+async function renderThreeDimensionalPng(params: {
+  circuitJson: CircuitJson
+  prebuiltCadSceneUrl: string
+}): Promise<Uint8Array> {
+  const glb = await Bun.file(resolvePublicUrl(params.prebuiltCadSceneUrl)).arrayBuffer()
 
   return renderGLTFToPNGFromGLB(glb, {
-    ...getBestCameraPosition(circuitJson, { aspectRatio: 4 / 3 }),
+    ...getBestCameraPosition(params.circuitJson, { aspectRatio: 4 / 3 }),
     backgroundColor: "#07100c",
     height: 900,
     supersampling: 2,
     width: 1200,
-  })
-}
-
-function resolveLocalCadModelUrls(circuitJson: CircuitJson): CircuitJson {
-  return circuitJson.map((element) => {
-    if (element.type !== "cad_component" || !element.model_step_url?.startsWith("/")) {
-      return element
-    }
-
-    return {
-      ...element,
-      model_step_url: resolvePublicUrl(element.model_step_url),
-    } satisfies CadComponent
   })
 }
 

@@ -20,8 +20,13 @@ export async function generateReferenceArtifacts(params: {
   outputDirectory: string
   reference: ReferenceInput
 }): Promise<void> {
-  const { definition, embeddedCadModels, projectCircuitJson, referenceSchematicCircuitJsons } =
-    await createReferenceDefinition(params.reference)
+  const {
+    definition,
+    embeddedCadModels,
+    projectCircuitJson,
+    referenceSchematicCircuitJsons,
+    sourceFootprintByComponentName,
+  } = await createReferenceDefinition(params.reference)
   const cadModelBoardDirectory = resolve(params.cadModelOutputDirectory, params.reference.id)
   await mkdir(cadModelBoardDirectory, { recursive: true })
 
@@ -31,6 +36,10 @@ export async function generateReferenceArtifacts(params: {
       definition,
       exportName: params.reference.exportName,
     }),
+  )
+  await Bun.write(
+    resolve(params.outputDirectory, `${params.reference.id}.component-footprints.json`),
+    `${JSON.stringify(Object.fromEntries(sourceFootprintByComponentName), null, 2)}\n`,
   )
   await Bun.write(
     resolve(params.outputDirectory, `${params.reference.id}.source.circuit.json.gz`),

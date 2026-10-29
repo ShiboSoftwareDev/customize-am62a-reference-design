@@ -46,6 +46,7 @@ import type {
   PinKeysByComponentRecordIndex,
   ReferenceConversion,
   ReferenceInput,
+  SourceFootprintByComponentName,
 } from "./types"
 
 type EndpointKey = string
@@ -202,6 +203,7 @@ export async function createReferenceDefinition(
 
   const components: ReferenceComponent[] = []
   const componentPinKeys: PinKeysByComponentRecordIndex = new Map()
+  const sourceFootprintByComponentName: SourceFootprintByComponentName = new Map()
   for (const [componentIndex, componentRecord] of componentRecords.entries()) {
     const componentElement = componentElements.get(componentIndex)
     if (componentElement?.type !== "pcb_component") continue
@@ -222,6 +224,9 @@ export async function createReferenceDefinition(
     const componentName = componentNames.get(componentIndex)
     if (!componentName) {
       throw new Error(`${reference.name} component ${componentIndex} has no generated name`)
+    }
+    if (componentRecord.footprint) {
+      sourceFootprintByComponentName.set(componentName, componentRecord.footprint)
     }
     const sourceComponent = sourceComponents.get(componentName)
     const schematicName = componentRecord.designator ?? componentName
@@ -363,6 +368,7 @@ export async function createReferenceDefinition(
     embeddedCadModels,
     projectCircuitJson,
     referenceSchematicCircuitJsons: schematicCircuitJsons,
+    sourceFootprintByComponentName,
   }
 }
 
