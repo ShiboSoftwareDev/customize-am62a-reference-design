@@ -96,10 +96,13 @@ export function applyReplacements(params: {
   replacements: SourceReplacement[]
   source: string
 }): string {
-  let updatedSource = params.source
+  const sourceParts: string[] = []
+  let sourceEnd = params.source.length
   const replacements = [...params.replacements].sort((first, second) => second.start - first.start)
   for (const replacement of replacements) {
-    updatedSource = `${updatedSource.slice(0, replacement.start)}${replacement.text}${updatedSource.slice(replacement.end)}`
+    sourceParts.push(params.source.slice(replacement.end, sourceEnd), replacement.text)
+    sourceEnd = replacement.start
   }
-  return updatedSource
+  sourceParts.push(params.source.slice(0, sourceEnd))
+  return sourceParts.reverse().join("")
 }
