@@ -1,19 +1,10 @@
 import { mkdir } from "node:fs/promises"
 import { resolve } from "node:path"
-import { convertCircuitJsonToTscircuit } from "circuit-json-to-tscircuit"
 import type { ReferenceEvmDefinition } from "../../lib/evms/reference-evm-types"
-import { parameterizeGeneratedBoard } from "../parameterize-generated-board"
 import { compressCircuitJson } from "./compress-circuit-json"
 import { createReferenceDefinition } from "./create-reference-definition"
-import { getFeatureIdBySourceComponentId } from "./get-feature-id-by-source-component-id"
-import { getImportedRoutingMetadata } from "./get-imported-routing-metadata"
-import { getRoutingConnectivityCheckCircuitJson } from "./get-routing-connectivity-check-circuit-json"
-import { getSupportedCopperPours } from "./get-supported-copper-pours"
-import {
-  getRoutablePortSelectors,
-  prepareConverterCircuitJson,
-} from "./prepare-converter-circuit-json"
-import type { ComponentName, FeatureId, ReferenceInput } from "./types"
+import { createParameterizedReferenceSource } from "./create-parameterized-reference-source"
+import type { ReferenceInput } from "./types"
 
 export async function generateReferenceArtifacts(params: {
   cadModelOutputDirectory: string
@@ -22,6 +13,7 @@ export async function generateReferenceArtifacts(params: {
 }): Promise<void> {
   const {
     definition,
+    pcbDocument,
     embeddedCadModels,
     projectCircuitJson,
     referenceSchematicCircuitJsons,
@@ -51,52 +43,11 @@ export async function generateReferenceArtifacts(params: {
     ),
   )
 
-  const featureIdByComponentName = new Map<ComponentName, FeatureId>(
-    definition.components.flatMap((component) => {
-      if (!component.removableFeatureId) return []
-      return [[component.schematicName ?? component.name, component.removableFeatureId] as const]
-    }),
-  )
-  const featureIdBySourceComponentId = getFeatureIdBySourceComponentId({
-    circuitJson: projectCircuitJson,
-    featureIdByComponentName,
-  })
-  const converterCircuitJson = prepareConverterCircuitJson(projectCircuitJson)
-  const importedRoutingMetadata = getImportedRoutingMetadata({
-    circuitJson: converterCircuitJson,
-    featureIdByComponentName,
-    removedFeatureIdCombinations: params.reference.removedFeatureIdCombinations,
-  })
-  const generatedSource = convertCircuitJsonToTscircuit(converterCircuitJson, {
-    componentName: params.reference.componentName,
-  })
-  const parameterizedBoard = parameterizeGeneratedBoard({
-    componentName: params.reference.componentName,
-    featureIdByComponentName,
-    generatedSource,
-    importedRoutingMetadata,
-    routablePortSelectors: getRoutablePortSelectors(converterCircuitJson),
-    supportedCopperPours: getSupportedCopperPours({
-      circuitJson: getRoutingConnectivityCheckCircuitJson({
-        circuitJson: projectCircuitJson,
-        featureIdBySourceComponentId,
-      }),
-      featureIdBySourceComponentId,
-    }),
-    teardropPortSelectors: new Set(
-      definition.nets.flatMap((net) =>
-        (net.teardropEndpoints ?? []).map(
-          ({ componentName, pinKey }) => `.${componentName} > .${pinKey}`,
-        ),
-      ),
-    ),
-    viaTeardropPortSelectors: new Set(
-      definition.nets.flatMap((net) =>
-        net.hasViaTeardrops
-          ? net.endpoints.map(({ componentName, pinKey }) => `.${componentName} > .${pinKey}`)
-          : [],
-      ),
-    ),
+  const parameterizedBoard = createParameterizedReferenceSource({
+    definition,
+    pcbDocument,
+    projectCircuitJson,
+    reference: params.reference,
   })
 
   await Bun.write(

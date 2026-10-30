@@ -30,9 +30,17 @@ test("SK-AM62 minimal board removes R323 HDMI copper with the multimedia feature
   if (!r323CopperPour) throw new Error("SK-AM62 source is missing the R323 copper pour")
 
   expect(hasComponent({ circuitJson: fullBoardCircuitJson, componentName: "R323" })).toBe(true)
-  expect(hasMatchingCopperPour({ circuitJson: fullBoardCircuitJson, r323CopperPour })).toBe(true)
+  const sourceNet = sourceCircuitJson.find(
+    (element) =>
+      element.type === "source_net" && element.source_net_id === r323CopperPour.source_net_id,
+  )
+  if (!sourceNet || typeof sourceNet.name !== "string")
+    throw new Error("R323 copper has no source net")
+  const netName = sourceNet.name
+  const layer = r323CopperPour.layer
+  expect(hasMatchingCopperPour({ circuitJson: fullBoardCircuitJson, netName, layer })).toBe(true)
   expect(hasComponent({ circuitJson: minimalBoardCircuitJson, componentName: "R323" })).toBe(false)
-  expect(hasMatchingCopperPour({ circuitJson: minimalBoardCircuitJson, r323CopperPour })).toBe(
+  expect(hasMatchingCopperPour({ circuitJson: minimalBoardCircuitJson, netName, layer })).toBe(
     false,
   )
 })
@@ -51,15 +59,25 @@ function hasComponent(params: {
   )
 }
 
-function hasMatchingCopperPour(params: {
+function hasMatchingCopperPour({
+  circuitJson,
+  netName,
+  layer,
+}: {
   circuitJson: AnyCircuitElement[]
-  r323CopperPour: PolygonCopperPour
+  netName: string
+  layer: string
 }): boolean {
-  return params.circuitJson.some(
+  const netIds = new Set(
+    circuitJson.flatMap((element) =>
+      element.type === "source_net" && element.name === netName ? [element.source_net_id] : [],
+    ),
+  )
+  return circuitJson.some(
     (element) =>
-      isPolygonCopperPour(element) &&
-      element.layer === params.r323CopperPour.layer &&
-      JSON.stringify(element.points) === JSON.stringify(params.r323CopperPour.points),
+      element.type === "pcb_copper_pour" &&
+      element.layer === layer &&
+      netIds.has(element.source_net_id),
   )
 }
 

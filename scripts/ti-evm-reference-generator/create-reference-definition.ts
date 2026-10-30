@@ -338,6 +338,7 @@ export async function createReferenceDefinition(
   )
 
   return {
+    pcbDocument,
     definition: {
       id: reference.id,
       name: reference.name,

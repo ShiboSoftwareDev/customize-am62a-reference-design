@@ -32,6 +32,12 @@ bun run prebuild:ti-evms
 
 The prebuild imports the generated components directly, renders every PCB population with `new Circuit()` and `renderUntilSettled()`, rejects failed components, routing errors, and zero-trace PCB output, applies the same feature selection to the authored schematic, compresses both Circuit JSON artifacts under `public/prebuilt-ti-evms`, and records source and element counts in the manifest. It does not use `eval`, a web worker, or browser-side circuit generation.
 
+Each population renders in a separate Bun process so its native geometry runtime is released before the next population starts. A failed render or missing copper stops the build before an incomplete artifact is cached.
+
+Copper uses the existing `<copperpour>` component on every copper layer. Reference copper is preserved to retain Altium's fine clearances and original connections. Authored polygon boundaries compute additional fill against each population during prebuild, reclaiming clearance holes left by omitted pads and traces. The solver clears preserved copper belonging to other nets while same-net copper can overlap. Explicit design cutouts, independent copper, polygon order, and feature ownership remain. The import uses the largest generic source gap on each layer for computed pad, trace, and cutout clearances; it does not reproduce Altium's full object-, room-, and net-class-specific rules. Unfilled polygon outlines are pour intent, so contact regressions compare actual filled source regions rather than assuming that every original outline was conductive. The community SK-AM62 import has incomplete cached fill and generic clearance rules; it is not a complete representation of TI's original constraint setup.
+
+The converter pin excludes Altium keepout regions from physical copper. The temporary copper-pour-solver override pins shared connectivity, native-geometry cleanup, clearance around drills wider than their nominal pads, and net-aware handling of preserved polygon copper. Core's current version range otherwise selects the older solver; remove the override when that range includes the published fix.
+
 The same command regenerates `public/board-details` from each full-board Circuit JSON. The detail artifacts are static, and the 3D preview is rendered from the same prebuilt GLB used by the interactive viewer, so the browser does not rerun SVG or 3D rendering.
 
 To regenerate the checked-in Circuit JSON and parameterized TSX from TI's original Altium files:
