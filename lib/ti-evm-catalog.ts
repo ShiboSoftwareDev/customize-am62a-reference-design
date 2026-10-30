@@ -30,6 +30,7 @@ export type TiEvm = {
   sourceUrl: string
   sourcePath: string
   schematicSheetLabels: string[]
+  unavailableSchematicSheetLabels?: string[]
   removableFeatures: TiEvmRemovableFeature[]
   variants: TiEvmVariant[]
 }
@@ -90,6 +91,7 @@ function createEvaluationEvm(params: {
   sourceUrl: string
   sourcePath: string
   schematicSheetLabels: string[]
+  unavailableSchematicSheetLabels?: string[]
   removableFeatures: TiEvmRemovableFeature[]
 }): TiEvm {
   return {
@@ -151,6 +153,8 @@ export const tiEvms: TiEvm[] = [
     sourceUrl: "https://www.ti.com/tool/SK-AM62",
     sourcePath: "boards/sk-am62/index.circuit.tsx",
     schematicSheetLabels: createNumberedSchematicSheetLabels(44),
+    // The source importer could not recover the embedded OrCAD diagrams.
+    unavailableSchematicSheetLabels: createNumberedSchematicSheetLabels(8).slice(2),
     removableFeatures: [
       {
         id: "connectivity",

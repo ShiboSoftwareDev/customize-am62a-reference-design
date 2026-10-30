@@ -297,6 +297,26 @@ button:disabled {
 .viewer-canvas > div {
   width: 100%;
 }
+.schematic-source-notice {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid #d9dddb;
+  border-radius: 6px;
+  background: #f5f8f6;
+  color: #354b40;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.schematic-source-notice a {
+  color: #176845;
+}
+.viewer-canvas > .schematic-source-notice {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 2;
+}
 .viewer-empty {
   display: grid;
   place-items: center;
