@@ -1,4 +1,5 @@
 import type { AnyCircuitElement } from "circuit-json"
+import type { AltiumBinaryPcbDoc } from "altiumts"
 import type { ReferenceEvmDefinition } from "../../lib/evms/reference-evm-types"
 
 export type ComponentName = string
@@ -40,6 +41,7 @@ export type ReferenceInput = {
 }
 
 export type ReferenceConversion = {
+  pcbDocument: AltiumBinaryPcbDoc
   definition: ReferenceEvmDefinition
   embeddedCadModels: Array<{
     bytes: Uint8Array

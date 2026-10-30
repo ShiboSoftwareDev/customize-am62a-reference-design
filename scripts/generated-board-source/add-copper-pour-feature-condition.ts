@@ -1,6 +1,7 @@
 import type ts from "typescript"
 import type { SupportedCopperPour } from "../ti-evm-reference-generator/get-supported-copper-pours"
 import { getStringAttribute, type SourceReplacement } from "./ast-helpers"
+import { applyCopperPourSettings } from "./apply-copper-pour-settings"
 
 type CopperPourKey = string
 type NetName = string
@@ -27,6 +28,7 @@ export function addCopperPourFeatureCondition(params: {
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
   supportedCopperPoursByKey: SupportedCopperPoursByKey
+  computeAllCopperPours?: boolean
 }): void {
   const copperPourKey = getGeneratedCopperPourKey({
     copperPourElement: params.copperPourElement,
@@ -43,10 +45,11 @@ export function addCopperPourFeatureCondition(params: {
     params.supportedCopperPoursByKey.delete(copperPourKey)
   }
 
-  const originalElement = params.generatedSource.slice(
-    params.copperPourElement.getStart(params.sourceFile),
-    params.copperPourElement.getEnd(),
-  )
+  const originalElement = applyCopperPourSettings({
+    ...params,
+    supportedCopperPour,
+    computeAllCopperPours: params.computeAllCopperPours ?? false,
+  })
   const connectsTo = getStringAttribute({
     element: params.copperPourElement,
     name: "connectsTo",
@@ -58,12 +61,24 @@ export function addCopperPourFeatureCondition(params: {
     renamedNets: params.renamedNets,
   })
   const removableFeatureId = supportedCopperPour.removableFeatureId
+  const conditions = [
+    ...(removableFeatureId
+      ? [`!removedFeatureIds.has(${JSON.stringify(removableFeatureId)})`]
+      : []),
+    ...(supportedCopperPour.computedSettings?.presentFeatureIds ?? []).map(
+      (featureId) => `!removedFeatureIds.has(${JSON.stringify(featureId)})`,
+    ),
+    ...(supportedCopperPour.computedSettings?.absentFeatureIds ?? []).map(
+      (featureId) => `removedFeatureIds.has(${JSON.stringify(featureId)})`,
+    ),
+  ]
   params.replacements.push({
     start: params.copperPourElement.getStart(params.sourceFile),
     end: params.copperPourElement.getEnd(),
-    text: removableFeatureId
-      ? `{!removedFeatureIds.has(${JSON.stringify(removableFeatureId)}) && (${emittedElement})}`
-      : emittedElement,
+    text:
+      conditions.length > 0
+        ? `{${conditions.join(" && ")} && (${emittedElement})}`
+        : emittedElement,
   })
 }
 

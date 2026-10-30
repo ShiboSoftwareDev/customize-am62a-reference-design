@@ -4,6 +4,7 @@ import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import type { AnyCircuitElement } from "circuit-json"
 import type { ParameterizedTiEvmId } from "lib/evms/parameterized-ti-evms"
 import { getTiEvm } from "lib/ti-evm-catalog"
+import { expectReferenceCopperConnections } from "./expect-reference-copper-connections"
 
 type CircuitPoint = { x: number; y: number }
 type ComponentName = string
@@ -146,6 +147,7 @@ export async function expectReferenceEvmFidelity(params: {
     renderedCircuitJson: pcbCircuitJson,
     sourceCircuitJson,
   })
+  expectReferenceCopperConnections({ renderedCircuitJson: pcbCircuitJson, sourceCircuitJson })
   expectPhysicalConnectivityMatchesSource({
     renderedCircuitJson: pcbCircuitJson,
     sourceCircuitJson,
@@ -172,10 +174,30 @@ async function expectCopperPoursAreRendered(params: {
   const generatedSource = await Bun.file(
     resolve(repositoryRoot, `lib/generated/ti-evms/${params.evmId}.circuit.tsx`),
   ).text()
-  expect(generatedSource.match(/<copperpour\b/gu)?.length ?? 0).toBe(
-    params.sourceCircuitJson.filter(isPcbCopperPour).length,
-  )
+  expect(generatedSource.match(/<copperpour\b/gu)?.length ?? 0).toBeGreaterThan(0)
   expect(params.renderedCircuitJson.filter(isPcbCopperPour).length).toBeGreaterThan(0)
+  const renderedNetLayers = getCopperPourNetLayers(params.renderedCircuitJson)
+  for (const sourceNetLayer of getCopperPourNetLayers(params.sourceCircuitJson)) {
+    expect(
+      renderedNetLayers.has(sourceNetLayer),
+      `${params.evmId}: missing copper for ${sourceNetLayer}`,
+    ).toBe(true)
+  }
+}
+
+function getCopperPourNetLayers(circuitJson: AnyCircuitElement[]): Set<string> {
+  const netNamesById = new Map<SourceNetId, string>(
+    circuitJson
+      .filter(isSourceNet)
+      .map((net) => [net.source_net_id, net.name.trim().toUpperCase()]),
+  )
+  return new Set(
+    circuitJson.filter(isPcbCopperPour).flatMap((pour) => {
+      const netName = pour.source_net_id ? netNamesById.get(pour.source_net_id) : undefined
+      if (!netName || netName.startsWith("__")) return []
+      return [JSON.stringify([pour.layer, netName])]
+    }),
+  )
 }
 
 function expectNoDanglingCopperPourNets(circuitJson: AnyCircuitElement[]): void {

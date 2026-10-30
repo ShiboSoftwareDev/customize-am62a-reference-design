@@ -43,6 +43,7 @@ export function parameterizeGeneratedBoard(params: {
   importedRoutingMetadata?: ImportedRoutingMetadata
   routablePortSelectors: ReadonlySet<PortSelector>
   supportedCopperPours?: readonly SupportedCopperPour[]
+  computeAllCopperPours?: boolean
   teardropPortSelectors: ReadonlySet<PortSelector>
   viaTeardropPortSelectors: ReadonlySet<PortSelector>
 }): ParameterizedBoardSource {
@@ -136,6 +137,7 @@ export function parameterizeGeneratedBoard(params: {
         replacements,
         sourceFile,
         supportedCopperPoursByKey,
+        computeAllCopperPours: params.computeAllCopperPours,
       })
       continue
     }

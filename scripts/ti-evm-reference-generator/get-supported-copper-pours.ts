@@ -2,8 +2,10 @@ import type { AnyCircuitElement } from "circuit-json"
 import { applyToPoint, compose, rotateDEG, translate } from "transformation-matrix"
 import { isPcbComponent } from "./circuit-json-elements"
 import type { FeatureId, PcbComponentId, SourceComponentId } from "./types"
+import type { ComputedCopperPourSettings } from "./copper-pour-settings"
 
 type CircuitPoint = { x: number; y: number }
+type PcbCopperPourId = string
 type PcbCopperPour = AnyCircuitElement & {
   type: "pcb_copper_pour"
   pcb_copper_pour_id: string
@@ -30,6 +32,7 @@ type SourceNetId = SourceNet["source_net_id"]
 type SourceNetName = SourceNet["name"]
 
 export type SupportedCopperPour = {
+  computedSettings?: ComputedCopperPourSettings
   coveredWithSolderMask: boolean
   layer: string
   netName: SourceNetName
@@ -40,6 +43,7 @@ export type SupportedCopperPour = {
 
 export function getSupportedCopperPours(params: {
   circuitJson: AnyCircuitElement[]
+  computedCopperPourSettingsById?: ReadonlyMap<PcbCopperPourId, ComputedCopperPourSettings>
   featureIdBySourceComponentId?: ReadonlyMap<SourceComponentId, FeatureId>
 }): SupportedCopperPour[] {
   const sourceNetNamesById = new Map<SourceNetId, SourceNetName>(
@@ -72,16 +76,26 @@ export function getSupportedCopperPours(params: {
 
       return [
         {
+          ...(params.computedCopperPourSettingsById?.has(copperPour.pcb_copper_pour_id)
+            ? {
+                computedSettings: params.computedCopperPourSettingsById.get(
+                  copperPour.pcb_copper_pour_id,
+                ),
+              }
+            : {}),
           coveredWithSolderMask: copperPour.covered_with_solder_mask ?? true,
           layer: copperPour.layer,
           netName,
           outline,
           pcbCopperPourId: copperPour.pcb_copper_pour_id,
-          removableFeatureId: getCopperPourFeatureId({
-            copperPour,
-            featureIdBySourceComponentId: params.featureIdBySourceComponentId,
-            sourceComponentIdByPcbComponentId,
-          }),
+          removableFeatureId:
+            params.computedCopperPourSettingsById?.get(copperPour.pcb_copper_pour_id)
+              ?.removableFeatureId ??
+            getCopperPourFeatureId({
+              copperPour,
+              featureIdBySourceComponentId: params.featureIdBySourceComponentId,
+              sourceComponentIdByPcbComponentId,
+            }),
         },
       ]
     })
