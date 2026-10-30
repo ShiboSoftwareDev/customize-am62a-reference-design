@@ -21,6 +21,7 @@ import type {
   ReferenceSchematicPlacement,
 } from "../../lib/evms/reference-evm-types"
 import { applyAllegroPadNetAssignments } from "./apply-allegro-pad-net-assignments"
+import { applyAllegroPlacementBoundaries } from "./apply-allegro-placement-boundaries"
 import {
   isPcbBoard,
   isPcbComponent,
@@ -85,13 +86,21 @@ export async function createReferenceDefinition(
     document: pcbDocument,
   })
   if (reference.sourcePcbConnectivityPath) {
+    const allegroAsciiExport = await readFile(reference.sourcePcbConnectivityPath, "utf8")
     const assignedPadCount = applyAllegroPadNetAssignments({
-      allegroAsciiExport: await readFile(reference.sourcePcbConnectivityPath, "utf8"),
+      allegroAsciiExport,
       componentNames,
       pcbDocument,
     })
     console.log(
       `${reference.name}: restored ${assignedPadCount} pad net assignments from the official connectivity source`,
+    )
+    const restoredBoundaryCount = applyAllegroPlacementBoundaries({
+      allegroAsciiExport,
+      pcbDocument,
+    })
+    console.log(
+      `${reference.name}: restored ${restoredBoundaryCount} package placement boundaries from the official source`,
     )
   }
   const padRecordsByComponentIndex = new Map<ComponentRecordIndex, AltiumPadRecord[]>()

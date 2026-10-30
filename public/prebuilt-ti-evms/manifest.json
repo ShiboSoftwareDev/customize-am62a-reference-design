@@ -411,7 +411,7 @@
       "id": "sk-am62",
       "artifacts": [
         {
-          "elementCount": 94109,
+          "elementCount": 94164,
           "output": "prebuilt-ti-evms/sk-am62/full-board.circuit.json.gz",
           "pcbTraceCount": 22340,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -465,7 +465,7 @@
           ]
         },
         {
-          "elementCount": 84297,
+          "elementCount": 84347,
           "output": "prebuilt-ti-evms/sk-am62/without-connectivity.circuit.json.gz",
           "pcbTraceCount": 19677,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -519,7 +519,7 @@
           ]
         },
         {
-          "elementCount": 83411,
+          "elementCount": 83466,
           "output": "prebuilt-ti-evms/sk-am62/without-test-debug.circuit.json.gz",
           "pcbTraceCount": 19888,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -573,7 +573,7 @@
           ]
         },
         {
-          "elementCount": 88158,
+          "elementCount": 88208,
           "output": "prebuilt-ti-evms/sk-am62/without-expansion.circuit.json.gz",
           "pcbTraceCount": 19690,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -627,7 +627,7 @@
           ]
         },
         {
-          "elementCount": 82509,
+          "elementCount": 82559,
           "output": "prebuilt-ti-evms/sk-am62/without-multimedia.circuit.json.gz",
           "pcbTraceCount": 17381,
           "source": "Parameterized SK-AM62 tscircuit TSX",
@@ -681,7 +681,7 @@
           ]
         },
         {
-          "elementCount": 56842,
+          "elementCount": 56883,
           "output": "prebuilt-ti-evms/sk-am62/minimal-board.circuit.json.gz",
           "pcbTraceCount": 10105,
           "source": "Parameterized SK-AM62 tscircuit TSX",

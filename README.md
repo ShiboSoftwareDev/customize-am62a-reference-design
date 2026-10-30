@@ -48,7 +48,7 @@ To regenerate the checked-in Circuit JSON and parameterized TSX from TI's origin
 bun run generate:ti-evm-references
 ```
 
-The download step verifies each source archive against its pinned SHA-256 checksum before extraction. The source archives remain untracked. SK-AM62 uses the community Altium conversion for PCB geometry and TI's official Allegro ASCII export for authoritative pad-to-net assignments; the generator rejects missing or inconsistent mappings. The generated project Circuit JSON, component-level TSX, compact reference definitions, and provenance metadata are committed. The Altium parser and both converters are pinned to exact versions.
+The download step verifies each source archive against its pinned SHA-256 checksum before extraction. The source archives remain untracked. SK-AM62 uses the community Altium conversion for PCB geometry and TI's official Allegro ASCII export for authoritative pad-to-net assignments; the generator rejects missing or inconsistent mappings. It also restores package placement boundaries that the community import incorrectly classified as copper, matching the owning footprint, side, and complete contour to TI's placement metadata. Real unassigned copper remains conductive. The generated project Circuit JSON, component-level TSX, compact reference definitions, and provenance metadata are committed. The Altium parser and both converters are pinned to exact versions.
 
 ## Verify
 
