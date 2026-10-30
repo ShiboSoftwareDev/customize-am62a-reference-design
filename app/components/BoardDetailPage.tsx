@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import type { TiEvm } from "lib/ti-evm-catalog"
+import { SchematicSourceNotice } from "app/components/SchematicSourceNotice"
 import { getSchematicAssetFileName } from "lib/schematic-sheet-assets"
 
 export function BoardDetailPage({ evm }: { evm: TiEvm }) {
@@ -74,6 +75,11 @@ export function BoardDetailPage({ evm }: { evm: TiEvm }) {
                   : `Schematic ${schematicSheetIndex + 1}`
               }
               description={schematicSheetLabel}
+              sourceNoticeUrl={
+                evm.unavailableSchematicSheetLabels?.includes(schematicSheetLabel)
+                  ? evm.sourceUrl
+                  : undefined
+              }
               alt={`${evm.name} ${schematicSheetLabel} schematic SVG`}
             />
           )
@@ -104,6 +110,7 @@ function RenderCard(props: {
   description: string
   href: string
   imageUrl: string
+  sourceNoticeUrl?: string
   title: string
 }) {
   return (
@@ -117,6 +124,7 @@ function RenderCard(props: {
           Open image ↗
         </a>
       </div>
+      {props.sourceNoticeUrl && <SchematicSourceNotice referenceUrl={props.sourceNoticeUrl} />}
       <a className="render-image-link" href={props.href} target="_blank" rel="noreferrer">
         <img src={props.imageUrl} alt={props.alt} />
       </a>

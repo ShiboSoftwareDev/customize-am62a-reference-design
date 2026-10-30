@@ -1,5 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { lazy, Suspense, useEffect, useMemo, useState } from "react"
+import { SchematicSourceNotice } from "app/components/SchematicSourceNotice"
 import { getPcbRenderer } from "app/get-pcb-renderer"
 import { useElementHeight } from "app/hooks/use-element-height"
 import { getSelectedSchematicSheet } from "app/components/get-selected-schematic-sheet"
@@ -26,6 +27,8 @@ const CadViewer = lazy(loadCadViewer)
 type DesignViewerProps = {
   activeView: DesignView
   boardKey: string
+  referenceUrl: string
+  unavailableSchematicSheetLabels?: string[]
   prebuiltCadSceneUrl: string
   pcbCircuitJson: AnyCircuitElement[] | null
   schematicCircuitJsons: AnyCircuitElement[][]
@@ -39,6 +42,8 @@ export type DesignView = "pcb" | "schematic" | "cad"
 export function DesignViewer({
   activeView,
   boardKey,
+  referenceUrl,
+  unavailableSchematicSheetLabels,
   prebuiltCadSceneUrl,
   pcbCircuitJson,
   schematicCircuitJsons,
@@ -137,6 +142,12 @@ export function DesignViewer({
       </header>
 
       <div className="viewer-canvas" ref={elementRef}>
+        {activeView === "schematic" &&
+          schematicSheetSelection.label &&
+          unavailableSchematicSheetLabels?.includes(schematicSheetSelection.label) && (
+            <SchematicSourceNotice referenceUrl={referenceUrl} />
+          )}
+
         {activeView === "pcb" && pcbCircuitJson ? (
           <Suspense fallback={<ViewerLoading label="Loading PCB viewer…" />}>
             <PCBViewer

@@ -69,6 +69,8 @@ function Configurator() {
       />
       <DesignViewer
         activeView={activeView}
+        referenceUrl={evm.sourceUrl}
+        unavailableSchematicSheetLabels={evm.unavailableSchematicSheetLabels}
         boardKey={evm.id}
         prebuiltCadSceneUrl={variant.prebuiltCadSceneUrl}
         pcbCircuitJson={render.pcbCircuitJson}
