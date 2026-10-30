@@ -61,12 +61,24 @@ export function addCopperPourFeatureCondition(params: {
     renamedNets: params.renamedNets,
   })
   const removableFeatureId = supportedCopperPour.removableFeatureId
+  const conditions = [
+    ...(removableFeatureId
+      ? [`!removedFeatureIds.has(${JSON.stringify(removableFeatureId)})`]
+      : []),
+    ...(supportedCopperPour.computedSettings?.presentFeatureIds ?? []).map(
+      (featureId) => `!removedFeatureIds.has(${JSON.stringify(featureId)})`,
+    ),
+    ...(supportedCopperPour.computedSettings?.absentFeatureIds ?? []).map(
+      (featureId) => `removedFeatureIds.has(${JSON.stringify(featureId)})`,
+    ),
+  ]
   params.replacements.push({
     start: params.copperPourElement.getStart(params.sourceFile),
     end: params.copperPourElement.getEnd(),
-    text: removableFeatureId
-      ? `{!removedFeatureIds.has(${JSON.stringify(removableFeatureId)}) && (${emittedElement})}`
-      : emittedElement,
+    text:
+      conditions.length > 0
+        ? `{${conditions.join(" && ")} && (${emittedElement})}`
+        : emittedElement,
   })
 }
 

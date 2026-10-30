@@ -22,8 +22,7 @@ export function applyCopperPourSettings(params: {
   for (const attribute of params.copperPourElement.attributes.properties) {
     if (!ts.isJsxAttribute(attribute)) continue
     const name = attribute.name.getText(params.sourceFile)
-    // Fixed copper stays a zero-clearance region, but must participate in the
-    // same solver pass so new different-net pours clear it too.
+    // Omit the zero-margin preservation shortcut for pours being recomputed.
     if ((clearance === undefined || clearance === 0) && name === "boardEdgeMargin") {
       replacements.push({
         start: attribute.getStart(params.sourceFile) - start,

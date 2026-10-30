@@ -4,23 +4,23 @@ import {
   AltiumPcbDoc,
   type AltiumPcbDocument,
   AltiumRegionRecord,
+  getAltiumPcbDocumentLayerStackEntries,
+  getAltiumPcbLayerAliasKey,
+  getAltiumPcbLayerAliasMap,
 } from "altiumts"
 import type { AnyCircuitElement } from "circuit-json"
-import type { FeatureId, NetName, SourceComponentId } from "./types"
+import type { ComponentName, FeatureId, NetName, SourceComponentId } from "./types"
 import { getSupportedCopperPours } from "./get-supported-copper-pours"
 import { getSourcePourClearance } from "./get-source-pour-clearance"
+import { getSourceCopperKeepouts } from "./get-source-copper-keepouts"
+import { clipCopperPourKeepouts, isAuthoredCopperPour } from "./clip-copper-pour-keepouts"
+import type { ComputedCopperPourSettings } from "./copper-pour-settings"
 
 type PcbCopperPourId = string
 type SourceNetId = string
 type NormalizedNetName = string
 type PolygonIndex = number
 type SourceCopperRecordKey = string
-
-export type ComputedCopperPourSettings = {
-  clearance: number
-  preserveReferenceCopper?: boolean
-  removableFeatureId?: FeatureId
-}
 
 export function prepareAuthoredCopperPours(params: {
   pcbDocument: AltiumPcbDocument
@@ -30,6 +30,24 @@ export function prepareAuthoredCopperPours(params: {
   circuitJson: AnyCircuitElement[]
   computedCopperPourSettingsById: Map<PcbCopperPourId, ComputedCopperPourSettings>
 } {
+  const featureIdByComponentName = new Map<ComponentName, FeatureId>()
+  for (const element of params.circuitJson) {
+    if (
+      element.type !== "source_component" ||
+      typeof element.name !== "string" ||
+      typeof element.source_component_id !== "string"
+    )
+      continue
+    const featureId = params.featureIdBySourceComponentId.get(element.source_component_id)
+    if (featureId) featureIdByComponentName.set(element.name, featureId)
+  }
+  const keepouts = getSourceCopperKeepouts({
+    pcbDocument: params.pcbDocument,
+    featureIdByComponentName,
+  })
+  const layerAliases = getAltiumPcbLayerAliasMap(
+    getAltiumPcbDocumentLayerStackEntries(params.pcbDocument),
+  )
   // Convert authored boundaries and independent copper, without cached polygon
   // fragments. The converter also excludes keepout regions from copper.
   const polygonDocument = new AltiumPcbDoc({
@@ -104,7 +122,8 @@ export function prepareAuthoredCopperPours(params: {
   for (const pour of supportedCopperPours) {
     const polygonIndex = importedPolygonIndexByPourId.get(pour.pcbCopperPourId)
     if (polygonIndex === undefined) continue
-    const featureIds = featureIdsByPolygonIndex.get(polygonIndex) ?? new Set()
+    const featureIds =
+      featureIdsByPolygonIndex.get(polygonIndex) ?? new Set<FeatureId | undefined>()
     featureIds.add(pour.removableFeatureId)
     featureIdsByPolygonIndex.set(polygonIndex, featureIds)
   }
@@ -153,26 +172,39 @@ export function prepareAuthoredCopperPours(params: {
       })
       return []
     }
-    const polygon =
-      polygonIndex === undefined ? undefined : params.pcbDocument.polygons[polygonIndex]
-    if (!polygon || polygonIndex === undefined) return []
+    const polygon = params.pcbDocument.polygons[polygonIndex]
+    if (!polygon) return []
     if (!canonicalNet) return []
+    if (!isAuthoredCopperPour(element))
+      throw new Error(`Unsupported authored copper ${element.pcb_copper_pour_id}`)
     const featureIds = featureIdsByPolygonIndex.get(polygonIndex)
     const removableFeatureId = featureIds?.size === 1 ? [...featureIds][0] : undefined
     const pcbCopperPourId = element.pcb_copper_pour_id.replace("altium_polygon", "authored")
-    computedCopperPourSettingsById.set(pcbCopperPourId, {
+    const settings = {
       clearance: getSourcePourClearance({ polygon, pcbDocument: params.pcbDocument }),
       removableFeatureId,
-    })
-    recomputedPolygonIndexes.add(polygonIndex)
-    return [
-      {
+    }
+    const layer = getAltiumPcbLayerAliasKey(polygon.layer ?? "", layerAliases)
+    const clippedPours = clipCopperPourKeepouts({
+      copperPour: {
         ...element,
         pcb_copper_pour_id: pcbCopperPourId,
         source_net_id: canonicalNet.id,
-        pourOrder: polygon.pourIndex ?? polygonIndex,
       },
-    ]
+      keepouts: keepouts.filter(
+        (keepout) =>
+          keepout.layer === "MULTILAYER" || keepout.layer === "KEEPOUT" || keepout.layer === layer,
+      ),
+      settings,
+    })
+    for (const clipped of clippedPours) {
+      computedCopperPourSettingsById.set(clipped.copperPour.pcb_copper_pour_id, clipped.settings)
+    }
+    recomputedPolygonIndexes.add(polygonIndex)
+    return clippedPours.map(({ copperPour }) => ({
+      ...copperPour,
+      pourOrder: polygon.pourIndex ?? polygonIndex,
+    }))
   })
   // Altium pours the lowest index first. Core gives later declarations priority.
   authoredPours.sort((first, second) => second.pourOrder - first.pourOrder)

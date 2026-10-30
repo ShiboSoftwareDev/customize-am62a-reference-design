@@ -2,7 +2,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { applyToPoint, compose, rotateDEG, translate } from "transformation-matrix"
 import { isPcbComponent } from "./circuit-json-elements"
 import type { FeatureId, PcbComponentId, SourceComponentId } from "./types"
-import type { ComputedCopperPourSettings } from "./prepare-authored-copper-pours"
+import type { ComputedCopperPourSettings } from "./copper-pour-settings"
 
 type CircuitPoint = { x: number; y: number }
 type PcbCopperPourId = string
