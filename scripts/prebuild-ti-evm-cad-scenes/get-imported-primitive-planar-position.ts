@@ -1,4 +1,4 @@
-import { applyToPoint, rotateDEG } from "transformation-matrix"
+import { applyToPoint, rotateDEG, scale } from "transformation-matrix"
 
 type Point2 = { x: number; y: number }
 type Point3 = Point2 & { z: number }
@@ -30,10 +30,7 @@ export function getImportedPrimitivePlanarPosition({
 
   const localCenter = getImportedPrimitiveLocalPlanarCenter(modelJscad)
   if (!localCenter) return undefined
-  const scaledLocalCenter = {
-    x: localCenter.x * modelUnitToMmScaleFactor,
-    y: localCenter.y * modelUnitToMmScaleFactor,
-  }
+  const scaledLocalCenter = applyToPoint(scale(modelUnitToMmScaleFactor), localCenter)
   const rotatedCenter = applyToPoint(rotateDEG(rotation.z), {
     x: normalizeConversionNoiseMm(scaledLocalCenter.x),
     y: normalizeConversionNoiseMm(scaledLocalCenter.y),
@@ -53,7 +50,7 @@ function getImportedPrimitiveLocalPlanarCenter(modelJscad: unknown): Point2 | un
     minimumY: Infinity,
     pointCount: 0,
   }
-  updateBoundsFromJscadValue({ bounds, value: modelJscad })
+  updateBoundsFromJscadNode({ bounds, jscadNode: modelJscad })
   if (bounds.pointCount === 0) return undefined
 
   return {
@@ -62,21 +59,21 @@ function getImportedPrimitiveLocalPlanarCenter(modelJscad: unknown): Point2 | un
   }
 }
 
-function updateBoundsFromJscadValue({
+function updateBoundsFromJscadNode({
   bounds,
-  value,
+  jscadNode,
 }: {
   bounds: PlanarBounds
-  value: unknown
+  jscadNode: unknown
 }): void {
-  if (Array.isArray(value)) {
-    for (const item of value) updateBoundsFromJscadValue({ bounds, value: item })
+  if (Array.isArray(jscadNode)) {
+    for (const childNode of jscadNode) updateBoundsFromJscadNode({ bounds, jscadNode: childNode })
     return
   }
-  if (!isObjectRecord(value)) return
+  if (!isObjectRecord(jscadNode)) return
 
-  if (value.type === "fromPointsGeom2" && Array.isArray(value.points)) {
-    for (const point of value.points) {
+  if (jscadNode.type === "fromPointsGeom2" && Array.isArray(jscadNode.points)) {
+    for (const point of jscadNode.points) {
       if (!isPoint2Tuple(point)) continue
       bounds.minimumX = Math.min(bounds.minimumX, point[0])
       bounds.minimumY = Math.min(bounds.minimumY, point[1])
@@ -87,21 +84,21 @@ function updateBoundsFromJscadValue({
     return
   }
 
-  for (const childValue of Object.values(value)) {
-    updateBoundsFromJscadValue({ bounds, value: childValue })
+  for (const childNode of Object.values(jscadNode)) {
+    updateBoundsFromJscadNode({ bounds, jscadNode: childNode })
   }
 }
 
-function isObjectRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value)
+function isObjectRecord(jscadNode: unknown): jscadNode is Record<string, unknown> {
+  return typeof jscadNode === "object" && jscadNode !== null && !Array.isArray(jscadNode)
 }
 
-function isPoint2Tuple(value: unknown): value is [number, number] {
+function isPoint2Tuple(point: unknown): point is [number, number] {
   return (
-    Array.isArray(value) &&
-    value.length >= 2 &&
-    typeof value[0] === "number" &&
-    typeof value[1] === "number"
+    Array.isArray(point) &&
+    point.length >= 2 &&
+    typeof point[0] === "number" &&
+    typeof point[1] === "number"
   )
 }
 

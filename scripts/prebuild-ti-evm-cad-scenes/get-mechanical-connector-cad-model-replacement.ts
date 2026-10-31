@@ -77,14 +77,6 @@ function getMicroSdModelYawOffsetDegrees(footprint: string): number {
   return 0
 }
 
-function createBeaglePlayUsbAConnectorCadModel() {
-  return createUsbAConnectorCadModel()
-}
-
-function createBeagleBoneBlackUsbAConnectorCadModel() {
-  return createUsbAConnectorCadModel()
-}
-
 export function getMechanicalConnectorCadModelReplacement(
   componentIdentity: CadModelComponentIdentity,
 ): CadModelReplacement | undefined {
@@ -126,7 +118,7 @@ export function getMechanicalConnectorCadModelReplacement(
   }
 
   if (footprint === "USB_A_SH") {
-    return createJscadReplacement(createBeagleBoneBlackUsbAConnectorCadModel(), {
+    return createJscadReplacement(createUsbAConnectorCadModel(), {
       modelPlanarOffsetMillimeters: {
         x: 0,
         y: -beagleBoneBlackUsbAModelCenterOffsetMillimeters,
@@ -137,7 +129,7 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createUsbAConnectorCadModel())
   }
   if (footprint.startsWith("USB7P_")) {
-    return createJscadReplacement(createBeaglePlayUsbAConnectorCadModel(), {
+    return createJscadReplacement(createUsbAConnectorCadModel(), {
       modelPlanarOffsetMillimeters: {
         x: 0,
         y: -beaglePlayUsbAModelCenterOffsetMillimeters,
