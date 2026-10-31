@@ -110,9 +110,9 @@ function createMixedMountPinGrid(params: {
     return [
       pin,
       createColoredCuboid({
-        center: [x, solderTailCenterY, 0.12],
+        center: [x, solderTailCenterY, params.pinWidth / 2],
         color: connectorModelColors.silver,
-        size: [params.pinWidth, params.solderTailLength, 0.24],
+        size: [params.pinWidth, params.solderTailLength, params.pinWidth],
       }),
     ]
   }).flat()

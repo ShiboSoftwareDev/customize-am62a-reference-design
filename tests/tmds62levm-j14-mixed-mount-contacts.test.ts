@@ -23,6 +23,9 @@ test("J14 contacts reach all five through-holes and ten SMT pads in the TI footp
   })
   if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
   const bodies: Geom3[] = replacement.jscadOperations.map(executeCadModelOperation)
+  const bounds = jscad.measurements.measureAggregateBoundingBox(bodies)
+  expect(bounds[0][2]).toBeCloseTo(-3.81, 6)
+  expect(bounds[1][2]).toBeCloseTo(2.54 + 5.84, 6)
   const circuitJson = parsePrebuiltCircuitJson(
     new Uint8Array(
       await Bun.file("public/prebuilt-ti-evms/tmds62levm/full-board.circuit.json.gz").arrayBuffer(),
@@ -54,7 +57,7 @@ test("J14 contacts reach all five through-holes and ten SMT pads in the TI footp
       center: [
         pad.x - pcbComponent.center.x,
         pad.y - pcbComponent.center.y,
-        pad.type === "pcb_plated_hole" ? -1.6 : 0.1,
+        pad.type === "pcb_plated_hole" ? -1.6 : 0.5,
       ],
       size: [0.1, 0.1, 0.1],
     })
