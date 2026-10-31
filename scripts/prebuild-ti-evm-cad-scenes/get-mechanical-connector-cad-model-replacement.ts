@@ -27,6 +27,7 @@ import {
   createMixedMountPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
+import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
 
 // The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
 // shell by half the depth difference so both rear edges remain aligned.
@@ -90,17 +91,32 @@ export function getMechanicalConnectorCadModelReplacement(
   const footprint = componentIdentity.altiumFootprint.toUpperCase()
   const partNumber = componentIdentity.manufacturerPartNumber?.toUpperCase() ?? ""
 
-  if (footprint === "HEADER10X2_SMD" || footprint.includes("FTR-110-51-D-06")) {
-    return createStepReplacement(externalStepModelUrls.pinHeader2x10P1_27Smd)
+  if (footprint.includes("FTR-110-51-D-06")) {
+    return createJscadReplacement(createKeyedDebugHeaderCadModel())
+  }
+  if (footprint === "HEADER10X2_SMD") {
+    // KiCad numbers contacts along local -Y; the TI footprint uses local +X.
+    return createStepReplacement(externalStepModelUrls.pinHeader2x10P1_27Smd, {
+      modelYawOffsetDegrees: 90,
+    })
   }
   if (footprint.includes("PREC010DAAN")) {
-    return createStepReplacement(externalStepModelUrls.pinHeader2x10P2_54ThroughHole)
+    // KiCad's origin is pin 1. Its contact-array center is (1.27, -11.43) mm.
+    return createStepReplacement(externalStepModelUrls.pinHeader2x10P2_54ThroughHole, {
+      modelPlanarOffsetMillimeters: { x: -1.27, y: 11.43 },
+      modelYawOffsetDegrees: 90,
+    })
   }
   if (footprint.includes("54202-T0805ALF")) {
-    return createStepReplacement(externalStepModelUrls.pinHeader2x05P2_54Smd)
+    return createStepReplacement(externalStepModelUrls.pinHeader2x05P2_54Smd, {
+      modelYawOffsetDegrees: 90,
+    })
   }
   if (footprint.includes("TSM-104-02-SV")) {
-    return createStepReplacement(externalStepModelUrls.pinHeader1x04P2_54Smd)
+    // The TI footprint alternates its solder tails with pin 1 on local -Y.
+    return createStepReplacement(externalStepModelUrls.pinHeader1x04P2_54Smd, {
+      modelYawOffsetDegrees: -90,
+    })
   }
   if (footprint.includes("TSM-105-01-T-TM")) {
     return createJscadReplacement(createMixedMountPinHeaderCadModel())

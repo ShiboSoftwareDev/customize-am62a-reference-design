@@ -28,23 +28,38 @@ test("uses exact STEP geometry for recognized Sitara connectors", () => {
       altiumFootprint: "HDR_2X10_PREC010DAAN_S_T_8-4",
       componentName: "J10",
       modelStepUrl: externalStepModelUrls.pinHeader2x10P2_54ThroughHole,
+      modelPlanarOffsetMillimeters: { x: -1.27, y: 11.43 },
+      modelYawOffsetDegrees: 90,
     },
     {
-      altiumFootprint: "HDR_2X10_FTR-110-51-D-06_S_S_8-7",
-      componentName: "J17",
+      altiumFootprint: "HEADER10X2_SMD",
+      componentName: "P2",
       modelStepUrl: externalStepModelUrls.pinHeader2x10P1_27Smd,
+      modelYawOffsetDegrees: 90,
+    },
+    {
+      altiumFootprint: "HDR_2X5_54202-T0805ALF_P_S_S_9-9",
+      componentName: "J11",
+      modelStepUrl: externalStepModelUrls.pinHeader2x05P2_54Smd,
+      modelYawOffsetDegrees: 90,
+    },
+    {
+      altiumFootprint: "HDR_1X4_TSM-104-02-SV_S_S_12-4",
+      componentName: "J6",
+      modelStepUrl: externalStepModelUrls.pinHeader1x04P2_54Smd,
+      modelYawOffsetDegrees: -90,
     },
   ] as const
 
-  for (const connectorCase of connectorCases) {
+  for (const { altiumFootprint, componentName, ...expectedModel } of connectorCases) {
     expect(
       getCadModelReplacement({
-        altiumFootprint: connectorCase.altiumFootprint,
-        componentName: connectorCase.componentName,
+        altiumFootprint,
+        componentName,
       }),
     ).toEqual({
       kind: "step",
-      modelStepUrl: connectorCase.modelStepUrl,
+      ...expectedModel,
     })
   }
 })

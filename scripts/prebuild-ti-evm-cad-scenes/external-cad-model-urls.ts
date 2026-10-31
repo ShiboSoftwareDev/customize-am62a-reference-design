@@ -13,7 +13,7 @@ export const externalStepModelUrls = {
     "HARDWARE/ESP32-ADF%20Rev.C/3d/sj-43514-smt-tr.stp",
   pinHeader1x04P2_54Smd:
     `${kicadPackageBaseUrl}/Connector_PinHeader_2.54mm.3dshapes/` +
-    "PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Left.step",
+    "PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Right.step",
   pinHeader2x05P2_54Smd:
     `${kicadPackageBaseUrl}/Connector_PinHeader_2.54mm.3dshapes/` +
     "PinHeader_2x05_P2.54mm_Vertical_SMD.step",
