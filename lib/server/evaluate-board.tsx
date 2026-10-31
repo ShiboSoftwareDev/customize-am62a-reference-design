@@ -1,5 +1,5 @@
-import { Circuit } from "@tscircuit/core"
 import type { AnyCircuitElement } from "circuit-json"
+import { Circuit } from "tscircuit"
 import type { BoardRenderResponse } from "../board-render-types"
 import {
   ParameterizedTiEvm,
