@@ -14,9 +14,9 @@ export const externalStepModelUrls = {
   pinHeader1x04P2_54Smd:
     `${kicadPackageBaseUrl}/Connector_PinHeader_2.54mm.3dshapes/` +
     "PinHeader_1x04_P2.54mm_Vertical_SMD_Pin1Left.step",
-  pinHeader2x05P2Smd:
-    `${kicadPackageBaseUrl}/Connector_PinHeader_2.00mm.3dshapes/` +
-    "PinHeader_2x05_P2.00mm_Vertical_SMD.step",
+  pinHeader2x05P2_54Smd:
+    `${kicadPackageBaseUrl}/Connector_PinHeader_2.54mm.3dshapes/` +
+    "PinHeader_2x05_P2.54mm_Vertical_SMD.step",
   pinHeader2x10P1_27Smd:
     `${kicadPackageBaseUrl}/Connector_PinHeader_1.27mm.3dshapes/` +
     "PinHeader_2x10_P1.27mm_Vertical_SMD.step",

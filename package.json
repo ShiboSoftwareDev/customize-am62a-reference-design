@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
+    "@jscad/modeling": "2.13.0",
     "@tscircuit/checks": "0.0.266",
     "@tscircuit/circuit-json-util": "0.0.128",
     "@tscircuit/footprinter": "0.0.450",
@@ -48,6 +49,7 @@
     "circuit-to-svg": "0.0.445",
     "fast-png": "8.0.0",
     "format-si-unit": "0.0.14",
+    "jscad-planner": "0.0.19",
     "poppygl": "0.0.34",
     "transformation-matrix": "3.1.0",
     "tscircuit": "0.0.3043",

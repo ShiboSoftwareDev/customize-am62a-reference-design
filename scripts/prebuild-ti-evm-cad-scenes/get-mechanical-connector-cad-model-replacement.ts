@@ -24,7 +24,7 @@ import {
 } from "./create-usb-connector-cad-model"
 import {
   createMikroBusSocketCadModel,
-  createSmdPinHeaderCadModel,
+  createMixedMountPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 
@@ -97,15 +97,13 @@ export function getMechanicalConnectorCadModelReplacement(
     return createStepReplacement(externalStepModelUrls.pinHeader2x10P2_54ThroughHole)
   }
   if (footprint.includes("54202-T0805ALF")) {
-    return createStepReplacement(externalStepModelUrls.pinHeader2x05P2Smd)
+    return createStepReplacement(externalStepModelUrls.pinHeader2x05P2_54Smd)
   }
   if (footprint.includes("TSM-104-02-SV")) {
     return createStepReplacement(externalStepModelUrls.pinHeader1x04P2_54Smd)
   }
   if (footprint.includes("TSM-105-01-T-TM")) {
-    return createJscadReplacement(
-      createSmdPinHeaderCadModel({ columnCount: 5, pitch: 2.54, rowCount: 3 }),
-    )
+    return createJscadReplacement(createMixedMountPinHeaderCadModel())
   }
   if (footprint.startsWith("MIKROBUS16_")) {
     return createJscadReplacement(createMikroBusSocketCadModel())

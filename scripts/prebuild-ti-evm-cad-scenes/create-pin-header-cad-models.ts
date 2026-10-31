@@ -6,24 +6,25 @@ import {
   createColoredRoundedCuboid,
 } from "./jscad-model-primitives"
 
-export function createSmdPinHeaderCadModel(params: {
-  columnCount: number
-  pitch: number
-  rowCount: number
-}): JscadOperation[] {
-  const bodyMargin = Math.min(1.6, params.pitch * 0.72)
-  const bodyLength = (params.columnCount - 1) * params.pitch + bodyMargin
-  const bodyWidth = (params.rowCount - 1) * params.pitch + bodyMargin
-  const bodyHeight = 2.25
-  const pinHeight = 6.4
-  const pinWidth = Math.min(0.5, params.pitch * 0.32)
-  const solderTailLength = Math.max(1.35, params.pitch * 0.9)
-  const pins = createPinGrid({
-    columnCount: params.columnCount,
-    pitch: params.pitch,
+// TSM-105-01-T-TM: Samtec TSM drawing, figure 6. The center row is
+// through-hole; the two outer rows have gullwing surface-mount tails.
+// https://suddendocs.samtec.com/prints/tsm-1xx-xx-xxx-xx-x-xxx-x-mkt.pdf
+export function createMixedMountPinHeaderCadModel(): JscadOperation[] {
+  const columnCount = 5
+  const rowCount = 3
+  const pitch = 2.54
+  const bodyLength = columnCount * pitch
+  const bodyWidth = rowCount * pitch
+  const bodyHeight = 2.54
+  const pinHeight = bodyHeight + 5.84
+  const pinWidth = 0.64
+  const solderTailLength = (11.43 - (rowCount - 1) * pitch) / 2
+  const pins = createMixedMountPinGrid({
+    columnCount,
+    pitch,
     pinHeight,
     pinWidth,
-    rowCount: params.rowCount,
+    rowCount,
     solderTailLength,
   })
 
@@ -31,7 +32,7 @@ export function createSmdPinHeaderCadModel(params: {
     createColoredRoundedCuboid({
       center: [0, 0, bodyHeight / 2],
       color: connectorModelColors.blackPlastic,
-      roundRadius: Math.min(0.22, bodyMargin * 0.12),
+      roundRadius: 0.22,
       size: [bodyLength, bodyWidth, bodyHeight],
     }),
     ...pins,
@@ -81,7 +82,7 @@ export function createMikroBusSocketCadModel(): JscadOperation[] {
   return [...bodies, ...contacts.flat()]
 }
 
-function createPinGrid(params: {
+function createMixedMountPinGrid(params: {
   columnCount: number
   pinHeight: number
   pinWidth: number
@@ -94,18 +95,23 @@ function createPinGrid(params: {
     const rowIndex = Math.floor(pinIndex / params.columnCount)
     const x = (columnIndex - (params.columnCount - 1) / 2) * params.pitch
     const y = (rowIndex - (params.rowCount - 1) / 2) * params.pitch
-    const rowSide = rowIndex < params.rowCount / 2 ? -1 : 1
+    const isThroughHoleRow = rowIndex === 1
+    const throughHoleTailLength = isThroughHoleRow ? 3.81 : 0
+    const pin = createColoredCuboid({
+      center: [x, y, (params.pinHeight - throughHoleTailLength) / 2],
+      color: connectorModelColors.silver,
+      size: [params.pinWidth, params.pinWidth, params.pinHeight + throughHoleTailLength],
+    })
+    if (isThroughHoleRow) return [pin]
+
+    const rowSide = rowIndex === 0 ? -1 : 1
     const solderTailCenterY = y + (rowSide * params.solderTailLength) / 2
 
     return [
-      createColoredCuboid({
-        center: [x, y, params.pinHeight / 2],
-        color: connectorModelColors.gold,
-        size: [params.pinWidth, params.pinWidth, params.pinHeight],
-      }),
+      pin,
       createColoredCuboid({
         center: [x, solderTailCenterY, 0.12],
-        color: connectorModelColors.gold,
+        color: connectorModelColors.silver,
         size: [params.pinWidth, params.solderTailLength, 0.24],
       }),
     ]

@@ -165,7 +165,9 @@ function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOp
     segments: 24,
     size: [dimensions.width, dimensions.depth, dimensions.height],
   }
-  const opening = translate([0, -dimensions.depth * 0.2, dimensions.height * 0.52], {
+  // Both operands are centered on the shell's local origin. Move the finished
+  // shell onto the PCB only after subtraction, keeping the roof intact.
+  const opening = translate([0, -dimensions.depth * 0.2, 0], {
     type: "roundedCuboid",
     roundRadius: Math.min(0.35, dimensions.openingHeight * 0.2),
     segments: 20,
