@@ -3,7 +3,6 @@ import {
   createMetalCanCadModel,
   createRadialCapacitorCadModel,
   createShieldedInductorCadModel,
-  createTactileSwitchCadModel,
   createTantalumCapacitorCadModel,
   createWifiModuleCadModel,
 } from "./create-dimensioned-package-cad-models"
@@ -68,15 +67,6 @@ export function getDimensionedMechanicalPackageReplacement(
         }),
       )
     }
-  }
-  if (/^(?:SW|BUTTON)/u.test(normalizedFootprint)) {
-    const switchDimensions = bodyDimensions ?? { x: 6, y: 4 }
-    return createJscadReplacement(
-      createTactileSwitchCadModel({
-        length: switchDimensions.x,
-        width: switchDimensions.y,
-      }),
-    )
   }
   if (/^(?:OSC|X\d|XTAL)/u.test(normalizedFootprint)) {
     const canDimensions = bodyDimensions ?? getKnownMetalCanDimensions(normalizedFootprint)
