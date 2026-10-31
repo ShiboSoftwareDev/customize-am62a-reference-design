@@ -1,13 +1,24 @@
 export function getPackageBodyDimensionsMillimeters(
   normalizedFootprint: string,
 ): { x: number; y: number } | undefined {
-  const explicitMillimeters = /(?:_|-)(\d+(?:D\d+)?)X(\d+(?:D\d+)?)MM(?:_|$)/u.exec(
+  const hundredthMillimeterDimensions = /(?:_|-)(\d{3})X(\d{3})X\d{2,3}MM(?:_|$)/u.exec(
     normalizedFootprint,
   )
+  if (hundredthMillimeterDimensions) {
+    return {
+      x: Number(hundredthMillimeterDimensions[1]) / 100,
+      y: Number(hundredthMillimeterDimensions[2]) / 100,
+    }
+  }
+
+  const explicitMillimeters =
+    /(?:_|-)(\d+(?:D\d+|_\d+)?)X(\d+(?:D\d+|_\d+)?)(?:X\d+(?:D\d+|_\d+)?)?MM(?:_|$)/u.exec(
+      normalizedFootprint,
+    )
   if (explicitMillimeters) {
     return {
-      x: Number(explicitMillimeters[1].replace("D", ".")),
-      y: Number(explicitMillimeters[2].replace("D", ".")),
+      x: parseEncodedDecimal(explicitMillimeters[1]),
+      y: parseEncodedDecimal(explicitMillimeters[2]),
     }
   }
 
@@ -40,7 +51,7 @@ function getEncodedDecimalDimensions(
 }
 
 function parseEncodedDecimal(encodedNumber: string): number {
-  return Number(encodedNumber.replace(/[P_]/u, "."))
+  return Number(encodedNumber.replace(/[DP_]/u, "."))
 }
 
 function roundToHundredth(millimeters: number): number {

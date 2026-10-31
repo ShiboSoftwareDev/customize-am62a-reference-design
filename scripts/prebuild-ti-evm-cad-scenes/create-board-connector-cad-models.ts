@@ -38,25 +38,42 @@ export function createMicroSdConnectorCadModel(): JscadOperation[] {
 }
 
 export function createUflConnectorCadModel(): JscadOperation[] {
-  const outer = createColoredCylinder({
-    center: [0, 0, 0.62],
+  const base = createColoredRoundedCuboid({
+    center: [0, 0, 0.16],
+    color: connectorModelColors.silver,
+    roundRadius: 0.12,
+    size: [2.6, 2.6, 0.32],
+  })
+  const groundTabs = [-1, 1].map((side) =>
+    createColoredCuboid({
+      center: [side * 1.425, 0, 0.09],
+      color: connectorModelColors.silver,
+      size: [0.45, 1.8, 0.18],
+    }),
+  )
+  const shell = colorize(
+    connectorModelColors.silver,
+    translate(
+      [0, 0, 0.775],
+      subtract([
+        { type: "cylinder", height: 0.85, radius: 1, resolution: 32 },
+        { type: "cylinder", height: 0.95, radius: 0.64, resolution: 32 },
+      ]),
+    ),
+  )
+  const dielectric = createColoredCylinder({
+    center: [0, 0, 0.49],
+    color: connectorModelColors.whitePlastic,
+    height: 0.28,
+    radius: 0.58,
+  })
+  const signalContact = createColoredCylinder({
+    center: [0, 0, 0.72],
     color: connectorModelColors.gold,
-    height: 1.24,
-    radius: 1.25,
+    height: 0.36,
+    radius: 0.18,
   })
-  const center = createColoredCylinder({
-    center: [0, 0, 0.84],
-    color: connectorModelColors.darkPlastic,
-    height: 0.72,
-    radius: 0.48,
-  })
-  const signal = createColoredCylinder({
-    center: [0, 0, 1.05],
-    color: connectorModelColors.gold,
-    height: 0.48,
-    radius: 0.16,
-  })
-  return [outer, center, signal]
+  return [base, ...groundTabs, shell, dielectric, signalContact]
 }
 
 export function createAudioJackCadModel(): JscadOperation[] {
@@ -93,7 +110,37 @@ export function createAudioJackCadModel(): JscadOperation[] {
     radius: 1.62,
     rotation: [Math.PI / 2, 0, 0],
   })
-  return [body, opening, socket]
+  const terminalTabs = [
+    createColoredCuboid({
+      center: [-2.7, -1.8, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 2.2, 0.24],
+    }),
+    createColoredCuboid({
+      center: [2.7, -1.8, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 2.2, 0.24],
+    }),
+    createColoredCuboid({
+      center: [-2.7, 3.5, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 1.6, 0.24],
+    }),
+    createColoredCuboid({
+      center: [2.7, 3.5, 0.12],
+      color: connectorModelColors.metal,
+      size: [1.1, 1.6, 0.24],
+    }),
+  ]
+  const boardGuides = [-1, 1].map((side) =>
+    createColoredCylinder({
+      center: [side * 1.9, 3.8, -0.45],
+      color: connectorModelColors.blackPlastic,
+      height: 0.9,
+      radius: 0.48,
+    }),
+  )
+  return [body, opening, socket, ...terminalTabs, ...boardGuides]
 }
 
 export function createBarrelJackCadModel(): JscadOperation[] {

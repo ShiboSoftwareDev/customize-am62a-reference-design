@@ -32,6 +32,16 @@ test("replaces primitive imported CAD while preserving external models", () => {
       model_jscad: { type: "cube", size: 1 },
     },
     {
+      type: "pcb_component",
+      pcb_component_id: "pcb_component_1",
+      source_component_id: "source_component_1",
+      center: { x: 1, y: 2 },
+      width: 37,
+      height: 4,
+      layer: "top",
+      rotation: 180,
+    },
+    {
       type: "cad_component",
       cad_component_id: "cad_component_2",
       source_component_id: "source_component_2",
@@ -99,7 +109,7 @@ test("replaces primitive imported CAD while preserving external models", () => {
     footprinter_string: "headermodule30_rows2_p2.54mm_male",
     model_jscad: undefined,
     position: { x: 1, y: 2, z: 0.8 },
-    rotation: { x: 0, y: 0, z: 90 },
+    rotation: { x: 0, y: 0, z: 180 },
   })
   expect(connectorCadModel).toMatchObject({ model_glb_url: "/models/connector.glb" })
   expect(resistorCadModel).toMatchObject({

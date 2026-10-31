@@ -34,33 +34,24 @@ function createHdmiConnectorCadModel(params: {
   lowerWidth: number
   upperWidth: number
 }): JscadOperation[] {
-  const outerProfile: Vector2D[] = [
-    [-params.lowerWidth / 2, 0],
-    [-params.upperWidth / 2, params.height * 0.32],
-    [-params.upperWidth / 2, params.height],
-    [params.upperWidth / 2, params.height],
-    [params.upperWidth / 2, params.height * 0.32],
-    [params.lowerWidth / 2, 0],
-  ]
-  const innerProfile = outerProfile.map(
-    ([x, z]) => [x * 0.86, z * 0.72 + params.height * 0.14] as Vector2D,
-  )
-  const extrudeProfile = (points: Vector2D[]): JscadOperation => ({
-    type: "rotateX",
-    angle: Math.PI / 2,
-    shape: {
-      type: "extrudeLinear",
-      options: { height: params.depth },
-      shape: { type: "fromPointsGeom2", points },
-    },
+  const shellWallThickness = Math.max(0.28, params.height * 0.07)
+  const outerProfile = createConnectorProfile({
+    height: params.height,
+    lowerWidth: params.lowerWidth,
+    upperWidth: params.upperWidth,
   })
-  const shell = colorize(
-    connectorModelColors.metal,
-    translate(
-      [0, params.depth / 2, 0],
-      subtract([extrudeProfile(outerProfile), extrudeProfile(innerProfile)]),
-    ),
-  )
+  const innerProfile = createConnectorProfile({
+    height: params.height - shellWallThickness * 2,
+    lowerWidth: params.lowerWidth - shellWallThickness * 2,
+    upperWidth: params.upperWidth - shellWallThickness * 2,
+    verticalOffset: shellWallThickness,
+  })
+  const outerShell = extrudeProfileAlongDepth({ depth: params.depth, profile: outerProfile })
+  const innerOpening = extrudeProfileAlongDepth({
+    depth: params.depth - shellWallThickness,
+    profile: innerProfile,
+  })
+  const shell = colorize(connectorModelColors.metal, subtract([outerShell, innerOpening]))
   const tongueHeight = params.height * 0.16
   const tongueCenterZ = params.height * 0.39
   const tongue = createColoredCuboid({
@@ -80,5 +71,38 @@ function createHdmiConnectorCadModel(params: {
       size: [contactSpacing * 0.45, params.depth * 0.38, 0.05],
     }),
   )
-  return [shell, tongue, ...contacts]
+  const rearInsulator = createColoredCuboid({
+    center: [0, params.depth - shellWallThickness * 1.5, params.height / 2],
+    color: connectorModelColors.darkPlastic,
+    size: [params.lowerWidth * 0.9, shellWallThickness, params.height * 0.7],
+  })
+  return [shell, rearInsulator, tongue, ...contacts]
+}
+
+function createConnectorProfile(params: {
+  height: number
+  lowerWidth: number
+  upperWidth: number
+  verticalOffset?: number
+}): Vector2D[] {
+  const verticalOffset = params.verticalOffset ?? 0
+  return [
+    [-params.lowerWidth / 2, verticalOffset],
+    [params.lowerWidth / 2, verticalOffset],
+    [params.upperWidth / 2, verticalOffset + params.height],
+    [-params.upperWidth / 2, verticalOffset + params.height],
+  ]
+}
+
+function extrudeProfileAlongDepth(params: { depth: number; profile: Vector2D[] }): JscadOperation {
+  const extrudedProfile: JscadOperation = {
+    type: "extrudeLinear",
+    options: { height: params.depth },
+    shape: { type: "fromPointsGeom2", points: params.profile },
+  }
+  return translate([0, params.depth, 0], {
+    type: "rotateX",
+    angle: Math.PI / 2,
+    shape: extrudedProfile,
+  })
 }
