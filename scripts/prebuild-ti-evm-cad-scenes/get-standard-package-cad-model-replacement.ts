@@ -11,6 +11,7 @@ import {
 } from "./create-board-specific-package-cad-models"
 import { getDimensionedMechanicalPackageReplacement } from "./get-dimensioned-mechanical-package-replacement"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
+import { getSwitchCadModelReplacement } from "./get-switch-cad-model-replacement"
 
 type ImperialPackageSize =
   | "01005"
@@ -310,6 +311,7 @@ export function getStandardPackageCadModelReplacement(
     getBallGridPackageReplacement(normalizedFootprint) ??
     getQuadFlatPackageReplacement(normalizedFootprint) ??
     getLandGridPackageReplacement(normalizedFootprint) ??
+    getSwitchCadModelReplacement(componentIdentity) ??
     getDimensionedMechanicalPackageReplacement(componentIdentity)
   )
 }
