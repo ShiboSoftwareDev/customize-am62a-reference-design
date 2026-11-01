@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test"
 import "bun-match-svg"
+import { checkDanglingTraces } from "@tscircuit/checks"
 import type { AnyCircuitElement } from "circuit-json"
 import { getFullConnectivityMapFromCircuitJson } from "circuit-json-to-connectivity-map"
 import { convertCircuitJsonToPcbSvg } from "circuit-to-svg"
@@ -62,15 +63,25 @@ test("removing SK-AM62 multimedia removes its local copper and newly dangling FB
       return routing.includedPcbViaIds.has(element.pcb_via_id)
     return true
   })
-  await expect(
-    convertCircuitJsonToPcbSvg(withoutMultimedia, {
-      layer: "bottom",
-      hiddenLayerOpacity: 0,
-      showSolderMask: false,
-      includeVersion: false,
-      viewport: { minX: 4, maxX: 10, minY: 111.55, maxY: 117.05 },
-    }),
-  ).toMatchSvgSnapshot(import.meta.path, "without-multimedia")
+  // The recomputed fill drops this isolated local polygon after its pads are removed.
+  // Routing pruning uses the imported boundary, so inspect its retained routes without that fill.
+  const finalRouting = withoutMultimedia.filter((element) => element.type !== "pcb_copper_pour")
+  for (const [name, circuitJson] of [
+    ["reference", source],
+    ["without-multimedia", finalRouting],
+  ] as const) {
+    const danglingErrors = checkDanglingTraces(circuitJson, { connMap: connectivityMap })
+    await expect(
+      convertCircuitJsonToPcbSvg([...circuitJson, ...danglingErrors], {
+        layer: "bottom",
+        hiddenLayerOpacity: 0.3,
+        showSolderMask: false,
+        showErrorsInTextOverlay: false,
+        includeVersion: false,
+        viewport: { minX: 4, maxX: 10, minY: 111.55, maxY: 117.05 },
+      }),
+    ).toMatchSvgSnapshot(import.meta.path, name)
+  }
 
   const localPour = normalized.find(
     (element) =>
