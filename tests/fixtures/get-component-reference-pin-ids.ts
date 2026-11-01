@@ -24,7 +24,7 @@ export function getComponentReferencePinIds({
       element.type === "source_port" &&
       element.source_component_id === referenceComponent.source_component_id,
   )
-  const componentPortIds = new Set(
+  const componentPortIds = new Set<SourcePortId>(
     circuitJson.flatMap((element) =>
       element.type === "source_port" &&
       element.source_component_id === component.source_component_id &&
