@@ -13,7 +13,13 @@ import {
 } from "../scripts/ti-evm-reference-generator/get-included-imported-routing-element-ids"
 import { getRoutingConnectivityCheckCircuitJson } from "../scripts/ti-evm-reference-generator/get-routing-connectivity-check-circuit-json"
 
-const multimediaComponentIds = new Set([
+import type {
+  FeatureId,
+  PcbComponentId,
+  SourceComponentId,
+} from "../scripts/ti-evm-reference-generator/types"
+
+const multimediaComponentIds = new Set<SourceComponentId>([
   "schematic_41_source_component_altium_1658", // FB1
   "schematic_41_source_component_altium_3389", // C204
 ])
@@ -24,7 +30,7 @@ test("removing SK-AM62 multimedia removes its local copper and newly dangling FB
   ).json()) as AnyCircuitElement[]
   const normalized = getRoutingConnectivityCheckCircuitJson({
     circuitJson: source,
-    featureIdBySourceComponentId: new Map(
+    featureIdBySourceComponentId: new Map<SourceComponentId, FeatureId>(
       [...multimediaComponentIds].map((componentId) => [componentId, "multimedia"]),
     ),
   })
@@ -40,7 +46,7 @@ test("removing SK-AM62 multimedia removes its local copper and newly dangling FB
     incidentPcbTraceIdsByViaId: getIncidentPcbTraceIdsByViaId({ pcbTraces, pcbVias }),
     removedSourceComponentIds: multimediaComponentIds,
   })
-  const removedPcbComponentIds = new Set(
+  const removedPcbComponentIds = new Set<PcbComponentId>(
     normalized.flatMap((element) =>
       element.type === "pcb_component" &&
       typeof element.source_component_id === "string" &&
