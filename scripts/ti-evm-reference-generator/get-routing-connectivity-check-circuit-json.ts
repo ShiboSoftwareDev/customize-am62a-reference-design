@@ -124,18 +124,11 @@ function getLocalCopperPourPcbComponentId(params: {
   const enclosedPcbPorts = params.pcbPorts.filter(
     (pcbPort) =>
       pcbPort.layers.includes(params.copperPour.layer) &&
+      params.sourceNetIdBySourcePortId.get(pcbPort.source_port_id) ===
+        params.copperPour.source_net_id &&
       isPointInPolygon({ point: pcbPort, polygon: outline }),
   )
   if (enclosedPcbPorts.length === 0) return undefined
-  if (
-    enclosedPcbPorts.some(
-      (pcbPort) =>
-        params.sourceNetIdBySourcePortId.get(pcbPort.source_port_id) !==
-        params.copperPour.source_net_id,
-    )
-  ) {
-    return undefined
-  }
   const firstEnclosedPcbPort = enclosedPcbPorts[0]
   if (!firstEnclosedPcbPort) return undefined
   if (enclosedPcbPorts.length === 1) return firstEnclosedPcbPort.pcb_component_id
