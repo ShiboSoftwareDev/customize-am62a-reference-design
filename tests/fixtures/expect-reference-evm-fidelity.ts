@@ -2,12 +2,14 @@ import { expect } from "bun:test"
 import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import type { AnyCircuitElement } from "circuit-json"
+import { getSourcePortConnectivityMapFromCircuitJson } from "circuit-json-to-connectivity-map"
 import type { ParameterizedTiEvmId } from "lib/evms/parameterized-ti-evms"
 import { getTiEvm } from "lib/ti-evm-catalog"
 import { expectReferenceCopperConnections } from "./expect-reference-copper-connections"
 
 type CircuitPoint = { x: number; y: number }
 type ComponentName = string
+type ConnectivityNetId = string
 type PcbComponentId = string
 type SourceComponentId = string
 type SourceNetId = string
@@ -532,6 +534,7 @@ function createPhysicalNetKeys(params: {
   referenceCircuitJson: AnyCircuitElement[]
 }): string[] {
   const sourcePortReferenceKeyBySourcePortId = getSourcePortReferenceKeyBySourcePortId(params)
+  const connectivityMap = getSourcePortConnectivityMapFromCircuitJson(params.circuitJson)
   const physicalSourcePortIds = new Set<SourcePortId>(
     params.circuitJson.flatMap((element) =>
       element.type === "pcb_port" && typeof element.source_port_id === "string"
@@ -539,11 +542,14 @@ function createPhysicalNetKeys(params: {
         : [],
     ),
   )
-  const endpointKeysByNet = new Map<SourceNetId, Set<SourcePortReferenceKey>>()
+  const endpointKeysByNet = new Map<ConnectivityNetId, Set<SourcePortReferenceKey>>()
   for (const sourceTrace of params.circuitJson.filter(isSourceTrace)) {
     for (const sourceNetId of sourceTrace.connected_source_net_ids) {
-      const endpointKeys = endpointKeysByNet.get(sourceNetId) ?? new Set<SourcePortReferenceKey>()
-      endpointKeysByNet.set(sourceNetId, endpointKeys)
+      const connectivityNetId = connectivityMap.getNetConnectedToId(sourceNetId)
+      if (!connectivityNetId) throw new Error(`Source net ${sourceNetId} has no connectivity`)
+      const endpointKeys =
+        endpointKeysByNet.get(connectivityNetId) ?? new Set<SourcePortReferenceKey>()
+      endpointKeysByNet.set(connectivityNetId, endpointKeys)
       for (const sourcePortId of sourceTrace.connected_source_port_ids) {
         if (!physicalSourcePortIds.has(sourcePortId)) continue
         const sourcePortReferenceKey = sourcePortReferenceKeyBySourcePortId.get(sourcePortId)
