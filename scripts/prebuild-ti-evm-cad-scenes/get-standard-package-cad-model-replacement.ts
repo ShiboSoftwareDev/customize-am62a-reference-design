@@ -12,6 +12,7 @@ import {
 import { getDimensionedMechanicalPackageReplacement } from "./get-dimensioned-mechanical-package-replacement"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
 import { getSwitchCadModelReplacement } from "./get-switch-cad-model-replacement"
+import { externalStepModelUrls } from "./external-cad-model-urls"
 
 type ImperialPackageSize =
   | "01005"
@@ -113,7 +114,8 @@ function getSmallOutlinePackageReplacement(
     if (!pinCount) continue
     const needsQuarterTurn =
       /^TSSOP10(?:_|$)/u.test(normalizedFootprint) ||
-      /^VSSOP8_0D65_3X3X1_1MM/u.test(normalizedFootprint)
+      /^VSSOP8_0D65_3X3X1_1MM/u.test(normalizedFootprint) ||
+      /^SOIC8_1D27_4_9X3_9MM/u.test(normalizedFootprint)
     return createFootprinterReplacement(
       `${footprinterPrefix}${pinCount}`,
       needsQuarterTurn ? 90 : undefined,
@@ -121,7 +123,7 @@ function getSmallOutlinePackageReplacement(
   }
 
   if (/^SOP8_DCT/u.test(normalizedFootprint)) {
-    return createFootprinterReplacement("ssop8_p0.65mm")
+    return createFootprinterReplacement("ssop8_p0.65mm", 90)
   }
   if (/^SO8-/u.test(normalizedFootprint)) {
     return createFootprinterReplacement("soic8_p1.27mm", 90)
@@ -194,11 +196,20 @@ function getBoardSpecificSmallPackageReplacement(
   if (/^POLYSW200-5638-310/u.test(normalizedFootprint)) {
     return { kind: "jscad", jscadOperations: createRadialPolyfuseCadModel() }
   }
+  // These Altium pad rows face local +/-Y; the replacement leads face local +/-X.
+  if (/^U_8_DCU/u.test(normalizedFootprint)) {
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.vssop8Dcu,
+      modelYawOffsetDegrees: 90,
+    }
+  }
+  if (/^DGN-16X60/u.test(normalizedFootprint)) {
+    return createFootprinterReplacement("msop8", 90)
+  }
 
   const exactPackageMappings: Array<[RegExp, string]> = [
-    [/^U_8_DCU/u, "vssop8"],
     [/^U_6_DRY/u, "dfn6_w1.45mm_h1mm_bodywidth1.45mm_bodylength1mm_p0.5mm"],
-    [/^DGN-16X60/u, "msop8"],
     [/^DCK5_/u, "sot23-5"],
     [/^SMINI6-/u, "sot363"],
     [/^SOT553-5/u, "sot563"],
