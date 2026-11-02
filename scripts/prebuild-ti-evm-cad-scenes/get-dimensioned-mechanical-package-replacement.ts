@@ -9,6 +9,7 @@ import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensio
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
 import { createSmdElectrolyticCapacitorCadModel } from "./create-smd-electrolytic-capacitor-cad-model"
+import { getCrystalCadModelReplacement } from "./get-crystal-cad-model-replacement"
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -33,15 +34,6 @@ function getMetricInductorDimensions(
 function getInductorHeight(normalizedFootprint: string): number | undefined {
   if (normalizedFootprint === "L1008") return 1.2
   if (/^L4P_2D54/u.test(normalizedFootprint)) return 5
-  return undefined
-}
-
-function getKnownMetalCanDimensions(
-  normalizedFootprint: string,
-): { x: number; y: number } | undefined {
-  if (/^XTAL150SMD_125X196/u.test(normalizedFootprint)) return { x: 4.98, y: 3.18 }
-  if (/^XTAL4_126-216SMD/u.test(normalizedFootprint)) return { x: 5.49, y: 3.2 }
-  if (/^OSC4_61X65/u.test(normalizedFootprint)) return { x: 2.5, y: 2 }
   return undefined
 }
 
@@ -76,7 +68,11 @@ export function getDimensionedMechanicalPackageReplacement(
     }
   }
   if (/^(?:OSC|X\d|XTAL)/u.test(normalizedFootprint)) {
-    const canDimensions = bodyDimensions ?? getKnownMetalCanDimensions(normalizedFootprint)
+    const crystalReplacement = getCrystalCadModelReplacement(componentIdentity, modelLocalPads)
+    if (crystalReplacement) return crystalReplacement
+    const canDimensions =
+      bodyDimensions ??
+      (normalizedFootprint.startsWith("OSC4_61X65") ? { x: 2.5, y: 2 } : undefined)
     if (canDimensions) {
       return createJscadReplacement(
         createMetalCanCadModel({

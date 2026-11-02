@@ -242,9 +242,22 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createRj11ConnectorCadModel())
   }
   if (footprint.includes("LPJG16314A4NL") || partNumber === "LPJG16314A4NL") {
-    return createJscadReplacement(
-      createRj45ConnectorCadModel({ depth: 21.25, height: 13.6, width: 15.95 }),
-    )
+    return {
+      kind: "glb",
+      modelGlbUrl: "/cad-models/linkpp-lpjg16314a4nl.glb",
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelUnitToMmScaleFactor: 1,
+      // LINK-PP's product uses Y for height, with its seated plane at -6.75.
+      // The cached asset plus X=0 restores this as board-normal Z.
+      modelXRotationDegrees: 0,
+      modelYawOffsetDegrees: 180,
+      modelVerticalOffsetMillimeters: 6.75,
+      modelPinPositions: Array.from({ length: 10 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -5.715 + index * 1.27,
+        y: index % 2 === 0 ? -1.61 : -4.15,
+      })),
+    }
   }
   if (footprint === "RJ45_18P_21_23X15_93X13_3MM") {
     return createJscadReplacement(

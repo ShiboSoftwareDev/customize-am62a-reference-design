@@ -1,7 +1,4 @@
-import { mkdir } from "node:fs/promises"
-import { resolve } from "node:path"
-import { convertCircuitJsonToCadScene } from "./convert-circuit-json-to-cad-scene"
-import { extractStepProduct } from "./extract-step-product"
+import { prebuildStepProductModel } from "./prebuild-step-product-model"
 
 export async function prebuildBeaglePlayConnectorModel(): Promise<void> {
   const referenceUrl =
@@ -9,41 +6,17 @@ export async function prebuildBeaglePlayConnectorModel(): Promise<void> {
   const response = await fetch(referenceUrl)
   if (!response.ok) throw new Error(`Failed to download BeaglePlay STEP: ${response.status}`)
   const step = await response.text()
-  const productName = "HDMI19P_1D155_23_1X7_7X16_4MM"
-  const temporaryDirectory = resolve("tmp/reference-connector-models")
-  await mkdir(temporaryDirectory, { recursive: true })
-  const modelStepPath = resolve(temporaryDirectory, "beagleplay-hdmi.step")
-  await Bun.write(modelStepPath, extractStepProduct({ step, productName }))
-  const glb = await convertCircuitJsonToCadScene({
-    publicDirectory: "/",
-    circuitJson: [
-      {
-        type: "source_component",
-        source_component_id: "source_model",
-        name: productName,
-        ftype: "simple_chip",
-      },
-      {
-        type: "pcb_component",
-        pcb_component_id: "pcb_model",
-        source_component_id: "source_model",
-        center: { x: 0, y: 0 },
-        width: 7.88,
-        height: 23.1,
-        layer: "top",
-        rotation: 0,
-      },
-      {
-        type: "cad_component",
-        cad_component_id: "cad_model",
-        pcb_component_id: "pcb_model",
-        source_component_id: "source_model",
-        position: { x: 0, y: 0, z: 0 },
-        rotation: { x: 0, y: 0, z: 0 },
-        model_origin_position: { x: 0, y: 0, z: 0 },
-        model_step_url: modelStepPath,
-      },
-    ],
+  const productName = "MICRO_SD_ST_TF_003A_16_1X14_5MM"
+  await prebuildStepProductModel({
+    step,
+    productName: "HDMI19P_1D155_23_1X7_7X16_4MM",
+    outputName: "beagleplay-hdmi",
   })
-  await Bun.write("public/cad-models/beagleplay-hdmi.glb", glb)
+  await prebuildStepProductModel({
+    step,
+    productName,
+    outputName: "beagleplay-microsd",
+    // The optional removable card is not part of the fitted socket assembly.
+    excludedProductNames: ["MicroSD"],
+  })
 }

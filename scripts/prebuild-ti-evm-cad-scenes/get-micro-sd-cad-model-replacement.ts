@@ -8,6 +8,24 @@ export function getMicroSdCadModelReplacement(
   modelLocalPads: ModelLocalPad[],
 ): CadModelReplacement | undefined {
   const footprint = componentIdentity.altiumFootprint.toUpperCase()
+  if (footprint === "MICRO_SD_ST_TF_003A_16_1X14_5MM") {
+    return {
+      kind: "glb",
+      modelGlbUrl: "/cad-models/beagleplay-microsd.glb",
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelUnitToMmScaleFactor: 1,
+      // Restore the extracted STEP package frame from the exported GLB axes.
+      modelXRotationDegrees: 270,
+      modelYawOffsetDegrees: 180,
+      // Centers of the STEP's flat solder tails at Z=0, not the sprung tips.
+      // ST-TF-003A: X=-0.3216, Y=2.2472 - 1.1*(pin-1).
+      modelPinPositions: Array.from({ length: 9 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -0.3216,
+        y: 2.2472 - index * 1.1,
+      })),
+    }
+  }
   if (!/MEM2051|MICRO_SD|SD-MICRO/u.test(footprint)) return undefined
   const modelYawOffsetDegrees = getMicroSdModelYawOffsetDegrees({ footprint, modelLocalPads })
   // Undo the socket's package-axis offset before applying it to the whole model.

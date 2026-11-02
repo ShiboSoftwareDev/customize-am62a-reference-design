@@ -33,7 +33,10 @@ test("microSD sockets open toward the reference board edge on both mounting side
     const board = review.circuitJson.find((element) => element.type === "pcb_board")
     if (typeof board?.thickness !== "number") throw new Error("Missing board thickness")
     const mesh = readGlbComponentMesh({ componentName, glb: review.glb })
-    const cardPlaneZ = (component.layer === "bottom" ? -1 : 1) * (board.thickness / 2 + 0.9)
+    // The ST-TF-003A card plane is above its molded base, unlike MEM2051.
+    const cardHeight = boardId === "beagleplay" ? 1.4 : 0.9
+    const rearOffset = boardId === "beagleplay" ? 4.8 : 6.2
+    const cardPlaneZ = (component.layer === "bottom" ? -1 : 1) * (board.thickness / 2 + cardHeight)
     // Probe the card cavity at each end of the shell, below its metal lid.
     // The entry must be clear; the opposite end must retain its rear wall.
     expect(
@@ -46,7 +49,7 @@ test("microSD sockets open toward the reference board edge on both mounting side
     expect(
       isPointInsideMeshSection({
         mesh,
-        point: [center.x - entryDirectionX * 6.2, center.y, cardPlaneZ],
+        point: [center.x - entryDirectionX * rearOffset, center.y, cardPlaneZ],
       }),
       `${boardId} ${componentName} rear wall`,
     ).toBe(true)
