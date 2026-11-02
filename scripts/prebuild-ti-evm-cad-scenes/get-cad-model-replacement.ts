@@ -3,6 +3,7 @@ import { getMechanicalConnectorCadModelReplacement } from "./get-mechanical-conn
 import { getNonPhysicalCadModelReplacement } from "./get-non-physical-cad-model-replacement"
 import { getStandardPackageCadModelReplacement } from "./get-standard-package-cad-model-replacement"
 import type { JscadOperation } from "jscad-planner"
+import type { ModelLocalPad } from "./get-model-local-pads"
 
 export type CadModelComponentIdentity = {
   altiumFootprint: string
@@ -65,10 +66,11 @@ export type CadModelReplacement = CadModelPlacement &
 
 export function getCadModelReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
 ): CadModelReplacement | undefined {
   return (
     getNonPhysicalCadModelReplacement(componentIdentity) ??
-    getStandardPackageCadModelReplacement(componentIdentity) ??
+    getStandardPackageCadModelReplacement(componentIdentity, modelLocalPads) ??
     getMechanicalConnectorCadModelReplacement(componentIdentity) ??
     getConnectorCadModelReplacement(componentIdentity)
   )

@@ -7,6 +7,7 @@ import {
   type CadRegistrationPad,
 } from "./get-pad-registered-model-placement"
 import { getImportedPrimitivePlanarPosition } from "./get-imported-primitive-planar-position"
+import { getModelLocalPads } from "./get-model-local-pads"
 
 type PcbComponentId = string
 type SourceComponentId = string
@@ -81,6 +82,10 @@ export function replacePrimitiveCadModels(params: {
       type: element.type,
       x: typeof element.x === "number" ? element.x : undefined,
       y: typeof element.y === "number" ? element.y : undefined,
+      width: typeof element.width === "number" ? element.width : undefined,
+      height: typeof element.height === "number" ? element.height : undefined,
+      radius: typeof element.radius === "number" ? element.radius : undefined,
+      ccw_rotation: typeof element.ccw_rotation === "number" ? element.ccw_rotation : undefined,
       port_hints: Array.isArray(element.port_hints)
         ? element.port_hints.filter((hint): hint is string => typeof hint === "string")
         : undefined,
@@ -107,12 +112,30 @@ export function replacePrimitiveCadModels(params: {
     const sourceFootprint = sourceComponent
       ? params.sourceFootprintByComponentName.get(sourceComponent.name)
       : undefined
+    const pcbComponent = pcbComponentBySourceComponentId.get(element.source_component_id)
+    const pads =
+      padsByPcbComponentId.get(
+        typeof element.pcb_component_id === "string" ? element.pcb_component_id : "",
+      ) ?? []
+    const position = getReplacementPosition(element)
+    const modelLocalPads =
+      pcbComponent && position
+        ? getModelLocalPads({
+            pads,
+            position,
+            layer: pcbComponent.layer,
+            ccwRotationDegrees: pcbComponent.rotation,
+          })
+        : []
     const replacement = sourceFootprint
-      ? getCadModelReplacement({
-          altiumFootprint: sourceFootprint,
-          componentName: sourceComponent?.name ?? "",
-          manufacturerPartNumber: sourceComponent?.manufacturer_part_number,
-        })
+      ? getCadModelReplacement(
+          {
+            altiumFootprint: sourceFootprint,
+            componentName: sourceComponent?.name ?? "",
+            manufacturerPartNumber: sourceComponent?.manufacturer_part_number,
+          },
+          modelLocalPads,
+        )
       : undefined
     if (!replacement) {
       retainedPrimitiveComponentCount += 1
@@ -122,11 +145,8 @@ export function replacePrimitiveCadModels(params: {
     enrichedComponentCount += 1
     return applyCadModelReplacement({
       cadComponent: element,
-      pads:
-        padsByPcbComponentId.get(
-          typeof element.pcb_component_id === "string" ? element.pcb_component_id : "",
-        ) ?? [],
-      pcbComponent: pcbComponentBySourceComponentId.get(element.source_component_id),
+      pads,
+      pcbComponent,
       replacement,
     })
   })

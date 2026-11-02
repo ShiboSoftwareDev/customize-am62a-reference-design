@@ -17,6 +17,9 @@ function createJscadReplacement(
 function getMetricInductorDimensions(
   normalizedFootprint: string,
 ): { x: number; y: number } | undefined {
+  // BeaglePlay's L1008 is an imperial package (CODACA CSTB252012H),
+  // unlike its L2012/L2016 metric library names.
+  if (normalizedFootprint === "L1008") return { x: 2.5, y: 2 }
   const metricSize = /^L(\d{2})(\d{2})$/u.exec(normalizedFootprint)
   if (metricSize) return { x: Number(metricSize[1]) / 10, y: Number(metricSize[2]) / 10 }
   if (/^IND0806/u.test(normalizedFootprint)) return { x: 2, y: 1.6 }
@@ -26,6 +29,7 @@ function getMetricInductorDimensions(
 }
 
 function getInductorHeight(normalizedFootprint: string): number | undefined {
+  if (normalizedFootprint === "L1008") return 1.2
   if (/^L4P_2D54/u.test(normalizedFootprint)) return 5
   return undefined
 }
