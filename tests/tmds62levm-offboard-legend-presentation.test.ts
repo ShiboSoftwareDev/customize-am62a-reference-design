@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test"
 import "bun-match-svg"
 import { getPcbElementBounds } from "@tscircuit/circuit-json-util"
+import { getPcbViewerCircuitJson } from "app/get-pcb-viewer-circuit-json"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import { convertCircuitJsonToPcbSvg } from "circuit-to-svg"
 
@@ -10,7 +11,7 @@ test("TMDS62LEVM fabrication-legend presentation", async () => {
       new URL("../public/prebuilt-ti-evms/tmds62levm/full-board.circuit.json.gz", import.meta.url),
     ).bytes(),
   )
-  const circuitJson = originalCircuitJson.filter((element) => {
+  const circuitJson = getPcbViewerCircuitJson(originalCircuitJson).filter((element) => {
     if (element.type === "pcb_board") return true
     const isCopperText = element.type === "pcb_copper_text" && element.layer === "top"
     const isUnassignedTrack =

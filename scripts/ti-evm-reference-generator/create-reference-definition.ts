@@ -1,9 +1,7 @@
 import { readFile } from "node:fs/promises"
-import { basename } from "node:path"
 import {
   convertAltiumProjectToCircuitJson,
   convertAltiumToCircuitJson,
-  parseAltiumSource,
 } from "altium-to-circuit-json"
 import {
   AltiumComponentRecord,
@@ -13,6 +11,7 @@ import {
   type AltiumSchDoc,
   parseAltiumBinaryPcbDoc,
   parseAltiumFile,
+  parseAltiumSchDoc,
 } from "altiumts"
 import type { AnyCircuitElement } from "circuit-json"
 import type {
@@ -37,6 +36,8 @@ import {
   removeRedundantContainedPads,
 } from "./pads"
 import { createSchematicPlacements } from "./schematic-placements"
+import { getSchematicConversionOptions } from "./get-schematic-conversion-options"
+import { prepareReferenceSchematicDocument } from "./prepare-reference-schematic-document"
 import { createSilkscreen } from "./silkscreen"
 import { getTeardropsByNet } from "./teardrops"
 import type {
@@ -112,15 +113,23 @@ export async function createReferenceDefinition(
     padRecordsByComponentIndex.set(componentIndex, componentPads)
   }
   const schematicSources: Array<{
-    bytes: Uint8Array
     document: AltiumSchDoc
     path: string
   }> = []
   for (const schematicPath of reference.schematicPaths) {
     const schematicBytes = new Uint8Array(await readFile(schematicPath))
+    const document = parseAltiumSchDoc(schematicBytes)
+    prepareReferenceSchematicDocument({
+      document,
+      options: getSchematicConversionOptions({
+        parsedProject,
+        projectPath: reference.projectPath,
+        referenceName: reference.name,
+        schematicPath,
+      }),
+    })
     schematicSources.push({
-      bytes: schematicBytes,
-      document: parseAltiumSource(schematicBytes, "schematic") as AltiumSchDoc,
+      document,
       path: schematicPath,
     })
   }
@@ -153,7 +162,7 @@ export async function createReferenceDefinition(
   }).filter((element) => !element.type.startsWith("schematic_"))
   console.log(`${reference.name}: converted PCB source`)
   const schematicCircuitJsons = schematicSources.map((schematicSource) =>
-    convertAltiumToCircuitJson(schematicSource.bytes, {
+    convertAltiumToCircuitJson(schematicSource.document, {
       sourceType: "schematic",
       schematic: getSchematicConversionOptions({
         parsedProject,
@@ -386,20 +395,6 @@ function hasConnectedPcbPads(padRecords: AltiumPadRecord[]): boolean {
   return padRecords.some(
     (padRecord) => padRecord.netIndex !== undefined && padRecord.netIndex !== 65535,
   )
-}
-
-function getSchematicConversionOptions(params: {
-  parsedProject: AltiumPrjPcb
-  projectPath: string
-  referenceName: string
-  schematicPath: string
-}) {
-  return {
-    documentName: basename(params.schematicPath),
-    project: params.parsedProject,
-    projectName: basename(params.projectPath),
-    sheetName: params.referenceName,
-  }
 }
 
 function getSchematicSheetIndexesByComponentName(
