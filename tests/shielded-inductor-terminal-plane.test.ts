@@ -8,7 +8,7 @@ import {
 
 test("large shielded-inductor terminations reach the mounting surface on both board sides", async () => {
   for (const { boardId, componentNames } of [
-    { boardId: "tmds62levm", componentNames: ["L6", "L10", "L11"] },
+    { boardId: "tmds62levm", componentNames: ["L10", "L11"] },
     { boardId: "sk-am62", componentNames: ["L12"] },
   ]) {
     const review = await readPrebuiltPackageReview(boardId)

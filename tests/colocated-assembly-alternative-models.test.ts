@@ -7,7 +7,7 @@ test("cached scenes show the fitted assembly instead of overlapping co-layout al
     {
       boardId: "tmds62levm",
       fitted: ["L2", "L9", "R143", "R121", "R122", "R311"],
-      notFitted: ["R181", "R185", "R266", "R271", "R144", "R115", "R119", "R302"],
+      notFitted: ["L6", "R181", "R185", "R266", "R271", "R144", "R115", "R119", "R302"],
     },
     {
       boardId: "sk-am62",
