@@ -15,41 +15,53 @@ export type CadModelPlanarOffsetMillimeters = {
   y: number
 }
 
-export type CadModelReplacement =
-  | {
-      kind: "none"
-    }
-  | {
-      kind: "footprinter"
-      footprinterString: string
-      /** Rotation around the board normal after applying the PCB component rotation. */
-      modelYawOffsetDegrees?: number
-    }
-  | {
-      kind: "glb"
-      modelGlbUrl: string
-      modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
-      modelUnitToMmScaleFactor: number
-      modelVerticalOffsetMillimeters?: number
-      /** Rotation around the board normal after applying the PCB component rotation. */
-      modelYawOffsetDegrees?: number
-    }
-  | {
-      kind: "jscad"
-      jscadOperations: JscadOperation[]
-      /** Model-local XY offset applied before board-side mirroring and yaw. */
-      modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
-      /** Rotation around the board normal after applying the PCB component rotation. */
-      modelYawOffsetDegrees?: number
-    }
-  | {
-      kind: "step"
-      modelStepUrl: string
-      /** Model-local XY offset applied before board-side mirroring and yaw. */
-      modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
-      /** Rotation around the board normal after applying the PCB component rotation. */
-      modelYawOffsetDegrees?: number
-    }
+type CadModelPlacement = {
+  /** Numbered reference pads, used to register a package to the imported pads. */
+  modelFootprintString?: string
+  modelPinPositions?: Array<{ x: number; y: number; pinNumber: string }>
+  modelXRotationDegrees?: number
+  modelBoardNormalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
+  modelOriginPosition?: { x: number; y: number; z: number }
+  modelVerticalOffsetMillimeters?: number
+}
+
+export type CadModelReplacement = CadModelPlacement &
+  (
+    | {
+        kind: "none"
+      }
+    | {
+        kind: "footprinter"
+        footprinterString: string
+        /** Rotation around the board normal after applying the PCB component rotation. */
+        modelYawOffsetDegrees?: number
+      }
+    | {
+        kind: "glb"
+        modelGlbUrl: string
+        modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+        modelUnitToMmScaleFactor: number
+        modelVerticalOffsetMillimeters?: number
+        /** Rotation around the board normal after applying the PCB component rotation. */
+        modelYawOffsetDegrees?: number
+      }
+    | {
+        kind: "jscad"
+        jscadOperations: JscadOperation[]
+        /** Model-local XY offset applied before board-side mirroring and yaw. */
+        modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+        /** Rotation around the board normal after applying the PCB component rotation. */
+        modelYawOffsetDegrees?: number
+      }
+    | {
+        kind: "step"
+        modelStepUrl: string
+        /** Model-local XY offset applied before board-side mirroring and yaw. */
+        modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
+        /** Rotation around the board normal after applying the PCB component rotation. */
+        modelYawOffsetDegrees?: number
+      }
+  )
 
 export function getCadModelReplacement(
   componentIdentity: CadModelComponentIdentity,

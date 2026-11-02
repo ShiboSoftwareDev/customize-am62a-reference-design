@@ -57,7 +57,7 @@ test("uses exact STEP geometry for recognized Sitara connectors", () => {
         altiumFootprint,
         componentName,
       }),
-    ).toEqual({
+    ).toMatchObject({
       kind: "step",
       ...expectedModel,
     })

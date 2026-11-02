@@ -2,6 +2,18 @@ const kicadPackageBaseUrl =
   "https://sources.debian.org/data/main/k/kicad-packages3d/9.0.8-1~bpo13%2B1"
 
 export const externalStepModelUrls = {
+  msop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8_3x3mm_P0.65mm.step`,
+  msop8PowerPad: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8-1EP_3x3mm_P0.65mm_EP1.73x1.85mm.step`,
+  tssop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-8_4.4x3mm_P0.65mm.step`,
+  tssop14: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-14_4.4x5mm_P0.65mm.step`,
+  tssop16: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-16_4.4x5mm_P0.65mm.step`,
+  tssop24: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-24_4.4x7.8mm_P0.65mm.step`,
+  tssop56: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-56_6.1x14mm_P0.5mm.step`,
+  msop10: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-10_3x3mm_P0.5mm.step`,
+  sc70_5: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-353_SC-70-5.step`,
+  sot23_5: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step`,
+  sot23_6: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step`,
+  sot23: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23.step`,
   vssop8Dcu: `${kicadPackageBaseUrl}/Package_SO.3dshapes/` + "VSSOP-8_2.3x2mm_P0.5mm.step",
   amphenolHdmiA:
     `${kicadPackageBaseUrl}/Connector_Video.3dshapes/` +
