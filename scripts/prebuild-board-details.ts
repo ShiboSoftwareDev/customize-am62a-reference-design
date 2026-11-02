@@ -5,6 +5,7 @@ import { getBestCameraPosition } from "circuit-json-to-gltf"
 import { convertCircuitJsonToPcbSvg, convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { gunzipSync, strFromU8 } from "fflate"
 import { renderGLTFToPNGFromGLB } from "poppygl"
+import { getPcbViewerCircuitJson } from "../app/get-pcb-viewer-circuit-json"
 import { tiEvms } from "../lib/ti-evm-catalog"
 import { getSchematicAssetFileName } from "../lib/schematic-sheet-assets"
 
@@ -27,7 +28,7 @@ for (const evm of tiEvms) {
     ),
   )
   const pcbSvg = stripTrailingWhitespace(
-    convertCircuitJsonToPcbSvg(circuitJson, {
+    convertCircuitJsonToPcbSvg(getPcbViewerCircuitJson(circuitJson), {
       backgroundColor: "#07100c",
       drawPaddingOutsideBoard: true,
       height: 900,

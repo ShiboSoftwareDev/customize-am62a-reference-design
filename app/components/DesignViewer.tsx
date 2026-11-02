@@ -2,6 +2,7 @@ import type { AnyCircuitElement } from "circuit-json"
 import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 import { SchematicSourceNotice } from "app/components/SchematicSourceNotice"
 import { getPcbRenderer } from "app/get-pcb-renderer"
+import { getPcbViewerCircuitJson } from "app/get-pcb-viewer-circuit-json"
 import { useElementHeight } from "app/hooks/use-element-height"
 import { getSelectedSchematicSheet } from "app/components/get-selected-schematic-sheet"
 
@@ -65,6 +66,10 @@ export function DesignViewer({
   const schematicCircuitJson = schematicCircuitJsons[schematicSheetSelection.index]
   const pcbRenderer = useMemo(
     () => (pcbCircuitJson ? getPcbRenderer(pcbCircuitJson) : "webgpu"),
+    [pcbCircuitJson],
+  )
+  const pcbViewerCircuitJson = useMemo(
+    () => (pcbCircuitJson ? getPcbViewerCircuitJson(pcbCircuitJson) : null),
     [pcbCircuitJson],
   )
   const isPcbRendering =
@@ -152,7 +157,7 @@ export function DesignViewer({
           <Suspense fallback={<ViewerLoading label="Loading PCB viewer…" />}>
             <PCBViewer
               key={boardKey}
-              circuitJson={pcbCircuitJson}
+              circuitJson={pcbViewerCircuitJson ?? pcbCircuitJson}
               height={height}
               renderer={pcbRenderer}
               allowEditing={false}
