@@ -1,6 +1,7 @@
 import { getPcbElementBounds } from "@tscircuit/circuit-json-util"
 import type { AnyCircuitElement } from "circuit-json"
 import { getPcbAnnotationBounds } from "./get-pcb-annotation-bounds"
+import { canHideOutsideBoard } from "./can-hide-outside-board"
 
 export function getPcbViewerCircuitJson(circuitJson: AnyCircuitElement[]): AnyCircuitElement[] {
   const board = circuitJson.find((element) => element.type === "pcb_board")
@@ -9,12 +10,7 @@ export function getPcbViewerCircuitJson(circuitJson: AnyCircuitElement[]): AnyCi
   if (!boardBounds) return circuitJson
 
   return circuitJson.filter((element) => {
-    if (
-      element.type !== "pcb_cutout" &&
-      !element.type.startsWith("pcb_silkscreen_") &&
-      !element.type.startsWith("pcb_fabrication_note_")
-    )
-      return true
+    if (!canHideOutsideBoard(element)) return true
     const bounds = getPcbAnnotationBounds(element)
     if (!bounds) return true
     const overlapWidth =

@@ -4,7 +4,7 @@ import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import { tiEvms } from "lib/ti-evm-catalog"
 import { isPcbBoard } from "../scripts/ti-evm-reference-generator/circuit-json-elements"
 
-test("PCB presentation preserves physical primitives and cutouts that overlap the board", async () => {
+test("PCB presentation preserves electrical geometry and cutouts that overlap the board", async () => {
   for (const evm of tiEvms) {
     for (const variant of evm.variants.filter((variant) => variant.id === "full-board")) {
       const circuitJson = parsePrebuiltCircuitJson(
@@ -15,6 +15,9 @@ test("PCB presentation preserves physical primitives and cutouts that overlap th
       const physicalElements = circuitJson.filter(
         (element) =>
           element.type !== "pcb_cutout" &&
+          element.type !== "pcb_copper_text" &&
+          (element.type !== "pcb_trace" ||
+            Boolean(element.source_trace_id || element.source_net_id)) &&
           !element.type.startsWith("pcb_silkscreen_") &&
           !element.type.startsWith("pcb_fabrication_note_"),
       )
@@ -72,5 +75,51 @@ test("PCB presentation preserves physical primitives and cutouts that overlap th
   expect(getPcbViewerCircuitJson([board, crossingSilkscreenLine, externalSilkscreenLine])).toEqual([
     board,
     crossingSilkscreenLine,
+  ])
+  const unassignedOutsideTrace = {
+    type: "pcb_trace",
+    pcb_trace_id: "outside-drawing",
+    route: [
+      {
+        route_type: "wire",
+        layer: "top",
+        width: 0.2,
+        x: board.center.x,
+        y: board.center.y + board.height,
+      },
+      {
+        route_type: "wire",
+        layer: "top",
+        width: 0.2,
+        x: board.center.x + 1,
+        y: board.center.y + board.height,
+      },
+    ],
+  }
+  const netAssignedOutsideTrace = { ...unassignedOutsideTrace, source_net_id: "assigned-net" }
+  const traceAssignedOutsideTrace = { ...unassignedOutsideTrace, source_trace_id: "assigned-trace" }
+  const portAssignedOutsideTrace = {
+    ...unassignedOutsideTrace,
+    route: unassignedOutsideTrace.route.map((point) => ({ ...point, start_pcb_port_id: "port-1" })),
+  }
+  const unassignedInsideTrace = {
+    ...unassignedOutsideTrace,
+    route: unassignedOutsideTrace.route.map((point) => ({ ...point, y: board.center.y })),
+  }
+  expect(
+    getPcbViewerCircuitJson([
+      board,
+      unassignedOutsideTrace,
+      netAssignedOutsideTrace,
+      traceAssignedOutsideTrace,
+      portAssignedOutsideTrace,
+      unassignedInsideTrace,
+    ]),
+  ).toEqual([
+    board,
+    netAssignedOutsideTrace,
+    traceAssignedOutsideTrace,
+    portAssignedOutsideTrace,
+    unassignedInsideTrace,
   ])
 }, 60_000)
