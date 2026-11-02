@@ -17,8 +17,13 @@ export function createQfpCadModel(params: {
   bodyLength: number
   bodyWidth: number
   modelLocalPads: ModelLocalPad[]
+  packageHeight?: number
 }): JscadOperation[] {
-  const bodyHeight = 1.45
+  const bodyStandoff = params.packageHeight ? 0.1 : 0
+  const markingHeight = params.packageHeight ? 0.02 : 0.04
+  const bodyHeight = params.packageHeight
+    ? params.packageHeight - bodyStandoff - markingHeight
+    : 1.45
   const leads = params.modelLocalPads.flatMap((pad) => {
     const isHorizontalLead =
       Math.abs(pad.x) / params.bodyWidth > Math.abs(pad.y) / params.bodyLength
@@ -39,15 +44,19 @@ export function createQfpCadModel(params: {
   })
 
   const body = createColoredRoundedCuboid({
-    center: [0, 0, bodyHeight / 2],
+    center: [0, 0, bodyStandoff + bodyHeight / 2],
     color: integratedCircuitColors.body,
     roundRadius: Math.min(0.45, Math.min(params.bodyWidth, params.bodyLength) * 0.04),
     size: [params.bodyWidth, params.bodyLength, bodyHeight],
   })
   const pinOneMark = createColoredCylinder({
-    center: [-params.bodyWidth * 0.36, -params.bodyLength * 0.36, bodyHeight + 0.02],
+    center: [
+      -params.bodyWidth * 0.36,
+      -params.bodyLength * 0.36,
+      bodyStandoff + bodyHeight + markingHeight / 2,
+    ],
     color: integratedCircuitColors.marking,
-    height: 0.04,
+    height: markingHeight,
     radius: Math.min(0.38, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
   })
   return [body, pinOneMark, ...leads]
@@ -57,36 +66,44 @@ export function createBgaCadModel(params: {
   bodyLength: number
   bodyWidth: number
   modelLocalPads: ModelLocalPad[]
+  packageHeight?: number
 }): JscadOperation[] {
-  const bodyHeight = 1.2
   const ballRadius = Math.min(
     0.28,
     ...params.modelLocalPads.map((pad) => Math.min(pad.width, pad.height) / 2),
   )
+  // The declared package height includes the solder balls and pin-one mark.
+  const ballHeight = Math.min(ballRadius * 2, (params.packageHeight ?? Infinity) * 0.35)
+  const markingHeight = params.packageHeight ? 0.02 : 0.04
+  const bodyHeight = params.packageHeight ? params.packageHeight - ballHeight - markingHeight : 1.2
   const balls = params.modelLocalPads.map((pad) =>
     createColoredPrism({
-      center: [pad.x, pad.y, ballRadius],
+      center: [pad.x, pad.y, ballHeight / 2],
       color: connectorModelColors.gold,
-      height: ballRadius * 2,
+      height: ballHeight,
       radius: ballRadius,
       sideCount: 8,
     }),
   )
 
   const body = createColoredRoundedCuboid({
-    center: [0, 0, ballRadius * 2 + bodyHeight / 2],
+    center: [0, 0, ballHeight + bodyHeight / 2],
     color: integratedCircuitColors.body,
-    roundRadius: Math.min(0.38, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
+    roundRadius: Math.min(
+      0.38,
+      bodyHeight / 3,
+      Math.min(params.bodyWidth, params.bodyLength) * 0.035,
+    ),
     size: [params.bodyWidth, params.bodyLength, bodyHeight],
   })
   const pinOneMark = createColoredCylinder({
     center: [
       -params.bodyWidth * 0.38,
       -params.bodyLength * 0.38,
-      ballRadius * 2 + bodyHeight + 0.02,
+      ballHeight + bodyHeight + markingHeight / 2,
     ],
     color: integratedCircuitColors.marking,
-    height: 0.04,
+    height: markingHeight,
     radius: Math.min(0.35, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
   })
   return [body, pinOneMark, ...balls]

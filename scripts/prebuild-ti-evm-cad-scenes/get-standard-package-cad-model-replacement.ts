@@ -17,6 +17,7 @@ import { externalStepModelUrls } from "./external-cad-model-urls"
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { getMultiTerminalResistorReplacement } from "./get-multi-terminal-resistor-replacement"
 import { getSmallTransistorCadModelReplacement } from "./get-small-transistor-cad-model-replacement"
+import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
 
 type ImperialPackageSize =
   | "01005"
@@ -240,6 +241,7 @@ function getBallGridPackageReplacement(
         modelLocalPads,
         bodyLength: 12.95,
         bodyWidth: 12.95,
+        packageHeight: getPackageHeightMillimeters(normalizedFootprint),
       }),
     }
   }
@@ -254,6 +256,7 @@ function getBallGridPackageReplacement(
       jscadOperations: createBgaCadModel({
         bodyLength: bodyDimensions.y,
         bodyWidth: bodyDimensions.x,
+        packageHeight: getPackageHeightMillimeters(normalizedFootprint),
         modelLocalPads,
       }),
     }
@@ -287,6 +290,7 @@ function getQuadFlatPackageReplacement(
     jscadOperations: createQfpCadModel({
       bodyLength: bodyDimensions.y,
       bodyWidth: bodyDimensions.x,
+      packageHeight: getPackageHeightMillimeters(normalizedFootprint),
       modelLocalPads,
     }),
   }
