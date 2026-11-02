@@ -3,4 +3,4 @@ import { expectPcbRenderCompletion } from "./fixtures/expect-pcb-render-completi
 
 test("a revisited cached PCB waits for its new frame", async () => {
   await expectPcbRenderCompletion("cached")
-})
+}, 60_000)

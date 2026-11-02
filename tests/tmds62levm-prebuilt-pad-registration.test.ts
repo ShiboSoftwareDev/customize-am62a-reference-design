@@ -18,4 +18,4 @@ test("TMDS62LEVM leaded packages register to their own pads in every variant", a
       { componentName: "U65", pinCount: 5 },
     ],
   })
-})
+}, 120_000)

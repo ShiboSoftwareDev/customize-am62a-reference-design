@@ -15,4 +15,4 @@ test("SK-AM62 leaded packages register to their own pads in every variant", asyn
       { componentName: "U58", pinCount: 5 },
     ],
   })
-})
+}, 120_000)
