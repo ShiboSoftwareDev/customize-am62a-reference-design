@@ -1,7 +1,13 @@
 const kicadPackageBaseUrl =
   "https://sources.debian.org/data/main/k/kicad-packages3d/9.0.8-1~bpo13%2B1"
 
+const wurthConnectorBaseUrl =
+  "https://raw.githubusercontent.com/WurthElektronik/KiCad-Library/" +
+  "215595ffc7c98649394598bc6bac81ddc421fcc6/3dmodels/Connector_SMD_Wurth.3dshapes"
+
 export const externalStepModelUrls = {
+  wurthUsbA: `${wurthConnectorBaseUrl}/J_Wurth_WR-USB_629104151021.step`,
+  wurthMicroUsbB: `${wurthConnectorBaseUrl}/J_Wurth_WR-USB_629105150521.step`,
   msop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8_3x3mm_P0.65mm.step`,
   msop8PowerPad: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8-1EP_3x3mm_P0.65mm_EP1.73x1.85mm.step`,
   tssop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-8_4.4x3mm_P0.65mm.step`,

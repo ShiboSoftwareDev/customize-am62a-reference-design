@@ -16,7 +16,6 @@ import {
   createUflConnectorCadModel,
 } from "./create-board-connector-cad-models"
 import {
-  createMicroUsbConnectorCadModel,
   createMiniUsbConnectorCadModel,
   createUsbAConnectorCadModel,
   createUsbCConnectorCadModel,
@@ -123,7 +122,18 @@ export function getMechanicalConnectorCadModelReplacement(
     })
   }
   if (footprint.includes("629104151") || partNumber.startsWith("629104151")) {
-    return createJscadReplacement(createUsbAConnectorCadModel())
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.wurthUsbA,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // Wurth's matching footprint puts pins 1-4 on Y=-6.75 mm.
+      // Reverse footprint Y into the STEP model's right-handed package frame.
+      modelPinPositions: [-3.5, -1, 1, 3.5].map((x, index) => ({
+        pinNumber: String(index + 1),
+        x,
+        y: 6.75,
+      })),
+    }
   }
   if (footprint.startsWith("USB7P_")) {
     return createJscadReplacement(createUsbAConnectorCadModel(), {
@@ -139,7 +149,18 @@ export function getMechanicalConnectorCadModelReplacement(
     footprint.includes("MUSBB5") ||
     partNumber === "629105150521"
   ) {
-    return createJscadReplacement(createMicroUsbConnectorCadModel())
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.wurthMicroUsbB,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // The manufacturer's footprint and STEP share the same datum.
+      // Numbered solder lands sit on Y=-2.9 mm in the footprint (STEP +Y).
+      modelPinPositions: Array.from({ length: 5 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -1.3 + index * 0.65,
+        y: 2.9,
+      })),
+    }
   }
   if (footprint.includes("USB5MINI") || footprint.includes("ST-USB-117")) {
     return createJscadReplacement(createMiniUsbConnectorCadModel(), {
