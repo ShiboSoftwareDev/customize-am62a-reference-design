@@ -12,7 +12,6 @@ import {
 import {
   createBarrelJackCadModel,
   createCoinCellHolderCadModel,
-  createMicroSdConnectorCadModel,
   createRj11ConnectorCadModel,
   createUflConnectorCadModel,
 } from "./create-board-connector-cad-models"
@@ -73,11 +72,6 @@ function createGlbReplacement(
   },
 ): CadModelReplacement {
   return { kind: "glb", modelGlbUrl, ...options }
-}
-
-function getMicroSdModelYawOffsetDegrees(footprint: string): number {
-  if (footprint.startsWith("MICRO_SD_")) return 90
-  return 0
 }
 
 export function getMechanicalConnectorCadModelReplacement(
@@ -187,15 +181,6 @@ export function getMechanicalConnectorCadModelReplacement(
   }
   if (footprint.includes("CONN19_HDMI")) {
     return createStepReplacement(externalStepModelUrls.molexMicroHdmiD)
-  }
-  if (
-    footprint.includes("MEM2051") ||
-    footprint.includes("MICRO_SD") ||
-    footprint.includes("SD-MICRO")
-  ) {
-    return createJscadReplacement(createMicroSdConnectorCadModel(), {
-      modelYawOffsetDegrees: getMicroSdModelYawOffsetDegrees(footprint),
-    })
   }
   if (footprint.includes("U-FL") || partNumber.startsWith("U.FL-R-SMT")) {
     return createJscadReplacement(createUflConnectorCadModel())

@@ -72,6 +72,7 @@ function isImperialPackageSize(
 
 function getTwoTerminalPackageReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[],
 ): CadModelReplacement | undefined {
   const imperialPackageSize = getImperialPackageSize(componentIdentity.altiumFootprint)
   if (!imperialPackageSize) return undefined
@@ -79,28 +80,41 @@ function getTwoTerminalPackageReplacement(
   if (/RESA_|4TERM|1206-4/u.test(componentIdentity.altiumFootprint.toUpperCase())) return undefined
 
   if (componentIdentity.componentName.startsWith("C")) {
-    return createTwoTerminalReplacement("capacitor", imperialPackageSize)
+    return createTwoTerminalReplacement({
+      kind: "capacitor",
+      packageSize: imperialPackageSize,
+      modelLocalPads,
+    })
   }
   if (/^(?:R|L|FB|FL|F)/u.test(componentIdentity.componentName)) {
     const kind = componentIdentity.componentName.startsWith("R") ? "resistor" : "inductor"
-    return createTwoTerminalReplacement(kind, imperialPackageSize)
+    return createTwoTerminalReplacement({ kind, packageSize: imperialPackageSize, modelLocalPads })
   }
   if (componentIdentity.componentName.startsWith("LED")) {
-    return createTwoTerminalReplacement("led", imperialPackageSize)
+    return createTwoTerminalReplacement({
+      kind: "led",
+      packageSize: imperialPackageSize,
+      modelLocalPads,
+    })
   }
   if (componentIdentity.componentName.startsWith("D")) {
-    return createTwoTerminalReplacement("diode", imperialPackageSize)
+    return createTwoTerminalReplacement({
+      kind: "diode",
+      packageSize: imperialPackageSize,
+      modelLocalPads,
+    })
   }
   return undefined
 }
 
-function createTwoTerminalReplacement(
-  kind: TwoTerminalPackageKind,
-  packageSize: ImperialPackageSize,
-): CadModelReplacement {
+function createTwoTerminalReplacement(params: {
+  kind: TwoTerminalPackageKind
+  packageSize: ImperialPackageSize
+  modelLocalPads: ModelLocalPad[]
+}): CadModelReplacement {
   return {
     kind: "jscad",
-    jscadOperations: createTwoTerminalCadModel({ kind, packageSize }),
+    jscadOperations: createTwoTerminalCadModel(params),
   }
 }
 
@@ -319,7 +333,7 @@ export function getStandardPackageCadModelReplacement(
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
   return (
     getMultiTerminalResistorReplacement({ normalizedFootprint, modelLocalPads }) ??
-    getTwoTerminalPackageReplacement(componentIdentity) ??
+    getTwoTerminalPackageReplacement(componentIdentity, modelLocalPads) ??
     getSmallTransistorCadModelReplacement(normalizedFootprint) ??
     getRegisteredLeadedPackageReplacement(normalizedFootprint) ??
     getSmallOutlinePackageReplacement(normalizedFootprint) ??

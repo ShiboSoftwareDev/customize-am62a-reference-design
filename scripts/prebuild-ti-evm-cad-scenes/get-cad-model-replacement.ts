@@ -5,6 +5,7 @@ import { getStandardPackageCadModelReplacement } from "./get-standard-package-ca
 import type { JscadOperation } from "jscad-planner"
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { getFpcCadModelReplacement } from "./get-fpc-cad-model-replacement"
+import { getMicroSdCadModelReplacement } from "./get-micro-sd-cad-model-replacement"
 
 export type CadModelComponentIdentity = {
   altiumFootprint: string
@@ -73,6 +74,7 @@ export function getCadModelReplacement(
     getNonPhysicalCadModelReplacement(componentIdentity) ??
     getStandardPackageCadModelReplacement(componentIdentity, modelLocalPads) ??
     getFpcCadModelReplacement(componentIdentity, modelLocalPads) ??
+    getMicroSdCadModelReplacement(componentIdentity, modelLocalPads) ??
     getMechanicalConnectorCadModelReplacement(componentIdentity) ??
     getConnectorCadModelReplacement(componentIdentity)
   )

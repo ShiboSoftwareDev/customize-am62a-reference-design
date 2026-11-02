@@ -45,18 +45,20 @@ export function createMetalCanCadModel(params: {
   length: number
   width: number
 }): JscadOperation[] {
-  const height = params.height ?? Math.min(params.length, params.width) * 0.45
+  const packageHeight = params.height ?? 0.24 + Math.min(params.length, params.width) * 0.45
+  const substrateHeight = Math.min(0.24, packageHeight * 0.3)
+  const lidHeight = packageHeight - substrateHeight
   return [
     createColoredCuboid({
-      center: [0, 0, 0.12],
+      center: [0, 0, substrateHeight / 2],
       color: packageColors.blackEpoxy,
-      size: [params.length, params.width, 0.24],
+      size: [params.length, params.width, substrateHeight],
     }),
     createColoredRoundedCuboid({
-      center: [0, 0, 0.24 + height / 2],
+      center: [0, 0, substrateHeight + lidHeight / 2],
       color: connectorModelColors.silver,
-      roundRadius: Math.min(params.width * 0.12, 0.45),
-      size: [params.length * 0.9, params.width * 0.88, height],
+      roundRadius: Math.min(params.width * 0.12, lidHeight / 3, 0.45),
+      size: [params.length * 0.9, params.width * 0.88, lidHeight],
     }),
   ]
 }

@@ -8,6 +8,7 @@ import {
 } from "./create-dimensioned-package-cad-models"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
 import type { ModelLocalPad } from "./get-model-local-pads"
+import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -81,6 +82,7 @@ export function getDimensionedMechanicalPackageReplacement(
         createMetalCanCadModel({
           length: canDimensions.x,
           width: canDimensions.y,
+          height: getPackageHeightMillimeters(normalizedFootprint),
         }),
       )
     }

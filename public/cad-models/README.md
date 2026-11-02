@@ -15,3 +15,7 @@ The dimensioned FPC models use the following package references:
 - BeaglePlay's 0.5K-DX-40PWB and 0.5K-DX-22PWB use the 25.4 × 5.25 × 2 mm and 15.4 × 5.25 × 2 mm bodies recorded in its official Altium footprint names and BOM.
 
 These are dimensioned JSCAD representations with simplified housings and spring contacts. Solder tails follow every imported SMT land in the package's local frame, including mounting tabs and the TE part's paired A/B tails. They are not tessellations of manufacturer STEP models. Only the prebuilt GLB scenes include this enrichment; electrical and PCB/schematic artifacts are unchanged.
+
+The microSD representation keeps a simplified hollow shell and eight internal mating contacts, rather than drawing contacts on the lid. Signal, card-detect and mounting tails follow the imported SMT lands, including the socket's package-axis offset on BeaglePlay. The shell is an illustration, not an exact manufacturer model; [GCT's MEM2051 drawing](https://www.farnell.com/cad/2343030.pdf) distinguishes internal mating contacts from the PCB solder areas.
+
+Symmetric chip passives align their long axis through the imported land centers. Crystal package heights, when present in the footprint name, include the substrate rather than being added above it.

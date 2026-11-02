@@ -9,34 +9,6 @@ import {
   translate,
 } from "./jscad-model-primitives"
 
-export function createMicroSdConnectorCadModel(): JscadOperation[] {
-  const base = createColoredRoundedCuboid({
-    center: [0, 0, 0.45],
-    color: connectorModelColors.blackPlastic,
-    roundRadius: 0.35,
-    size: [14.8, 14.5, 0.9],
-  })
-  const shell = createColoredRoundedCuboid({
-    center: [0, -0.4, 1.28],
-    color: connectorModelColors.metal,
-    roundRadius: 0.3,
-    size: [14.5, 13.5, 0.75],
-  })
-  const cardOpening = createColoredCuboid({
-    center: [0, -6.75, 1.15],
-    color: connectorModelColors.darkPlastic,
-    size: [10.9, 0.45, 0.65],
-  })
-  const contacts = Array.from({ length: 8 }, (_, contactIndex) =>
-    createColoredCuboid({
-      center: [-4.2 + contactIndex * 1.1, 4.4, 1.7],
-      color: connectorModelColors.gold,
-      size: [0.55, 2.4, 0.08],
-    }),
-  )
-  return [base, shell, cardOpening, ...contacts]
-}
-
 export function createUflConnectorCadModel(): JscadOperation[] {
   const base = createColoredRoundedCuboid({
     center: [0, 0, 0.16],
