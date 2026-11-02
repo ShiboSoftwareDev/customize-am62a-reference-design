@@ -55,9 +55,13 @@ export function DesignViewer({
   const [requestedSchematicSheetLabel, setRequestedSchematicSheetLabel] = useState<
     string | undefined
   >()
-  const [renderedPcbCircuitJson, setRenderedPcbCircuitJson] = useState<AnyCircuitElement[] | null>(
-    null,
+  const pcbRenderRequest = useMemo(
+    () => ({ pcbCircuitJson, boardKey, activeView }),
+    [pcbCircuitJson, boardKey, activeView],
   )
+  const [completedPcbRenderRequest, setCompletedPcbRenderRequest] = useState<
+    typeof pcbRenderRequest | null
+  >(null)
   const { elementRef, height } = useElementHeight<HTMLDivElement>()
   const schematicSheetSelection = getSelectedSchematicSheet({
     requestedLabel: requestedSchematicSheetLabel,
@@ -73,7 +77,9 @@ export function DesignViewer({
     [pcbCircuitJson],
   )
   const isPcbRendering =
-    activeView === "pcb" && pcbCircuitJson !== null && renderedPcbCircuitJson !== pcbCircuitJson
+    activeView === "pcb" &&
+    pcbCircuitJson !== null &&
+    completedPcbRenderRequest !== pcbRenderRequest
   const isViewerLoading = isLoading || isPcbRendering
 
   useEffect(() => {
@@ -162,7 +168,7 @@ export function DesignViewer({
               renderer={pcbRenderer}
               allowEditing={false}
               focusOnHover
-              onRenderComplete={() => setRenderedPcbCircuitJson(pcbCircuitJson)}
+              onRenderComplete={() => setCompletedPcbRenderRequest(pcbRenderRequest)}
             />
           </Suspense>
         ) : activeView === "schematic" && schematicCircuitJson ? (
