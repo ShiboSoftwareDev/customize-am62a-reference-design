@@ -1,7 +1,6 @@
 import { expect, test } from "bun:test"
 import { tiEvms } from "../lib/ti-evm-catalog"
 import { readGlbComponentMesh } from "./fixtures/read-glb-component-mesh"
-import { readPrebuiltPackageReview } from "./fixtures/read-prebuilt-package-review"
 
 test("cached scenes show the fitted assembly instead of overlapping co-layout alternatives", async () => {
   for (const { boardId, fitted, notFitted } of [
@@ -19,19 +18,15 @@ test("cached scenes show the fitted assembly instead of overlapping co-layout al
     const board = tiEvms.find((evm) => evm.id === boardId)
     if (!board) throw new Error(`Missing ${boardId}`)
     for (const variant of board.variants) {
-      const review = await readPrebuiltPackageReview(boardId, variant.id)
-      const presentNames = review.circuitJson.flatMap((element) =>
-        element.type === "source_component" ? [element.name] : [],
-      )
-      for (const componentName of fitted) {
-        if (!presentNames.includes(componentName)) continue
-        expect(
-          readGlbComponentMesh({ componentName, glb: review.glb }).polygons.length,
-        ).toBeGreaterThan(0)
+      const glb = await Bun.file(`public${variant.prebuiltCadSceneUrl}`).arrayBuffer()
+      if (variant.id === "full-board") {
+        for (const componentName of fitted) {
+          expect(readGlbComponentMesh({ componentName, glb }).polygons.length).toBeGreaterThan(0)
+        }
       }
       for (const componentName of notFitted) {
         expect(() => {
-          readGlbComponentMesh({ componentName, glb: review.glb })
+          readGlbComponentMesh({ componentName, glb })
         }).toThrow(`Missing ${componentName} mesh`)
       }
     }
