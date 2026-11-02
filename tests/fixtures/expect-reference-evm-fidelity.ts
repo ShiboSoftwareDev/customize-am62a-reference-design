@@ -2,16 +2,17 @@ import { expect } from "bun:test"
 import { resolve } from "node:path"
 import { parsePrebuiltCircuitJson } from "app/parse-prebuilt-circuit-json"
 import type { AnyCircuitElement } from "circuit-json"
+import { getSourcePortConnectivityMapFromCircuitJson } from "circuit-json-to-connectivity-map"
 import type { ParameterizedTiEvmId } from "lib/evms/parameterized-ti-evms"
 import { getTiEvm } from "lib/ti-evm-catalog"
 import { expectReferenceCopperConnections } from "./expect-reference-copper-connections"
 
 type CircuitPoint = { x: number; y: number }
 type ComponentName = string
+type ConnectivityNetId = string
 type PcbComponentId = string
 type SourceComponentId = string
 type SourceNetId = string
-type SourcePortAlias = string
 type SourcePortId = string
 type SourcePortReferenceKey = string
 type CircuitSourceComponent = AnyCircuitElement & {
@@ -24,8 +25,6 @@ type CircuitSourcePort = AnyCircuitElement & {
   source_port_id: SourcePortId
   source_component_id?: SourceComponentId
   name: string
-  pin_number?: number
-  port_hints?: string[]
 }
 type CircuitSourceTrace = AnyCircuitElement & {
   type: "source_trace"
@@ -49,6 +48,13 @@ type CircuitPcbComponent = AnyCircuitElement & {
   center: CircuitPoint
   layer: string
   rotation: number
+}
+type CircuitPcbPort = AnyCircuitElement & {
+  type: "pcb_port"
+  source_port_id: SourcePortId
+  x: number
+  y: number
+  layers: string[]
 }
 type CircuitPcbCopperPour = AnyCircuitElement & {
   type: "pcb_copper_pour"
@@ -528,6 +534,7 @@ function createPhysicalNetKeys(params: {
   referenceCircuitJson: AnyCircuitElement[]
 }): string[] {
   const sourcePortReferenceKeyBySourcePortId = getSourcePortReferenceKeyBySourcePortId(params)
+  const connectivityMap = getSourcePortConnectivityMapFromCircuitJson(params.circuitJson)
   const physicalSourcePortIds = new Set<SourcePortId>(
     params.circuitJson.flatMap((element) =>
       element.type === "pcb_port" && typeof element.source_port_id === "string"
@@ -535,11 +542,14 @@ function createPhysicalNetKeys(params: {
         : [],
     ),
   )
-  const endpointKeysByNet = new Map<SourceNetId, Set<SourcePortReferenceKey>>()
+  const endpointKeysByNet = new Map<ConnectivityNetId, Set<SourcePortReferenceKey>>()
   for (const sourceTrace of params.circuitJson.filter(isSourceTrace)) {
     for (const sourceNetId of sourceTrace.connected_source_net_ids) {
-      const endpointKeys = endpointKeysByNet.get(sourceNetId) ?? new Set<SourcePortReferenceKey>()
-      endpointKeysByNet.set(sourceNetId, endpointKeys)
+      const connectivityNetId = connectivityMap.getNetConnectedToId(sourceNetId)
+      if (!connectivityNetId) throw new Error(`Source net ${sourceNetId} has no connectivity`)
+      const endpointKeys =
+        endpointKeysByNet.get(connectivityNetId) ?? new Set<SourcePortReferenceKey>()
+      endpointKeysByNet.set(connectivityNetId, endpointKeys)
       for (const sourcePortId of sourceTrace.connected_source_port_ids) {
         if (!physicalSourcePortIds.has(sourcePortId)) continue
         const sourcePortReferenceKey = sourcePortReferenceKeyBySourcePortId.get(sourcePortId)
@@ -570,70 +580,49 @@ function getSourcePortReferenceKeyBySourcePortId(params: {
       .filter(isSourceComponent)
       .map(({ name, source_component_id }) => [source_component_id, name]),
   )
-  const referenceSourcePortsByComponentName = new Map<ComponentName, CircuitSourcePort[]>()
-  for (const referenceSourcePort of params.referenceCircuitJson.filter(isSourcePort)) {
+  const sourcePortsById = new Map<SourcePortId, CircuitSourcePort>(
+    params.circuitJson.filter(isSourcePort).map((port) => [port.source_port_id, port]),
+  )
+  const referenceSourcePortsById = new Map<SourcePortId, CircuitSourcePort>(
+    params.referenceCircuitJson.filter(isSourcePort).map((port) => [port.source_port_id, port]),
+  )
+  const referencePcbPortsByComponentName = new Map<ComponentName, CircuitPcbPort[]>()
+  for (const referencePcbPort of params.referenceCircuitJson.filter(isPcbPort)) {
+    const referenceSourcePort = referenceSourcePortsById.get(referencePcbPort.source_port_id)
+    if (!referenceSourcePort) throw new Error("Reference PCB port has no source port")
     if (!referenceSourcePort.source_component_id) continue
     const componentName = referenceSourceComponentNameById.get(
       referenceSourcePort.source_component_id,
     )
     if (!componentName) continue
-    const referenceSourcePorts = referenceSourcePortsByComponentName.get(componentName) ?? []
-    referenceSourcePorts.push(referenceSourcePort)
-    referenceSourcePortsByComponentName.set(componentName, referenceSourcePorts)
+    const referencePcbPorts = referencePcbPortsByComponentName.get(componentName) ?? []
+    referencePcbPorts.push(referencePcbPort)
+    referencePcbPortsByComponentName.set(componentName, referencePcbPorts)
   }
 
   const sourcePortReferenceKeyBySourcePortId = new Map<SourcePortId, SourcePortReferenceKey>()
-  for (const sourcePort of params.circuitJson.filter(isSourcePort)) {
+  // Conversion removes unsafe aliases, so identify physical pins by their authored placement.
+  for (const pcbPort of params.circuitJson.filter(isPcbPort)) {
+    const sourcePort = sourcePortsById.get(pcbPort.source_port_id)
+    if (!sourcePort) throw new Error("Converted PCB port has no source port")
     if (!sourcePort.source_component_id) continue
     const componentName = sourceComponentNameById.get(sourcePort.source_component_id)
-    const referenceSourcePorts = componentName
-      ? referenceSourcePortsByComponentName.get(componentName)
+    const referencePcbPorts = componentName
+      ? referencePcbPortsByComponentName.get(componentName)
       : undefined
-    if (!componentName || !referenceSourcePorts) continue
-    const sourcePortAliases = getSourcePortAliases(sourcePort)
-    const referenceSourcePort = [...referenceSourcePorts].sort(
-      (first, second) =>
-        getSourcePortAliasMatchCount({
-          firstAliases: sourcePortAliases,
-          secondAliases: getSourcePortAliases(second),
-        }) -
-        getSourcePortAliasMatchCount({
-          firstAliases: sourcePortAliases,
-          secondAliases: getSourcePortAliases(first),
-        }),
-    )[0]
-    if (!referenceSourcePort) continue
+    if (!componentName || !referencePcbPorts) continue
+    const referencePcbPort = referencePcbPorts.find(
+      (referencePort) =>
+        getPointDistance(pcbPort, referencePort) < 0.00001 &&
+        referencePort.layers.every((layer) => pcbPort.layers.includes(layer)),
+    )
+    if (!referencePcbPort) throw new Error(`Missing reference PCB port for ${componentName}`)
     sourcePortReferenceKeyBySourcePortId.set(
       sourcePort.source_port_id,
-      `${componentName}:${referenceSourcePort.source_port_id}`,
+      `${componentName}:${referencePcbPort.source_port_id}`,
     )
   }
   return sourcePortReferenceKeyBySourcePortId
-}
-
-function getSourcePortAliases(sourcePort: CircuitSourcePort): Set<SourcePortAlias> {
-  const sourcePortAliases = new Set<SourcePortAlias>([
-    sourcePort.name,
-    ...(sourcePort.port_hints ?? []),
-  ])
-  if (sourcePort.pin_number !== undefined) {
-    sourcePortAliases.add(String(sourcePort.pin_number))
-    sourcePortAliases.add(`pin${sourcePort.pin_number}`)
-  }
-  return sourcePortAliases
-}
-
-function getSourcePortAliasMatchCount(params: {
-  firstAliases: ReadonlySet<SourcePortAlias>
-  secondAliases: ReadonlySet<SourcePortAlias>
-}): number {
-  let matchCount = 0
-  for (const sourcePortAlias of params.firstAliases) {
-    if (params.secondAliases.has(sourcePortAlias)) {
-      matchCount += 1
-    }
-  }
-  return matchCount
 }
 
 function expectNoRoutingErrors(circuitJson: AnyCircuitElement[]): void {
@@ -712,6 +701,10 @@ function isPcbBoard(element: AnyCircuitElement): element is CircuitPcbBoard {
 
 function isPcbComponent(element: AnyCircuitElement): element is CircuitPcbComponent {
   return element.type === "pcb_component"
+}
+
+function isPcbPort(element: AnyCircuitElement): element is CircuitPcbPort {
+  return element.type === "pcb_port"
 }
 
 function isPcbCopperPour(element: AnyCircuitElement): element is CircuitPcbCopperPour {
