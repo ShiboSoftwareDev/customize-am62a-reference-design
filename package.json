@@ -39,7 +39,7 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
     "altium-to-circuit-json": "0.0.114",
-    "altiumts": "0.0.87",
+    "altiumts": "0.0.95",
     "bun-match-svg": "0.0.17",
     "bun-types": "1.4.2",
     "circuit-json": "0.0.539",
