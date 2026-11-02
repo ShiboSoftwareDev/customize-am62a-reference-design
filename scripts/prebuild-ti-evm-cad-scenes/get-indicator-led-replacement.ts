@@ -16,7 +16,9 @@ export function getIndicatorLedReplacement(
   if (!packageSize) return undefined
   const length = packageSize === "40" ? 1 : 2
   const width = packageSize === "40" ? 0.5 : 1.25
-  const height = packageSize === "40" ? 0.46 : 0.7
+  const height = packageSize === "40" ? 0.25 : 0.7
+  const substrateTop = packageSize === "40" ? 0.11 : 0.3
+  const terminalThickness = 0.03
   const terminalLength = length * 0.2
   return {
     kind: "jscad",
@@ -24,20 +26,24 @@ export function getIndicatorLedReplacement(
       modelLocalPads,
       jscadOperations: [
         createColoredCuboid({
-          center: [0, 0, 0.08],
-          size: [length, width, 0.16],
+          center: [0, 0, (substrateTop + terminalThickness) / 2],
+          size: [length, width, substrateTop - terminalThickness],
           color: connectorModelColors.whitePlastic,
         }),
         createColoredRoundedCuboid({
-          center: [0, 0, (height + 0.16) / 2],
-          size: [length * 0.7, width * 0.9, height - 0.16],
-          roundRadius: 0.04,
+          center: [0, 0, (height + substrateTop) / 2],
+          size: [
+            packageSize === "40" ? length : 1.4,
+            packageSize === "40" ? width : 1.2,
+            height - substrateTop,
+          ],
+          roundRadius: packageSize === "40" ? 0.01 : 0.04,
           color: [0.92, 0.94, 0.89],
         }),
         ...[-1, 1].map((side) =>
           createColoredCuboid({
-            center: [(side * (length - terminalLength)) / 2, 0, 0.025],
-            size: [terminalLength, width, 0.05],
+            center: [(side * (length - terminalLength)) / 2, 0, terminalThickness / 2],
+            size: [terminalLength, width, terminalThickness],
             color: connectorModelColors.metal,
           }),
         ),

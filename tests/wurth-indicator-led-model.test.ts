@@ -1,6 +1,8 @@
 import { expect, test } from "bun:test"
 import { getDnpComponentNames } from "../scripts/prebuild-ti-evm-cad-scenes/get-dnp-component-names"
 import jscad from "@jscad/modeling"
+import { getIndicatorLedReplacement } from "../scripts/prebuild-ti-evm-cad-scenes/get-indicator-led-replacement"
+import { executeCadModelOperation } from "./fixtures/execute-cad-model-operation"
 import { readGlbComponentMesh } from "./fixtures/read-glb-component-mesh"
 import {
   readPrebuiltPackageReview,
@@ -8,6 +10,18 @@ import {
 } from "./fixtures/read-prebuilt-package-review"
 
 test("Wurth LD indicators use light LED lenses instead of ferrite inductor cases", async () => {
+  const replacement = getIndicatorLedReplacement(
+    { altiumFootprint: "LED_150080VS75000_80X50_SMD_0-8", componentName: "LD1" },
+    [],
+  )
+  if (replacement?.kind !== "jscad") throw new Error("Missing LED geometry")
+  const [substrate, , ...terminals] = replacement.jscadOperations.map(executeCadModelOperation)
+  if (!substrate) throw new Error("Missing LED substrate")
+  for (const terminal of terminals) {
+    expect(
+      Math.abs(jscad.measurements.measureVolume(jscad.booleans.intersect(substrate, terminal))),
+    ).toBeLessThan(1e-8)
+  }
   let checkedCount = 0
   for (const boardId of ["tmds62levm", "sk-am62"] as const) {
     const review = await readPrebuiltPackageReview(boardId)
@@ -20,7 +34,7 @@ test("Wurth LD indicators use light LED lenses instead of ferrite inductor cases
       const dimensions = jscad.measurements.measureDimensions(
         readGlbComponentMesh({ componentName: source.name, glb: review.glb }),
       )
-      expect(dimensions[2], `${boardId} ${source.name}`).toBeCloseTo(is0402 ? 0.46 : 0.7, 4)
+      expect(dimensions[2], `${boardId} ${source.name}`).toBeCloseTo(is0402 ? 0.25 : 0.7, 4)
       const lens = readGlbComponentMesh({
         componentName: source.name,
         glb: review.glb,

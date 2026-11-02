@@ -1,5 +1,7 @@
 import { expect, test } from "bun:test"
 import jscad from "@jscad/modeling"
+import { createCommonModeChokeCadModel } from "../scripts/prebuild-ti-evm-cad-scenes/create-common-mode-choke-cad-model"
+import { executeCadModelOperation } from "./fixtures/execute-cad-model-operation"
 import { readGlbComponentMesh } from "./fixtures/read-glb-component-mesh"
 import { getMeshContactCenters } from "./fixtures/get-mesh-contact-centers"
 import {
@@ -8,6 +10,13 @@ import {
 } from "./fixtures/read-prebuilt-package-review"
 
 test("DLW21 common-mode chokes have four isolated terminations instead of two shorting bars", async () => {
+  const [body, ...electrodes] = createCommonModeChokeCadModel().map(executeCadModelOperation)
+  if (!body) throw new Error("Missing choke body")
+  for (const electrode of electrodes) {
+    expect(
+      Math.abs(jscad.measurements.measureVolume(jscad.booleans.intersect(body, electrode))),
+    ).toBeLessThan(1e-8)
+  }
   for (const [boardId, names] of [
     ["sk-am62", ["L9", "L10"]],
     ["tmds62levm", ["L2", "L9"]],
