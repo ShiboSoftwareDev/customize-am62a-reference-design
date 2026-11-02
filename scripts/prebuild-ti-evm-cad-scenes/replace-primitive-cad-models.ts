@@ -158,21 +158,19 @@ function applyCadModelReplacement(params: {
           pads: params.pads ?? [],
         })
       : undefined
-  const canonicalRotation = registeredPlacement
-    ? {
-        x: 0,
-        y: params.pcbComponent?.layer === "bottom" ? 180 : 0,
-        z: normalizeDegrees(registeredPlacement.ccwRotationDegrees + (modelYawOffsetDegrees ?? 0)),
-      }
-    : params.pcbComponent
-      ? getCanonicalCadRotation({
-          modelYawOffsetDegrees,
-          pcbComponent: params.pcbComponent,
-        })
-      : params.cadComponent.rotation
-  const rotation = canonicalRotation && {
-    ...canonicalRotation,
-    x: params.replacement.modelXRotationDegrees ?? canonicalRotation.x,
+  let rotation = params.cadComponent.rotation
+  if (params.pcbComponent) {
+    rotation = getCanonicalCadRotation({ modelYawOffsetDegrees, pcbComponent: params.pcbComponent })
+  }
+  if (registeredPlacement) {
+    rotation = {
+      x: 0,
+      y: params.pcbComponent?.layer === "bottom" ? 180 : 0,
+      z: normalizeDegrees(registeredPlacement.ccwRotationDegrees + (modelYawOffsetDegrees ?? 0)),
+    }
+  }
+  if (rotation) {
+    rotation = { ...rotation, x: params.replacement.modelXRotationDegrees ?? rotation.x }
   }
   const importedPrimitivePosition = getReplacementPosition(params.cadComponent)
   const position =
