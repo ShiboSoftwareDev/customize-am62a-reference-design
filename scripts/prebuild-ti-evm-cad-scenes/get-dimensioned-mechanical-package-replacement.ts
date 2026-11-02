@@ -34,6 +34,7 @@ function getMetricInductorDimensions(
 function getInductorHeight(normalizedFootprint: string): number | undefined {
   if (normalizedFootprint === "L1008") return 1.2
   if (/^L4P_2D54/u.test(normalizedFootprint)) return 5
+  if (normalizedFootprint.startsWith("IND")) return getPackageHeightMillimeters(normalizedFootprint)
   return undefined
 }
 

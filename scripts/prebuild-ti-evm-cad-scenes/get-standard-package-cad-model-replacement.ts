@@ -18,6 +18,7 @@ import type { ModelLocalPad } from "./get-model-local-pads"
 import { getMultiTerminalResistorReplacement } from "./get-multi-terminal-resistor-replacement"
 import { getSmallTransistorCadModelReplacement } from "./get-small-transistor-cad-model-replacement"
 import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
+import { getLeadlessDiodeCadModelReplacement } from "./get-leadless-diode-cad-model-replacement"
 
 type ImperialPackageSize =
   | "01005"
@@ -181,14 +182,6 @@ function getLeadlessPackageReplacement(
 function getDiscretePackageReplacement(
   normalizedFootprint: string,
 ): CadModelReplacement | undefined {
-  if (/^DIO_DFN0201/u.test(normalizedFootprint)) {
-    return createFootprinterReplacement(
-      "dfn2_w0.65mm_h0.4mm_bodywidth0.65mm_bodylength0.4mm_p0.4mm",
-    )
-  }
-  if (/^DIO_DFN0402/u.test(normalizedFootprint)) {
-    return createFootprinterReplacement("dfn2_w1mm_h0.6mm_bodywidth1mm_bodylength0.6mm_p0.5mm")
-  }
   const exactPackageMappings: Array<[RegExp, string]> = [
     [/^BF10_/u, "dfn10_w2mm_h1.25mm_bodywidth2mm_bodylength1.25mm_p0.5mm"],
     [/^SOT23[-_]?5/u, "sot23-5"],
@@ -333,6 +326,7 @@ export function getStandardPackageCadModelReplacement(
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
   return (
     getMultiTerminalResistorReplacement({ normalizedFootprint, modelLocalPads }) ??
+    getLeadlessDiodeCadModelReplacement(normalizedFootprint, modelLocalPads) ??
     getTwoTerminalPackageReplacement(componentIdentity, modelLocalPads) ??
     getSmallTransistorCadModelReplacement(normalizedFootprint) ??
     getRegisteredLeadedPackageReplacement(normalizedFootprint) ??
