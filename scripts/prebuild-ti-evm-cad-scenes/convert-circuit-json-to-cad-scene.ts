@@ -31,13 +31,19 @@ function resolveLocalCadModelUrls({
   publicDirectory: string
 }): AnyCircuitElement[] {
   return circuitJson.map((element) => {
-    if (element.type !== "cad_component" || !element.model_step_url?.startsWith("/")) {
-      return element
-    }
-
+    if (element.type !== "cad_component") return element
     return {
       ...element,
-      model_step_url: resolve(publicDirectory, element.model_step_url.replace(/^\//u, "")),
+      model_step_url: resolveLocalModelUrl(element.model_step_url, publicDirectory),
+      model_glb_url: resolveLocalModelUrl(element.model_glb_url, publicDirectory),
     } satisfies CadComponent
   })
+}
+
+function resolveLocalModelUrl(
+  modelUrl: string | undefined,
+  publicDirectory: string,
+): string | undefined {
+  if (!modelUrl?.startsWith("/")) return modelUrl
+  return resolve(publicDirectory, modelUrl.replace(/^\//u, ""))
 }

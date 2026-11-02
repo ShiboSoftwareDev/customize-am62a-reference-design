@@ -1,3 +1,4 @@
+import { getRegisteredLeadedPackageReplacement } from "./get-registered-leaded-package-replacement"
 import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-model-replacement"
 import { createBgaCadModel, createQfpCadModel } from "./create-integrated-circuit-cad-models"
 import {
@@ -178,7 +179,6 @@ function getDiscretePackageReplacement(
     [/^(?:DIO_)?(?:SOD[-_]?523|SOD523)/u, "sod523"],
     [/^DO_214AC_SMA/u, "sma"],
     [/^(?:SOT23-123|TO_SOT23-123|SOT23$)/u, "sot23"],
-    [/^SC70-5/u, "sot23-5"],
   ]
   const exactMapping = exactPackageMappings.find(([pattern]) => pattern.test(normalizedFootprint))
   return exactMapping ? createFootprinterReplacement(exactMapping[1]) : undefined
@@ -210,10 +210,8 @@ function getBoardSpecificSmallPackageReplacement(
 
   const exactPackageMappings: Array<[RegExp, string]> = [
     [/^U_6_DRY/u, "dfn6_w1.45mm_h1mm_bodywidth1.45mm_bodylength1mm_p0.5mm"],
-    [/^DCK5_/u, "sot23-5"],
     [/^SMINI6-/u, "sot363"],
     [/^SOT553-5/u, "sot563"],
-    [/^TVSOP14/u, "tssop14"],
   ]
   const exactMapping = exactPackageMappings.find(([pattern]) => pattern.test(normalizedFootprint))
   return exactMapping ? createFootprinterReplacement(exactMapping[1]) : undefined
@@ -315,6 +313,7 @@ export function getStandardPackageCadModelReplacement(
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
   return (
     getTwoTerminalPackageReplacement(componentIdentity) ??
+    getRegisteredLeadedPackageReplacement(normalizedFootprint) ??
     getSmallOutlinePackageReplacement(normalizedFootprint) ??
     getLeadlessPackageReplacement(normalizedFootprint) ??
     getDiscretePackageReplacement(normalizedFootprint) ??

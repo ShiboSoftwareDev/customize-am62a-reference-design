@@ -27,6 +27,7 @@ import {
   createMixedMountPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
+import { createGroveSmdConnectorCadModel } from "./create-grove-smd-connector-cad-model"
 import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
 
 // The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
@@ -36,9 +37,10 @@ const beaglePlayUsbAModelCenterOffsetMillimeters = 5.04
 // Move the complete 15.8 mm shell outward so their rear edges stay aligned.
 const beagleBoneBlackUsbAModelCenterOffsetMillimeters = 5.275
 // Ultra Librarian's manufacturer model uses meters and retains TE's CAD origin.
-// Center its 8.7 mm depth and place its lowest contact surface on the PCB.
-const te2199119_4ModelCenterOffsetMillimeters = 4
-const te2199119_4ModelBottomOffsetMillimeters = 1.385
+// The model is inverted. Its solder tails are at -1.71 mm after flipping Z;
+// the locating pegs extend another 0.525 mm into the PCB.
+const te2199119_4ModelCenterOffsetMillimeters = -4
+const te2199119_4ModelBottomOffsetMillimeters = 1.71
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -65,6 +67,7 @@ function createGlbReplacement(
   options: {
     modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
     modelUnitToMmScaleFactor: number
+    modelBoardNormalDirection?: "z+" | "z-"
     modelVerticalOffsetMillimeters?: number
     modelYawOffsetDegrees?: number
   },
@@ -149,8 +152,35 @@ export function getMechanicalConnectorCadModelReplacement(
       modelYawOffsetDegrees: -90,
     })
   }
-  if (footprint.includes("10029449") || footprint.includes("HDMI19P")) {
-    return createStepReplacement(externalStepModelUrls.amphenolHdmiA)
+  if (footprint.startsWith("HDMI19P_1D155_")) {
+    return {
+      kind: "glb",
+      modelGlbUrl: "/cad-models/beagleplay-hdmi.glb",
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelUnitToMmScaleFactor: 1,
+      // This asset is exported in scene coordinates. Recover the reference
+      // package frame before registering its two staggered through-hole rows.
+      modelXRotationDegrees: 270,
+      modelYawOffsetDegrees: 180,
+      modelVerticalOffsetMillimeters: 0.0338,
+      modelPinPositions: Array.from({ length: 19 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: index % 2 === 0 ? 0.5 : -0.5,
+        y: 1.9159 + index * 0.5775,
+      })),
+    }
+  }
+  if (footprint.includes("10029449")) {
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.amphenolHdmiA,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: Array.from({ length: 19 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: 4.75 - index * 0.5,
+        y: 5,
+      })),
+    }
   }
   if (footprint.includes("DC04S019")) {
     return createStepReplacement(externalStepModelUrls.amphenolHdmiA)
@@ -171,7 +201,20 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createUflConnectorCadModel())
   }
   if (footprint.includes("SJ-43514")) {
-    return createStepReplacement(externalStepModelUrls.cuiSj43514AudioJack)
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.cuiSj43514AudioJack,
+      // Rotate CUI's Y-up file into the board frame. The numbered
+      // solder contacts below are measured in that rotated package frame.
+      modelXRotationDegrees: 90,
+      modelVerticalOffsetMillimeters: 2.6,
+      modelPinPositions: [
+        { pinNumber: "1", x: -0.6, y: 3.75 },
+        { pinNumber: "2", x: -12.8, y: 3.4 },
+        { pinNumber: "3", x: -5.3, y: -3.625 },
+        { pinNumber: "4", x: -3.4, y: 3.4 },
+      ],
+    }
   }
   if (footprint.includes("PJ102A")) {
     return createJscadReplacement(createBarrelJackCadModel(), {
@@ -216,6 +259,7 @@ export function getMechanicalConnectorCadModelReplacement(
         y: te2199119_4ModelCenterOffsetMillimeters,
       },
       modelUnitToMmScaleFactor: 1000,
+      modelBoardNormalDirection: "z-",
       modelVerticalOffsetMillimeters: te2199119_4ModelBottomOffsetMillimeters,
     })
   }
@@ -238,6 +282,9 @@ export function getMechanicalConnectorCadModelReplacement(
   }
   if (footprint.includes("1734248-5")) {
     return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 15, pitch: 0.5 }))
+  }
+  if (footprint === "JST4P_SMD_2_0_90D") {
+    return createJscadReplacement(createGroveSmdConnectorCadModel())
   }
   if (footprint.startsWith("JST4P_")) {
     const pitch = footprint.includes("_1D0_") ? 1 : 2

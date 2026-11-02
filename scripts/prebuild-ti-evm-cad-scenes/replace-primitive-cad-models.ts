@@ -2,8 +2,13 @@ import type { AnyCircuitElement } from "circuit-json"
 import { applyToPoint, rotateDEG } from "transformation-matrix"
 import { type CadModelReplacement, getCadModelReplacement } from "./get-cad-model-replacement"
 import type { ComponentName, SourceFootprintByComponentName } from "./read-source-footprints"
+import {
+  getPadRegisteredModelPlacement,
+  type CadRegistrationPad,
+} from "./get-pad-registered-model-placement"
 import { getImportedPrimitivePlanarPosition } from "./get-imported-primitive-planar-position"
 
+type PcbComponentId = string
 type SourceComponentId = string
 type CadComponentCountBySourceComponentId = Map<SourceComponentId, number>
 type PcbComponentBySourceComponentId = Map<SourceComponentId, PcbComponentElement>
@@ -64,6 +69,24 @@ export function replacePrimitiveCadModels(params: {
     const currentCount = cadComponentCountBySourceComponentId.get(element.source_component_id) ?? 0
     cadComponentCountBySourceComponentId.set(element.source_component_id, currentCount + 1)
   }
+  const padsByPcbComponentId = new Map<PcbComponentId, CadRegistrationPad[]>()
+  for (const element of params.circuitJson) {
+    if (
+      (element.type !== "pcb_smtpad" && element.type !== "pcb_plated_hole") ||
+      typeof element.pcb_component_id !== "string"
+    )
+      continue
+    const pads = padsByPcbComponentId.get(element.pcb_component_id) ?? []
+    pads.push({
+      type: element.type,
+      x: typeof element.x === "number" ? element.x : undefined,
+      y: typeof element.y === "number" ? element.y : undefined,
+      port_hints: Array.isArray(element.port_hints)
+        ? element.port_hints.filter((hint): hint is string => typeof hint === "string")
+        : undefined,
+    })
+    padsByPcbComponentId.set(element.pcb_component_id, pads)
+  }
   let enrichedComponentCount = 0
   let retainedPrimitiveComponentCount = 0
 
@@ -99,6 +122,10 @@ export function replacePrimitiveCadModels(params: {
     enrichedComponentCount += 1
     return applyCadModelReplacement({
       cadComponent: element,
+      pads:
+        padsByPcbComponentId.get(
+          typeof element.pcb_component_id === "string" ? element.pcb_component_id : "",
+        ) ?? [],
       pcbComponent: pcbComponentBySourceComponentId.get(element.source_component_id),
       replacement,
     })
@@ -116,17 +143,42 @@ export function replacePrimitiveCadModels(params: {
 function applyCadModelReplacement(params: {
   cadComponent: CadComponentElement
   pcbComponent?: PcbComponentElement
+  pads?: CadRegistrationPad[]
   replacement: CadModelReplacement
 }): CadComponentElement {
   const modelYawOffsetDegrees =
     params.replacement.kind === "none" ? undefined : params.replacement.modelYawOffsetDegrees
-  const rotation = params.pcbComponent
-    ? getCanonicalCadRotation({
-        modelYawOffsetDegrees,
-        pcbComponent: params.pcbComponent,
-      })
-    : params.cadComponent.rotation
+  const registeredPlacement =
+    (params.replacement.modelFootprintString || params.replacement.modelPinPositions) &&
+    params.pcbComponent
+      ? getPadRegisteredModelPlacement({
+          layer: params.pcbComponent.layer,
+          modelFootprintString: params.replacement.modelFootprintString,
+          modelPinPositions: params.replacement.modelPinPositions,
+          pads: params.pads ?? [],
+        })
+      : undefined
+  const canonicalRotation = registeredPlacement
+    ? {
+        x: 0,
+        y: params.pcbComponent?.layer === "bottom" ? 180 : 0,
+        z: normalizeDegrees(registeredPlacement.ccwRotationDegrees + (modelYawOffsetDegrees ?? 0)),
+      }
+    : params.pcbComponent
+      ? getCanonicalCadRotation({
+          modelYawOffsetDegrees,
+          pcbComponent: params.pcbComponent,
+        })
+      : params.cadComponent.rotation
+  const rotation = canonicalRotation && {
+    ...canonicalRotation,
+    x: params.replacement.modelXRotationDegrees ?? canonicalRotation.x,
+  }
   const importedPrimitivePosition = getReplacementPosition(params.cadComponent)
+  const position =
+    registeredPlacement && importedPrimitivePosition
+      ? { ...importedPrimitivePosition, ...registeredPlacement.position }
+      : importedPrimitivePosition
   const cadComponentWithoutPrimitive: CadComponentElement = {
     ...params.cadComponent,
     footprinter_string: undefined,
@@ -137,6 +189,11 @@ function applyCadModelReplacement(params: {
     model_obj_url: undefined,
     model_step_url: undefined,
     model_stl_url: undefined,
+    model_board_normal_direction:
+      params.replacement.modelBoardNormalDirection ??
+      params.cadComponent.model_board_normal_direction,
+    model_origin_position:
+      params.replacement.modelOriginPosition ?? params.cadComponent.model_origin_position,
     position: getPositionWithModelOffset({
       modelPlanarOffsetMillimeters:
         params.replacement.kind === "jscad" ||
@@ -144,11 +201,8 @@ function applyCadModelReplacement(params: {
         params.replacement.kind === "glb"
           ? params.replacement.modelPlanarOffsetMillimeters
           : undefined,
-      modelVerticalOffsetMillimeters:
-        params.replacement.kind === "glb"
-          ? params.replacement.modelVerticalOffsetMillimeters
-          : undefined,
-      position: importedPrimitivePosition,
+      modelVerticalOffsetMillimeters: params.replacement.modelVerticalOffsetMillimeters,
+      position,
       rotation,
     }),
     rotation,

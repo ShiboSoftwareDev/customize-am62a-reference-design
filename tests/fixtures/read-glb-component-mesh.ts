@@ -27,6 +27,8 @@ type GlbDocument = {
   }>
 }
 
+const documentByGlb = new WeakMap<ArrayBuffer, GlbDocument>()
+
 export function readGlbComponentMesh({
   componentName,
   glb,
@@ -37,9 +39,13 @@ export function readGlbComponentMesh({
   materialColorFilter?: (color: number[] | undefined) => boolean
 }) {
   const jsonChunkLength = new DataView(glb).getUint32(12, true)
-  const document = JSON.parse(
-    new TextDecoder().decode(new Uint8Array(glb, 20, jsonChunkLength)),
-  ) as GlbDocument
+  let document = documentByGlb.get(glb)
+  if (!document) {
+    document = JSON.parse(
+      new TextDecoder().decode(new Uint8Array(glb, 20, jsonChunkLength)),
+    ) as GlbDocument
+    documentByGlb.set(glb, document)
+  }
   const binaryOffset = 28 + jsonChunkLength
   const node = document.nodes.find(
     (candidate) => candidate.extras?.tscircuit?.componentName === componentName,
@@ -58,10 +64,10 @@ export function readGlbComponentMesh({
     if (positionAccessor.componentType !== 5126 || positionBufferView.byteStride) {
       throw new Error("Expected packed float32 mesh positions")
     }
+    const positionOffset =
+      binaryOffset + (positionBufferView.byteOffset ?? 0) + (positionAccessor.byteOffset ?? 0)
     const positions = new Float32Array(
-      glb,
-      binaryOffset + (positionBufferView.byteOffset ?? 0) + (positionAccessor.byteOffset ?? 0),
-      positionAccessor.count * 3,
+      glb.slice(positionOffset, positionOffset + positionAccessor.count * 3 * 4),
     )
     const indexAccessor = document.accessors[primitive.indices]!
     const indexBufferView = document.bufferViews[indexAccessor.bufferView]!
@@ -72,8 +78,8 @@ export function readGlbComponentMesh({
     }
     const indices =
       indexAccessor.componentType === 5123
-        ? new Uint16Array(glb, indexOffset, indexAccessor.count)
-        : new Uint32Array(glb, indexOffset, indexAccessor.count)
+        ? new Uint16Array(glb.slice(indexOffset, indexOffset + indexAccessor.count * 2))
+        : new Uint32Array(glb.slice(indexOffset, indexOffset + indexAccessor.count * 4))
     for (let triangleIndex = 0; triangleIndex < indices.length; triangleIndex += 3) {
       const triangle: Vec3[] = []
       for (let cornerIndex = 0; cornerIndex < 3; cornerIndex++) {

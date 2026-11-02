@@ -1,4 +1,5 @@
 import { expect, test } from "bun:test"
+import { externalStepModelUrls } from "../scripts/prebuild-ti-evm-cad-scenes/external-cad-model-urls"
 import { getCadModelReplacement } from "../scripts/prebuild-ti-evm-cad-scenes/get-cad-model-replacement"
 
 test("maps standard Altium package identities to reusable CAD models", () => {
@@ -28,7 +29,12 @@ test("maps standard Altium package identities to reusable CAD models", () => {
       altiumFootprint: "SOT23-5_1-5",
       componentName: "U2",
     }),
-  ).toEqual({ kind: "footprinter", footprinterString: "sot23-5" })
+  ).toEqual({
+    kind: "step",
+    modelOriginPosition: { x: 0, y: 0, z: 0 },
+    modelStepUrl: externalStepModelUrls.sot23_5,
+    modelFootprintString: "sot23-5",
+  })
   expect(
     getCadModelReplacement({
       altiumFootprint: "SO8-25X75",
@@ -37,6 +43,6 @@ test("maps standard Altium package identities to reusable CAD models", () => {
   ).toEqual({
     footprinterString: "soic8_p1.27mm",
     kind: "footprinter",
-    modelYawOffsetDegrees: 90,
+    modelFootprintString: "soic8_p1.27mm",
   })
 })

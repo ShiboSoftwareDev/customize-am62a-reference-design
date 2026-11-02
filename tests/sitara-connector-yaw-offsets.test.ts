@@ -9,7 +9,7 @@ test("aligns board-edge connector openings with their Sitara footprints", () => 
     ["USB7P_1R4_14X5R72MM", -90],
     ["USB2_0_TYPE_C", -90],
     ["MICRO_SD_ST_TF_003A_16_1X14_5MM", 90],
-    ["JST4P_SMD_2_0_90D", 180],
+    ["JST4P_SMD_2_0_90D", 0],
     ["USB5MINI_4SHIELDED_SMD-5", -90],
     ["SD-MICRO-SCHA5B0300", 0],
     ["CONN3-PWR-PJ102A", 90],
