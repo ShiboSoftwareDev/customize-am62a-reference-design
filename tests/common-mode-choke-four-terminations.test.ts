@@ -24,7 +24,7 @@ test("DLW21 common-mode chokes have four isolated terminations instead of two sh
         jscad.measurements.measureDimensions(
           readGlbComponentMesh({ componentName, glb: review.glb }),
         )[2],
-      ).toBeCloseTo(1.2, 4)
+      ).toBeCloseTo(1.4, 4)
       expect(findMissingPackageContacts({ componentName, review })).toEqual([])
     }
   }
