@@ -16,8 +16,8 @@ test("uses package identity instead of broad connector substitutions", () => {
       altiumFootprint: "CON_RJ45-14_LPJG16314A4NL_S_R_T_13-6",
       componentName: "J2",
       manufacturerPartNumber: "LPJG16314A4NL",
-    })?.kind,
-  ).toBe("jscad")
+    }),
+  ).toMatchObject({ kind: "glb", modelGlbUrl: "/cad-models/linkpp-lpjg16314a4nl.glb" })
   expect(
     getCadModelReplacement({
       altiumFootprint: "CON_USBC24_2012670_S_R_S_3-9",
