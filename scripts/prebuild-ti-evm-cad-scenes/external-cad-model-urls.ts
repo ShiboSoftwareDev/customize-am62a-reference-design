@@ -22,6 +22,7 @@ export const externalStepModelUrls = {
   sot23: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23.step`,
   sot323: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-323_SC-70.step`,
   sot363: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-363_SC-70-6.step`,
+  jstSh4: `${kicadPackageBaseUrl}/Connector_JST.3dshapes/JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal.step`,
   vssop8Dcu: `${kicadPackageBaseUrl}/Package_SO.3dshapes/` + "VSSOP-8_2.3x2mm_P0.5mm.step",
   amphenolHdmiA:
     `${kicadPackageBaseUrl}/Connector_Video.3dshapes/` +

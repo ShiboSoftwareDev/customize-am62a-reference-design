@@ -9,6 +9,7 @@ import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensio
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
 import { createSmdElectrolyticCapacitorCadModel } from "./create-smd-electrolytic-capacitor-cad-model"
+import { createCommonModeChokeCadModel } from "./create-common-mode-choke-cad-model"
 import { getCrystalCadModelReplacement } from "./get-crystal-cad-model-replacement"
 
 function createJscadReplacement(
@@ -56,7 +57,10 @@ export function getDimensionedMechanicalPackageReplacement(
   if (/^MOD100_WL18/u.test(normalizedFootprint)) {
     return createJscadReplacement(createWifiModuleCadModel(modelLocalPads))
   }
-  if (componentIdentity.componentName.startsWith("L")) {
+  if (normalizedFootprint.startsWith("IND4_DLW21H_")) {
+    return createJscadReplacement(createCommonModeChokeCadModel())
+  }
+  if (/^L\d/u.test(componentIdentity.componentName)) {
     const inductorDimensions = bodyDimensions ?? getMetricInductorDimensions(normalizedFootprint)
     if (inductorDimensions) {
       return createJscadReplacement(

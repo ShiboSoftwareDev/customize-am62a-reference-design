@@ -9,6 +9,7 @@ export type CadRegistrationPad = {
   height?: number
   radius?: number
   ccw_rotation?: number
+  points?: Array<{ x: number; y: number }>
   port_hints?: string[]
 }
 type PinNumber = string

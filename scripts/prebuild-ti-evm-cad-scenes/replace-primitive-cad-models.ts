@@ -86,6 +86,7 @@ export function replacePrimitiveCadModels(params: {
       height: typeof element.height === "number" ? element.height : undefined,
       radius: typeof element.radius === "number" ? element.radius : undefined,
       ccw_rotation: typeof element.ccw_rotation === "number" ? element.ccw_rotation : undefined,
+      points: Array.isArray(element.points) ? element.points.filter(isPlanarPoint) : undefined,
       port_hints: Array.isArray(element.port_hints)
         ? element.port_hints.filter((hint): hint is string => typeof hint === "string")
         : undefined,
@@ -122,6 +123,9 @@ export function replacePrimitiveCadModels(params: {
       pcbComponent && position
         ? getModelLocalPads({
             pads,
+            includeConnectionAnchors: /^(?:U?QFN|VQFN|WQFN|X[12]SON|U?SON|UDFN|WSON|VSON)/u.test(
+              sourceFootprint ?? "",
+            ),
             position,
             layer: pcbComponent.layer,
             ccwRotationDegrees: pcbComponent.rotation,
@@ -367,5 +371,16 @@ function isPcbComponentElement(element: AnyCircuitElement): element is PcbCompon
     typeof element.source_component_id === "string" &&
     (element.layer === "top" || element.layer === "bottom") &&
     typeof element.rotation === "number"
+  )
+}
+
+function isPlanarPoint(point: unknown): point is { x: number; y: number } {
+  return (
+    typeof point === "object" &&
+    point !== null &&
+    "x" in point &&
+    "y" in point &&
+    typeof point.x === "number" &&
+    typeof point.y === "number"
   )
 }

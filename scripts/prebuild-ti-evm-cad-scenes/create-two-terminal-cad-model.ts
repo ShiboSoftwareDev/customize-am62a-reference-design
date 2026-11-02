@@ -40,7 +40,7 @@ const twoTerminalColors = {
   diodeMark: [0.8, 0.82, 0.84] as Color,
   inductorBody: [0.12, 0.13, 0.14] as Color,
   ledBody: [0.82, 0.84, 0.82] as Color,
-  ledLens: [0.12, 0.72, 0.32] as Color,
+  ledLens: [0.92, 0.94, 0.89] as Color,
   resistorBody: [0.15, 0.13, 0.1] as Color,
   terminal: [0.68, 0.7, 0.72] as Color,
 }
@@ -92,7 +92,7 @@ export function createTwoTerminalCadModel(params: {
     )
   }
   // Polarity markings need a pin-numbered reference, rather than an undirected axis.
-  if (params.kind === "diode" || params.kind === "led") return operations
+  if (params.kind === "diode") return operations
   return alignTwoTerminalCadModel({
     jscadOperations: operations,
     modelLocalPads: params.modelLocalPads ?? [],

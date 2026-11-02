@@ -22,8 +22,10 @@ export async function readPrebuiltPackageReview(boardId: string, variantId = "fu
 export function findMissingPackageContacts({
   componentName,
   review,
+  materialColorFilter,
 }: {
   componentName: string
+  materialColorFilter?: Parameters<typeof readGlbComponentMesh>[0]["materialColorFilter"]
   review: Awaited<ReturnType<typeof readPrebuiltPackageReview>>
 }): string[] {
   const sourceComponent = review.circuitJson.find(
@@ -41,7 +43,8 @@ export function findMissingPackageContacts({
   const mesh = readGlbComponentMesh({
     componentName,
     glb: review.glb,
-    materialColorFilter: (color) => Boolean(color && Math.max(...color.slice(0, 3)) > 0.5),
+    materialColorFilter:
+      materialColorFilter ?? ((color) => Boolean(color && Math.max(...color.slice(0, 3)) > 0.5)),
   })
   const contactTriangles = mesh.polygons.flatMap((polygon) => {
     const heights = polygon.vertices.map((vertex) => vertex[2])

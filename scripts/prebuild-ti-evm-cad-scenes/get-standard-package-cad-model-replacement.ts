@@ -18,6 +18,8 @@ import type { ModelLocalPad } from "./get-model-local-pads"
 import { getMultiTerminalResistorReplacement } from "./get-multi-terminal-resistor-replacement"
 import { getSmallTransistorCadModelReplacement } from "./get-small-transistor-cad-model-replacement"
 import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
+import { getLeadlessPackageReplacement } from "./get-leadless-package-replacement"
+import { getIndicatorLedReplacement } from "./get-indicator-led-replacement"
 import { getLeadlessDiodeCadModelReplacement } from "./get-leadless-diode-cad-model-replacement"
 
 type ImperialPackageSize =
@@ -87,7 +89,7 @@ function getTwoTerminalPackageReplacement(
       modelLocalPads,
     })
   }
-  if (/^(?:R|L|FB|FL|F)/u.test(componentIdentity.componentName)) {
+  if (/^(?:R|L|FB|FL|F)\d/u.test(componentIdentity.componentName)) {
     const kind = componentIdentity.componentName.startsWith("R") ? "resistor" : "inductor"
     return createTwoTerminalReplacement({ kind, packageSize: imperialPackageSize, modelLocalPads })
   }
@@ -149,32 +151,6 @@ function getSmallOutlinePackageReplacement(
   }
   if (/^SO8-/u.test(normalizedFootprint)) {
     return createFootprinterReplacement("soic8_p1.27mm", 90)
-  }
-  return undefined
-}
-
-function getLeadlessPackageReplacement(
-  normalizedFootprint: string,
-): CadModelReplacement | undefined {
-  const qfnPinCount = /^(?:U?QFN|VQFN(?:HR)?|WQFN)(\d+)/u.exec(normalizedFootprint)?.[1]
-  if (qfnPinCount) {
-    const dimensionsMillimeters = getPackageBodyDimensionsMillimeters(normalizedFootprint)
-    const dimensionsToken = dimensionsMillimeters
-      ? `_w${dimensionsMillimeters.x}mm_h${dimensionsMillimeters.y}mm`
-      : ""
-    return createFootprinterReplacement(`qfn${qfnPinCount}${dimensionsToken}`)
-  }
-
-  const sonMatch = /^(?:X[12]SON|U?SON|UDFN|WSON|VSON(?:HR)?)(\d+)/u.exec(normalizedFootprint)
-  if (sonMatch) {
-    const dimensionsMillimeters = getPackageBodyDimensionsMillimeters(normalizedFootprint)
-    const dimensionsToken = dimensionsMillimeters
-      ? `_w${dimensionsMillimeters.x}mm_h${dimensionsMillimeters.y}mm_bodywidth${dimensionsMillimeters.x}mm_bodylength${dimensionsMillimeters.y}mm`
-      : ""
-    const pinPitchMillimeters = Number(sonMatch[1]) <= 5 ? 0.4 : 0.5
-    return createFootprinterReplacement(
-      `dfn${sonMatch[1]}${dimensionsToken}_p${pinPitchMillimeters}mm`,
-    )
   }
   return undefined
 }
@@ -327,11 +303,12 @@ export function getStandardPackageCadModelReplacement(
   return (
     getMultiTerminalResistorReplacement({ normalizedFootprint, modelLocalPads }) ??
     getLeadlessDiodeCadModelReplacement(normalizedFootprint, modelLocalPads) ??
+    getIndicatorLedReplacement(componentIdentity, modelLocalPads) ??
     getTwoTerminalPackageReplacement(componentIdentity, modelLocalPads) ??
     getSmallTransistorCadModelReplacement(normalizedFootprint) ??
     getRegisteredLeadedPackageReplacement(normalizedFootprint) ??
     getSmallOutlinePackageReplacement(normalizedFootprint) ??
-    getLeadlessPackageReplacement(normalizedFootprint) ??
+    getLeadlessPackageReplacement(normalizedFootprint, modelLocalPads) ??
     getDiscretePackageReplacement(normalizedFootprint) ??
     getBoardSpecificSmallPackageReplacement(normalizedFootprint) ??
     getBallGridPackageReplacement(normalizedFootprint, modelLocalPads) ??

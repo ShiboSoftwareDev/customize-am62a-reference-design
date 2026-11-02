@@ -298,6 +298,20 @@ export function getMechanicalConnectorCadModelReplacement(
   if (footprint === "JST4P_SMD_2_0_90D") {
     return createJscadReplacement(createGroveSmdConnectorCadModel())
   }
+  if (footprint === "JST4P_1D0_6_5X4_35X3_1MM") {
+    // BeagleBoard's released STEP identifies this as SM04B-SRSS. Register the
+    // reference's four 1 mm solder tails; the two side tabs remain separate.
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.jstSh4,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: Array.from({ length: 4 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -1.5 + index,
+        y: 2.075,
+      })),
+    }
+  }
   if (footprint.startsWith("JST4P_")) {
     const pitch = footprint.includes("_1D0_") ? 1 : 2
     const modelYawOffsetDegrees = footprint.includes("_90D") ? 180 : 0
