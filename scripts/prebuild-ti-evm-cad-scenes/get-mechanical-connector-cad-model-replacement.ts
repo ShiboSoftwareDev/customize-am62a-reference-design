@@ -164,7 +164,7 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("10029449")) {
+  if (footprint.includes("10029449") || footprint.includes("DC04S019")) {
     return {
       kind: "step",
       modelStepUrl: externalStepModelUrls.amphenolHdmiA,
@@ -176,11 +176,19 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("DC04S019")) {
-    return createStepReplacement(externalStepModelUrls.amphenolHdmiA)
-  }
   if (footprint.includes("CONN19_HDMI")) {
-    return createStepReplacement(externalStepModelUrls.molexMicroHdmiD)
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.molexMicroHdmiD,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // KiCad's matching Molex footprint has staggered 0.4 mm contact rows.
+      // STEP uses +Y toward the solder tails, opposite KiCad's footprint Y.
+      modelPinPositions: Array.from({ length: 19 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: 1.8 - index * 0.2,
+        y: index % 2 === 0 ? 4.775 : 3.55,
+      })),
+    }
   }
   if (footprint.includes("U-FL") || partNumber.startsWith("U.FL-R-SMT")) {
     return createJscadReplacement(createUflConnectorCadModel())
