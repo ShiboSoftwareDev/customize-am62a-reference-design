@@ -1,4 +1,6 @@
 import type { Color, JscadOperation } from "jscad-planner"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { createSmtPadCadContact } from "./create-smt-pad-cad-contact"
 import {
   connectorModelColors,
   createColoredCuboid,
@@ -26,11 +28,11 @@ export function createShieldedInductorCadModel(params: {
       center: [0, 0, height / 2],
       color: packageColors.darkFerrite,
       roundRadius: Math.min(params.width * 0.12, 0.5),
-      size: [params.length - terminalLength, params.width, height],
+      size: [params.length - 2 * terminalLength, params.width, height],
     }),
     ...[-1, 1].map((side) =>
       createColoredCuboid({
-        center: [(side * (params.length - terminalLength)) / 2, 0, height * 0.18],
+        center: [(side * (params.length - terminalLength)) / 2, 0, height * 0.11],
         color: connectorModelColors.metal,
         size: [terminalLength, params.width * 0.72, height * 0.22],
       }),
@@ -109,28 +111,21 @@ export function createTantalumCapacitorCadModel(params: {
   ]
 }
 
-export function createWifiModuleCadModel(): JscadOperation[] {
-  const castellations = Array.from({ length: 18 }, (_, index) =>
-    createColoredCuboid({
-      center: [-5.5 + (index % 9) * 1.38, index < 9 ? -6.15 : 6.15, 0.18],
-      color: connectorModelColors.gold,
-      size: [0.58, 0.5, 0.2],
-    }),
-  )
+export function createWifiModuleCadModel(modelLocalPads: ModelLocalPad[]): JscadOperation[] {
   return [
     createColoredRoundedCuboid({
-      center: [0, 0, 0.45],
+      center: [0, 0, 0.5],
       color: packageColors.greenSubstrate,
-      roundRadius: 0.35,
-      size: [13.3, 13.3, 0.9],
+      roundRadius: 0.25,
+      size: [13.3, 13.4, 0.7],
     }),
     createColoredRoundedCuboid({
-      center: [0, 0, 1.35],
+      center: [0, 0, 1.425],
       color: connectorModelColors.silver,
       roundRadius: 0.28,
       size: [10.8, 10.4, 1.15],
     }),
-    ...castellations,
+    ...modelLocalPads.map((pad) => createSmtPadCadContact(pad, connectorModelColors.gold)),
   ]
 }
 

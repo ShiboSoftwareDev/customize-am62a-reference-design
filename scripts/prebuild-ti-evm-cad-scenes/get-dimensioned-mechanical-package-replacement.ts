@@ -7,6 +7,7 @@ import {
   createWifiModuleCadModel,
 } from "./create-dimensioned-package-cad-models"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
+import type { ModelLocalPad } from "./get-model-local-pads"
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -53,12 +54,13 @@ function getKnownTantalumDimensions(
 
 export function getDimensionedMechanicalPackageReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
 ): CadModelReplacement | undefined {
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
   const bodyDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint)
 
   if (/^MOD100_WL18/u.test(normalizedFootprint)) {
-    return createJscadReplacement(createWifiModuleCadModel())
+    return createJscadReplacement(createWifiModuleCadModel(modelLocalPads))
   }
   if (componentIdentity.componentName.startsWith("L")) {
     const inductorDimensions = bodyDimensions ?? getMetricInductorDimensions(normalizedFootprint)

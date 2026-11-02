@@ -33,10 +33,12 @@ export function readGlbComponentMesh({
   componentName,
   glb,
   materialColorFilter,
+  surfaceZ,
 }: {
   componentName: string
   glb: ArrayBuffer
   materialColorFilter?: (color: number[] | undefined) => boolean
+  surfaceZ?: number
 }) {
   const jsonChunkLength = new DataView(glb).getUint32(12, true)
   let document = documentByGlb.get(glb)
@@ -81,6 +83,16 @@ export function readGlbComponentMesh({
         ? new Uint16Array(glb.slice(indexOffset, indexOffset + indexAccessor.count * 2))
         : new Uint32Array(glb.slice(indexOffset, indexOffset + indexAccessor.count * 4))
     for (let triangleIndex = 0; triangleIndex < indices.length; triangleIndex += 3) {
+      if (
+        surfaceZ !== undefined &&
+        [0, 1, 2].some(
+          (cornerIndex) =>
+            Math.abs(
+              positions[indices[triangleIndex + cornerIndex]! * 3 + 1]! + translation[1] - surfaceZ,
+            ) > 0.00001,
+        )
+      )
+        continue
       const triangle: Vec3[] = []
       for (let cornerIndex = 0; cornerIndex < 3; cornerIndex++) {
         const positionIndex = indices[triangleIndex + cornerIndex]! * 3

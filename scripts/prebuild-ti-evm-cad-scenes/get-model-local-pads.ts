@@ -7,6 +7,7 @@ export type ModelLocalPad = {
   width: number
   height: number
   ccwRotationDegrees: number
+  pinNumber?: string
 }
 
 // Imported pads use board XY millimeters. Replacement models use package XY,
@@ -44,6 +45,7 @@ export function getModelLocalPads({
         height,
         ccwRotationDegrees:
           (layer === "bottom" ? -1 : 1) * ((pad.ccw_rotation ?? 0) - ccwRotationDegrees),
+        pinNumber: pad.port_hints?.find((hint) => /^\d+[A-Z]?$/u.test(hint)),
       },
     ]
   })

@@ -330,6 +330,6 @@ export function getStandardPackageCadModelReplacement(
     getQuadFlatPackageReplacement(normalizedFootprint, modelLocalPads) ??
     getLandGridPackageReplacement(normalizedFootprint, modelLocalPads) ??
     getSwitchCadModelReplacement(componentIdentity) ??
-    getDimensionedMechanicalPackageReplacement(componentIdentity)
+    getDimensionedMechanicalPackageReplacement(componentIdentity, modelLocalPads)
   )
 }

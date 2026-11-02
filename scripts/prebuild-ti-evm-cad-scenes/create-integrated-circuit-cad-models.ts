@@ -1,5 +1,6 @@
 import type { Color, JscadOperation } from "jscad-planner"
 import type { ModelLocalPad } from "./get-model-local-pads"
+import { getBgaBodyDimensions } from "./get-bga-body-dimensions"
 import {
   connectorModelColors,
   createColoredCuboid,
@@ -68,6 +69,7 @@ export function createBgaCadModel(params: {
   modelLocalPads: ModelLocalPad[]
   packageHeight?: number
 }): JscadOperation[] {
+  const { bodyLength, bodyWidth } = getBgaBodyDimensions(params)
   const ballRadius = Math.min(
     0.28,
     ...params.modelLocalPads.map((pad) => Math.min(pad.width, pad.height) / 2),
@@ -89,22 +91,14 @@ export function createBgaCadModel(params: {
   const body = createColoredRoundedCuboid({
     center: [0, 0, ballHeight + bodyHeight / 2],
     color: integratedCircuitColors.body,
-    roundRadius: Math.min(
-      0.38,
-      bodyHeight / 3,
-      Math.min(params.bodyWidth, params.bodyLength) * 0.035,
-    ),
-    size: [params.bodyWidth, params.bodyLength, bodyHeight],
+    roundRadius: Math.min(0.38, bodyHeight / 3, Math.min(bodyWidth, bodyLength) * 0.035),
+    size: [bodyWidth, bodyLength, bodyHeight],
   })
   const pinOneMark = createColoredCylinder({
-    center: [
-      -params.bodyWidth * 0.38,
-      -params.bodyLength * 0.38,
-      ballHeight + bodyHeight + markingHeight / 2,
-    ],
+    center: [-bodyWidth * 0.38, -bodyLength * 0.38, ballHeight + bodyHeight + markingHeight / 2],
     color: integratedCircuitColors.marking,
     height: markingHeight,
-    radius: Math.min(0.35, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
+    radius: Math.min(0.35, Math.min(bodyWidth, bodyLength) * 0.035),
   })
   return [body, pinOneMark, ...balls]
 }

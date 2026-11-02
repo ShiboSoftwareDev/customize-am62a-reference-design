@@ -268,21 +268,6 @@ export function getMechanicalConnectorCadModelReplacement(
       createBoxHeaderCadModel({ columnCount: 7, pitch: 2.54, rowCount: 2 }),
     )
   }
-  if (footprint.includes("5019512230")) {
-    return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 22, pitch: 0.5 }))
-  }
-  const genericFpcPinCount = /^FPC(\d+)_0D5/u.exec(footprint)?.[1]
-  if (genericFpcPinCount) {
-    return createJscadReplacement(
-      createFpcConnectorCadModel({ pinCount: Number(genericFpcPinCount), pitch: 0.5 }),
-    )
-  }
-  if (footprint.includes("FH12A") || footprint.includes("FFC2A32-40")) {
-    return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 40, pitch: 0.5 }))
-  }
-  if (footprint.includes("1734248-5")) {
-    return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 15, pitch: 0.5 }))
-  }
   if (footprint === "JST4P_SMD_2_0_90D") {
     return createJscadReplacement(createGroveSmdConnectorCadModel())
   }
