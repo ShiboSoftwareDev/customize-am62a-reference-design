@@ -167,11 +167,13 @@ function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOp
   }
   // Both operands are centered on the shell's local origin. Move the finished
   // shell onto the PCB only after subtraction, keeping the roof intact.
-  const opening = translate([0, -dimensions.depth * 0.2, 0], {
+  const openingCenterY = -dimensions.depth * 0.2
+  const openingDepth = dimensions.depth * 0.72
+  const opening = translate([0, openingCenterY, 0], {
     type: "roundedCuboid",
     roundRadius: Math.min(0.35, dimensions.openingHeight * 0.2),
     segments: 20,
-    size: [dimensions.openingWidth, dimensions.depth * 0.72, dimensions.openingHeight],
+    size: [dimensions.openingWidth, openingDepth, dimensions.openingHeight],
   })
   const shell = colorize(
     connectorModelColors.metal,
@@ -199,10 +201,12 @@ function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOp
       size: [contactSpacing * 0.38, dimensions.depth * 0.4, 0.06],
     }),
   )
+  // Seat the insulator in the cavity's back wall, away from the exterior metal
+  // face. Coplanar plastic and metal faces flicker as the camera moves.
   const rearHousing = createColoredCuboid({
-    center: [0, dimensions.depth * 0.42, dimensions.height * 0.48],
+    center: [0, openingCenterY + openingDepth / 2, dimensions.height * 0.48],
     color: connectorModelColors.darkPlastic,
-    size: [dimensions.openingWidth * 0.92, dimensions.depth * 0.16, dimensions.height * 0.7],
+    size: [dimensions.openingWidth * 0.92, shellWall * 2, dimensions.height * 0.7],
   })
   const mountingTabs = [-1, 1].map((side) =>
     createColoredCuboid({
