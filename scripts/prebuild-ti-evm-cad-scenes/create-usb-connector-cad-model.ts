@@ -179,18 +179,20 @@ function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOp
   )
   const tongueCenterZ =
     dimensions.height / 2 - dimensions.openingHeight / 2 + dimensions.tongueHeight / 2
+  const tongueDepth = dimensions.depth * 0.58
+  const tongueCenterY = -dimensions.depth * 0.18
   const tongue = createColoredRoundedCuboid({
-    center: [0, -dimensions.depth * 0.18, tongueCenterZ],
+    center: [0, tongueCenterY, tongueCenterZ],
     color: connectorModelColors.blackPlastic,
     roundRadius: Math.min(0.2, dimensions.tongueHeight * 0.25),
-    size: [dimensions.openingWidth * 0.82, dimensions.depth * 0.58, dimensions.tongueHeight],
+    size: [dimensions.openingWidth * 0.82, tongueDepth, dimensions.tongueHeight],
   })
   const contactSpacing = (dimensions.openingWidth * 0.68) / dimensions.contactCount
   const contacts = Array.from({ length: dimensions.contactCount }, (_, contactIndex) =>
     createColoredCuboid({
       center: [
         (contactIndex - (dimensions.contactCount - 1) / 2) * contactSpacing,
-        -dimensions.depth * 0.35,
+        tongueCenterY,
         tongueCenterZ + dimensions.tongueHeight / 2 + 0.03,
       ],
       color: connectorModelColors.gold,
