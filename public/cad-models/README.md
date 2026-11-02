@@ -21,3 +21,7 @@ The microSD representation keeps a simplified hollow shell and eight internal ma
 The surface-mount HDMI models register their numbered signal contacts against the imported lands. The micro-HDMI reference uses KiCad's [Molex 46765-0x01 footprint](https://github.com/KiCad/kicad-footprints/blob/master/Connector_HDMI.pretty/HDMI_Micro-D_Molex_46765-0x01.kicad_mod), with footprint Y reversed into STEP coordinates. The prebuilt-scene regression checks all 19 solder tails against their lands on both mounting sides.
 
 Symmetric chip passives align their long axis through the imported land centers. Crystal package heights, when present in the footprint name, include the substrate rather than being added above it.
+
+BeaglePlay SW1–SW3 use a side-actuated TS23M representation, with the 4.55 × 2.3 mm body from the Altium footprint and the 1.85 mm height from the [official schematic](https://docs.beagleboard.org/beagleplay.pdf). The actuator projects toward package +Y, toward the board edge, and the five solder contacts follow the imported lands. The official STEP assembly's switch product has no solid geometry, so this is a simplified dimensioned model.
+
+BeagleBone Black C34 uses the [CDE AVE case-D drawing](https://www.cde.com/resources/catalogs/AVE.pdf): a 6.3 mm metal can, 6.6 mm square base, 5.3 mm seated height and two 2.7 × 0.65 mm solder tails. The chamfered base and negative marking follow the package's polarity, with pin 1 on local -X. Lettering and internal construction are omitted.

@@ -1,7 +1,6 @@
 import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-model-replacement"
 import {
   createMetalCanCadModel,
-  createRadialCapacitorCadModel,
   createShieldedInductorCadModel,
   createTantalumCapacitorCadModel,
   createWifiModuleCadModel,
@@ -9,6 +8,7 @@ import {
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
+import { createSmdElectrolyticCapacitorCadModel } from "./create-smd-electrolytic-capacitor-cad-model"
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -93,8 +93,8 @@ export function getDimensionedMechanicalPackageReplacement(
       return createJscadReplacement(createTantalumCapacitorCadModel(capacitorDimensions))
     }
   }
-  if (/^RD205/u.test(normalizedFootprint)) {
-    return createJscadReplacement(createRadialCapacitorCadModel({ height: 5.2, radius: 2.5 }))
+  if (normalizedFootprint === "RD205SMD_250D") {
+    return createJscadReplacement(createSmdElectrolyticCapacitorCadModel())
   }
   if (/^U_48_RSL/u.test(normalizedFootprint)) {
     return { kind: "footprinter", footprinterString: "qfn48_w6mm_h6mm" }

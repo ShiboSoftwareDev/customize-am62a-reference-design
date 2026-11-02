@@ -2,11 +2,13 @@ import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-m
 import { createDipSwitchCadModel } from "./create-dip-switch-cad-model"
 import { createTactileSwitchCadModel } from "./create-dimensioned-package-cad-models"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { createSideActuatedSwitchCadModel } from "./create-side-actuated-switch-cad-model"
 
-export function getSwitchCadModelReplacement({
-  altiumFootprint,
-  manufacturerPartNumber,
-}: CadModelComponentIdentity): CadModelReplacement | undefined {
+export function getSwitchCadModelReplacement(
+  { altiumFootprint, manufacturerPartNumber }: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
+): CadModelReplacement | undefined {
   const normalizedFootprint = altiumFootprint.trim().toUpperCase()
   const partNumber = manufacturerPartNumber?.trim().toUpperCase()
 
@@ -24,8 +26,11 @@ export function getSwitchCadModelReplacement({
     return { kind: "jscad", jscadOperations: createDipSwitchCadModel({ poleCount: 8 }) }
   }
 
+  if (normalizedFootprint === "BUTTON2_3P_4D55X2D3X1D88MM") {
+    return { kind: "jscad", jscadOperations: createSideActuatedSwitchCadModel(modelLocalPads) }
+  }
+
   const isKnownTactileSwitch =
-    /^BUTTON2_3P_4D55X2D3X1D88MM/u.test(normalizedFootprint) ||
     /^SW4SMD_63X161LS/u.test(normalizedFootprint) ||
     /^SW4_100X216_200X200_SMD/u.test(normalizedFootprint) ||
     /^SW4_161-41X62-99_170X110_SMD/u.test(normalizedFootprint)

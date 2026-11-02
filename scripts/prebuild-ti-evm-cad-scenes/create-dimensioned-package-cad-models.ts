@@ -4,7 +4,6 @@ import { createSmtPadCadContact } from "./create-smt-pad-cad-contact"
 import {
   connectorModelColors,
   createColoredCuboid,
-  createColoredCylinder,
   createColoredRoundedCuboid,
 } from "./jscad-model-primitives"
 
@@ -128,25 +127,5 @@ export function createWifiModuleCadModel(modelLocalPads: ModelLocalPad[]): Jscad
       size: [10.8, 10.4, 1.15],
     }),
     ...modelLocalPads.map((pad) => createSmtPadCadContact(pad, connectorModelColors.gold)),
-  ]
-}
-
-export function createRadialCapacitorCadModel(params: {
-  height: number
-  radius: number
-}): JscadOperation[] {
-  return [
-    createColoredCylinder({
-      center: [0, 0, params.height / 2],
-      color: [0.08, 0.09, 0.1],
-      height: params.height,
-      radius: params.radius,
-    }),
-    createColoredCylinder({
-      center: [0, 0, params.height + 0.04],
-      color: connectorModelColors.silver,
-      height: 0.08,
-      radius: params.radius * 0.9,
-    }),
   ]
 }
