@@ -38,14 +38,16 @@ const { DesignViewer } = await import("app/components/DesignViewer")
 async function renderBoard({
   root,
   circuitJson,
+  activeView = "pcb",
 }: {
   root: Root
   circuitJson: AnyCircuitElement[]
+  activeView?: "pcb" | "schematic"
 }) {
   await act(async () => {
     root.render(
       <DesignViewer
-        activeView="pcb"
+        activeView={activeView}
         boardKey="tmds62levm"
         referenceUrl="https://www.ti.com/tool/TMDS62LEVM"
         prebuiltCadSceneUrl=""
@@ -83,15 +85,19 @@ try {
   await finishFrame()
   assert.equal(getViewer().getAttribute("aria-busy"), "false")
 
-  await renderBoard({ root, circuitJson: minimalBoard })
-  assert.equal(getViewer().getAttribute("aria-busy"), "true")
+  if (process.argv[2] === "remount") {
+    await renderBoard({ root, circuitJson: fullBoard, activeView: "schematic" })
+  } else {
+    await renderBoard({ root, circuitJson: minimalBoard })
+    assert.equal(getViewer().getAttribute("aria-busy"), "true")
+  }
 
   // Reuse the exact cached array, without completing the intervening scene.
   await renderBoard({ root, circuitJson: fullBoard })
   assert.equal(
     getViewer().getAttribute("aria-busy"),
     "true",
-    "A cached PCB needs completion of its new render request",
+    "The PCB needs completion of its new render request",
   )
   await finishFrame()
   assert.equal(getViewer().getAttribute("aria-busy"), "false")
