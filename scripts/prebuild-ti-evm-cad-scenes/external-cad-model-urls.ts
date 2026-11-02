@@ -2,6 +2,7 @@ const kicadPackageBaseUrl =
   "https://sources.debian.org/data/main/k/kicad-packages3d/9.0.8-1~bpo13%2B1"
 
 export const externalStepModelUrls = {
+  vssop8Dcu: `${kicadPackageBaseUrl}/Package_SO.3dshapes/` + "VSSOP-8_2.3x2mm_P0.5mm.step",
   amphenolHdmiA:
     `${kicadPackageBaseUrl}/Connector_Video.3dshapes/` +
     "HDMI_A_Amphenol_10029449-x01xLF_Horizontal.step",
