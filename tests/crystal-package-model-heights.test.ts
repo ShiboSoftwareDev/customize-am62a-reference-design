@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import jscad from "@jscad/modeling"
 import { readGlbComponentMesh } from "./fixtures/read-glb-component-mesh"
 import { readPrebuiltPackageReview } from "./fixtures/read-prebuilt-package-review"
+import { getDnpComponentNames } from "../scripts/prebuild-ti-evm-cad-scenes/get-dnp-component-names"
 
 test("crystal package heights include the substrate and match the reference footprint", async () => {
   for (const { boardId, packages } of [
@@ -26,9 +27,15 @@ test("crystal package heights include the substrate and match the reference foot
         { name: "X2", height: 1 },
       ],
     },
-  ]) {
+  ] as const) {
     const review = await readPrebuiltPackageReview(boardId)
     for (const { name, height } of packages) {
+      if (getDnpComponentNames(boardId).has(name)) {
+        expect(() => readGlbComponentMesh({ componentName: name, glb: review.glb })).toThrow(
+          `Missing ${name} mesh`,
+        )
+        continue
+      }
       const mesh = readGlbComponentMesh({ componentName: name, glb: review.glb })
       expect(jscad.measurements.measureDimensions(mesh)[2], `${boardId} ${name}`).toBeCloseTo(
         height,
