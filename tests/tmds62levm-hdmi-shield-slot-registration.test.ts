@@ -2,10 +2,17 @@ import { expect, test } from "bun:test"
 import type { Vec3 } from "@jscad/modeling/src/maths/types"
 import { parsePrebuiltCircuitJson } from "../app/parse-prebuilt-circuit-json"
 import { getTiEvm } from "../lib/ti-evm-catalog"
+import { getCadModelReplacement } from "../scripts/prebuild-ti-evm-cad-scenes/get-cad-model-replacement"
 import { isPointInsideMeshSection } from "./fixtures/is-point-inside-mesh-section"
 import { readGlbComponentMesh } from "./fixtures/read-glb-component-mesh"
 
 test("TMDS62LEVM J13 seats all four HDMI shield tabs in every HDMI variant", async () => {
+  expect(
+    getCadModelReplacement({
+      altiumFootprint: "CON_HDMI19_DC04S019JA1R600_S_R_S_6-3",
+      componentName: "J13",
+    }),
+  ).toMatchObject({ kind: "jscad" })
   let hdmiVariantCount = 0
   for (const variant of getTiEvm("tmds62levm").variants) {
     const circuitJson = parsePrebuiltCircuitJson(
