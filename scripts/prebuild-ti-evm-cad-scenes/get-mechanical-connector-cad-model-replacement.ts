@@ -28,7 +28,9 @@ import {
   mikroBusSmtPinPositions,
 } from "./create-pin-header-cad-models"
 import {
+  createFciMicroHdmiConnectorCadModel,
   createJaeHdmiConnectorCadModel,
+  fciMicroHdmiSignalPinPositions,
   jaeHdmiSignalPinPositions,
 } from "./create-hdmi-connector-cad-model"
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
@@ -226,18 +228,12 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("CONN19_HDMI")) {
+  if (footprint === "CONN19_HDMI" || partNumber === "10118241-001RLF") {
     return {
-      kind: "step",
-      modelStepUrl: externalStepModelUrls.molexMicroHdmiD,
+      kind: "jscad",
+      jscadOperations: createFciMicroHdmiConnectorCadModel(),
       modelOriginPosition: { x: 0, y: 0, z: 0 },
-      // KiCad's matching Molex footprint has staggered 0.4 mm contact rows.
-      // STEP uses +Y toward the solder tails, opposite KiCad's footprint Y.
-      modelPinPositions: Array.from({ length: 19 }, (_, index) => ({
-        pinNumber: String(index + 1),
-        x: 1.8 - index * 0.2,
-        y: index % 2 === 0 ? 4.775 : 3.55,
-      })),
+      modelPinPositions: fciMicroHdmiSignalPinPositions,
     }
   }
   if (footprint.includes("U-FL") || partNumber.startsWith("U.FL-R-SMT")) {

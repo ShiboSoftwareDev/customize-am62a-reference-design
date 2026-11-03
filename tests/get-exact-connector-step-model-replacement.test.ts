@@ -15,11 +15,6 @@ test("uses exact STEP geometry for recognized Sitara connectors", () => {
       modelStepUrl: externalStepModelUrls.cuiSj43514AudioJack,
     },
     {
-      altiumFootprint: "CONN19_HDMI",
-      componentName: "P6",
-      modelStepUrl: externalStepModelUrls.molexMicroHdmiD,
-    },
-    {
       altiumFootprint: "HDR_2X10_PREC010DAAN_S_T_8-4",
       componentName: "J10",
       modelStepUrl: externalStepModelUrls.pinHeader2x10P2_54ThroughHole,
