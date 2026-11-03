@@ -268,7 +268,13 @@ export function getMechanicalConnectorCadModelReplacement(
     }
   }
   if (footprint === "BAT-CR1220") {
-    return createJscadReplacement(createCoinCellHolderCadModel())
+    return {
+      kind: "jscad",
+      jscadOperations: createCoinCellHolderCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // The footprint has a 90° component rotation, but its pad row runs along board X.
+      modelYawOffsetDegrees: -90,
+    }
   }
   if (footprint.startsWith("RJ11_")) {
     return {

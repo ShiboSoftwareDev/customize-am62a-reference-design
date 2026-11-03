@@ -158,26 +158,41 @@ export function createBarrelJackCadModel(): JscadOperation[] {
 }
 
 export function createCoinCellHolderCadModel(): JscadOperation[] {
-  const base = createColoredCylinder({
-    center: [0, 0, 0.65],
-    color: connectorModelColors.blackPlastic,
-    height: 1.3,
-    radius: 8.2,
-  })
-  const cell = createColoredCylinder({
-    center: [0, 0, 1.35],
-    color: connectorModelColors.silver,
-    height: 1.4,
-    radius: 6.25,
-  })
-  const clips = [-1, 1].map((side) =>
+  const housing = colorize(
+    connectorModelColors.blackPlastic,
+    subtract([
+      { type: "cylinder", height: 2.4, radius: 7.5, center: [0, 0, 1.2], resolution: 48 },
+      { type: "cylinder", height: 2, radius: 6.25, center: [0, 0, 1.7], resolution: 48 },
+    ]),
+  )
+  const terminals = [-8.2, 8.2].map((x) =>
     createColoredCuboid({
-      center: [side * 5.9, 0, 2.1],
+      center: [x, 0, 0.12],
       color: connectorModelColors.metal,
-      size: [1.5, 7.8, 1.6],
+      size: [3.2, 1.6, 0.24],
     }),
   )
-  return [base, cell, ...clips]
+  const negativeContact = createColoredCuboid({
+    center: [-3.5, 0, 0.79],
+    color: connectorModelColors.metal,
+    size: [8.2, 1.6, 0.18],
+  })
+  const positiveClip = createColoredCuboid({
+    center: [6.55, 0, 2.1],
+    color: connectorModelColors.metal,
+    size: [2.1, 4.6, 0.35],
+  })
+  const contactRisers = [
+    { x: -7.5, height: 0.88 },
+    { x: 7.5, height: 2.275 },
+  ].map(({ x, height }) =>
+    createColoredCuboid({
+      center: [x, 0, height / 2],
+      color: connectorModelColors.metal,
+      size: [0.4, 1.6, height],
+    }),
+  )
+  return [housing, ...terminals, ...contactRisers, negativeContact, positiveClip]
 }
 
 export const rj11PinPositions = [
