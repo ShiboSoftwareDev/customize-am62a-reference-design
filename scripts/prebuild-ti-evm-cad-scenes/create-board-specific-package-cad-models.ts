@@ -30,21 +30,26 @@ export function createCeramicAntennaCadModel(): JscadOperation[] {
 }
 
 export function createEmiFilterCadModel(): JscadOperation[] {
-  return [
-    createColoredRoundedCuboid({
-      center: [0, 0, 0.18],
-      color: ceramicBody,
-      roundRadius: 0.06,
-      size: [0.62, 0.5, 0.34],
+  // Murata NFM15CC: X follows the 1 mm package length, and Z=0 is the PCB seat.
+  // The two ground electrodes wrap around opposite sides with ceramic between them.
+  const body = createColoredCuboid({
+    center: [0, 0, 0.2],
+    color: ceramicBody,
+    size: [1, 0.5, 0.4],
+  })
+  const electrodes = [-1, 1].flatMap((side) => [
+    createColoredCuboid({
+      center: [side * 0.415, 0, 0.2],
+      color: connectorModelColors.silver,
+      size: [0.17, 0.5, 0.4],
     }),
-    ...[-1, 0, 1].map((terminalIndex) =>
-      createColoredCuboid({
-        center: [terminalIndex * 0.37, 0, 0.1],
-        color: connectorModelColors.silver,
-        size: [0.16, 0.5, 0.2],
-      }),
-    ),
-  ]
+    createColoredCuboid({
+      center: [0, side * 0.175, 0.2],
+      color: connectorModelColors.silver,
+      size: [0.35, 0.15, 0.4],
+    }),
+  ])
+  return [colorize(ceramicBody, subtract([body, ...electrodes])), ...electrodes]
 }
 
 export function createRadialPolyfuseCadModel(): JscadOperation[] {
