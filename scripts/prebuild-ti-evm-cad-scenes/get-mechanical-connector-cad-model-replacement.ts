@@ -25,7 +25,14 @@ import {
 import {
   createMikroBusSocketCadModel,
   createMixedMountPinHeaderCadModel,
+  mikroBusSmtPinPositions,
 } from "./create-pin-header-cad-models"
+import {
+  createFciMicroHdmiConnectorCadModel,
+  createJaeHdmiConnectorCadModel,
+  fciMicroHdmiSignalPinPositions,
+  jaeHdmiSignalPinPositions,
+} from "./create-hdmi-connector-cad-model"
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 import { createGroveSmdConnectorCadModel } from "./create-grove-smd-connector-cad-model"
 import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
@@ -113,7 +120,12 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createMixedMountPinHeaderCadModel())
   }
   if (footprint.startsWith("MIKROBUS16_")) {
-    return createJscadReplacement(createMikroBusSocketCadModel())
+    return {
+      kind: "jscad",
+      jscadOperations: createMikroBusSocketCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: mikroBusSmtPinPositions,
+    }
   }
 
   if (footprint === "USB_A_SH") {
@@ -196,7 +208,15 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("10029449") || footprint.includes("DC04S019")) {
+  if (footprint.includes("DC04S019JA1") || partNumber === "DC04S019JA1R600") {
+    return {
+      kind: "jscad",
+      jscadOperations: createJaeHdmiConnectorCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: jaeHdmiSignalPinPositions,
+    }
+  }
+  if (footprint.includes("10029449")) {
     return {
       kind: "step",
       modelStepUrl: externalStepModelUrls.amphenolHdmiA,
@@ -208,18 +228,12 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("CONN19_HDMI")) {
+  if (footprint === "CONN19_HDMI" || partNumber === "10118241-001RLF") {
     return {
-      kind: "step",
-      modelStepUrl: externalStepModelUrls.molexMicroHdmiD,
+      kind: "jscad",
+      jscadOperations: createFciMicroHdmiConnectorCadModel(),
       modelOriginPosition: { x: 0, y: 0, z: 0 },
-      // KiCad's matching Molex footprint has staggered 0.4 mm contact rows.
-      // STEP uses +Y toward the solder tails, opposite KiCad's footprint Y.
-      modelPinPositions: Array.from({ length: 19 }, (_, index) => ({
-        pinNumber: String(index + 1),
-        x: 1.8 - index * 0.2,
-        y: index % 2 === 0 ? 4.775 : 3.55,
-      })),
+      modelPinPositions: fciMicroHdmiSignalPinPositions,
     }
   }
   if (footprint.includes("U-FL") || partNumber.startsWith("U.FL-R-SMT")) {
@@ -250,7 +264,13 @@ export function getMechanicalConnectorCadModelReplacement(
     }
   }
   if (footprint === "BAT-CR1220") {
-    return createJscadReplacement(createCoinCellHolderCadModel())
+    return {
+      kind: "jscad",
+      jscadOperations: createCoinCellHolderCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // The footprint has a 90° component rotation, but its pad row runs along board X.
+      modelYawOffsetDegrees: -90,
+    }
   }
   if (footprint.startsWith("RJ11_")) {
     return {

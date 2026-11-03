@@ -28,8 +28,6 @@ export const externalStepModelUrls = {
   amphenolHdmiA:
     `${kicadPackageBaseUrl}/Connector_Video.3dshapes/` +
     "HDMI_A_Amphenol_10029449-x01xLF_Horizontal.step",
-  molexMicroHdmiD:
-    `${kicadPackageBaseUrl}/Connector_Video.3dshapes/` + "HDMI_Micro-D_Molex_46765-0xxx.step",
   cuiSj43514AudioJack:
     "https://raw.githubusercontent.com/OLIMEX/ESP32-ADF/" +
     "0c8be17c9b54dd790953d77f1a5ded12204756dc/" +

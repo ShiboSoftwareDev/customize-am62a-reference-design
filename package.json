@@ -56,8 +56,5 @@
     "tscircuit": "0.0.3043",
     "typescript": "5.9.3",
     "vite": "8.3.2"
-  },
-  "overrides": {
-    "@tscircuit/copper-pour-solver": "https://pkg.pr.new/@tscircuit/copper-pour-solver@926d4aa"
   }
 }

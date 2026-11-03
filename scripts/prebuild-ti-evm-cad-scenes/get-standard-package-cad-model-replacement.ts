@@ -1,3 +1,4 @@
+import { createBourns3214wCadModel } from "./create-bourns-3214w-cad-model"
 import { getRegisteredLeadedPackageReplacement } from "./get-registered-leaded-package-replacement"
 import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-model-replacement"
 import { createBgaCadModel, createQfpCadModel } from "./create-integrated-circuit-cad-models"
@@ -316,6 +317,13 @@ export function getStandardPackageCadModelReplacement(
   modelLocalPads: ModelLocalPad[] = [],
 ): CadModelReplacement | undefined {
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
+  if (normalizedFootprint === "POT3_3214W_190X140_SMD_5-3" && modelLocalPads.length === 3) {
+    return {
+      kind: "jscad",
+      jscadOperations: createBourns3214wCadModel(modelLocalPads),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+    }
+  }
   return (
     getMultiTerminalResistorReplacement({ normalizedFootprint, modelLocalPads }) ??
     getLeadlessDiodeCadModelReplacement(normalizedFootprint, modelLocalPads) ??

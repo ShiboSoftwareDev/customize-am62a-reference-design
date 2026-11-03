@@ -7,22 +7,23 @@ import { readGlbComponentMesh } from "./fixtures/read-glb-component-mesh"
 import { readPrebuiltPackageReview } from "./fixtures/read-prebuilt-package-review"
 import type { Vec3 } from "@jscad/modeling/src/maths/types"
 
-test("Beagle jacks have open mating cavities and leads through their PCB holes", async () => {
-  const jacks = [
-    {
-      boardId: "beaglebone-black",
-      componentName: "P1",
-      holeCount: 3,
-      cavityPoint: [375.66426, 274.73034, 6.1] satisfies Vec3,
-    },
-    {
-      boardId: "beagleplay",
-      componentName: "J2",
-      holeCount: 6,
-      cavityPoint: [-263.103868, 233.267436, 7.3] satisfies Vec3,
-    },
-  ] as const
-  for (const { boardId, componentName, holeCount, cavityPoint } of jacks) {
+const jacks = [
+  {
+    boardId: "beaglebone-black",
+    componentName: "P1",
+    holeCount: 3,
+    cavityPoint: [375.66426, 274.73034, 6.1] satisfies Vec3,
+  },
+  {
+    boardId: "beagleplay",
+    componentName: "J2",
+    holeCount: 6,
+    cavityPoint: [-263.103868, 233.267436, 7.3] satisfies Vec3,
+  },
+] as const
+
+for (const { boardId, componentName, holeCount, cavityPoint } of jacks) {
+  test(`${boardId} ${componentName} has an open mating cavity and leads through its PCB holes`, async () => {
     for (const variant of getTiEvm(boardId).variants) {
       const { circuitJson, glb } = await readPrebuiltPackageReview(boardId, variant.id)
       const source = circuitJson.find(
@@ -74,5 +75,5 @@ test("Beagle jacks have open mating cavities and leads through their PCB holes",
         expect(isPointInsideMeshSection({ point: [hole.x, hole.y, 0], mesh })).toBe(true)
       }
     }
-  }
-})
+  })
+}
