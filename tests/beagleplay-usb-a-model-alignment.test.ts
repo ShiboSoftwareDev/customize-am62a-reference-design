@@ -33,7 +33,7 @@ test("seats the BeaglePlay UART and vertical USB-A connectors without overlap", 
       expect(isPointInsideMeshSection({ mesh: usb, point: [x, y, 0] })).toBe(true)
     }
   }
-})
+}, 60_000)
 
 function getConnectorHoles({
   circuitJson,

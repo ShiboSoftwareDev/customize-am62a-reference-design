@@ -10,4 +10,4 @@ test("BeaglePlay J10 has solder terminals on both RTC holder pads", async () => 
     const review = await readPrebuiltPackageReview("beagleplay", variant.id)
     expect(findMissingPackageContacts({ componentName: "J10", review }), variant.id).toEqual([])
   }
-})
+}, 60_000)

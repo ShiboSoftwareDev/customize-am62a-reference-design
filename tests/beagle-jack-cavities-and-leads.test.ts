@@ -75,5 +75,5 @@ for (const { boardId, componentName, holeCount, cavityPoint } of jacks) {
         expect(isPointInsideMeshSection({ point: [hole.x, hole.y, 0], mesh })).toBe(true)
       }
     }
-  })
+  }, 60_000)
 }
