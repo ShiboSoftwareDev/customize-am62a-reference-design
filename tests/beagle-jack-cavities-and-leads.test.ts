@@ -22,9 +22,8 @@ const jacks = [
   },
 ] as const
 
-test.each(jacks)(
-  "$boardId $componentName has an open mating cavity and leads through its PCB holes",
-  async ({ boardId, componentName, holeCount, cavityPoint }) => {
+for (const { boardId, componentName, holeCount, cavityPoint } of jacks) {
+  test(`${boardId} ${componentName} has an open mating cavity and leads through its PCB holes`, async () => {
     for (const variant of getTiEvm(boardId).variants) {
       const { circuitJson, glb } = await readPrebuiltPackageReview(boardId, variant.id)
       const source = circuitJson.find(
@@ -76,5 +75,5 @@ test.each(jacks)(
         expect(isPointInsideMeshSection({ point: [hole.x, hole.y, 0], mesh })).toBe(true)
       }
     }
-  },
-)
+  })
+}
