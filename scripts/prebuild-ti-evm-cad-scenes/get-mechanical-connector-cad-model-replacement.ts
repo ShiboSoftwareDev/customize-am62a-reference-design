@@ -25,6 +25,7 @@ import {
 import {
   createMikroBusSocketCadModel,
   createMixedMountPinHeaderCadModel,
+  mikroBusSmtPinPositions,
 } from "./create-pin-header-cad-models"
 import {
   createJaeHdmiConnectorCadModel,
@@ -117,7 +118,12 @@ export function getMechanicalConnectorCadModelReplacement(
     return createJscadReplacement(createMixedMountPinHeaderCadModel())
   }
   if (footprint.startsWith("MIKROBUS16_")) {
-    return createJscadReplacement(createMikroBusSocketCadModel())
+    return {
+      kind: "jscad",
+      jscadOperations: createMikroBusSocketCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: mikroBusSmtPinPositions,
+    }
   }
 
   if (footprint === "USB_A_SH") {
