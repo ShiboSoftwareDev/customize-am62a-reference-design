@@ -1,9 +1,11 @@
 import type { JscadOperation } from "jscad-planner"
 import {
+  colorize,
   connectorModelColors,
   createColoredCuboid,
   createColoredCylinder,
   createColoredRoundedCuboid,
+  subtract,
 } from "./jscad-model-primitives"
 
 // TSM-105-01-T-TM: Samtec TSM drawing, figure 6. The center row is
@@ -56,29 +58,38 @@ export function createMikroBusSocketCadModel(): JscadOperation[] {
   const bodyLength = (mikroBusColumnCount - 1) * mikroBusPitchMillimeters + 2.5
   const bodyWidth = 2.5
   const bodyHeight = 8.5
-  const bodies = [-1, 1].map((rowSide) =>
-    createColoredRoundedCuboid({
+  const sockets = mikroBusSmtPinPositions.map(({ x, y: padY }) => {
+    const socketY = (Math.sign(padY) * mikroBusRowSeparationMillimeters) / 2
+    const bore = createColoredCylinder({
+      center: [x, socketY, bodyHeight - 1.5],
+      color: connectorModelColors.blackPlastic,
+      height: 4,
+      radius: 0.52,
+    })
+    return { x, padY, socketY, bore }
+  })
+  const bodies = [-1, 1].map((rowSide) => {
+    const body = createColoredRoundedCuboid({
       center: [0, (rowSide * mikroBusRowSeparationMillimeters) / 2, bodyHeight / 2],
       color: connectorModelColors.blackPlastic,
       roundRadius: 0.22,
       size: [bodyLength, bodyWidth, bodyHeight],
-    }),
-  )
-  const contacts = mikroBusSmtPinPositions.flatMap(({ x, y: padY }) => {
-    const socketY = (Math.sign(padY) * mikroBusRowSeparationMillimeters) / 2
+    })
+    const bores = sockets.filter(({ socketY }) => Math.sign(socketY) === rowSide)
+    return colorize(
+      connectorModelColors.blackPlastic,
+      subtract([body, ...bores.map(({ bore }) => bore)]),
+    )
+  })
+  const contacts = sockets.flatMap(({ x, padY, socketY, bore }) => {
+    const rim = createColoredCylinder({
+      center: [x, socketY, bodyHeight + 0.02],
+      color: connectorModelColors.gold,
+      height: 0.08,
+      radius: 0.62,
+    })
     return [
-      createColoredCylinder({
-        center: [x, socketY, bodyHeight + 0.02],
-        color: connectorModelColors.gold,
-        height: 0.08,
-        radius: 0.62,
-      }),
-      createColoredCylinder({
-        center: [x, socketY, bodyHeight + 0.07],
-        color: connectorModelColors.darkPlastic,
-        height: 0.1,
-        radius: 0.36,
-      }),
+      colorize(connectorModelColors.gold, subtract([rim, bore])),
       createColoredCuboid({
         center: [x, (padY + socketY) / 2, 0.075],
         color: connectorModelColors.gold,
