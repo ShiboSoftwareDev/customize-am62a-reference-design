@@ -4,6 +4,7 @@ import { createTactileSwitchCadModel } from "./create-dimensioned-package-cad-mo
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { createSideActuatedSwitchCadModel } from "./create-side-actuated-switch-cad-model"
+import { createBourns7914CadModel } from "./create-bourns-7914-cad-model"
 
 export function getSwitchCadModelReplacement(
   { altiumFootprint, manufacturerPartNumber }: CadModelComponentIdentity,
@@ -30,9 +31,12 @@ export function getSwitchCadModelReplacement(
     return { kind: "jscad", jscadOperations: createSideActuatedSwitchCadModel(modelLocalPads) }
   }
 
+  if (partNumber === "7914G-1-000E" || normalizedFootprint === "SW4_100X216_200X200_SMD_4-2") {
+    return { kind: "jscad", jscadOperations: createBourns7914CadModel() }
+  }
+
   const isKnownTactileSwitch =
     /^SW4SMD_63X161LS/u.test(normalizedFootprint) ||
-    /^SW4_100X216_200X200_SMD/u.test(normalizedFootprint) ||
     /^SW4_161-41X62-99_170X110_SMD/u.test(normalizedFootprint)
   if (!isKnownTactileSwitch) return undefined
 

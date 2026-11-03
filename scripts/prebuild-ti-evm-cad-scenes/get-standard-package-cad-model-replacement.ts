@@ -21,6 +21,7 @@ import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
 import { getLeadlessPackageReplacement } from "./get-leadless-package-replacement"
 import { getIndicatorLedReplacement } from "./get-indicator-led-replacement"
 import { getLeadlessDiodeCadModelReplacement } from "./get-leadless-diode-cad-model-replacement"
+import { getReferenceCapacitorHeightMillimeters } from "./get-reference-capacitor-height-millimeters"
 
 type ImperialPackageSize =
   | "01005"
@@ -87,6 +88,9 @@ function getTwoTerminalPackageReplacement(
       kind: "capacitor",
       packageSize: imperialPackageSize,
       modelLocalPads,
+      heightMillimeters: getReferenceCapacitorHeightMillimeters(
+        componentIdentity.manufacturerPartNumber,
+      ),
     })
   }
   if (/^(?:R|L|FB|FL|F)\d/u.test(componentIdentity.componentName)) {
@@ -114,6 +118,7 @@ function createTwoTerminalReplacement(params: {
   kind: TwoTerminalPackageKind
   packageSize: ImperialPackageSize
   modelLocalPads: ModelLocalPad[]
+  heightMillimeters?: number
 }): CadModelReplacement {
   return {
     kind: "jscad",

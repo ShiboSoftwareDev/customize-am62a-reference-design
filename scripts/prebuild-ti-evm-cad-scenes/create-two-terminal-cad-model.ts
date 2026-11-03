@@ -49,8 +49,12 @@ export function createTwoTerminalCadModel(params: {
   kind: TwoTerminalPackageKind
   packageSize: ImperialPackageSize
   modelLocalPads?: ModelLocalPad[]
+  heightMillimeters?: number
 }): JscadOperation[] {
-  const dimensions = packageDimensionsByImperialSize[params.packageSize]
+  const dimensions = {
+    ...packageDimensionsByImperialSize[params.packageSize],
+    height: params.heightMillimeters ?? packageDimensionsByImperialSize[params.packageSize].height,
+  }
   const terminalLength = dimensions.length * 0.2
   const bodyLength = dimensions.length - terminalLength * 2
   const bodyColor = getBodyColor(params.kind)
