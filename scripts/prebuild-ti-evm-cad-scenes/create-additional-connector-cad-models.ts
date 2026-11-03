@@ -3,9 +3,11 @@ import type { ModelLocalPad } from "./get-model-local-pads"
 import { createSmtPadCadContact } from "./create-smt-pad-cad-contact"
 import { createHorizontalFpcContact } from "./create-horizontal-fpc-contact"
 import {
+  colorize,
   connectorModelColors,
   createColoredCuboid,
   createColoredRoundedCuboid,
+  subtract,
 } from "./jscad-model-primitives"
 
 export function createRj45ConnectorCadModel(params: {
@@ -16,9 +18,9 @@ export function createRj45ConnectorCadModel(params: {
   const contactCount = 8
   const contacts = Array.from({ length: contactCount }, (_, contactIndex) =>
     createColoredCuboid({
-      center: [-3.5 + contactIndex, -params.depth / 2 - 0.17, params.height * 0.56],
+      center: [-3.5 + contactIndex, -params.depth / 2 + 4, params.height * 0.745],
       color: connectorModelColors.gold,
-      size: [0.38, 0.34, params.height * 0.38],
+      size: [0.38, 6, 0.3],
     }),
   )
   const statusLeds = [-1, 1].map((side) =>
@@ -28,23 +30,24 @@ export function createRj45ConnectorCadModel(params: {
       size: [2, 0.38, 1.4],
     }),
   )
+  const body = createColoredRoundedCuboid({
+    center: [0, 0, params.height / 2],
+    color: connectorModelColors.metal,
+    roundRadius: 0.45,
+    size: [params.width, params.depth, params.height],
+  })
+  const opening = createColoredCuboid({
+    center: [0, -params.depth / 2 + 3.5, params.height * 0.48],
+    color: connectorModelColors.blackPlastic,
+    size: [params.width * 0.76, 9, params.height * 0.54],
+  })
+  const latchOpening = createColoredCuboid({
+    center: [0, -params.depth / 2 + 3.5, params.height * 0.19],
+    color: connectorModelColors.darkPlastic,
+    size: [params.width * 0.46, 9, params.height * 0.18],
+  })
   return [
-    createColoredRoundedCuboid({
-      center: [0, 0, params.height / 2],
-      color: connectorModelColors.metal,
-      roundRadius: 0.45,
-      size: [params.width, params.depth, params.height],
-    }),
-    createColoredCuboid({
-      center: [0, -params.depth / 2 - 0.16, params.height * 0.48],
-      color: connectorModelColors.blackPlastic,
-      size: [params.width * 0.76, 0.34, params.height * 0.62],
-    }),
-    createColoredCuboid({
-      center: [0, -params.depth / 2 - 0.36, params.height * 0.19],
-      color: connectorModelColors.darkPlastic,
-      size: [params.width * 0.46, 0.38, params.height * 0.1],
-    }),
+    colorize(connectorModelColors.metal, subtract([body, opening, latchOpening])),
     ...contacts,
     ...statusLeds,
   ]

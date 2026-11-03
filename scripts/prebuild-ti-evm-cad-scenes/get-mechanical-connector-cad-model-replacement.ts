@@ -29,10 +29,10 @@ import {
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 import { createGroveSmdConnectorCadModel } from "./create-grove-smd-connector-cad-model"
 import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
+import { connectorModelColors, createColoredCuboid } from "./jscad-model-primitives"
 
-// The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
-// shell by half the depth difference so both rear edges remain aligned.
-const beaglePlayUsbAModelCenterOffsetMillimeters = 5.04
+// Leave room for the parts alongside the rear pin row on BeaglePlay.
+const beaglePlayUsbAModelCenterOffsetMillimeters = 3.04
 // The imported USB_A_SH body marks the connector's 5.25 mm rear section.
 // Move the complete 15.8 mm shell outward so their rear edges stay aligned.
 const beagleBoneBlackUsbAModelCenterOffsetMillimeters = 5.275
@@ -47,6 +47,7 @@ function createJscadReplacement(
   options: {
     modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
     modelYawOffsetDegrees?: number
+    boardTerminals?: "through-hole" | "usb-c"
   } = {},
 ): CadModelReplacement {
   return { kind: "jscad", jscadOperations, ...options }
@@ -117,6 +118,7 @@ export function getMechanicalConnectorCadModelReplacement(
 
   if (footprint === "USB_A_SH") {
     return createJscadReplacement(createUsbAConnectorCadModel(), {
+      boardTerminals: "through-hole",
       modelPlanarOffsetMillimeters: {
         x: 0,
         y: -beagleBoneBlackUsbAModelCenterOffsetMillimeters,
@@ -138,7 +140,14 @@ export function getMechanicalConnectorCadModelReplacement(
     }
   }
   if (footprint.startsWith("USB7P_")) {
-    return createJscadReplacement(createUsbAConnectorCadModel(), {
+    // The narrower termination block carries the rear pins past the shield.
+    const terminationBlock = createColoredCuboid({
+      center: [0, 8.7, 0.85],
+      size: [6.4, 1.6, 1.5],
+      color: connectorModelColors.darkPlastic,
+    })
+    return createJscadReplacement([...createUsbAConnectorCadModel(), terminationBlock], {
+      boardTerminals: "through-hole",
       modelPlanarOffsetMillimeters: {
         x: 0,
         y: -beaglePlayUsbAModelCenterOffsetMillimeters,
@@ -272,11 +281,13 @@ export function getMechanicalConnectorCadModelReplacement(
   if (footprint === "RJ45_18P_21_23X15_93X13_3MM") {
     return createJscadReplacement(
       createRj45ConnectorCadModel({ depth: 21.23, height: 13.3, width: 15.93 }),
+      { boardTerminals: "through-hole" },
     )
   }
   if (footprint === "RJ45-7499010211A") {
     return createJscadReplacement(
       createRj45ConnectorCadModel({ depth: 21.25, height: 13.6, width: 16 }),
+      { boardTerminals: "through-hole" },
     )
   }
   if (
@@ -286,6 +297,7 @@ export function getMechanicalConnectorCadModelReplacement(
   ) {
     const modelYawOffsetDegrees = footprint === "USB2_0_TYPE_C" ? -90 : 0
     return createJscadReplacement(createUsbCConnectorCadModel(), {
+      boardTerminals: "usb-c",
       modelYawOffsetDegrees,
     })
   }

@@ -9,6 +9,12 @@ export type CadRegistrationPad = {
   height?: number
   radius?: number
   ccw_rotation?: number
+  hole_diameter?: number
+  hole_width?: number
+  hole_height?: number
+  hole_ccw_rotation?: number
+  hole_offset_x?: number
+  hole_offset_y?: number
   points?: Array<{ x: number; y: number }>
   port_hints?: string[]
 }

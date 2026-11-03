@@ -51,6 +51,7 @@ export type CadModelReplacement = CadModelPlacement &
     | {
         kind: "jscad"
         jscadOperations: JscadOperation[]
+        boardTerminals?: "through-hole" | "usb-c"
         /** Model-local XY offset applied before board-side mirroring and yaw. */
         modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
         /** Rotation around the board normal after applying the PCB component rotation. */

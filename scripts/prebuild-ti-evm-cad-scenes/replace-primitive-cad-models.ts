@@ -8,6 +8,7 @@ import {
 } from "./get-pad-registered-model-placement"
 import { getImportedPrimitivePlanarPosition } from "./get-imported-primitive-planar-position"
 import { getModelLocalPads } from "./get-model-local-pads"
+import { addConnectorBoardTerminals } from "./add-connector-board-terminals"
 
 type PcbComponentId = string
 type SourceComponentId = string
@@ -86,6 +87,13 @@ export function replacePrimitiveCadModels(params: {
       height: typeof element.height === "number" ? element.height : undefined,
       radius: typeof element.radius === "number" ? element.radius : undefined,
       ccw_rotation: typeof element.ccw_rotation === "number" ? element.ccw_rotation : undefined,
+      hole_diameter: typeof element.hole_diameter === "number" ? element.hole_diameter : undefined,
+      hole_width: typeof element.hole_width === "number" ? element.hole_width : undefined,
+      hole_height: typeof element.hole_height === "number" ? element.hole_height : undefined,
+      hole_ccw_rotation:
+        typeof element.hole_ccw_rotation === "number" ? element.hole_ccw_rotation : undefined,
+      hole_offset_x: typeof element.hole_offset_x === "number" ? element.hole_offset_x : undefined,
+      hole_offset_y: typeof element.hole_offset_y === "number" ? element.hole_offset_y : undefined,
       points: Array.isArray(element.points) ? element.points.filter(isPlanarPoint) : undefined,
       port_hints: Array.isArray(element.port_hints)
         ? element.port_hints.filter((hint): hint is string => typeof hint === "string")
@@ -256,6 +264,21 @@ function applyCadModelReplacement(params: {
     }
   }
 
+  const boardTerminals = params.replacement.boardTerminals
+  const modelPosition = cadComponentWithoutPrimitive.position
+  if (boardTerminals && modelPosition && rotation) {
+    return {
+      ...cadComponentWithoutPrimitive,
+      model_origin_position: { x: 0, y: 0, z: 0 },
+      model_jscad: addConnectorBoardTerminals({
+        kind: boardTerminals,
+        operations: params.replacement.jscadOperations,
+        pads: params.pads ?? [],
+        position: modelPosition,
+        rotation,
+      }),
+    }
+  }
   return {
     ...cadComponentWithoutPrimitive,
     model_jscad: params.replacement.jscadOperations,
