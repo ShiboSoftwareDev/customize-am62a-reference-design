@@ -1,13 +1,15 @@
 import { resolve } from "node:path"
 import type { AnyCircuitElement, CadComponent } from "circuit-json"
-import { convertCircuitJsonToGltf } from "circuit-json-to-gltf"
+import { convertCircuitJsonToGltf, type CoordinateTransformConfig } from "circuit-json-to-gltf"
 
 export async function convertCircuitJsonToCadScene({
   circuitJson,
   publicDirectory,
+  coordinateTransform,
 }: {
   circuitJson: AnyCircuitElement[]
   publicDirectory: string
+  coordinateTransform?: CoordinateTransformConfig
 }): Promise<ArrayBuffer> {
   const cadScene = await convertCircuitJsonToGltf(
     resolveLocalCadModelUrls({ circuitJson, publicDirectory }),
@@ -15,6 +17,7 @@ export async function convertCircuitJsonToCadScene({
       boardDrillQuality: "high",
       boardTextureResolution: 1024,
       format: "glb",
+      coordinateTransform,
     },
   )
   if (!(cadScene instanceof ArrayBuffer)) {

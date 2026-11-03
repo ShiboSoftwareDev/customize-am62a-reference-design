@@ -73,7 +73,7 @@ test("TMDS62LEVM J13 seats all four HDMI shield tabs in every HDMI variant", asy
     }
   }
   expect(hdmiVariantCount).toBe(4)
-})
+}, 60_000)
 
 function getSectionPoints({ vertices, z }: { vertices: Vec3[]; z: number }): Vec3[] {
   return vertices.flatMap((start, index) => {

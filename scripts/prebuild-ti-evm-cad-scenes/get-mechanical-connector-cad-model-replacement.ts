@@ -36,10 +36,7 @@ import {
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 import { createGroveSmdConnectorCadModel } from "./create-grove-smd-connector-cad-model"
 import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
-import { connectorModelColors, createColoredCuboid } from "./jscad-model-primitives"
 
-// Leave room for the parts alongside the rear pin row on BeaglePlay.
-const beaglePlayUsbAModelCenterOffsetMillimeters = 3.04
 // The imported USB_A_SH body marks the connector's 5.25 mm rear section.
 // Move the complete 15.8 mm shell outward so their rear edges stay aligned.
 const beagleBoneBlackUsbAModelCenterOffsetMillimeters = 5.275
@@ -151,21 +148,34 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.startsWith("USB7P_")) {
-    // The narrower termination block carries the rear pins past the shield.
-    const terminationBlock = createColoredCuboid({
-      center: [0, 8.7, 0.85],
-      size: [6.4, 1.6, 1.5],
-      color: connectorModelColors.darkPlastic,
-    })
-    return createJscadReplacement([...createUsbAConnectorCadModel(), terminationBlock], {
-      boardTerminals: "through-hole",
-      modelPlanarOffsetMillimeters: {
+  if (footprint === "USB7P_1R4_14X5R72MM") {
+    return {
+      kind: "glb",
+      modelGlbUrl: "/cad-models/beagleplay-usb-a.glb",
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelUnitToMmScaleFactor: 1,
+      // The prebuilt GLB is Y-up. Register its origin at the signal-pin row.
+      modelBoardNormalDirection: "y+",
+      modelPinPositions: Array.from({ length: 4 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: 0.01,
+        y: 1.4 * (index - 1.5),
+      })),
+    }
+  }
+  if (footprint === "HEADER3P_2D54_DIP") {
+    return {
+      kind: "glb",
+      modelGlbUrl: "/cad-models/beagleplay-uart-header.glb",
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelUnitToMmScaleFactor: 1,
+      modelBoardNormalDirection: "y+",
+      modelPinPositions: Array.from({ length: 3 }, (_, index) => ({
+        pinNumber: String(index + 1),
         x: 0,
-        y: -beaglePlayUsbAModelCenterOffsetMillimeters,
-      },
-      modelYawOffsetDegrees: -90,
-    })
+        y: 2.54 * (1 - index),
+      })),
+    }
   }
   if (
     footprint.includes("629105150521") ||

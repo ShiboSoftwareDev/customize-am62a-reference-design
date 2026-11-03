@@ -1,3 +1,4 @@
+import { COORDINATE_TRANSFORMS } from "circuit-json-to-gltf"
 import { prebuildStepProductModel } from "./prebuild-step-product-model"
 
 export async function prebuildBeaglePlayConnectorModel(): Promise<void> {
@@ -18,5 +19,20 @@ export async function prebuildBeaglePlayConnectorModel(): Promise<void> {
     outputName: "beagleplay-microsd",
     // The optional removable card is not part of the fitted socket assembly.
     excludedProductNames: ["MicroSD"],
+  })
+  // Export these Z-up STEP packages as Y-up assets for reuse by the GLB loader.
+  // The scene exporter negates X, so compensate before serializing the assets.
+  const stepToReusableGlb = { ...COORDINATE_TRANSFORMS.STEP_INVERTED, flipX: -1 }
+  await prebuildStepProductModel({
+    step,
+    productName: "USB7P_1R4_14X5R72MM",
+    outputName: "beagleplay-usb-a",
+    coordinateTransform: stepToReusableGlb,
+  })
+  await prebuildStepProductModel({
+    step,
+    productName: "HEADER3P_2D54_DIP",
+    outputName: "beagleplay-uart-header",
+    coordinateTransform: stepToReusableGlb,
   })
 }
