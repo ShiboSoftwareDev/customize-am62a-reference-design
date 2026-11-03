@@ -7,6 +7,80 @@ import {
   translate,
 } from "./jscad-model-primitives"
 
+// JAE drawing SJ120821. The mating face is at Y=0, with +Y toward
+// the solder tails and Z=0 at the seated PCB surface.
+const jaeHdmiShellDepthMillimeters = 10.25
+const jaeHdmiSignalRowYMillimeters = 10.2
+
+export const jaeHdmiSignalPinPositions = Array.from({ length: 19 }, (_, index) => ({
+  pinNumber: String(index + 1),
+  x: 4.25 - index * 0.5,
+  y: jaeHdmiSignalRowYMillimeters,
+}))
+
+export function createJaeHdmiConnectorCadModel(): JscadOperation[] {
+  const depth = jaeHdmiShellDepthMillimeters
+  const shell = colorize(
+    connectorModelColors.metal,
+    subtract([
+      createColoredCuboid({
+        center: [0, depth / 2, 3.05],
+        color: connectorModelColors.metal,
+        size: [15, depth, 6.1],
+      }),
+      extrudeProfileAlongDepth({
+        depth: depth - 0.7,
+        profile: [
+          [-5.15, 0.95],
+          [5.15, 0.95],
+          [7, 2.65],
+          [7, 5.5],
+          [-7, 5.5],
+          [-7, 2.65],
+        ],
+      }),
+    ]),
+  )
+  const tongue = createColoredCuboid({
+    center: [0, 4.9, 3.3],
+    color: connectorModelColors.blackPlastic,
+    size: [10.9, 8.4, 0.85],
+  })
+  const matingContacts = jaeHdmiSignalPinPositions.map(({ x }, index) =>
+    createColoredCuboid({
+      center: [x, 3.2, index % 2 === 0 ? 3.75 : 2.85],
+      color: connectorModelColors.gold,
+      size: [0.2, 3.3, 0.06],
+    }),
+  )
+  const solderTails = jaeHdmiSignalPinPositions.map(({ x, y }) =>
+    createColoredCuboid({
+      center: [x, y, 0.1],
+      color: connectorModelColors.metal,
+      size: [0.2, 0.9, 0.2],
+    }),
+  )
+  const shieldTabs = [-1, 1].flatMap((side) => [
+    // Front tabs stand just outside the 15 mm shell, with an inward shoulder.
+    createColoredCuboid({
+      center: [side * 7.85, 3.6, -0.45],
+      color: connectorModelColors.metal,
+      size: [0.5, 1, 2.9],
+    }),
+    createColoredCuboid({
+      center: [side * 7.6, 3.6, 0.9],
+      color: connectorModelColors.metal,
+      size: [1, 1, 0.3],
+    }),
+    createColoredCuboid({
+      center: [side * 7.25, 9.5, -0.45],
+      color: connectorModelColors.metal,
+      size: [0.5, 1, 2.9],
+    }),
+  ])
+  return [shell, tongue, ...matingContacts, ...solderTails, ...shieldTabs]
+}
+
 export function createHdmiAConnectorCadModel(): JscadOperation[] {
   return createHdmiConnectorCadModel({
     contactCount: 19,

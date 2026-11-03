@@ -26,6 +26,10 @@ import {
   createMikroBusSocketCadModel,
   createMixedMountPinHeaderCadModel,
 } from "./create-pin-header-cad-models"
+import {
+  createJaeHdmiConnectorCadModel,
+  jaeHdmiSignalPinPositions,
+} from "./create-hdmi-connector-cad-model"
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 import { createGroveSmdConnectorCadModel } from "./create-grove-smd-connector-cad-model"
 import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
@@ -196,7 +200,15 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("10029449") || footprint.includes("DC04S019")) {
+  if (footprint.includes("DC04S019JA1") || partNumber === "DC04S019JA1R600") {
+    return {
+      kind: "jscad",
+      jscadOperations: createJaeHdmiConnectorCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: jaeHdmiSignalPinPositions,
+    }
+  }
+  if (footprint.includes("10029449")) {
     return {
       kind: "step",
       modelStepUrl: externalStepModelUrls.amphenolHdmiA,
