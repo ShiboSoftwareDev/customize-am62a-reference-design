@@ -6,6 +6,7 @@ import {
   createColoredRoundedCuboid,
   subtract,
   translate,
+  union,
 } from "./jscad-model-primitives"
 
 // JAE drawing SJ120821. The mating face is at Y=0, with +Y toward
@@ -128,7 +129,7 @@ export function createFciMicroHdmiConnectorCadModel(): JscadOperation[] {
         }),
       ),
       // Leave the underside open where the two staggered signal rows exit.
-      translate([0, 4.25, 0.25], { type: "cuboid", size: [4.5, 2.4, 1.1] }),
+      translate([0, 4.25, 0.5], { type: "cuboid", size: [4.5, 2.4, 1.7] }),
     ]),
   )
   const tongue = createColoredCuboid({
@@ -136,17 +137,27 @@ export function createFciMicroHdmiConnectorCadModel(): JscadOperation[] {
     color: connectorModelColors.blackPlastic,
     size: [4.5, 6.2, 0.45],
   })
+  const rearInsulator = createColoredCuboid({
+    center: [0, 3.9, 1.17],
+    color: connectorModelColors.blackPlastic,
+    size: [4.2, 1.7, 0.4],
+  })
   const contacts = fciMicroHdmiSignalPinPositions.flatMap(({ x, y }, index) => [
     createColoredCuboid({
       center: [x, -0.85, index % 2 === 0 ? 1.8 : 1.3],
       color: connectorModelColors.gold,
       size: [0.16, 2.2, 0.07],
     }),
-    createColoredCuboid({
-      center: [x, y, 0.08],
-      color: connectorModelColors.metal,
-      size: [0.16, index % 2 === 0 ? 0.7 : 0.8, 0.16],
-    }),
+    colorize(
+      connectorModelColors.metal,
+      union([
+        translate([x, y, 0.08], {
+          type: "cuboid",
+          size: [0.16, index % 2 === 0 ? 0.7 : 0.8, 0.16],
+        }),
+        translate([x, y - 0.2, 0.55], { type: "cuboid", size: [0.16, 0.18, 1.1] }),
+      ]),
+    ),
   ])
   const shieldTerminals = [-1, 1].flatMap((side) => [
     createColoredCuboid({
@@ -160,7 +171,7 @@ export function createFciMicroHdmiConnectorCadModel(): JscadOperation[] {
       size: [1, 1.8, 0.2],
     }),
   ])
-  return [shell, tongue, ...contacts, ...shieldTerminals]
+  return [shell, tongue, rearInsulator, ...contacts, ...shieldTerminals]
 }
 
 export function createHdmiAConnectorCadModel(): JscadOperation[] {
