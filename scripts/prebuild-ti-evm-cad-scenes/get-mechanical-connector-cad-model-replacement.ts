@@ -10,10 +10,12 @@ import {
   createRj45ConnectorCadModel,
 } from "./create-additional-connector-cad-models"
 import {
+  barrelJackPinPositions,
   createBarrelJackCadModel,
   createCoinCellHolderCadModel,
   createRj11ConnectorCadModel,
   createUflConnectorCadModel,
+  rj11PinPositions,
 } from "./create-board-connector-cad-models"
 import {
   createMiniUsbConnectorCadModel,
@@ -231,15 +233,23 @@ export function getMechanicalConnectorCadModelReplacement(
     }
   }
   if (footprint.includes("PJ102A")) {
-    return createJscadReplacement(createBarrelJackCadModel(), {
-      modelYawOffsetDegrees: 90,
-    })
+    return {
+      kind: "jscad",
+      jscadOperations: createBarrelJackCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: barrelJackPinPositions,
+    }
   }
   if (footprint === "BAT-CR1220") {
     return createJscadReplacement(createCoinCellHolderCadModel())
   }
   if (footprint.startsWith("RJ11_")) {
-    return createJscadReplacement(createRj11ConnectorCadModel())
+    return {
+      kind: "jscad",
+      jscadOperations: createRj11ConnectorCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: rj11PinPositions,
+    }
   }
   if (footprint.includes("LPJG16314A4NL") || partNumber === "LPJG16314A4NL") {
     return {

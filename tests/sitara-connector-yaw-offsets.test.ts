@@ -11,7 +11,6 @@ test("aligns board-edge connector openings with their Sitara footprints", () => 
     ["JST4P_SMD_2_0_90D", 0],
     ["USB5MINI_4SHIELDED_SMD-5", -90],
     ["SD-MICRO-SCHA5B0300", 0],
-    ["CONN3-PWR-PJ102A", 90],
   ])
 
   for (const [altiumFootprint, expectedYawOffsetDegrees] of expectedYawOffsetByFootprint) {

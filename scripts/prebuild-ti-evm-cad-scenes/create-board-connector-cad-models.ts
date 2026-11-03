@@ -115,28 +115,46 @@ export function createAudioJackCadModel(): JscadOperation[] {
   return [body, opening, socket, ...terminalTabs, ...boardGuides]
 }
 
+// Package coordinates in millimeters. Both jacks open toward -Y and seat at Z=0.
+export const barrelJackPinPositions = [
+  { pinNumber: "1", x: -1.651, y: 2.9972 },
+  { pinNumber: "2", x: -1.651, y: -2.9972 },
+  { pinNumber: "3", x: 3.048, y: 0 },
+]
+
 export function createBarrelJackCadModel(): JscadOperation[] {
   const body = createColoredRoundedCuboid({
-    center: [0, 0.8, 5.3],
+    center: [0, 0, 5.3],
     color: connectorModelColors.blackPlastic,
     roundRadius: 0.55,
     size: [9, 13.2, 10.6],
   })
-  const mouth = createColoredCylinder({
-    center: [0, -6.05, 5.3],
+  const bore = createColoredCylinder({
+    center: [0, -2.65, 5.3],
     color: connectorModelColors.darkPlastic,
-    height: 0.55,
-    radius: 3.25,
+    height: 10,
+    radius: 2.8,
     rotation: [Math.PI / 2, 0, 0],
   })
   const pin = createColoredCylinder({
-    center: [0, -6.36, 5.3],
+    center: [0, -1.65, 5.3],
     color: connectorModelColors.metal,
-    height: 1.15,
-    radius: 0.62,
+    height: 8.5,
+    // PJ-102A mechanical drawing specifies a 2.0 mm center post.
+    radius: 1,
     rotation: [Math.PI / 2, 0, 0],
   })
-  return [body, mouth, pin]
+  return [
+    colorize(connectorModelColors.blackPlastic, subtract([body, bore])),
+    pin,
+    ...barrelJackPinPositions.map(({ x, y }) =>
+      createColoredCuboid({
+        center: [x, y, -1.45],
+        color: connectorModelColors.metal,
+        size: [0.55, 0.8, 3.5],
+      }),
+    ),
+  ]
 }
 
 export function createCoinCellHolderCadModel(): JscadOperation[] {
@@ -162,24 +180,55 @@ export function createCoinCellHolderCadModel(): JscadOperation[] {
   return [base, cell, ...clips]
 }
 
+export const rj11PinPositions = [
+  { pinNumber: "2", x: -1.905, y: 6.57504 },
+  { pinNumber: "3", x: -0.635, y: 9.11504 },
+  { pinNumber: "4", x: 0.635, y: 6.57504 },
+  { pinNumber: "5", x: 1.905, y: 9.11504 },
+]
+
 export function createRj11ConnectorCadModel(): JscadOperation[] {
   const body = createColoredRoundedCuboid({
-    center: [0, 0, 6.3],
+    center: [0, 0.25, 6.65],
     color: connectorModelColors.darkPlastic,
     roundRadius: 0.5,
-    size: [12.4, 18.2, 12.6],
+    size: [13.8, 18.7, 13.3],
   })
   const opening = createColoredCuboid({
-    center: [0, -8.95, 6.5],
+    center: [0, -5.65, 6.9],
     color: connectorModelColors.blackPlastic,
-    size: [9.2, 0.4, 8.1],
+    size: [9.8, 9, 6.4],
   })
-  const contacts = Array.from({ length: 6 }, (_, contactIndex) =>
+  const latchOpening = createColoredCuboid({
+    center: [0, -5.65, 3.65],
+    color: connectorModelColors.blackPlastic,
+    size: [5.2, 9, 2.3],
+  })
+  const contacts = rj11PinPositions.map(({ x }) =>
     createColoredCuboid({
-      center: [-2.5 + contactIndex, -9.2, 8.5],
+      center: [x, -3.9, 9.94],
       color: connectorModelColors.gold,
-      size: [0.34, 0.55, 4.2],
+      size: [0.34, 6, 0.23],
     }),
   )
-  return [body, opening, ...contacts]
+  const signalLeads = rj11PinPositions.map(({ x, y }) =>
+    createColoredCuboid({
+      center: [x, y, -1.4],
+      color: connectorModelColors.metal,
+      size: [0.55, 0.55, 3.4],
+    }),
+  )
+  const shieldTabs = [-6.72998, 6.72998].map((x) =>
+    createColoredCuboid({
+      center: [x, 3.27508, -1.4],
+      color: connectorModelColors.metal,
+      size: [0.7, 1.25, 3.4],
+    }),
+  )
+  return [
+    colorize(connectorModelColors.darkPlastic, subtract([body, opening, latchOpening])),
+    ...contacts,
+    ...signalLeads,
+    ...shieldTabs,
+  ]
 }
