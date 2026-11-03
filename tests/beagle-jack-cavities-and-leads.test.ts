@@ -47,7 +47,17 @@ test("Beagle jacks have open mating cavities and leads through their PCB holes",
         const [[, , contactBottom]] = jscad.measurements.measureBoundingBox(contacts)
         expect(getMeshContactCenters({ mesh: contacts, surfaceZ: contactBottom })).toHaveLength(4)
       } else {
-        const { x, y } = component.center
+        const center = component.center
+        if (
+          !center ||
+          typeof center !== "object" ||
+          !("x" in center) ||
+          !("y" in center) ||
+          typeof center.x !== "number" ||
+          typeof center.y !== "number"
+        )
+          throw new Error("Missing barrel jack center")
+        const { x, y } = center
         // The 2 mm center post sits inside the open bore at Z=6.1 mm.
         expect(isPointInsideMeshSection({ point: [x - 5, y + 0.9, 6.1], mesh })).toBe(true)
         expect(isPointInsideMeshSection({ point: [x - 5, y + 1.1, 6.1], mesh })).toBe(false)
