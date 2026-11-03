@@ -3,6 +3,7 @@ import {
   colorize,
   connectorModelColors,
   createColoredCuboid,
+  createColoredRoundedCuboid,
   subtract,
   translate,
 } from "./jscad-model-primitives"
@@ -39,6 +40,11 @@ export function createJaeHdmiConnectorCadModel(): JscadOperation[] {
           [-7, 2.65],
         ],
       }),
+      // The rear underside is open where the insulated signal tails exit.
+      translate([0, jaeHdmiSignalRowYMillimeters, 0.2], {
+        type: "cuboid",
+        size: [10, 1.2, 0.6],
+      }),
     ]),
   )
   const tongue = createColoredCuboid({
@@ -62,9 +68,10 @@ export function createJaeHdmiConnectorCadModel(): JscadOperation[] {
   )
   const shieldTabs = [-1, 1].flatMap((side) => [
     // Front tabs stand just outside the 15 mm shell, with an inward shoulder.
-    createColoredCuboid({
+    createColoredRoundedCuboid({
       center: [side * 7.85, 3.6, -0.45],
       color: connectorModelColors.metal,
+      roundRadius: 0.1,
       size: [0.5, 1, 2.9],
     }),
     createColoredCuboid({
@@ -72,9 +79,10 @@ export function createJaeHdmiConnectorCadModel(): JscadOperation[] {
       color: connectorModelColors.metal,
       size: [1, 1, 0.3],
     }),
-    createColoredCuboid({
+    createColoredRoundedCuboid({
       center: [side * 7.25, 9.5, -0.45],
       color: connectorModelColors.metal,
+      roundRadius: 0.1,
       size: [0.5, 1, 2.9],
     }),
   ])
