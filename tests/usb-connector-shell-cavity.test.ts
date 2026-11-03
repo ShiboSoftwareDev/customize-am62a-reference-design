@@ -11,7 +11,7 @@ import {
 test("USB-A, USB-C and mini-USB shells have an open mouth and a closed roof", () => {
   const connectors = [
     { operations: createUsbAConnectorCadModel(), depth: 15.8, height: 7.1 },
-    { operations: createUsbCConnectorCadModel(), depth: 8.8, height: 3.2 },
+    { operations: createUsbCConnectorCadModel("2012670005"), depth: 8.8, height: 3.2 },
     { operations: createMiniUsbConnectorCadModel(), depth: 9.2, height: 4 },
   ]
   for (const { operations, depth, height } of connectors) {

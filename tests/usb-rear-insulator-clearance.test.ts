@@ -10,7 +10,7 @@ import { executeCadModelOperation } from "./fixtures/execute-cad-model-operation
 test("USB rear insulators sit inside the cavity without overlapping the exterior shell face", () => {
   const connectors = [
     createUsbAConnectorCadModel(),
-    createUsbCConnectorCadModel(),
+    createUsbCConnectorCadModel("2012670005"),
     createMiniUsbConnectorCadModel(),
   ]
   for (const operations of connectors) {

@@ -290,15 +290,15 @@ export function getMechanicalConnectorCadModelReplacement(
       { boardTerminals: "through-hole" },
     )
   }
-  if (
-    footprint.includes("2012670") ||
-    footprint === "USB2_0_TYPE_C" ||
-    partNumber === "2012670005"
-  ) {
-    const modelYawOffsetDegrees = footprint === "USB2_0_TYPE_C" ? -90 : 0
-    return createJscadReplacement(createUsbCConnectorCadModel(), {
+  if (footprint === "USB2_0_TYPE_C" || partNumber === "UBF31-0171") {
+    return createJscadReplacement(createUsbCConnectorCadModel("UBF31-0171"), {
       boardTerminals: "usb-c",
-      modelYawOffsetDegrees,
+      modelYawOffsetDegrees: -90,
+    })
+  }
+  if (footprint.includes("2012670") || partNumber === "2012670005") {
+    return createJscadReplacement(createUsbCConnectorCadModel("2012670005"), {
+      boardTerminals: "usb-c",
     })
   }
   if (footprint.includes("2199119")) {
