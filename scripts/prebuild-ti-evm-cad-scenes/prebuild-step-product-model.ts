@@ -1,4 +1,5 @@
 import { mkdir } from "node:fs/promises"
+import type { CoordinateTransformConfig } from "circuit-json-to-gltf"
 import { resolve } from "node:path"
 import { convertCircuitJsonToCadScene } from "./convert-circuit-json-to-cad-scene"
 import { extractStepProduct } from "./extract-step-product"
@@ -8,11 +9,13 @@ export async function prebuildStepProductModel({
   productName,
   outputName,
   excludedProductNames,
+  coordinateTransform,
 }: {
   step: string
   productName: string
   outputName: string
   excludedProductNames?: string[]
+  coordinateTransform?: CoordinateTransformConfig
 }): Promise<void> {
   const temporaryDirectory = resolve("tmp/reference-connector-models")
   await mkdir(temporaryDirectory, { recursive: true })
@@ -20,6 +23,7 @@ export async function prebuildStepProductModel({
   await Bun.write(modelStepPath, extractStepProduct({ step, productName, excludedProductNames }))
   const glb = await convertCircuitJsonToCadScene({
     publicDirectory: "/",
+    coordinateTransform,
     circuitJson: [
       {
         type: "source_component",

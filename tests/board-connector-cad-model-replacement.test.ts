@@ -20,7 +20,7 @@ test("maps the board-specific Ethernet and USB connector identities", () => {
       altiumFootprint: "USB7P_1R4_14X5R72MM",
       componentName: "J13",
     })?.kind,
-  ).toBe("jscad")
+  ).toBe("glb")
   expect(
     getCadModelReplacement({
       altiumFootprint: "USB2_0_TYPE_C",
