@@ -1,7 +1,23 @@
 import { fp } from "@tscircuit/footprinter"
 import { applyToPoint, compose, rotateDEG, scale } from "transformation-matrix"
 
-export type CadRegistrationPad = { type: string; x?: number; y?: number; port_hints?: string[] }
+export type CadRegistrationPad = {
+  type: string
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  radius?: number
+  ccw_rotation?: number
+  hole_diameter?: number
+  hole_width?: number
+  hole_height?: number
+  hole_ccw_rotation?: number
+  hole_offset_x?: number
+  hole_offset_y?: number
+  points?: Array<{ x: number; y: number }>
+  port_hints?: string[]
+}
 type PinNumber = string
 type NumberedPad = { x: number; y: number; pinNumber: PinNumber }
 

@@ -3,6 +3,9 @@ import { getMechanicalConnectorCadModelReplacement } from "./get-mechanical-conn
 import { getNonPhysicalCadModelReplacement } from "./get-non-physical-cad-model-replacement"
 import { getStandardPackageCadModelReplacement } from "./get-standard-package-cad-model-replacement"
 import type { JscadOperation } from "jscad-planner"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { getFpcCadModelReplacement } from "./get-fpc-cad-model-replacement"
+import { getMicroSdCadModelReplacement } from "./get-micro-sd-cad-model-replacement"
 
 export type CadModelComponentIdentity = {
   altiumFootprint: string
@@ -48,6 +51,7 @@ export type CadModelReplacement = CadModelPlacement &
     | {
         kind: "jscad"
         jscadOperations: JscadOperation[]
+        boardTerminals?: "through-hole" | "usb-c"
         /** Model-local XY offset applied before board-side mirroring and yaw. */
         modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
         /** Rotation around the board normal after applying the PCB component rotation. */
@@ -65,10 +69,13 @@ export type CadModelReplacement = CadModelPlacement &
 
 export function getCadModelReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
 ): CadModelReplacement | undefined {
   return (
     getNonPhysicalCadModelReplacement(componentIdentity) ??
-    getStandardPackageCadModelReplacement(componentIdentity) ??
+    getStandardPackageCadModelReplacement(componentIdentity, modelLocalPads) ??
+    getFpcCadModelReplacement(componentIdentity, modelLocalPads) ??
+    getMicroSdCadModelReplacement(componentIdentity, modelLocalPads) ??
     getMechanicalConnectorCadModelReplacement(componentIdentity) ??
     getConnectorCadModelReplacement(componentIdentity)
   )

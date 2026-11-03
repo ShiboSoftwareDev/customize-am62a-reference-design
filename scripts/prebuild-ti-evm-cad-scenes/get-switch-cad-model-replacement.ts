@@ -2,11 +2,15 @@ import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-m
 import { createDipSwitchCadModel } from "./create-dip-switch-cad-model"
 import { createTactileSwitchCadModel } from "./create-dimensioned-package-cad-models"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { createSideActuatedSwitchCadModel } from "./create-side-actuated-switch-cad-model"
+import { createBourns7914CadModel } from "./create-bourns-7914-cad-model"
+import { externalStepModelUrls } from "./external-cad-model-urls"
 
-export function getSwitchCadModelReplacement({
-  altiumFootprint,
-  manufacturerPartNumber,
-}: CadModelComponentIdentity): CadModelReplacement | undefined {
+export function getSwitchCadModelReplacement(
+  { altiumFootprint, manufacturerPartNumber }: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
+): CadModelReplacement | undefined {
   const normalizedFootprint = altiumFootprint.trim().toUpperCase()
   const partNumber = manufacturerPartNumber?.trim().toUpperCase()
 
@@ -24,11 +28,29 @@ export function getSwitchCadModelReplacement({
     return { kind: "jscad", jscadOperations: createDipSwitchCadModel({ poleCount: 8 }) }
   }
 
-  const isKnownTactileSwitch =
-    /^BUTTON2_3P_4D55X2D3X1D88MM/u.test(normalizedFootprint) ||
-    /^SW4SMD_63X161LS/u.test(normalizedFootprint) ||
-    /^SW4_100X216_200X200_SMD/u.test(normalizedFootprint) ||
-    /^SW4_161-41X62-99_170X110_SMD/u.test(normalizedFootprint)
+  if (normalizedFootprint === "BUTTON2_3P_4D55X2D3X1D88MM") {
+    return { kind: "jscad", jscadOperations: createSideActuatedSwitchCadModel(modelLocalPads) }
+  }
+
+  if (partNumber === "7914G-1-000E" || normalizedFootprint === "SW4_100X216_200X200_SMD_4-2") {
+    return { kind: "jscad", jscadOperations: createBourns7914CadModel() }
+  }
+
+  if (partNumber === "KMR231GLFS" || normalizedFootprint === "SW4SMD_63X161LS") {
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.kmr2Switch,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: [
+        { pinNumber: "1", x: -2, y: -0.8 },
+        { pinNumber: "2", x: -2, y: 0.8 },
+        { pinNumber: "3", x: 2, y: -0.8 },
+        { pinNumber: "4", x: 2, y: 0.8 },
+      ],
+    }
+  }
+
+  const isKnownTactileSwitch = /^SW4_161-41X62-99_170X110_SMD/u.test(normalizedFootprint)
   if (!isKnownTactileSwitch) return undefined
 
   const switchDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint) ?? {

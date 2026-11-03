@@ -1,13 +1,15 @@
 type StepEntityId = string
 
-// Select a product and its child assembly from the pinned BeaglePlay STEP
-// release. Follow STEP entity references; retain the original BREP and colors.
+// Select a product and its child assembly from a reference STEP release.
+// Follow entity references; retain the original BREP and colors.
 export function extractStepProduct({
   step,
   productName,
+  excludedProductNames = [],
 }: {
   step: string
   productName: string
+  excludedProductNames?: string[]
 }): string {
   const entities = new Map<StepEntityId, string>(
     Array.from(step.matchAll(/#(\d+)\s*=\s*(.*?);/gsu), (match) => [match[1]!, match[2]!]),
@@ -35,11 +37,33 @@ export function extractStepProduct({
     target: formation,
   })
   const definitions = new Set<StepEntityId>([definition])
+  const excludedDefinitions = new Set<StepEntityId>()
+  for (const excludedProductName of excludedProductNames) {
+    const excludedProduct = Array.from(entities).find(([, entity]) =>
+      entity.startsWith(`PRODUCT('${excludedProductName}'`),
+    )?.[0]
+    if (!excludedProduct) throw new Error(`Missing STEP product ${excludedProductName}`)
+    const excludedFormation = findReferencingEntity({
+      entities,
+      references,
+      prefix: "PRODUCT_DEFINITION_FORMATION",
+      target: excludedProduct,
+    })
+    excludedDefinitions.add(
+      findReferencingEntity({
+        entities,
+        references,
+        prefix: "PRODUCT_DEFINITION(",
+        target: excludedFormation,
+      }),
+    )
+  }
   const selected = new Set<StepEntityId>([definition])
   for (const parent of definitions) {
     for (const [id, entity] of entities) {
       const related = references.get(id)!
       if (!entity.startsWith("NEXT_ASSEMBLY_USAGE_OCCURRENCE(") || related[0] !== parent) continue
+      if (excludedDefinitions.has(related[1]!)) continue
       selected.add(id)
       selected.add(related[1]!)
       definitions.add(related[1]!)

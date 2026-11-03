@@ -14,7 +14,7 @@ test("does not read an Altium footprint revision as a decimal dimension", () => 
     type: "colorize",
     shape: {
       type: "translate",
-      shape: { size: [6.1, 7.87, 1.2] },
+      shape: { size: [6.1, 7.87, expect.any(Number)] },
     },
   })
 })

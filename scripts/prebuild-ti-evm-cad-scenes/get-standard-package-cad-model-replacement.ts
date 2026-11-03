@@ -14,6 +14,18 @@ import { getDimensionedMechanicalPackageReplacement } from "./get-dimensioned-me
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
 import { getSwitchCadModelReplacement } from "./get-switch-cad-model-replacement"
 import { externalStepModelUrls } from "./external-cad-model-urls"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { getMultiTerminalResistorReplacement } from "./get-multi-terminal-resistor-replacement"
+import { getSmallTransistorCadModelReplacement } from "./get-small-transistor-cad-model-replacement"
+import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
+import { getLeadlessPackageReplacement } from "./get-leadless-package-replacement"
+import { getIndicatorLedReplacement } from "./get-indicator-led-replacement"
+import { getLeadlessDiodeCadModelReplacement } from "./get-leadless-diode-cad-model-replacement"
+import { getReferenceCapacitorHeightMillimeters } from "./get-reference-capacitor-height-millimeters"
+import {
+  createJohansonBalunCadModel,
+  johansonBalunPinPositions,
+} from "./create-johanson-balun-cad-model"
 
 type ImperialPackageSize =
   | "01005"
@@ -68,33 +80,53 @@ function isImperialPackageSize(
 
 function getTwoTerminalPackageReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[],
 ): CadModelReplacement | undefined {
   const imperialPackageSize = getImperialPackageSize(componentIdentity.altiumFootprint)
   if (!imperialPackageSize) return undefined
+  // A size token alone does not make arrays or Kelvin packages two-terminal.
+  if (/RESA_|4TERM|1206-4/u.test(componentIdentity.altiumFootprint.toUpperCase())) return undefined
 
   if (componentIdentity.componentName.startsWith("C")) {
-    return createTwoTerminalReplacement("capacitor", imperialPackageSize)
+    return createTwoTerminalReplacement({
+      kind: "capacitor",
+      packageSize: imperialPackageSize,
+      modelLocalPads,
+      heightMillimeters: getReferenceCapacitorHeightMillimeters(
+        componentIdentity.manufacturerPartNumber,
+      ),
+    })
   }
-  if (/^(?:R|L|FB|FL|F)/u.test(componentIdentity.componentName)) {
+  if (/^(?:R|L|FB|FL|F)\d/u.test(componentIdentity.componentName)) {
     const kind = componentIdentity.componentName.startsWith("R") ? "resistor" : "inductor"
-    return createTwoTerminalReplacement(kind, imperialPackageSize)
+    return createTwoTerminalReplacement({ kind, packageSize: imperialPackageSize, modelLocalPads })
   }
   if (componentIdentity.componentName.startsWith("LED")) {
-    return createTwoTerminalReplacement("led", imperialPackageSize)
+    return createTwoTerminalReplacement({
+      kind: "led",
+      packageSize: imperialPackageSize,
+      modelLocalPads,
+    })
   }
   if (componentIdentity.componentName.startsWith("D")) {
-    return createTwoTerminalReplacement("diode", imperialPackageSize)
+    return createTwoTerminalReplacement({
+      kind: "diode",
+      packageSize: imperialPackageSize,
+      modelLocalPads,
+    })
   }
   return undefined
 }
 
-function createTwoTerminalReplacement(
-  kind: TwoTerminalPackageKind,
-  packageSize: ImperialPackageSize,
-): CadModelReplacement {
+function createTwoTerminalReplacement(params: {
+  kind: TwoTerminalPackageKind
+  packageSize: ImperialPackageSize
+  modelLocalPads: ModelLocalPad[]
+  heightMillimeters?: number
+}): CadModelReplacement {
   return {
     kind: "jscad",
-    jscadOperations: createTwoTerminalCadModel({ kind, packageSize }),
+    jscadOperations: createTwoTerminalCadModel(params),
   }
 }
 
@@ -132,49 +164,12 @@ function getSmallOutlinePackageReplacement(
   return undefined
 }
 
-function getLeadlessPackageReplacement(
-  normalizedFootprint: string,
-): CadModelReplacement | undefined {
-  const qfnPinCount = /^(?:U?QFN|VQFN(?:HR)?|WQFN)(\d+)/u.exec(normalizedFootprint)?.[1]
-  if (qfnPinCount) {
-    const dimensionsMillimeters = getPackageBodyDimensionsMillimeters(normalizedFootprint)
-    const dimensionsToken = dimensionsMillimeters
-      ? `_w${dimensionsMillimeters.x}mm_h${dimensionsMillimeters.y}mm`
-      : ""
-    return createFootprinterReplacement(`qfn${qfnPinCount}${dimensionsToken}`)
-  }
-
-  const sonMatch = /^(?:X[12]SON|U?SON|UDFN|WSON|VSON(?:HR)?)(\d+)/u.exec(normalizedFootprint)
-  if (sonMatch) {
-    const dimensionsMillimeters = getPackageBodyDimensionsMillimeters(normalizedFootprint)
-    const dimensionsToken = dimensionsMillimeters
-      ? `_w${dimensionsMillimeters.x}mm_h${dimensionsMillimeters.y}mm_bodywidth${dimensionsMillimeters.x}mm_bodylength${dimensionsMillimeters.y}mm`
-      : ""
-    const pinPitchMillimeters = Number(sonMatch[1]) <= 5 ? 0.4 : 0.5
-    return createFootprinterReplacement(
-      `dfn${sonMatch[1]}${dimensionsToken}_p${pinPitchMillimeters}mm`,
-    )
-  }
-  return undefined
-}
-
 function getDiscretePackageReplacement(
   normalizedFootprint: string,
 ): CadModelReplacement | undefined {
-  if (/^DIO_DFN0201/u.test(normalizedFootprint)) {
-    return createFootprinterReplacement(
-      "dfn2_w0.65mm_h0.4mm_bodywidth0.65mm_bodylength0.4mm_p0.4mm",
-    )
-  }
-  if (/^DIO_DFN0402/u.test(normalizedFootprint)) {
-    return createFootprinterReplacement("dfn2_w1mm_h0.6mm_bodywidth1mm_bodylength0.6mm_p0.5mm")
-  }
   const exactPackageMappings: Array<[RegExp, string]> = [
-    [/^BF10_/u, "dfn10_w2mm_h1.25mm_bodywidth2mm_bodylength1.25mm_p0.5mm"],
     [/^SOT23[-_]?5/u, "sot23-5"],
     [/^SOT23[-_]?6/u, "sot6"],
-    [/^(?:SOT[-_]?323|SOT323)/u, "sot323"],
-    [/^(?:SOT[-_]?523|SOT523)/u, "sot723"],
     [/^(?:DIO_)?(?:SOD[-_]?323|SOD323)/u, "sod323"],
     [/^(?:DIO_)?(?:SOD[-_]?523|SOD523)/u, "sod523"],
     [/^DO_214AC_SMA/u, "sma"],
@@ -187,6 +182,14 @@ function getDiscretePackageReplacement(
 function getBoardSpecificSmallPackageReplacement(
   normalizedFootprint: string,
 ): CadModelReplacement | undefined {
+  if (normalizedFootprint === "BF10_0D5_2X1D25X1MM") {
+    return {
+      kind: "jscad",
+      jscadOperations: createJohansonBalunCadModel(),
+      modelPinPositions: johansonBalunPinPositions,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+    }
+  }
   if (/^EMIFIL_NFM15CC_0402/u.test(normalizedFootprint)) {
     return { kind: "jscad", jscadOperations: createEmiFilterCadModel() }
   }
@@ -210,7 +213,6 @@ function getBoardSpecificSmallPackageReplacement(
 
   const exactPackageMappings: Array<[RegExp, string]> = [
     [/^U_6_DRY/u, "dfn6_w1.45mm_h1mm_bodywidth1.45mm_bodylength1mm_p0.5mm"],
-    [/^SMINI6-/u, "sot363"],
     [/^SOT553-5/u, "sot563"],
   ]
   const exactMapping = exactPackageMappings.find(([pattern]) => pattern.test(normalizedFootprint))
@@ -219,16 +221,15 @@ function getBoardSpecificSmallPackageReplacement(
 
 function getBallGridPackageReplacement(
   normalizedFootprint: string,
+  modelLocalPads: ModelLocalPad[],
 ): CadModelReplacement | undefined {
   if (/^BGA425_0D5_13X13MM/u.test(normalizedFootprint)) {
     return {
       kind: "jscad",
       jscadOperations: createBgaCadModel({
-        ballColumnCount: 25,
-        ballRowCount: 17,
+        modelLocalPads,
         bodyLength: 13,
         bodyWidth: 13,
-        pinCount: 425,
       }),
     }
   }
@@ -236,19 +237,15 @@ function getBallGridPackageReplacement(
     return {
       kind: "jscad",
       jscadOperations: createBgaCadModel({
-        ballColumnCount: 25,
-        ballRowCount: 17,
+        modelLocalPads,
         bodyLength: 12.95,
         bodyWidth: 12.95,
-        pinCount: 425,
+        packageHeight: getPackageHeightMillimeters(normalizedFootprint),
       }),
     }
   }
-  if (/^BGA96_T9_P8_/u.test(normalizedFootprint)) {
-    return createBgaReplacement({ bodyLength: 14, bodyWidth: 9, pinCount: 96 })
-  }
   if (/^AM33XX_15X15/u.test(normalizedFootprint)) {
-    return createBgaReplacement({ bodyLength: 15, bodyWidth: 15, pinCount: 324 })
+    return createBgaReplacement({ bodyLength: 15, bodyWidth: 15, modelLocalPads })
   }
   const ballGridMatch = /^(?:DSBGA|TFBGA|TPBGA|V?FBGA|BGA)(\d+)/u.exec(normalizedFootprint)
   const bodyDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint)
@@ -258,9 +255,13 @@ function getBallGridPackageReplacement(
       jscadOperations: createBgaCadModel({
         bodyLength: bodyDimensions.y,
         bodyWidth: bodyDimensions.x,
-        pinCount: Number(ballGridMatch[1]),
+        packageHeight: getPackageHeightMillimeters(normalizedFootprint),
+        modelLocalPads,
       }),
     }
+  }
+  if (/^BGA96_T9_P8_9X14/u.test(normalizedFootprint)) {
+    return createBgaReplacement({ bodyLength: 14, bodyWidth: 9, modelLocalPads })
   }
   return undefined
 }
@@ -268,7 +269,7 @@ function getBallGridPackageReplacement(
 function createBgaReplacement(params: {
   bodyLength: number
   bodyWidth: number
-  pinCount: number
+  modelLocalPads: ModelLocalPad[]
 }): CadModelReplacement {
   return {
     kind: "jscad",
@@ -278,6 +279,7 @@ function createBgaReplacement(params: {
 
 function getQuadFlatPackageReplacement(
   normalizedFootprint: string,
+  modelLocalPads: ModelLocalPad[],
 ): CadModelReplacement | undefined {
   const quadFlatMatch = /^(?:TQFP|LQFP|QFP)(\d+)/u.exec(normalizedFootprint)
   const bodyDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint)
@@ -287,13 +289,15 @@ function getQuadFlatPackageReplacement(
     jscadOperations: createQfpCadModel({
       bodyLength: bodyDimensions.y,
       bodyWidth: bodyDimensions.x,
-      pinCount: Number(quadFlatMatch[1]),
+      packageHeight: getPackageHeightMillimeters(normalizedFootprint),
+      modelLocalPads,
     }),
   }
 }
 
 function getLandGridPackageReplacement(
   normalizedFootprint: string,
+  modelLocalPads: ModelLocalPad[],
 ): CadModelReplacement | undefined {
   const landGridMatch = /^E-(\d+)_(\d+)X(\d+)_(\d+)-N(\d+)/u.exec(normalizedFootprint)
   if (!landGridMatch) return undefined
@@ -302,26 +306,31 @@ function getLandGridPackageReplacement(
     jscadOperations: createBgaCadModel({
       bodyLength: Number(`${landGridMatch[3]}.${landGridMatch[4]}`),
       bodyWidth: Number(`${landGridMatch[1]}.${landGridMatch[2]}`),
-      pinCount: Number(landGridMatch[5]),
+      modelLocalPads,
     }),
   }
 }
 
 export function getStandardPackageCadModelReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
 ): CadModelReplacement | undefined {
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
   return (
-    getTwoTerminalPackageReplacement(componentIdentity) ??
+    getMultiTerminalResistorReplacement({ normalizedFootprint, modelLocalPads }) ??
+    getLeadlessDiodeCadModelReplacement(normalizedFootprint, modelLocalPads) ??
+    getIndicatorLedReplacement(componentIdentity, modelLocalPads) ??
+    getTwoTerminalPackageReplacement(componentIdentity, modelLocalPads) ??
+    getSmallTransistorCadModelReplacement(normalizedFootprint) ??
     getRegisteredLeadedPackageReplacement(normalizedFootprint) ??
     getSmallOutlinePackageReplacement(normalizedFootprint) ??
-    getLeadlessPackageReplacement(normalizedFootprint) ??
+    getLeadlessPackageReplacement(normalizedFootprint, modelLocalPads) ??
     getDiscretePackageReplacement(normalizedFootprint) ??
     getBoardSpecificSmallPackageReplacement(normalizedFootprint) ??
-    getBallGridPackageReplacement(normalizedFootprint) ??
-    getQuadFlatPackageReplacement(normalizedFootprint) ??
-    getLandGridPackageReplacement(normalizedFootprint) ??
-    getSwitchCadModelReplacement(componentIdentity) ??
-    getDimensionedMechanicalPackageReplacement(componentIdentity)
+    getBallGridPackageReplacement(normalizedFootprint, modelLocalPads) ??
+    getQuadFlatPackageReplacement(normalizedFootprint, modelLocalPads) ??
+    getLandGridPackageReplacement(normalizedFootprint, modelLocalPads) ??
+    getSwitchCadModelReplacement(componentIdentity, modelLocalPads) ??
+    getDimensionedMechanicalPackageReplacement(componentIdentity, modelLocalPads)
   )
 }

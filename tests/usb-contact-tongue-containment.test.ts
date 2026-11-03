@@ -10,7 +10,7 @@ import { executeCadModelOperation } from "./fixtures/execute-cad-model-operation
 test("USB contacts stay recessed in the shell and supported by the tongue", () => {
   const connectors = [
     { operations: createUsbAConnectorCadModel(), contactCount: 4 },
-    { operations: createUsbCConnectorCadModel(), contactCount: 16 },
+    { operations: createUsbCConnectorCadModel("2012670005"), contactCount: 24 },
     { operations: createMiniUsbConnectorCadModel(), contactCount: 5 },
   ]
   for (const { operations, contactCount } of connectors) {

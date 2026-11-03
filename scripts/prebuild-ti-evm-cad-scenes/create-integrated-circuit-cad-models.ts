@@ -1,4 +1,6 @@
 import type { Color, JscadOperation } from "jscad-planner"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { getBgaBodyDimensions } from "./get-bga-body-dimensions"
 import {
   connectorModelColors,
   createColoredCuboid,
@@ -15,127 +17,108 @@ const integratedCircuitColors = {
 export function createQfpCadModel(params: {
   bodyLength: number
   bodyWidth: number
-  pinCount: number
+  modelLocalPads: ModelLocalPad[]
+  packageHeight?: number
 }): JscadOperation[] {
-  const pinsPerSide = Math.floor(params.pinCount / 4)
-  const bodyHeight = 1.45
-  const leadLength = 0.9
-  const leadWidth = Math.min(
-    0.28,
-    (Math.min(params.bodyLength, params.bodyWidth) * 0.7) / pinsPerSide,
-  )
-  const leads: JscadOperation[] = []
-
-  for (let pinIndex = 0; pinIndex < pinsPerSide; pinIndex += 1) {
-    const horizontalOffset = getEvenlySpacedOffset({
-      index: pinIndex,
-      itemCount: pinsPerSide,
-      span: params.bodyWidth * 0.78,
-    })
-    const verticalOffset = getEvenlySpacedOffset({
-      index: pinIndex,
-      itemCount: pinsPerSide,
-      span: params.bodyLength * 0.78,
-    })
-    leads.push(
+  const bodyStandoff = params.packageHeight ? 0.1 : 0
+  const markingHeight = params.packageHeight ? 0.02 : 0.04
+  const bodyHeight = params.packageHeight
+    ? params.packageHeight - bodyStandoff - markingHeight
+    : 1.45
+  const leads = params.modelLocalPads.flatMap((pad) => {
+    const isHorizontalLead =
+      Math.abs(pad.x) / params.bodyWidth > Math.abs(pad.y) / params.bodyLength
+    const bodyEdge = isHorizontalLead ? params.bodyWidth / 2 : params.bodyLength / 2
+    const padOffset = isHorizontalLead ? pad.x : pad.y
+    const leadLength = Math.max(0.05, Math.abs(padOffset) - bodyEdge + 0.1)
+    const leadCenter = (Math.sign(padOffset) * (Math.abs(padOffset) + bodyEdge)) / 2
+    return [
+      createPadContact(pad),
       createColoredCuboid({
-        center: [horizontalOffset, -(params.bodyLength + leadLength) / 2, 0.12],
+        center: isHorizontalLead ? [leadCenter, pad.y, 0.2] : [pad.x, leadCenter, 0.2],
         color: connectorModelColors.metal,
-        size: [leadWidth, leadLength, 0.24],
+        size: isHorizontalLead
+          ? [leadLength, getLeadWidth(pad), 0.2]
+          : [getLeadWidth(pad), leadLength, 0.2],
       }),
-      createColoredCuboid({
-        center: [horizontalOffset, (params.bodyLength + leadLength) / 2, 0.12],
-        color: connectorModelColors.metal,
-        size: [leadWidth, leadLength, 0.24],
-      }),
-      createColoredCuboid({
-        center: [-(params.bodyWidth + leadLength) / 2, verticalOffset, 0.12],
-        color: connectorModelColors.metal,
-        size: [leadLength, leadWidth, 0.24],
-      }),
-      createColoredCuboid({
-        center: [(params.bodyWidth + leadLength) / 2, verticalOffset, 0.12],
-        color: connectorModelColors.metal,
-        size: [leadLength, leadWidth, 0.24],
-      }),
-    )
-  }
+    ]
+  })
 
   const body = createColoredRoundedCuboid({
-    center: [0, 0, bodyHeight / 2],
+    center: [0, 0, bodyStandoff + bodyHeight / 2],
     color: integratedCircuitColors.body,
     roundRadius: Math.min(0.45, Math.min(params.bodyWidth, params.bodyLength) * 0.04),
     size: [params.bodyWidth, params.bodyLength, bodyHeight],
   })
   const pinOneMark = createColoredCylinder({
-    center: [-params.bodyWidth * 0.36, -params.bodyLength * 0.36, bodyHeight + 0.02],
+    center: [
+      -params.bodyWidth * 0.36,
+      -params.bodyLength * 0.36,
+      bodyStandoff + bodyHeight + markingHeight / 2,
+    ],
     color: integratedCircuitColors.marking,
-    height: 0.04,
+    height: markingHeight,
     radius: Math.min(0.38, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
   })
   return [body, pinOneMark, ...leads]
 }
 
 export function createBgaCadModel(params: {
-  ballColumnCount?: number
-  ballRowCount?: number
   bodyLength: number
   bodyWidth: number
-  pinCount: number
+  modelLocalPads: ModelLocalPad[]
+  packageHeight?: number
 }): JscadOperation[] {
-  const bodyHeight = 1.2
-  const rowCount =
-    params.ballRowCount ??
-    Math.max(2, Math.round(Math.sqrt((params.pinCount * params.bodyLength) / params.bodyWidth)))
-  const columnCount = params.ballColumnCount ?? Math.ceil(params.pinCount / rowCount)
+  const { bodyLength, bodyWidth } = getBgaBodyDimensions(params)
   const ballRadius = Math.min(
     0.28,
-    params.bodyWidth / (columnCount + 2) / 2,
-    params.bodyLength / (rowCount + 2) / 2,
+    ...params.modelLocalPads.map((pad) => Math.min(pad.width, pad.height) / 2),
   )
-  const balls = Array.from({ length: params.pinCount }, (_, ballIndex) => {
-    const columnIndex = ballIndex % columnCount
-    const rowIndex = Math.floor(ballIndex / columnCount)
-    return createColoredPrism({
-      center: [
-        getEvenlySpacedOffset({
-          index: columnIndex,
-          itemCount: columnCount,
-          span: params.bodyWidth * 0.82,
-        }),
-        getEvenlySpacedOffset({
-          index: rowIndex,
-          itemCount: rowCount,
-          span: params.bodyLength * 0.82,
-        }),
-        ballRadius,
-      ],
+  // The declared package height includes the solder balls and pin-one mark.
+  const ballHeight = Math.min(ballRadius * 2, (params.packageHeight ?? Infinity) * 0.35)
+  const markingHeight = params.packageHeight ? 0.02 : 0.04
+  const bodyHeight = params.packageHeight ? params.packageHeight - ballHeight - markingHeight : 1.2
+  const balls = params.modelLocalPads.map((pad) =>
+    createColoredPrism({
+      center: [pad.x, pad.y, ballHeight / 2],
       color: connectorModelColors.gold,
-      height: ballRadius * 2,
+      height: ballHeight,
       radius: ballRadius,
       sideCount: 8,
-    })
-  })
+    }),
+  )
+
   const body = createColoredRoundedCuboid({
-    center: [0, 0, ballRadius * 2 + bodyHeight / 2],
+    center: [0, 0, ballHeight + bodyHeight / 2],
     color: integratedCircuitColors.body,
-    roundRadius: Math.min(0.38, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
-    size: [params.bodyWidth, params.bodyLength, bodyHeight],
+    roundRadius: Math.min(0.38, bodyHeight / 3, Math.min(bodyWidth, bodyLength) * 0.035),
+    size: [bodyWidth, bodyLength, bodyHeight],
   })
   const pinOneMark = createColoredCylinder({
-    center: [
-      -params.bodyWidth * 0.38,
-      -params.bodyLength * 0.38,
-      ballRadius * 2 + bodyHeight + 0.02,
-    ],
+    center: [-bodyWidth * 0.38, -bodyLength * 0.38, ballHeight + bodyHeight + markingHeight / 2],
     color: integratedCircuitColors.marking,
-    height: 0.04,
-    radius: Math.min(0.35, Math.min(params.bodyWidth, params.bodyLength) * 0.035),
+    height: markingHeight,
+    radius: Math.min(0.35, Math.min(bodyWidth, bodyLength) * 0.035),
   })
   return [body, pinOneMark, ...balls]
 }
 
-function getEvenlySpacedOffset(params: { index: number; itemCount: number; span: number }): number {
-  if (params.itemCount <= 1) return 0
-  return -params.span / 2 + (params.index * params.span) / (params.itemCount - 1)
+function getLeadWidth(pad: ModelLocalPad): number {
+  return Math.min(pad.width, pad.height) * 0.75
+}
+
+function createPadContact(pad: ModelLocalPad): JscadOperation {
+  return {
+    type: "translate",
+    vector: [pad.x, pad.y, 0],
+    shape: {
+      type: "rotate",
+      angles: [0, 0, (pad.ccwRotationDegrees * Math.PI) / 180],
+      shape: createColoredCuboid({
+        center: [0, 0, 0.1],
+        color: connectorModelColors.metal,
+        size: [pad.width * 0.75, pad.height * 0.75, 0.2],
+      }),
+    },
+  }
 }

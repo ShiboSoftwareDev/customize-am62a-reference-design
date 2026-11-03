@@ -11,5 +11,5 @@ test("aligns the BeaglePlay USB-A shell with its board-edge footprint", () => {
   if (replacement?.kind !== "jscad") throw new Error("Expected a JSCAD replacement")
 
   expect(replacement.modelYawOffsetDegrees).toBe(-90)
-  expect(replacement.modelPlanarOffsetMillimeters).toEqual({ x: 0, y: -5.04 })
+  expect(replacement.modelPlanarOffsetMillimeters).toEqual({ x: 0, y: -3.04 })
 })

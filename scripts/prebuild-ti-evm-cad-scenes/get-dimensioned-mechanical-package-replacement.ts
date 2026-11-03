@@ -1,12 +1,16 @@
 import type { CadModelComponentIdentity, CadModelReplacement } from "./get-cad-model-replacement"
 import {
   createMetalCanCadModel,
-  createRadialCapacitorCadModel,
   createShieldedInductorCadModel,
   createTantalumCapacitorCadModel,
   createWifiModuleCadModel,
 } from "./create-dimensioned-package-cad-models"
 import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensions"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { getPackageHeightMillimeters } from "./get-package-height-millimeters"
+import { createSmdElectrolyticCapacitorCadModel } from "./create-smd-electrolytic-capacitor-cad-model"
+import { createCommonModeChokeCadModel } from "./create-common-mode-choke-cad-model"
+import { getCrystalCadModelReplacement } from "./get-crystal-cad-model-replacement"
 
 function createJscadReplacement(
   jscadOperations: Extract<CadModelReplacement, { kind: "jscad" }>["jscadOperations"],
@@ -17,6 +21,9 @@ function createJscadReplacement(
 function getMetricInductorDimensions(
   normalizedFootprint: string,
 ): { x: number; y: number } | undefined {
+  // BeaglePlay's L1008 is an imperial package (CODACA CSTB252012H),
+  // unlike its L2012/L2016 metric library names.
+  if (normalizedFootprint === "L1008") return { x: 2.5, y: 2 }
   const metricSize = /^L(\d{2})(\d{2})$/u.exec(normalizedFootprint)
   if (metricSize) return { x: Number(metricSize[1]) / 10, y: Number(metricSize[2]) / 10 }
   if (/^IND0806/u.test(normalizedFootprint)) return { x: 2, y: 1.6 }
@@ -26,16 +33,9 @@ function getMetricInductorDimensions(
 }
 
 function getInductorHeight(normalizedFootprint: string): number | undefined {
+  if (normalizedFootprint === "L1008") return 1.2
   if (/^L4P_2D54/u.test(normalizedFootprint)) return 5
-  return undefined
-}
-
-function getKnownMetalCanDimensions(
-  normalizedFootprint: string,
-): { x: number; y: number } | undefined {
-  if (/^XTAL150SMD_125X196/u.test(normalizedFootprint)) return { x: 4.98, y: 3.18 }
-  if (/^XTAL4_126-216SMD/u.test(normalizedFootprint)) return { x: 5.49, y: 3.2 }
-  if (/^OSC4_61X65/u.test(normalizedFootprint)) return { x: 2.5, y: 2 }
+  if (normalizedFootprint.startsWith("IND")) return getPackageHeightMillimeters(normalizedFootprint)
   return undefined
 }
 
@@ -43,20 +43,26 @@ function getKnownTantalumDimensions(
   normalizedFootprint: string,
 ): { height: number; length: number; width: number } | undefined {
   if (/^CAPT7343/u.test(normalizedFootprint)) return { length: 7.3, width: 4.3, height: 3.1 }
-  if (/^CAPAE_FCASE/u.test(normalizedFootprint)) return { length: 7.3, width: 4.3, height: 4.3 }
   return undefined
 }
 
 export function getDimensionedMechanicalPackageReplacement(
   componentIdentity: CadModelComponentIdentity,
+  modelLocalPads: ModelLocalPad[] = [],
 ): CadModelReplacement | undefined {
   const normalizedFootprint = componentIdentity.altiumFootprint.trim().toUpperCase()
   const bodyDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint)
 
   if (/^MOD100_WL18/u.test(normalizedFootprint)) {
-    return createJscadReplacement(createWifiModuleCadModel())
+    return createJscadReplacement(createWifiModuleCadModel(modelLocalPads))
   }
-  if (componentIdentity.componentName.startsWith("L")) {
+  if (
+    normalizedFootprint.startsWith("IND4_DLW21H_") ||
+    (normalizedFootprint === "L2012" && modelLocalPads.length === 4)
+  ) {
+    return createJscadReplacement(createCommonModeChokeCadModel())
+  }
+  if (/^L\d/u.test(componentIdentity.componentName)) {
     const inductorDimensions = bodyDimensions ?? getMetricInductorDimensions(normalizedFootprint)
     if (inductorDimensions) {
       return createJscadReplacement(
@@ -69,24 +75,43 @@ export function getDimensionedMechanicalPackageReplacement(
     }
   }
   if (/^(?:OSC|X\d|XTAL)/u.test(normalizedFootprint)) {
-    const canDimensions = bodyDimensions ?? getKnownMetalCanDimensions(normalizedFootprint)
+    const crystalReplacement = getCrystalCadModelReplacement(componentIdentity, modelLocalPads)
+    if (crystalReplacement) return crystalReplacement
+    const canDimensions =
+      bodyDimensions ??
+      (normalizedFootprint.startsWith("OSC4_61X65") ? { x: 2.5, y: 2 } : undefined)
     if (canDimensions) {
       return createJscadReplacement(
         createMetalCanCadModel({
           length: canDimensions.x,
           width: canDimensions.y,
+          height: getPackageHeightMillimeters(normalizedFootprint),
         }),
       )
     }
   }
-  if (/^CAP(?:T|AE)/u.test(normalizedFootprint)) {
+  if (normalizedFootprint === "CAPAE_FCASE_10-5") {
+    // Fitted UT107M050HFKTA: diameter 8, base 8.3, seated height 10.2;
+    // the drawing gives 9 mm lead span and a 3.1 mm gap between terminals.
+    return createJscadReplacement(
+      createSmdElectrolyticCapacitorCadModel({
+        canDiameter: 8,
+        baseSize: 8.3,
+        seatedHeight: 10.2,
+        terminalGap: 3.1,
+        terminalLength: 2.95,
+        terminalWidth: 0.9,
+      }),
+    )
+  }
+  if (/^CAPT/u.test(normalizedFootprint)) {
     const capacitorDimensions = getKnownTantalumDimensions(normalizedFootprint)
     if (capacitorDimensions) {
       return createJscadReplacement(createTantalumCapacitorCadModel(capacitorDimensions))
     }
   }
-  if (/^RD205/u.test(normalizedFootprint)) {
-    return createJscadReplacement(createRadialCapacitorCadModel({ height: 5.2, radius: 2.5 }))
+  if (normalizedFootprint === "RD205SMD_250D") {
+    return createJscadReplacement(createSmdElectrolyticCapacitorCadModel())
   }
   if (/^U_48_RSL/u.test(normalizedFootprint)) {
     return { kind: "footprinter", footprinterString: "qfn48_w6mm_h6mm" }

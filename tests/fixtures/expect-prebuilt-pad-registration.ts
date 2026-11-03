@@ -5,6 +5,10 @@ import { getTiEvm, type TiEvmId } from "../../lib/ti-evm-catalog"
 import type { ComponentName } from "../../scripts/prebuild-ti-evm-cad-scenes/read-source-footprints"
 import { getMeshContactCenters } from "./get-mesh-contact-centers"
 import { readGlbComponentMesh } from "./read-glb-component-mesh"
+import type { AnyCircuitElement } from "circuit-json"
+
+type SourceComponentId = string
+type PcbComponentId = string
 
 type ComponentRegistration = {
   componentName: ComponentName
@@ -15,35 +19,53 @@ type ComponentRegistration = {
 export async function expectPrebuiltPadRegistration({
   components,
   evmId,
+  variantId,
 }: {
   components: ComponentRegistration[]
   evmId: TiEvmId
+  variantId?: string
 }): Promise<void> {
   const registrationErrors: string[] = []
-  for (const variant of getTiEvm(evmId).variants) {
+  const variants = getTiEvm(evmId).variants.filter(
+    (variant) => variantId === undefined || variant.id === variantId,
+  )
+  expect(variants.length).toBeGreaterThan(0)
+  for (const variant of variants) {
     const circuitJson = parsePrebuiltCircuitJson(
       new Uint8Array(await Bun.file(`public${variant.circuitJsonUrl}`).arrayBuffer()),
     )
     const glb = await Bun.file(`public${variant.prebuiltCadSceneUrl}`).arrayBuffer()
     const board = circuitJson.find((element) => element.type === "pcb_board")
     if (typeof board?.thickness !== "number") throw new Error("Missing board thickness")
-    for (const { componentName, pinCount, expectedPadCount = pinCount } of components) {
-      const source = circuitJson.find(
-        (element) => element.type === "source_component" && element.name === componentName,
+    const sourceComponentIdByName = new Map<ComponentName, SourceComponentId>()
+    const pcbComponentBySourceComponentId = new Map<SourceComponentId, AnyCircuitElement>()
+    const padsByPcbComponentId = new Map<PcbComponentId, AnyCircuitElement[]>()
+    for (const element of circuitJson) {
+      if (
+        element.type === "source_component" &&
+        typeof element.name === "string" &&
+        typeof element.source_component_id === "string"
       )
-      const component = circuitJson.find(
-        (element) =>
-          element.type === "pcb_component" &&
-          element.source_component_id === source?.source_component_id,
+        sourceComponentIdByName.set(element.name, element.source_component_id)
+      if (element.type === "pcb_component" && typeof element.source_component_id === "string")
+        pcbComponentBySourceComponentId.set(element.source_component_id, element)
+      if (element.type === "pcb_smtpad" && typeof element.pcb_component_id === "string") {
+        const pads = padsByPcbComponentId.get(element.pcb_component_id) ?? []
+        pads.push(element)
+        padsByPcbComponentId.set(element.pcb_component_id, pads)
+      }
+    }
+    for (const { componentName, pinCount, expectedPadCount = pinCount } of components) {
+      const component = pcbComponentBySourceComponentId.get(
+        sourceComponentIdByName.get(componentName) ?? "",
       )
       if (!component) continue
-      const mesh = readGlbComponentMesh({ componentName, glb })
+      if (typeof component.pcb_component_id !== "string") throw new Error("Missing component ID")
       const surfaceZ = ((component.layer === "bottom" ? -1 : 1) * board.thickness) / 2
+      const mesh = readGlbComponentMesh({ componentName, glb, surfaceZ })
       const contactCenters = getMeshContactCenters({ mesh, surfaceZ })
-      const pads = circuitJson.filter(
+      const pads = (padsByPcbComponentId.get(component.pcb_component_id) ?? []).filter(
         (element) =>
-          element.type === "pcb_smtpad" &&
-          element.pcb_component_id === component.pcb_component_id &&
           Array.isArray(element.port_hints) &&
           element.port_hints.some(
             (hint) => typeof hint === "string" && /^\d+$/u.test(hint) && Number(hint) <= pinCount,
@@ -66,8 +88,9 @@ export async function expectPrebuiltPadRegistration({
           translate(pad.x, pad.y),
           rotateDEG(typeof pad.ccw_rotation === "number" ? pad.ccw_rotation : 0),
         )
+        const boardToPadTransform = inverse(padToBoardTransform)
         const centersOnPad = contactCenters.filter((center) => {
-          const localCenter = applyToPoint(inverse(padToBoardTransform), center)
+          const localCenter = applyToPoint(boardToPadTransform, center)
           return Math.abs(localCenter.x) <= padWidth / 2 && Math.abs(localCenter.y) <= padHeight / 2
         })
         if (centersOnPad.length !== 1)

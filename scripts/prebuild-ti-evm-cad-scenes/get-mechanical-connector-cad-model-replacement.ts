@@ -10,14 +10,14 @@ import {
   createRj45ConnectorCadModel,
 } from "./create-additional-connector-cad-models"
 import {
+  barrelJackPinPositions,
   createBarrelJackCadModel,
   createCoinCellHolderCadModel,
-  createMicroSdConnectorCadModel,
   createRj11ConnectorCadModel,
   createUflConnectorCadModel,
+  rj11PinPositions,
 } from "./create-board-connector-cad-models"
 import {
-  createMicroUsbConnectorCadModel,
   createMiniUsbConnectorCadModel,
   createUsbAConnectorCadModel,
   createUsbCConnectorCadModel,
@@ -29,10 +29,10 @@ import {
 import { externalGlbModelUrls, externalStepModelUrls } from "./external-cad-model-urls"
 import { createGroveSmdConnectorCadModel } from "./create-grove-smd-connector-cad-model"
 import { createKeyedDebugHeaderCadModel } from "./create-keyed-debug-header-cad-model"
+import { connectorModelColors, createColoredCuboid } from "./jscad-model-primitives"
 
-// The imported body marks the 5.72 mm section on the PCB. Offset the 15.8 mm
-// shell by half the depth difference so both rear edges remain aligned.
-const beaglePlayUsbAModelCenterOffsetMillimeters = 5.04
+// Leave room for the parts alongside the rear pin row on BeaglePlay.
+const beaglePlayUsbAModelCenterOffsetMillimeters = 3.04
 // The imported USB_A_SH body marks the connector's 5.25 mm rear section.
 // Move the complete 15.8 mm shell outward so their rear edges stay aligned.
 const beagleBoneBlackUsbAModelCenterOffsetMillimeters = 5.275
@@ -47,6 +47,7 @@ function createJscadReplacement(
   options: {
     modelPlanarOffsetMillimeters?: CadModelPlanarOffsetMillimeters
     modelYawOffsetDegrees?: number
+    boardTerminals?: "through-hole" | "usb-c"
   } = {},
 ): CadModelReplacement {
   return { kind: "jscad", jscadOperations, ...options }
@@ -73,11 +74,6 @@ function createGlbReplacement(
   },
 ): CadModelReplacement {
   return { kind: "glb", modelGlbUrl, ...options }
-}
-
-function getMicroSdModelYawOffsetDegrees(footprint: string): number {
-  if (footprint.startsWith("MICRO_SD_")) return 90
-  return 0
 }
 
 export function getMechanicalConnectorCadModelReplacement(
@@ -122,6 +118,7 @@ export function getMechanicalConnectorCadModelReplacement(
 
   if (footprint === "USB_A_SH") {
     return createJscadReplacement(createUsbAConnectorCadModel(), {
+      boardTerminals: "through-hole",
       modelPlanarOffsetMillimeters: {
         x: 0,
         y: -beagleBoneBlackUsbAModelCenterOffsetMillimeters,
@@ -129,10 +126,28 @@ export function getMechanicalConnectorCadModelReplacement(
     })
   }
   if (footprint.includes("629104151") || partNumber.startsWith("629104151")) {
-    return createJscadReplacement(createUsbAConnectorCadModel())
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.wurthUsbA,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // Wurth's matching footprint puts pins 1-4 on Y=-6.75 mm.
+      // Reverse footprint Y into the STEP model's right-handed package frame.
+      modelPinPositions: [-3.5, -1, 1, 3.5].map((x, index) => ({
+        pinNumber: String(index + 1),
+        x,
+        y: 6.75,
+      })),
+    }
   }
   if (footprint.startsWith("USB7P_")) {
-    return createJscadReplacement(createUsbAConnectorCadModel(), {
+    // The narrower termination block carries the rear pins past the shield.
+    const terminationBlock = createColoredCuboid({
+      center: [0, 8.7, 0.85],
+      size: [6.4, 1.6, 1.5],
+      color: connectorModelColors.darkPlastic,
+    })
+    return createJscadReplacement([...createUsbAConnectorCadModel(), terminationBlock], {
+      boardTerminals: "through-hole",
       modelPlanarOffsetMillimeters: {
         x: 0,
         y: -beaglePlayUsbAModelCenterOffsetMillimeters,
@@ -145,7 +160,18 @@ export function getMechanicalConnectorCadModelReplacement(
     footprint.includes("MUSBB5") ||
     partNumber === "629105150521"
   ) {
-    return createJscadReplacement(createMicroUsbConnectorCadModel())
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.wurthMicroUsbB,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // The manufacturer's footprint and STEP share the same datum.
+      // Numbered solder lands sit on Y=-2.9 mm in the footprint (STEP +Y).
+      modelPinPositions: Array.from({ length: 5 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -1.3 + index * 0.65,
+        y: 2.9,
+      })),
+    }
   }
   if (footprint.includes("USB5MINI") || footprint.includes("ST-USB-117")) {
     return createJscadReplacement(createMiniUsbConnectorCadModel(), {
@@ -170,7 +196,7 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("10029449")) {
+  if (footprint.includes("10029449") || footprint.includes("DC04S019")) {
     return {
       kind: "step",
       modelStepUrl: externalStepModelUrls.amphenolHdmiA,
@@ -182,20 +208,19 @@ export function getMechanicalConnectorCadModelReplacement(
       })),
     }
   }
-  if (footprint.includes("DC04S019")) {
-    return createStepReplacement(externalStepModelUrls.amphenolHdmiA)
-  }
   if (footprint.includes("CONN19_HDMI")) {
-    return createStepReplacement(externalStepModelUrls.molexMicroHdmiD)
-  }
-  if (
-    footprint.includes("MEM2051") ||
-    footprint.includes("MICRO_SD") ||
-    footprint.includes("SD-MICRO")
-  ) {
-    return createJscadReplacement(createMicroSdConnectorCadModel(), {
-      modelYawOffsetDegrees: getMicroSdModelYawOffsetDegrees(footprint),
-    })
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.molexMicroHdmiD,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      // KiCad's matching Molex footprint has staggered 0.4 mm contact rows.
+      // STEP uses +Y toward the solder tails, opposite KiCad's footprint Y.
+      modelPinPositions: Array.from({ length: 19 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: 1.8 - index * 0.2,
+        y: index % 2 === 0 ? 4.775 : 3.55,
+      })),
+    }
   }
   if (footprint.includes("U-FL") || partNumber.startsWith("U.FL-R-SMT")) {
     return createJscadReplacement(createUflConnectorCadModel())
@@ -217,39 +242,63 @@ export function getMechanicalConnectorCadModelReplacement(
     }
   }
   if (footprint.includes("PJ102A")) {
-    return createJscadReplacement(createBarrelJackCadModel(), {
-      modelYawOffsetDegrees: 90,
-    })
+    return {
+      kind: "jscad",
+      jscadOperations: createBarrelJackCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: barrelJackPinPositions,
+    }
   }
   if (footprint === "BAT-CR1220") {
     return createJscadReplacement(createCoinCellHolderCadModel())
   }
   if (footprint.startsWith("RJ11_")) {
-    return createJscadReplacement(createRj11ConnectorCadModel())
+    return {
+      kind: "jscad",
+      jscadOperations: createRj11ConnectorCadModel(),
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: rj11PinPositions,
+    }
   }
   if (footprint.includes("LPJG16314A4NL") || partNumber === "LPJG16314A4NL") {
-    return createJscadReplacement(
-      createRj45ConnectorCadModel({ depth: 21.25, height: 13.6, width: 15.95 }),
-    )
+    return {
+      kind: "glb",
+      modelGlbUrl: "/cad-models/linkpp-lpjg16314a4nl.glb",
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelUnitToMmScaleFactor: 1,
+      // LINK-PP's product uses Y for height, with its seated plane at -6.75.
+      // The cached asset plus X=0 restores this as board-normal Z.
+      modelXRotationDegrees: 0,
+      modelYawOffsetDegrees: 180,
+      modelVerticalOffsetMillimeters: 6.75,
+      modelPinPositions: Array.from({ length: 10 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -5.715 + index * 1.27,
+        y: index % 2 === 0 ? -1.61 : -4.15,
+      })),
+    }
   }
   if (footprint === "RJ45_18P_21_23X15_93X13_3MM") {
     return createJscadReplacement(
       createRj45ConnectorCadModel({ depth: 21.23, height: 13.3, width: 15.93 }),
+      { boardTerminals: "through-hole" },
     )
   }
   if (footprint === "RJ45-7499010211A") {
     return createJscadReplacement(
       createRj45ConnectorCadModel({ depth: 21.25, height: 13.6, width: 16 }),
+      { boardTerminals: "through-hole" },
     )
   }
-  if (
-    footprint.includes("2012670") ||
-    footprint === "USB2_0_TYPE_C" ||
-    partNumber === "2012670005"
-  ) {
-    const modelYawOffsetDegrees = footprint === "USB2_0_TYPE_C" ? -90 : 0
-    return createJscadReplacement(createUsbCConnectorCadModel(), {
-      modelYawOffsetDegrees,
+  if (footprint === "USB2_0_TYPE_C" || partNumber === "UBF31-0171") {
+    return createJscadReplacement(createUsbCConnectorCadModel("UBF31-0171"), {
+      boardTerminals: "usb-c",
+      modelYawOffsetDegrees: -90,
+    })
+  }
+  if (footprint.includes("2012670") || partNumber === "2012670005") {
+    return createJscadReplacement(createUsbCConnectorCadModel("2012670005"), {
+      boardTerminals: "usb-c",
     })
   }
   if (footprint.includes("2199119")) {
@@ -268,23 +317,22 @@ export function getMechanicalConnectorCadModelReplacement(
       createBoxHeaderCadModel({ columnCount: 7, pitch: 2.54, rowCount: 2 }),
     )
   }
-  if (footprint.includes("5019512230")) {
-    return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 22, pitch: 0.5 }))
-  }
-  const genericFpcPinCount = /^FPC(\d+)_0D5/u.exec(footprint)?.[1]
-  if (genericFpcPinCount) {
-    return createJscadReplacement(
-      createFpcConnectorCadModel({ pinCount: Number(genericFpcPinCount), pitch: 0.5 }),
-    )
-  }
-  if (footprint.includes("FH12A") || footprint.includes("FFC2A32-40")) {
-    return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 40, pitch: 0.5 }))
-  }
-  if (footprint.includes("1734248-5")) {
-    return createJscadReplacement(createFpcConnectorCadModel({ pinCount: 15, pitch: 0.5 }))
-  }
   if (footprint === "JST4P_SMD_2_0_90D") {
     return createJscadReplacement(createGroveSmdConnectorCadModel())
+  }
+  if (footprint === "JST4P_1D0_6_5X4_35X3_1MM") {
+    // BeagleBoard's released STEP identifies this as SM04B-SRSS. Register the
+    // reference's four 1 mm solder tails; the two side tabs remain separate.
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.jstSh4,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: Array.from({ length: 4 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: -1.5 + index,
+        y: 2.075,
+      })),
+    }
   }
   if (footprint.startsWith("JST4P_")) {
     const pitch = footprint.includes("_1D0_") ? 1 : 2

@@ -1,13 +1,9 @@
 import type { TiEvmId } from "../../lib/ti-evm-catalog"
 import type { ComponentName } from "./read-source-footprints"
+import notFittedComponentNames from "./not-fitted-component-names.json"
 
 export function getDnpComponentNames(evmId: TiEvmId): ReadonlySet<ComponentName> {
-  switch (evmId) {
-    case "beagleplay":
-      return new Set(["J6", "J11", "J19", "OSC2"])
-    case "tmds62levm":
-      return new Set(["U44", "U51", "U105", "U109", "U116", "U118", "U122", "U129"])
-    default:
-      return new Set()
-  }
+  // Reference BOM revisions and population policy are documented with the CAD
+  // assets. Apply the whole assembly list, including non-overlapping omissions.
+  return new Set(notFittedComponentNames[evmId])
 }

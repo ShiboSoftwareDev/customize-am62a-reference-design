@@ -4,7 +4,7 @@ import { getCadModelReplacement } from "../scripts/prebuild-ti-evm-cad-scenes/ge
 test("replaces fitted Sitara packages that previously rendered as generic boxes", () => {
   for (const [componentName, altiumFootprint] of [
     ["A1", "ANT2_W3006_390X130_SMD"],
-    ["B1", "BF10_50X5_200X125X80MM"],
+    ["B1", "BF10_0D5_2X1D25X1MM"],
     ["D1", "DIO_DFN0402_100X60X40MM"],
     ["D13", "DIO_DFN0201_65X40X30MM"],
     ["D18", "DIO_SOD323_250X125X95MM"],

@@ -1,8 +1,13 @@
 import type { JscadOperation } from "jscad-planner"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { createSmtPadCadContact } from "./create-smt-pad-cad-contact"
+import { createHorizontalFpcContact } from "./create-horizontal-fpc-contact"
 import {
+  colorize,
   connectorModelColors,
   createColoredCuboid,
   createColoredRoundedCuboid,
+  subtract,
 } from "./jscad-model-primitives"
 
 export function createRj45ConnectorCadModel(params: {
@@ -13,9 +18,9 @@ export function createRj45ConnectorCadModel(params: {
   const contactCount = 8
   const contacts = Array.from({ length: contactCount }, (_, contactIndex) =>
     createColoredCuboid({
-      center: [-3.5 + contactIndex, -params.depth / 2 - 0.17, params.height * 0.56],
+      center: [-3.5 + contactIndex, -params.depth / 2 + 4, params.height * 0.745],
       color: connectorModelColors.gold,
-      size: [0.38, 0.34, params.height * 0.38],
+      size: [0.38, 6, 0.3],
     }),
   )
   const statusLeds = [-1, 1].map((side) =>
@@ -25,23 +30,24 @@ export function createRj45ConnectorCadModel(params: {
       size: [2, 0.38, 1.4],
     }),
   )
+  const body = createColoredRoundedCuboid({
+    center: [0, 0, params.height / 2],
+    color: connectorModelColors.metal,
+    roundRadius: 0.45,
+    size: [params.width, params.depth, params.height],
+  })
+  const opening = createColoredCuboid({
+    center: [0, -params.depth / 2 + 3.5, params.height * 0.48],
+    color: connectorModelColors.blackPlastic,
+    size: [params.width * 0.76, 9, params.height * 0.54],
+  })
+  const latchOpening = createColoredCuboid({
+    center: [0, -params.depth / 2 + 3.5, params.height * 0.19],
+    color: connectorModelColors.darkPlastic,
+    size: [params.width * 0.46, 9, params.height * 0.18],
+  })
   return [
-    createColoredRoundedCuboid({
-      center: [0, 0, params.height / 2],
-      color: connectorModelColors.metal,
-      roundRadius: 0.45,
-      size: [params.width, params.depth, params.height],
-    }),
-    createColoredCuboid({
-      center: [0, -params.depth / 2 - 0.16, params.height * 0.48],
-      color: connectorModelColors.blackPlastic,
-      size: [params.width * 0.76, 0.34, params.height * 0.62],
-    }),
-    createColoredCuboid({
-      center: [0, -params.depth / 2 - 0.36, params.height * 0.19],
-      color: connectorModelColors.darkPlastic,
-      size: [params.width * 0.46, 0.38, params.height * 0.1],
-    }),
+    colorize(connectorModelColors.metal, subtract([body, opening, latchOpening])),
     ...contacts,
     ...statusLeds,
   ]
@@ -49,33 +55,52 @@ export function createRj45ConnectorCadModel(params: {
 export function createFpcConnectorCadModel(params: {
   pinCount: number
   pitch: number
+  bodySize?: { width: number; depth: number; height: number }
+  modelLocalPads?: ModelLocalPad[]
 }): JscadOperation[] {
-  const width = params.pinCount * params.pitch + 3.2
-  const contacts = Array.from({ length: params.pinCount }, (_, pinIndex) =>
-    createColoredCuboid({
-      center: [(-(params.pinCount - 1) * params.pitch) / 2 + pinIndex * params.pitch, -1.65, 0.62],
-      color: connectorModelColors.gold,
-      size: [Math.min(params.pitch * 0.48, 0.28), 1.2, 0.12],
-    }),
-  )
+  const { width, depth, height } = params.bodySize ?? {
+    width: params.pinCount * params.pitch + 3.2,
+    depth: 4.5,
+    height: 1.65,
+  }
+  const contacts = (params.modelLocalPads ?? [])
+    .filter(
+      (pad) =>
+        pad.pinNumber && /^\d+$/u.test(pad.pinNumber) && Number(pad.pinNumber) <= params.pinCount,
+    )
+    .flatMap((pad) => createHorizontalFpcContact({ pad, pitch: params.pitch, depth }))
   return [
-    createColoredRoundedCuboid({
-      center: [0, 0, 0.72],
+    createColoredCuboid({
+      center: [0, 0, 0.31],
       color: connectorModelColors.whitePlastic,
-      roundRadius: 0.24,
-      size: [width, 4.5, 1.45],
+      size: [width, depth, 0.3],
     }),
     createColoredCuboid({
-      center: [0, 1.45, 1.42],
-      color: connectorModelColors.darkPlastic,
-      size: [width * 0.9, 1.1, 0.46],
+      center: [0, depth / 2 - 0.4, (height + 0.16) / 2],
+      color: connectorModelColors.whitePlastic,
+      size: [width, 0.8, height - 0.76],
+    }),
+    ...[-1, 1].map((side) =>
+      createColoredCuboid({
+        center: [side * (width / 2 - 0.65), -0.4, (height + 0.16) / 2],
+        color: connectorModelColors.whitePlastic,
+        size: [1.3, depth - 0.8, height - 0.76],
+      }),
+    ),
+    createColoredCuboid({
+      center: [0, 0.5, height - 0.15],
+      color: connectorModelColors.whitePlastic,
+      size: [width, depth - 1, 0.3],
     }),
     createColoredCuboid({
-      center: [0, -2.18, 0.92],
+      center: [0, -depth / 2 + 0.5, height - 0.2],
       color: connectorModelColors.blackPlastic,
-      size: [width * 0.82, 0.22, 0.68],
+      size: [width - 2.6, 1, 0.4],
     }),
     ...contacts,
+    ...(params.modelLocalPads ?? []).map((pad) =>
+      createSmtPadCadContact(pad, connectorModelColors.metal),
+    ),
   ]
 }
 export function createBoxHeaderCadModel(params: {

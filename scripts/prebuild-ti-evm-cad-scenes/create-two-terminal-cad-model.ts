@@ -1,5 +1,7 @@
 import type { Color, JscadOperation } from "jscad-planner"
 import { createColoredCuboid } from "./jscad-model-primitives"
+import type { ModelLocalPad } from "./get-model-local-pads"
+import { alignTwoTerminalCadModel } from "./align-two-terminal-cad-model"
 
 export type TwoTerminalPackageKind = "capacitor" | "diode" | "inductor" | "led" | "resistor"
 
@@ -38,7 +40,7 @@ const twoTerminalColors = {
   diodeMark: [0.8, 0.82, 0.84] as Color,
   inductorBody: [0.12, 0.13, 0.14] as Color,
   ledBody: [0.82, 0.84, 0.82] as Color,
-  ledLens: [0.12, 0.72, 0.32] as Color,
+  ledLens: [0.92, 0.94, 0.89] as Color,
   resistorBody: [0.15, 0.13, 0.1] as Color,
   terminal: [0.68, 0.7, 0.72] as Color,
 }
@@ -46,8 +48,13 @@ const twoTerminalColors = {
 export function createTwoTerminalCadModel(params: {
   kind: TwoTerminalPackageKind
   packageSize: ImperialPackageSize
+  modelLocalPads?: ModelLocalPad[]
+  heightMillimeters?: number
 }): JscadOperation[] {
-  const dimensions = packageDimensionsByImperialSize[params.packageSize]
+  const dimensions = {
+    ...packageDimensionsByImperialSize[params.packageSize],
+    height: params.heightMillimeters ?? packageDimensionsByImperialSize[params.packageSize].height,
+  }
   const terminalLength = dimensions.length * 0.2
   const bodyLength = dimensions.length - terminalLength * 2
   const bodyColor = getBodyColor(params.kind)
@@ -88,7 +95,12 @@ export function createTwoTerminalCadModel(params: {
       }),
     )
   }
-  return operations
+  // Polarity markings need a pin-numbered reference, rather than an undirected axis.
+  if (params.kind === "diode") return operations
+  return alignTwoTerminalCadModel({
+    jscadOperations: operations,
+    modelLocalPads: params.modelLocalPads ?? [],
+  })
 }
 
 function getBodyColor(kind: TwoTerminalPackageKind): Color {

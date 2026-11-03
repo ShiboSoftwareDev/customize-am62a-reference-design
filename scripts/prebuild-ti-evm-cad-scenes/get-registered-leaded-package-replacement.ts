@@ -6,6 +6,18 @@ import { externalStepModelUrls } from "./external-cad-model-urls"
 export function getRegisteredLeadedPackageReplacement(
   normalizedFootprint: string,
 ): CadModelReplacement | undefined {
+  if (/^VSSOP8_19-68_/u.test(normalizedFootprint)) {
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.vssop8Dcu,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: Array.from({ length: 8 }, (_, index) => ({
+        pinNumber: String(index + 1),
+        x: index < 4 ? -1.55 : 1.55,
+        y: index < 4 ? 0.75 - index * 0.5 : -0.75 + (index - 4) * 0.5,
+      })),
+    }
+  }
   const packages: Array<{
     pattern: RegExp
     modelStepUrl: string
@@ -95,7 +107,6 @@ export function getRegisteredLeadedPackageReplacement(
 }
 
 function getExistingLeadedFootprint(normalizedFootprint: string): string | undefined {
-  if (/^VSSOP8_19-68_/u.test(normalizedFootprint)) return "vssop8_p0.5mm"
   if (/^(?:SOIC8|SO8-)/u.test(normalizedFootprint)) return "soic8_p1.27mm"
   if (/^SOIC16/u.test(normalizedFootprint)) return "soic16_p1.27mm"
   return undefined

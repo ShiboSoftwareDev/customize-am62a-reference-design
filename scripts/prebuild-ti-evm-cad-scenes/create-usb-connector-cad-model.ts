@@ -9,14 +9,13 @@ import {
 } from "./jscad-model-primitives"
 
 type UsbConnectorDimensions = {
-  contactCount: number
   depth: number
   height: number
   openingHeight: number
   openingWidth: number
   tongueHeight: number
   width: number
-}
+} & ({ contactCount: number } | { twoSidedContactOffsetsMillimeters: number[] })
 
 export function createUsbAConnectorCadModel(): JscadOperation[] {
   return createUsbConnectorCadModel({
@@ -27,107 +26,6 @@ export function createUsbAConnectorCadModel(): JscadOperation[] {
     openingWidth: 12.4,
     tongueHeight: 1.2,
     width: 14.2,
-  })
-}
-
-export function createMicroUsbConnectorCadModel(): JscadOperation[] {
-  return createTaperedUsbConnectorCadModel({
-    contactCount: 5,
-    depth: 5.8,
-    height: 2.86,
-    openingHeight: 1.8,
-    openingWidth: 6.2,
-    tongueHeight: 0.45,
-    width: 7.5,
-  })
-}
-
-function createTaperedUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOperation[] {
-  const shellWall = 0.3
-  const lowerWidth = dimensions.width * 0.84
-  const outerProfile = createTrapezoidProfile({
-    height: dimensions.height,
-    lowerWidth,
-    upperWidth: dimensions.width,
-  })
-  const innerProfile = createTrapezoidProfile({
-    height: dimensions.openingHeight,
-    lowerWidth: dimensions.openingWidth * 0.82,
-    upperWidth: dimensions.openingWidth,
-    verticalOffset: (dimensions.height - dimensions.openingHeight) / 2,
-  })
-  const shell = colorize(
-    connectorModelColors.metal,
-    subtract([
-      extrudeProfileAlongDepth({ depth: dimensions.depth, profile: outerProfile }),
-      extrudeProfileAlongDepth({
-        depth: dimensions.depth - shellWall,
-        profile: innerProfile,
-      }),
-    ]),
-  )
-  const tongueCenterZ = dimensions.height / 2 - dimensions.openingHeight * 0.18
-  const tongue = createColoredRoundedCuboid({
-    center: [0, dimensions.depth * 0.42, tongueCenterZ],
-    color: connectorModelColors.blackPlastic,
-    roundRadius: 0.12,
-    size: [dimensions.openingWidth * 0.74, dimensions.depth * 0.68, dimensions.tongueHeight],
-  })
-  const contactSpacing = (dimensions.openingWidth * 0.58) / dimensions.contactCount
-  const contacts = Array.from({ length: dimensions.contactCount }, (_, contactIndex) =>
-    createColoredCuboid({
-      center: [
-        (contactIndex - (dimensions.contactCount - 1) / 2) * contactSpacing,
-        dimensions.depth * 0.26,
-        tongueCenterZ + dimensions.tongueHeight / 2 + 0.03,
-      ],
-      color: connectorModelColors.gold,
-      size: [contactSpacing * 0.42, dimensions.depth * 0.42, 0.06],
-    }),
-  )
-  const rearHousing = createColoredCuboid({
-    center: [0, dimensions.depth - shellWall * 1.5, dimensions.height / 2],
-    color: connectorModelColors.darkPlastic,
-    size: [dimensions.openingWidth * 0.88, shellWall, dimensions.openingHeight * 0.86],
-  })
-  const mountingTabs = [-1, 1].map((side) =>
-    createColoredCuboid({
-      center: [side * (dimensions.width / 2 + 0.2), dimensions.depth * 0.42, 0.2],
-      color: connectorModelColors.metal,
-      size: [0.4, dimensions.depth * 0.35, 0.4],
-    }),
-  )
-  return [shell, rearHousing, tongue, ...contacts, ...mountingTabs]
-}
-
-function createTrapezoidProfile(params: {
-  height: number
-  lowerWidth: number
-  upperWidth: number
-  verticalOffset?: number
-}): [number, number][] {
-  const verticalOffset = params.verticalOffset ?? 0
-  return [
-    [-params.lowerWidth / 2, verticalOffset],
-    [params.lowerWidth / 2, verticalOffset],
-    [params.upperWidth / 2, verticalOffset + params.height],
-    [-params.upperWidth / 2, verticalOffset + params.height],
-  ]
-}
-
-function extrudeProfileAlongDepth(params: {
-  depth: number
-  profile: [number, number][]
-}): JscadOperation {
-  const extrudedProfile: JscadOperation = {
-    type: "extrudeLinear",
-    options: { height: params.depth },
-    shape: { type: "fromPointsGeom2", points: params.profile },
-  }
-  return translate([0, params.depth, 0], {
-    type: "rotateX",
-    angle: Math.PI / 2,
-    shape: extrudedProfile,
   })
 }
 
@@ -143,9 +41,14 @@ export function createMiniUsbConnectorCadModel(): JscadOperation[] {
   })
 }
 
-export function createUsbCConnectorCadModel(): JscadOperation[] {
+export function createUsbCConnectorCadModel(part: "2012670005" | "UBF31-0171"): JscadOperation[] {
   return createUsbConnectorCadModel({
-    contactCount: 16,
+    // The UBF31-0171 combines four pairs of power/ground terminals at
+    // the PCB but presents both contacts of each pair at the mating face.
+    twoSidedContactOffsetsMillimeters:
+      part === "2012670005"
+        ? [-2.75, -2.25, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, 2.25, 2.75]
+        : [-2.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 2.75],
     depth: 8.8,
     height: 3.2,
     openingHeight: 2.1,
@@ -179,8 +82,10 @@ function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOp
     connectorModelColors.metal,
     translate([0, shellCenterY, shellCenterZ], subtract([outerShell, opening])),
   )
+  const hasTwoContactRows = "twoSidedContactOffsetsMillimeters" in dimensions
   const tongueCenterZ =
-    dimensions.height / 2 - dimensions.openingHeight / 2 + dimensions.tongueHeight / 2
+    dimensions.height / 2 -
+    (hasTwoContactRows ? 0 : (dimensions.openingHeight - dimensions.tongueHeight) / 2)
   const tongueDepth = dimensions.depth * 0.58
   const tongueCenterY = -dimensions.depth * 0.18
   const tongue = createColoredRoundedCuboid({
@@ -189,17 +94,31 @@ function createUsbConnectorCadModel(dimensions: UsbConnectorDimensions): JscadOp
     roundRadius: Math.min(0.2, dimensions.tongueHeight * 0.25),
     size: [dimensions.openingWidth * 0.82, tongueDepth, dimensions.tongueHeight],
   })
-  const contactSpacing = (dimensions.openingWidth * 0.68) / dimensions.contactCount
-  const contacts = Array.from({ length: dimensions.contactCount }, (_, contactIndex) =>
-    createColoredCuboid({
-      center: [
-        (contactIndex - (dimensions.contactCount - 1) / 2) * contactSpacing,
-        tongueCenterY,
-        tongueCenterZ + dimensions.tongueHeight / 2 + 0.03,
-      ],
-      color: connectorModelColors.gold,
-      size: [contactSpacing * 0.38, dimensions.depth * 0.4, 0.06],
-    }),
+  const contactSpacing =
+    (dimensions.openingWidth * 0.68) /
+    (hasTwoContactRows
+      ? dimensions.twoSidedContactOffsetsMillimeters.length
+      : dimensions.contactCount)
+  const contactOffsets = hasTwoContactRows
+    ? dimensions.twoSidedContactOffsetsMillimeters
+    : Array.from(
+        { length: dimensions.contactCount },
+        (_, index) => (index - (dimensions.contactCount - 1) / 2) * contactSpacing,
+      )
+  const contactWidth = hasTwoContactRows ? 0.25 : contactSpacing * 0.38
+  const tongueFaces = hasTwoContactRows ? [1, -1] : [1]
+  const contacts = tongueFaces.flatMap((side) =>
+    contactOffsets.map((offset) =>
+      createColoredCuboid({
+        center: [
+          offset,
+          tongueCenterY,
+          tongueCenterZ + side * (dimensions.tongueHeight / 2 + 0.03),
+        ],
+        color: connectorModelColors.gold,
+        size: [contactWidth, dimensions.depth * 0.4, 0.06],
+      }),
+    ),
   )
   // Seat the insulator in the cavity's back wall, away from the exterior metal
   // face. Coplanar plastic and metal faces flicker as the camera moves.

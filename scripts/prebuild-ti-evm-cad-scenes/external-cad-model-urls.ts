@@ -1,7 +1,14 @@
 const kicadPackageBaseUrl =
   "https://sources.debian.org/data/main/k/kicad-packages3d/9.0.8-1~bpo13%2B1"
 
+const wurthConnectorBaseUrl =
+  "https://raw.githubusercontent.com/WurthElektronik/KiCad-Library/" +
+  "215595ffc7c98649394598bc6bac81ddc421fcc6/3dmodels/Connector_SMD_Wurth.3dshapes"
+
 export const externalStepModelUrls = {
+  kmr2Switch: `${kicadPackageBaseUrl}/Button_Switch_SMD.3dshapes/` + "SW_Push_1P1T_NO_CK_KMR2.step",
+  wurthUsbA: `${wurthConnectorBaseUrl}/J_Wurth_WR-USB_629104151021.step`,
+  wurthMicroUsbB: `${wurthConnectorBaseUrl}/J_Wurth_WR-USB_629105150521.step`,
   msop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8_3x3mm_P0.65mm.step`,
   msop8PowerPad: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8-1EP_3x3mm_P0.65mm_EP1.73x1.85mm.step`,
   tssop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/TSSOP-8_4.4x3mm_P0.65mm.step`,
@@ -14,6 +21,9 @@ export const externalStepModelUrls = {
   sot23_5: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step`,
   sot23_6: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step`,
   sot23: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-23.step`,
+  sot323: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-323_SC-70.step`,
+  sot363: `${kicadPackageBaseUrl}/Package_TO_SOT_SMD.3dshapes/SOT-363_SC-70-6.step`,
+  jstSh4: `${kicadPackageBaseUrl}/Connector_JST.3dshapes/JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal.step`,
   vssop8Dcu: `${kicadPackageBaseUrl}/Package_SO.3dshapes/` + "VSSOP-8_2.3x2mm_P0.5mm.step",
   amphenolHdmiA:
     `${kicadPackageBaseUrl}/Connector_Video.3dshapes/` +
