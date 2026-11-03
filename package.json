@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@tscircuit/3d-viewer": "0.0.638",
-    "@tscircuit/pcb-viewer": "1.11.442",
+    "@tscircuit/pcb-viewer": "1.11.443",
     "@tscircuit/schematic-viewer": "2.0.100",
     "fflate": "0.8.3",
     "react": "19.3.0",
