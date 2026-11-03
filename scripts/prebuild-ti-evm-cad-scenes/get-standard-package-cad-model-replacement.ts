@@ -22,6 +22,10 @@ import { getLeadlessPackageReplacement } from "./get-leadless-package-replacemen
 import { getIndicatorLedReplacement } from "./get-indicator-led-replacement"
 import { getLeadlessDiodeCadModelReplacement } from "./get-leadless-diode-cad-model-replacement"
 import { getReferenceCapacitorHeightMillimeters } from "./get-reference-capacitor-height-millimeters"
+import {
+  createJohansonBalunCadModel,
+  johansonBalunPinPositions,
+} from "./create-johanson-balun-cad-model"
 
 type ImperialPackageSize =
   | "01005"
@@ -164,7 +168,6 @@ function getDiscretePackageReplacement(
   normalizedFootprint: string,
 ): CadModelReplacement | undefined {
   const exactPackageMappings: Array<[RegExp, string]> = [
-    [/^BF10_/u, "dfn10_w2mm_h1.25mm_bodywidth2mm_bodylength1.25mm_p0.5mm"],
     [/^SOT23[-_]?5/u, "sot23-5"],
     [/^SOT23[-_]?6/u, "sot6"],
     [/^(?:DIO_)?(?:SOD[-_]?323|SOD323)/u, "sod323"],
@@ -179,6 +182,14 @@ function getDiscretePackageReplacement(
 function getBoardSpecificSmallPackageReplacement(
   normalizedFootprint: string,
 ): CadModelReplacement | undefined {
+  if (normalizedFootprint === "BF10_0D5_2X1D25X1MM") {
+    return {
+      kind: "jscad",
+      jscadOperations: createJohansonBalunCadModel(),
+      modelPinPositions: johansonBalunPinPositions,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+    }
+  }
   if (/^EMIFIL_NFM15CC_0402/u.test(normalizedFootprint)) {
     return { kind: "jscad", jscadOperations: createEmiFilterCadModel() }
   }

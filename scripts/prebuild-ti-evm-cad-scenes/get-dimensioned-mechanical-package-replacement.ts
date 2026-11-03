@@ -43,7 +43,6 @@ function getKnownTantalumDimensions(
   normalizedFootprint: string,
 ): { height: number; length: number; width: number } | undefined {
   if (/^CAPT7343/u.test(normalizedFootprint)) return { length: 7.3, width: 4.3, height: 3.1 }
-  if (/^CAPAE_FCASE/u.test(normalizedFootprint)) return { length: 7.3, width: 4.3, height: 4.3 }
   return undefined
 }
 
@@ -57,7 +56,10 @@ export function getDimensionedMechanicalPackageReplacement(
   if (/^MOD100_WL18/u.test(normalizedFootprint)) {
     return createJscadReplacement(createWifiModuleCadModel(modelLocalPads))
   }
-  if (normalizedFootprint.startsWith("IND4_DLW21H_")) {
+  if (
+    normalizedFootprint.startsWith("IND4_DLW21H_") ||
+    (normalizedFootprint === "L2012" && modelLocalPads.length === 4)
+  ) {
     return createJscadReplacement(createCommonModeChokeCadModel())
   }
   if (/^L\d/u.test(componentIdentity.componentName)) {
@@ -88,7 +90,21 @@ export function getDimensionedMechanicalPackageReplacement(
       )
     }
   }
-  if (/^CAP(?:T|AE)/u.test(normalizedFootprint)) {
+  if (normalizedFootprint === "CAPAE_FCASE_10-5") {
+    // Fitted UT107M050HFKTA: diameter 8, base 8.3, seated height 10.2;
+    // the drawing gives 9 mm lead span and a 3.1 mm gap between terminals.
+    return createJscadReplacement(
+      createSmdElectrolyticCapacitorCadModel({
+        canDiameter: 8,
+        baseSize: 8.3,
+        seatedHeight: 10.2,
+        terminalGap: 3.1,
+        terminalLength: 2.95,
+        terminalWidth: 0.9,
+      }),
+    )
+  }
+  if (/^CAPT/u.test(normalizedFootprint)) {
     const capacitorDimensions = getKnownTantalumDimensions(normalizedFootprint)
     if (capacitorDimensions) {
       return createJscadReplacement(createTantalumCapacitorCadModel(capacitorDimensions))

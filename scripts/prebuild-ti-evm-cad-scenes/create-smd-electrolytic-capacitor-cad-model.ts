@@ -7,9 +7,25 @@ import {
   translate,
 } from "./jscad-model-primitives"
 
-// CDE AVE case D: 6.3 mm can, 6.6 mm base, 5.3 mm seated height.
-// Terminals run along local X at Z=0; pin 1 is on -X in RD205SMD_250D.
-export function createSmdElectrolyticCapacitorCadModel(): JscadOperation[] {
+// Dimensions are in millimeters. Terminals run along local X at Z=0,
+// with the negative polarity mark on +X. Defaults are CDE AVE case D.
+export function createSmdElectrolyticCapacitorCadModel({
+  canDiameter = 6.3,
+  baseSize = 6.6,
+  seatedHeight = 5.3,
+  terminalGap = 2,
+  terminalLength = 2.7,
+  terminalWidth = 0.65,
+}: {
+  canDiameter?: number
+  baseSize?: number
+  seatedHeight?: number
+  terminalGap?: number
+  terminalLength?: number
+  terminalWidth?: number
+} = {}): JscadOperation[] {
+  const halfBase = baseSize / 2
+  const canHeight = seatedHeight - 0.65
   return [
     colorize(
       connectorModelColors.blackPlastic,
@@ -19,38 +35,38 @@ export function createSmdElectrolyticCapacitorCadModel(): JscadOperation[] {
         shape: {
           type: "fromPointsGeom2",
           points: [
-            [-3.3, -2.5],
-            [-2.5, -3.3],
-            [3.3, -3.3],
-            [3.3, 3.3],
-            [-2.5, 3.3],
-            [-3.3, 2.5],
+            [-halfBase, -halfBase + 0.8],
+            [-halfBase + 0.8, -halfBase],
+            [halfBase, -halfBase],
+            [halfBase, halfBase],
+            [-halfBase + 0.8, halfBase],
+            [-halfBase, halfBase - 0.8],
           ],
         },
       }),
     ),
     createColoredCylinder({
-      center: [0, 0, 2.875],
+      center: [0, 0, 0.55 + canHeight / 2],
       color: connectorModelColors.metal,
-      height: 4.65,
-      radius: 3.15,
+      height: canHeight,
+      radius: canDiameter / 2,
     }),
     createColoredCylinder({
-      center: [0, 0, 5.245],
+      center: [0, 0, seatedHeight - 0.055],
       color: connectorModelColors.silver,
       height: 0.09,
-      radius: 3.1,
+      radius: canDiameter / 2 - 0.05,
     }),
     createColoredCuboid({
-      center: [2.2, 0, 5.295],
+      center: [canDiameter / 2 - 0.95, 0, seatedHeight - 0.005],
       color: connectorModelColors.blackPlastic,
       size: [0.45, 3.5, 0.01],
     }),
     ...[-1, 1].map((side) =>
       createColoredCuboid({
-        center: [side * 2.35, 0, 0.075],
+        center: [(side * (terminalGap + terminalLength)) / 2, 0, 0.075],
         color: connectorModelColors.silver,
-        size: [2.7, 0.65, 0.15],
+        size: [terminalLength, terminalWidth, 0.15],
       }),
     ),
   ]

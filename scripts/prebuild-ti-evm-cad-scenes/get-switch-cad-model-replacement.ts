@@ -5,6 +5,7 @@ import { getPackageBodyDimensionsMillimeters } from "./get-package-body-dimensio
 import type { ModelLocalPad } from "./get-model-local-pads"
 import { createSideActuatedSwitchCadModel } from "./create-side-actuated-switch-cad-model"
 import { createBourns7914CadModel } from "./create-bourns-7914-cad-model"
+import { externalStepModelUrls } from "./external-cad-model-urls"
 
 export function getSwitchCadModelReplacement(
   { altiumFootprint, manufacturerPartNumber }: CadModelComponentIdentity,
@@ -35,9 +36,21 @@ export function getSwitchCadModelReplacement(
     return { kind: "jscad", jscadOperations: createBourns7914CadModel() }
   }
 
-  const isKnownTactileSwitch =
-    /^SW4SMD_63X161LS/u.test(normalizedFootprint) ||
-    /^SW4_161-41X62-99_170X110_SMD/u.test(normalizedFootprint)
+  if (partNumber === "KMR231GLFS" || normalizedFootprint === "SW4SMD_63X161LS") {
+    return {
+      kind: "step",
+      modelStepUrl: externalStepModelUrls.kmr2Switch,
+      modelOriginPosition: { x: 0, y: 0, z: 0 },
+      modelPinPositions: [
+        { pinNumber: "1", x: -2, y: -0.8 },
+        { pinNumber: "2", x: -2, y: 0.8 },
+        { pinNumber: "3", x: 2, y: -0.8 },
+        { pinNumber: "4", x: 2, y: 0.8 },
+      ],
+    }
+  }
+
+  const isKnownTactileSwitch = /^SW4_161-41X62-99_170X110_SMD/u.test(normalizedFootprint)
   if (!isKnownTactileSwitch) return undefined
 
   const switchDimensions = getPackageBodyDimensionsMillimeters(normalizedFootprint) ?? {

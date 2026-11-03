@@ -7,7 +7,6 @@ test("replaces prominent Sitara packages with recognizable package models", () =
     { altiumFootprint: "BGA96_T9_P8_10_3X13_3", componentName: "U12" },
     { altiumFootprint: "MOD100_WL18", componentName: "MOD1" },
     { altiumFootprint: "L4P_2D54", componentName: "L1" },
-    { altiumFootprint: "SW4SMD_63X161LS", componentName: "SW1" },
   ]) {
     const replacement = getCadModelReplacement(componentIdentity)
     expect(replacement?.kind).toBe("jscad")

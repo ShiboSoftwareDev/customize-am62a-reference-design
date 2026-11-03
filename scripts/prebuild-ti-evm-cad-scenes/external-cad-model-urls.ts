@@ -6,6 +6,7 @@ const wurthConnectorBaseUrl =
   "215595ffc7c98649394598bc6bac81ddc421fcc6/3dmodels/Connector_SMD_Wurth.3dshapes"
 
 export const externalStepModelUrls = {
+  kmr2Switch: `${kicadPackageBaseUrl}/Button_Switch_SMD.3dshapes/` + "SW_Push_1P1T_NO_CK_KMR2.step",
   wurthUsbA: `${wurthConnectorBaseUrl}/J_Wurth_WR-USB_629104151021.step`,
   wurthMicroUsbB: `${wurthConnectorBaseUrl}/J_Wurth_WR-USB_629105150521.step`,
   msop8: `${kicadPackageBaseUrl}/Package_SO.3dshapes/MSOP-8_3x3mm_P0.65mm.step`,

@@ -6,7 +6,7 @@ import {
   subtract,
 } from "./jscad-model-primitives"
 
-// Murata DLW21SZ: 2 x 1.2 mm body, with the source footprint's 1.4 mm
+// Murata DLW21SZ/SN: 2 x 1.2 mm body, with the source footprint's 1.4 mm
 // maximum seated height (manufacturer nominal 1.2 +/- 0.2 mm). Four electrodes
 // stay isolated across the two windings; package +Z leaves the seated plane.
 export function createCommonModeChokeCadModel(): JscadOperation[] {
