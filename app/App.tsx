@@ -31,7 +31,6 @@ function Configurator() {
   const render = useEvmRender({
     evm,
     variant,
-    loadCadScenes: activeView === "cad",
     loadSchematics: activeView === "schematic",
     retryIndex,
   })
