@@ -1,5 +1,6 @@
 import type { AnyCircuitElement } from "circuit-json"
 import { lazy, Suspense, useEffect, useMemo, useState } from "react"
+import { preload } from "react-dom"
 import { SchematicSourceNotice } from "app/components/SchematicSourceNotice"
 import { getPcbRenderer } from "app/get-pcb-renderer"
 import { getPcbViewerCircuitJson } from "app/get-pcb-viewer-circuit-json"
@@ -124,7 +125,10 @@ export function DesignViewer({
             aria-selected={activeView === "cad"}
             onPointerEnter={() => void loadCadViewer()}
             onFocus={() => void loadCadViewer()}
-            onClick={() => onActiveViewChange("cad")}
+            onClick={() => {
+              preload(prebuiltCadSceneUrl, { as: "fetch", crossOrigin: "anonymous" })
+              onActiveViewChange("cad")
+            }}
           >
             <span className="tab-dot three-dimensional-dot" /> 3D
           </button>
