@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "bunVersion": "1.4.x",
-  "buildCommand": "bun run build",
+  "buildCommand": "bun run build && bun scripts/precompress-pcb-preview.ts",
   "outputDirectory": "dist",
   "framework": "vite",
   "headers": [
@@ -13,6 +13,56 @@
           "value": "public, max-age=120, stale-while-revalidate=86400"
         }
       ]
+    },
+    {
+      "source": "/prebuilt-ti-evms/:pcbPath(sk-am62/minimal-board|tmds62levm/full-board).circuit.json.gz",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120, stale-while-revalidate=86400, no-transform"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept-Encoding"
+        }
+      ]
+    },
+    {
+      "source": "/prebuilt-ti-evms/:pcbPath(sk-am62/minimal-board|tmds62levm/full-board).circuit.json.gz",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-encoding",
+          "value": "(?:.*,\\s*)?br\\s*(?:,.*)?"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Content-Encoding",
+          "value": "br"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/prebuilt-ti-evms/:pcbPath(sk-am62/minimal-board|tmds62levm/full-board).circuit.json.gz",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-encoding",
+          "value": "(?:.*,\\s*)?br\\s*(?:,.*)?"
+        }
+      ],
+      "destination": "/prebuilt-ti-evms/:pcbPath.circuit.json.br"
+    },
+    {
+      "source": "/prebuilt-ti-evms/:pcbPath(sk-am62/minimal-board|tmds62levm/full-board).circuit.json.gz",
+      "destination": "/prebuilt-ti-evms/:pcbPath.circuit.json.fallback.gz"
     }
   ]
 }
