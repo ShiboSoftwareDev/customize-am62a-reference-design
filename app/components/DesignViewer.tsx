@@ -6,6 +6,8 @@ import { getPcbRenderer } from "app/get-pcb-renderer"
 import { getPcbViewerCircuitJson } from "app/get-pcb-viewer-circuit-json"
 import { useElementHeight } from "app/hooks/use-element-height"
 import { getSelectedSchematicSheet } from "app/components/get-selected-schematic-sheet"
+import { preloadTiEvmPcbVariants } from "app/preload-ti-evm"
+import { getTiEvm, type TiEvmId } from "lib/ti-evm-catalog"
 
 async function loadPcbViewer() {
   const module = await import("@tscircuit/pcb-viewer")
@@ -28,7 +30,7 @@ const CadViewer = lazy(loadCadViewer)
 
 type DesignViewerProps = {
   activeView: DesignView
-  boardKey: string
+  boardKey: TiEvmId
   referenceUrl: string
   unavailableSchematicSheetLabels?: string[]
   prebuiltCadSceneUrl: string
@@ -86,6 +88,18 @@ export function DesignViewer({
   useEffect(() => {
     void loadPcbViewer()
   }, [])
+
+  useEffect(() => {
+    if (pcbRenderRequest.activeView !== "pcb" || completedPcbRenderRequest !== pcbRenderRequest) {
+      return
+    }
+    const controller = new AbortController()
+    void preloadTiEvmPcbVariants({
+      evm: getTiEvm(pcbRenderRequest.boardKey),
+      signal: controller.signal,
+    }).catch(() => undefined)
+    return () => controller.abort()
+  }, [completedPcbRenderRequest, pcbRenderRequest])
 
   useEffect(() => {
     setRequestedSchematicSheetLabel(undefined)
