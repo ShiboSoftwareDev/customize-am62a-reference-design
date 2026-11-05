@@ -1,3 +1,4 @@
+import { ExportPcbCircuitJsonButton } from "app/components/ExportPcbCircuitJsonButton"
 import type { TiEvm, TiEvmId, TiEvmVariant } from "lib/ti-evm-catalog"
 
 type ConfigurationPanelProps = {
@@ -9,7 +10,6 @@ type ConfigurationPanelProps = {
   onEvmChange: (evmId: TiEvmId) => void
   onVariantChange: (variantId: string) => void
   onRetry: () => void
-  onExportCircuitJson: () => void
   canExportCircuitJson: boolean
 }
 
@@ -62,18 +62,18 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         <a href={`/?board=${props.evm.id}`}>View PCB, schematic, 3D, and TSX →</a>
       </div>
 
-      <button
-        className="export-json-button"
-        type="button"
+      <ExportPcbCircuitJsonButton
+        key={props.variant.circuitJsonUrl}
+        circuitJsonUrl={props.variant.circuitJsonUrl}
+        fileName={`${props.evm.id}-${props.variant.id}.circuit.json`}
         disabled={!props.canExportCircuitJson}
-        onClick={props.onExportCircuitJson}
-      >
-        Export PCB Circuit JSON
-      </button>
+      />
 
-      <p className="render-status" role="status">
-        {props.statusText}
-      </p>
+      {props.statusText && (
+        <p className="render-status" role="status">
+          {props.statusText}
+        </p>
+      )}
       {props.error && (
         <div className="render-error" role="alert">
           <p>{props.error}</p>

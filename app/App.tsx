@@ -1,4 +1,3 @@
-import type { AnyCircuitElement } from "circuit-json"
 import { useMemo, useState } from "react"
 import { ConfigurationPanel } from "app/components/ConfigurationPanel"
 import { DesignViewer, type DesignView } from "app/components/DesignViewer"
@@ -31,20 +30,17 @@ function Configurator() {
   const render = useEvmRender({
     evm,
     variant,
+    loadPcb: activeView === "pcb",
     loadSchematics: activeView === "schematic",
     retryIndex,
   })
   const statusText = useMemo(() => {
+    if (activeView !== "pcb") return ""
     const seconds = (render.elapsedMs / 1000).toFixed(1)
     if (render.isLoading) return `Loading prebuilt design… ${seconds}s elapsed`
     if (!render.pcbCircuitJson) return "No design available"
     return `Design data loaded in ${seconds}s`
-  }, [render.elapsedMs, render.isLoading, render.pcbCircuitJson])
-
-  const exportCircuitJson = () => {
-    if (!render.pcbCircuitJson) return
-    downloadCircuitJson(render.pcbCircuitJson, `${evm.id}-${variant.id}.circuit.json`)
-  }
+  }, [activeView, render.elapsedMs, render.isLoading, render.pcbCircuitJson])
 
   const changeEvm = (nextEvmId: TiEvmId) => {
     const nextEvm = getTiEvm(nextEvmId)
@@ -63,8 +59,7 @@ function Configurator() {
         onEvmChange={changeEvm}
         onVariantChange={setVariantId}
         onRetry={() => setRetryIndex((index) => index + 1)}
-        onExportCircuitJson={exportCircuitJson}
-        canExportCircuitJson={Boolean(render.pcbCircuitJson) && !render.isLoading}
+        canExportCircuitJson={activeView !== "pcb" || Boolean(render.pcbCircuitJson)}
       />
       <DesignViewer
         activeView={activeView}
@@ -83,15 +78,4 @@ function Configurator() {
       />
     </main>
   )
-}
-
-function downloadCircuitJson(circuitJson: AnyCircuitElement[], fileName: string) {
-  const url = URL.createObjectURL(
-    new Blob([JSON.stringify(circuitJson, null, 2)], { type: "application/json" }),
-  )
-  const link = document.createElement("a")
-  link.href = url
-  link.download = fileName
-  link.click()
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000)
 }

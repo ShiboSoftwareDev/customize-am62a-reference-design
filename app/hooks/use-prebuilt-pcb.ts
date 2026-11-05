@@ -15,6 +15,7 @@ type LoadedPcb = {
 export function usePrebuiltPcb(request: {
   evm: TiEvm
   variant: TiEvmVariant
+  loadPcb: boolean
   retryIndex: number
 }): {
   circuitJson: AnyCircuitElement[] | null
@@ -30,6 +31,14 @@ export function usePrebuiltPcb(request: {
   const retryIndexRef = useRef(request.retryIndex)
 
   useEffect(() => {
+    if (!request.loadPcb) {
+      retryIndexRef.current = request.retryIndex
+      setLoadedPcb(null)
+      setError("")
+      setIsLoading(true)
+      return
+    }
+
     const requestIndex = ++requestIndexRef.current
     const forceReload = retryIndexRef.current !== request.retryIndex
     retryIndexRef.current = request.retryIndex
@@ -61,8 +70,11 @@ export function usePrebuiltPcb(request: {
         setIsLoading(false)
       })
 
-    return () => window.clearInterval(interval)
-  }, [request.evm, request.retryIndex, request.variant])
+    return () => {
+      requestIndexRef.current++
+      window.clearInterval(interval)
+    }
+  }, [request.evm, request.loadPcb, request.retryIndex, request.variant])
 
   const cachedCircuitJson = getCachedPrebuiltCircuitJson({
     url: request.variant.circuitJsonUrl,
@@ -73,9 +85,9 @@ export function usePrebuiltPcb(request: {
       : (cachedCircuitJson ?? null)
 
   return {
-    circuitJson,
-    error,
-    isLoading: isLoading && !circuitJson,
+    circuitJson: request.loadPcb ? circuitJson : null,
+    error: request.loadPcb ? error : "",
+    isLoading: request.loadPcb && isLoading && !circuitJson,
     elapsedMs,
   }
 }
