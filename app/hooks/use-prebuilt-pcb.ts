@@ -5,7 +5,6 @@ import {
   loadPrebuiltCircuitJson,
   type PrebuiltCircuitJsonUrl,
 } from "app/load-prebuilt-circuit-json"
-import { preloadTiEvmPcbVariants } from "app/preload-ti-evm"
 import type { TiEvm, TiEvmVariant } from "lib/ti-evm-catalog"
 
 type LoadedPcb = {
@@ -61,8 +60,6 @@ export function usePrebuiltPcb(request: {
         setElapsedMs(performance.now() - startedAt)
         setIsLoading(false)
       })
-
-    void preloadTiEvmPcbVariants({ evm: request.evm }).catch(() => undefined)
 
     return () => window.clearInterval(interval)
   }, [request.evm, request.retryIndex, request.variant])

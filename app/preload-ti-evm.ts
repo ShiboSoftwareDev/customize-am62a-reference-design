@@ -12,24 +12,25 @@ import {
   type TiEvmVariant,
 } from "lib/ti-evm-catalog"
 
-const pcbPreloadPromises = new Map<TiEvmId, Promise<void>>()
 const schematicPreloadPromises = new Map<TiEvmId, Promise<void>>()
 const retainedCircuitJsonUrlsByEvmId = new Map<TiEvmId, PrebuiltCircuitJsonUrl[]>()
 const schematicPreloadBatchSize = 16
 const retainedEvmCount = 2
 
-export function preloadTiEvmPcbVariants({ evm }: { evm: TiEvm }): Promise<void> {
-  const existingPreload = pcbPreloadPromises.get(evm.id)
-  if (existingPreload) return existingPreload
-
-  const preloadPromise = preloadCircuitJsonUrls(
-    evm.variants.map(({ circuitJsonUrl }) => circuitJsonUrl),
-  ).catch((error: unknown) => {
-    pcbPreloadPromises.delete(evm.id)
-    throw error
-  })
-  pcbPreloadPromises.set(evm.id, preloadPromise)
-  return preloadPromise
+export async function preloadTiEvmPcbVariants({
+  evm,
+  signal,
+}: {
+  evm: TiEvm
+  signal?: AbortSignal
+}): Promise<void> {
+  for (const { circuitJsonUrl } of evm.variants) {
+    if (getCachedPrebuiltCircuitJson({ url: circuitJsonUrl })) continue
+    await waitForBrowserIdle()
+    // A fetch already in progress can also serve the foreground PCB request.
+    if (signal?.aborted) return
+    await loadPrebuiltCircuitJson({ url: circuitJsonUrl })
+  }
 }
 
 export function preloadTiEvmSchematicVariants({ evm }: { evm: TiEvm }): Promise<void> {
@@ -81,26 +82,14 @@ export function retainTiEvmCircuitJsonCache({ evm }: { evm: TiEvm }): void {
     urls: [...retainedCircuitJsonUrlsByEvmId.values()].flat(),
   })
 
-  for (const evmId of pcbPreloadPromises.keys()) {
-    if (!retainedCircuitJsonUrlsByEvmId.has(evmId)) pcbPreloadPromises.delete(evmId)
-  }
   for (const evmId of schematicPreloadPromises.keys()) {
     if (!retainedCircuitJsonUrlsByEvmId.has(evmId)) schematicPreloadPromises.delete(evmId)
   }
 }
 
 export function clearTiEvmPreloadCache(): void {
-  pcbPreloadPromises.clear()
   schematicPreloadPromises.clear()
   retainedCircuitJsonUrlsByEvmId.clear()
-}
-
-async function preloadCircuitJsonUrls(circuitJsonUrls: PrebuiltCircuitJsonUrl[]): Promise<void> {
-  for (const url of circuitJsonUrls) {
-    if (getCachedPrebuiltCircuitJson({ url })) continue
-    await waitForBrowserIdle()
-    await loadPrebuiltCircuitJson({ url })
-  }
 }
 
 async function preloadCircuitJsonUrlsInBatches({

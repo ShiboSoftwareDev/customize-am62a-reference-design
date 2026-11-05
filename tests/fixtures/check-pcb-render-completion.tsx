@@ -31,6 +31,8 @@ async function finishFrame() {
 GlobalRegistrator.register()
 Object.defineProperty(globalThis, "IS_REACT_ACT_ENVIRONMENT", { value: true, configurable: true })
 mock.module("@tscircuit/pcb-viewer", () => ({ PCBViewer: ControlledPcbViewer }))
+const preloadPcbVariants = mock(async ({ signal }: { signal: AbortSignal }) => signal)
+mock.module("app/preload-ti-evm", () => ({ preloadTiEvmPcbVariants: preloadPcbVariants }))
 
 const { createRoot } = await import("react-dom/client")
 const { DesignViewer } = await import("app/components/DesignViewer")
@@ -82,8 +84,10 @@ const root = createRoot(container)
 try {
   await renderBoard({ root, circuitJson: fullBoard })
   assert.equal(getViewer().getAttribute("aria-busy"), "true")
+  assert.equal(preloadPcbVariants.mock.calls.length, 0)
   await finishFrame()
   assert.equal(getViewer().getAttribute("aria-busy"), "false")
+  assert.equal(preloadPcbVariants.mock.calls.length, 1)
 
   if (process.argv[2] === "remount") {
     await renderBoard({ root, circuitJson: fullBoard, activeView: "schematic" })
@@ -91,6 +95,8 @@ try {
     await renderBoard({ root, circuitJson: minimalBoard })
     assert.equal(getViewer().getAttribute("aria-busy"), "true")
   }
+  assert.equal(preloadPcbVariants.mock.calls[0][0].signal.aborted, true)
+  assert.equal(preloadPcbVariants.mock.calls.length, 1)
 
   // Reuse the exact cached array, without completing the intervening scene.
   await renderBoard({ root, circuitJson: fullBoard })
