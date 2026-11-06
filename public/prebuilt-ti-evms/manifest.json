@@ -1021,9 +1021,9 @@
           ]
         },
         {
-          "elementCount": 18685,
+          "elementCount": 18682,
           "output": "prebuilt-ti-evms/beaglebone-black/minimal-board.circuit.json.gz",
-          "pcbTraceCount": 4012,
+          "pcbTraceCount": 4009,
           "source": "Parameterized BeagleBone Black tscircuit TSX",
           "sourceComponentCount": 266,
           "sourceTraceCount": 178,

@@ -124,14 +124,14 @@ export function getIncludedImportedRoutingElementIds(params: {
   const includedPcbTraceIds = new Set<PcbTraceId>(
     params.pcbTraces.map(({ pcb_trace_id }) => pcb_trace_id),
   )
-  const bridgeVias = getImportedRoutingBridgeVias({
+  let includedBridgeVias = getImportedRoutingBridgeVias({
     circuitJson: params.circuitJson,
     pcbTraces: params.pcbTraces,
     pcbVias: params.pcbVias,
     removedPcbComponentIds,
   })
   const boardLayerStack = getBoardLayerStack(params.circuitJson)
-  const bridgeViaElements = bridgeVias.map((bridgeVia) =>
+  let bridgeViaElements = includedBridgeVias.map((bridgeVia) =>
     createBridgeViaCircuitElement({ bridgeVia, boardLayerStack }),
   )
   const connectivityMap =
@@ -171,18 +171,24 @@ export function getIncludedImportedRoutingElementIds(params: {
       }),
     )
     if (newlyDanglingPcbTraceIds.size === 0) {
-      console.log(`Imported routing: completed after ${pruningPassCount} pruning passes`)
-      return {
-        includedBridgeVias: bridgeVias.filter((bridgeVia) =>
-          isBridgeViaRequired({
-            bridgeVia,
-            includedPcbTraceIds,
-            pcbTraces: params.pcbTraces,
-          }),
-        ),
-        includedPcbTraceIds,
-        includedPcbViaIds,
+      const requiredBridgeVias = includedBridgeVias.filter((bridgeVia) =>
+        isBridgeViaRequired({
+          bridgeVia,
+          includedPcbTraceIds,
+          pcbTraces: params.pcbTraces,
+        }),
+      )
+      if (requiredBridgeVias.length < includedBridgeVias.length) {
+        // Recheck traces against the bridge vias that will be emitted.
+        includedBridgeVias = requiredBridgeVias
+        bridgeViaElements = includedBridgeVias.map((bridgeVia) =>
+          createBridgeViaCircuitElement({ bridgeVia, boardLayerStack }),
+        )
+        affectedNetIds = undefined
+        continue
       }
+      console.log(`Imported routing: completed after ${pruningPassCount} pruning passes`)
+      return { includedBridgeVias, includedPcbTraceIds, includedPcbViaIds }
     }
     for (const pcbTraceId of newlyDanglingPcbTraceIds) {
       includedPcbTraceIds.delete(pcbTraceId)
