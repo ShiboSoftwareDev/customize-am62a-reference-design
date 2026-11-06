@@ -60,6 +60,8 @@ export function getRoutingConnectivityCheckCircuitJson(params: {
   const viaCountByPourId = new Map<PcbCopperPourId, number>()
   for (const pours of viaContacts.values()) {
     for (const { id } of pours) {
+      // An unfilled Altium polygon is a pour boundary. It cannot prove a copper connection.
+      if (/_altium_polygon_\d+$/u.test(id)) continue
       viaCountByPourId.set(id, (viaCountByPourId.get(id) ?? 0) + 1)
     }
   }
