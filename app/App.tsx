@@ -38,9 +38,10 @@ function Configurator() {
     if (activeView !== "pcb") return ""
     const seconds = (render.elapsedMs / 1000).toFixed(1)
     if (render.isLoading) return `Loading prebuilt design… ${seconds}s elapsed`
-    if (!render.pcbCircuitJson) return "No design available"
-    return `Design data loaded in ${seconds}s`
-  }, [activeView, render.elapsedMs, render.isLoading, render.pcbCircuitJson])
+    if (render.hasCurrentPcb) return `Design data loaded in ${seconds}s`
+    if (render.pcbCircuitJson) return "Showing the previous PCB configuration"
+    return "No design available"
+  }, [activeView, render.elapsedMs, render.isLoading, render.hasCurrentPcb, render.pcbCircuitJson])
 
   const changeEvm = (nextEvmId: TiEvmId) => {
     const nextEvm = getTiEvm(nextEvmId)
@@ -59,7 +60,7 @@ function Configurator() {
         onEvmChange={changeEvm}
         onVariantChange={setVariantId}
         onRetry={() => setRetryIndex((index) => index + 1)}
-        canExportCircuitJson={activeView !== "pcb" || Boolean(render.pcbCircuitJson)}
+        canExportCircuitJson={activeView !== "pcb" || render.hasCurrentPcb}
       />
       <DesignViewer
         activeView={activeView}
