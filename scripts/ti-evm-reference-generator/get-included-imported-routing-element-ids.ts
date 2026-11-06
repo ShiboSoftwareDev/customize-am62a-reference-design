@@ -5,18 +5,20 @@ import {
   type ConnectivityMap,
   getFullConnectivityMapFromCircuitJson,
 } from "circuit-json-to-connectivity-map"
+import { getBoardLayerStack } from "./get-board-layer-stack"
+import { getCopperPourContacts } from "./get-copper-pour-contacts"
 import {
   getImportedRoutingBridgeVias,
   type ImportedRoutingBridgeVia,
   isBridgeViaRequired,
 } from "./get-imported-routing-bridge-vias"
-import { getBoardLayerStack } from "./get-routing-connectivity-check-circuit-json"
 import type { SourceComponentId } from "./types"
 
 export type DanglingEndpointKey = string
 export type PcbTraceId = string
 export type PcbViaId = string
 type PcbRoutePointKey = string
+type PcbLayerName = string
 type PcbComponentId = string
 type ConnectivityNetId = string
 type SourceNetId = string
@@ -43,6 +45,7 @@ export type ImportedPcbTrace = AnyCircuitElement & {
 export type ImportedPcbVia = AnyCircuitElement &
   Point & {
     hole_diameter?: number
+    layers?: string[]
     outer_diameter?: number
     pcb_via_id: PcbViaId
     source_net_id?: SourceNetId
@@ -134,6 +137,16 @@ export function getIncludedImportedRoutingElementIds(params: {
   let bridgeViaElements = includedBridgeVias.map((bridgeVia) =>
     createBridgeViaCircuitElement({ bridgeVia, boardLayerStack }),
   )
+  const copperPourContacts = getCopperPourContacts({
+    circuitJson: circuitJsonWithoutRemovedComponents,
+    pcbVias: [...params.pcbVias, ...bridgeViaElements],
+  })
+  const pourLayersByViaId = new Map<PcbViaId, ReadonlySet<PcbLayerName>>(
+    [...copperPourContacts].map(([viaId, pours]) => [
+      viaId,
+      new Set(pours.map(({ layer }) => layer)),
+    ]),
+  )
   const connectivityMap =
     bridgeViaElements.length > 0
       ? getFullConnectivityMapFromCircuitJson([...params.circuitJson, ...bridgeViaElements])
@@ -145,6 +158,7 @@ export function getIncludedImportedRoutingElementIds(params: {
     pruningPassCount += 1
     const includedPcbViaIds = getIncludedPcbViaIds({
       includedPcbTraceIds,
+      pourLayersByViaId,
       incidentPcbTraceIdsByViaId: params.incidentPcbTraceIdsByViaId,
       pcbVias: params.pcbVias,
     })
@@ -176,6 +190,7 @@ export function getIncludedImportedRoutingElementIds(params: {
           bridgeVia,
           includedPcbTraceIds,
           pcbTraces: params.pcbTraces,
+          pourContactLayers: pourLayersByViaId.get(bridgeVia.bridgeViaId),
         }),
       )
       if (requiredBridgeVias.length < includedBridgeVias.length) {
@@ -236,6 +251,7 @@ function getIncludedPcbViaIds(params: {
   includedPcbTraceIds: ReadonlySet<PcbTraceId>
   incidentPcbTraceIdsByViaId: IncidentPcbTraceIdsByViaId
   pcbVias: ImportedPcbVia[]
+  pourLayersByViaId: ReadonlyMap<PcbViaId, ReadonlySet<PcbLayerName>>
 }): Set<PcbViaId> {
   return new Set(
     params.pcbVias.flatMap((pcbVia) => {
@@ -244,6 +260,7 @@ function getIncludedPcbViaIds(params: {
       return isPcbViaIncluded({
         incidentTraceIds,
         includedPcbTraceIds: params.includedPcbTraceIds,
+        pourContactLayerCount: params.pourLayersByViaId.get(pcbVia.pcb_via_id)?.size ?? 0,
       })
         ? [pcbVia.pcb_via_id]
         : []
@@ -254,12 +271,15 @@ function getIncludedPcbViaIds(params: {
 function isPcbViaIncluded(params: {
   incidentTraceIds: ReadonlySet<PcbTraceId>
   includedPcbTraceIds: ReadonlySet<PcbTraceId>
+  pourContactLayerCount: number
 }): boolean {
-  if (params.incidentTraceIds.size === 0) return true
+  // A via can stitch planes together even after its surface route is removed.
+  if (params.incidentTraceIds.size === 0 || params.pourContactLayerCount >= 2) return true
   const includedIncidentTraceCount = [...params.incidentTraceIds].filter((pcbTraceId) =>
     params.includedPcbTraceIds.has(pcbTraceId),
   ).length
-  const requiredIncidentTraceCount = Math.min(params.incidentTraceIds.size, 2)
+  const requiredIncidentTraceCount =
+    params.pourContactLayerCount > 0 ? 1 : Math.min(params.incidentTraceIds.size, 2)
   return includedIncidentTraceCount >= requiredIncidentTraceCount
 }
 
@@ -285,7 +305,7 @@ function createBridgeViaCircuitElement({
 }: {
   bridgeVia: ImportedRoutingBridgeVia
   boardLayerStack: ReturnType<typeof getBoardLayerStack>
-}): AnyCircuitElement {
+}): ImportedPcbVia {
   return {
     type: "pcb_via",
     pcb_via_id: bridgeVia.bridgeViaId,

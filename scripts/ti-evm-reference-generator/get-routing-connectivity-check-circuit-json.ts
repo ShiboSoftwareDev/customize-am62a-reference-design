@@ -1,19 +1,9 @@
 import type { AnyCircuitElement } from "circuit-json"
+import { getBoardLayerStack, isPcbLayerName, type PcbLayerName } from "./get-board-layer-stack"
+import { getCopperPourContacts } from "./get-copper-pour-contacts"
+import { getImportedPcbVias } from "./get-included-imported-routing-element-ids"
 import { getSupportedCopperPourOutline } from "./get-supported-copper-pours"
 import type { FeatureId, SourceComponentId } from "./types"
-
-const INNER_LAYER_NAMES = [
-  "inner1",
-  "inner2",
-  "inner3",
-  "inner4",
-  "inner5",
-  "inner6",
-  "inner7",
-  "inner8",
-] as const
-
-type PcbLayerName = "bottom" | (typeof INNER_LAYER_NAMES)[number] | "top"
 
 type PcbElementWithLayerEndpoints = AnyCircuitElement & {
   layers: PcbLayerName[]
@@ -21,6 +11,7 @@ type PcbElementWithLayerEndpoints = AnyCircuitElement & {
 }
 
 type PcbComponentId = string
+type PcbCopperPourId = string
 type SourceNetId = string
 type SourcePortId = string
 
@@ -57,15 +48,34 @@ export function getRoutingConnectivityCheckCircuitJson(params: {
   featureIdBySourceComponentId: ReadonlyMap<SourceComponentId, FeatureId>
 }): AnyCircuitElement[] {
   const boardLayerStack = getBoardLayerStack(params.circuitJson)
-  const pcbPorts = params.circuitJson.filter(isPcbPort)
+  const circuitJson = params.circuitJson.map((element) =>
+    normalizeLayerSpan({ element, boardLayerStack }),
+  )
+  const viaContacts = getCopperPourContacts({
+    circuitJson,
+    pcbVias: getImportedPcbVias(circuitJson),
+  })
+  // A region with multiple via contacts can carry current between layers even
+  // if every pad on the region's own layer belongs to one optional feature.
+  const viaCountByPourId = new Map<PcbCopperPourId, number>()
+  for (const pours of viaContacts.values()) {
+    for (const { id } of pours) {
+      viaCountByPourId.set(id, (viaCountByPourId.get(id) ?? 0) + 1)
+    }
+  }
+  const pcbPorts = circuitJson.filter(isPcbPort)
   const sourceComponentIdByPcbComponentId = new Map<PcbComponentId, SourceComponentId>(
     params.circuitJson
       .filter(isPcbComponent)
       .map((pcbComponent) => [pcbComponent.pcb_component_id, pcbComponent.source_component_id]),
   )
   const sourceNetIdBySourcePortId = getSourceNetIdBySourcePortId(params.circuitJson)
-  return params.circuitJson.map((element) => {
-    if (isPcbCopperPour(element)) {
+  return circuitJson.map((element) => {
+    if (
+      isPcbCopperPour(element) &&
+      typeof element.pcb_copper_pour_id === "string" &&
+      (viaCountByPourId.get(element.pcb_copper_pour_id) ?? 0) < 2
+    ) {
       const pcbComponentId = getLocalCopperPourPcbComponentId({
         copperPour: element,
         featureIdBySourceComponentId: params.featureIdBySourceComponentId,
@@ -75,25 +85,26 @@ export function getRoutingConnectivityCheckCircuitJson(params: {
       })
       return pcbComponentId ? { ...element, pcb_component_id: pcbComponentId } : element
     }
-    if (!isPcbElementWithLayerEndpoints(element)) return element
-
-    const fromLayer = element.layers[0]
-    const toLayer = element.layers[element.layers.length - 1]
-    if (!fromLayer || !toLayer) return element
-
-    const layers = getLayerSpan({ boardLayerStack, fromLayer, toLayer })
-    const pcbElement = {
-      ...element,
-      layers,
-    }
-    return element.type === "pcb_via"
-      ? {
-          ...pcbElement,
-          from_layer: fromLayer,
-          to_layer: toLayer,
-        }
-      : pcbElement
+    return element
   })
+}
+
+function normalizeLayerSpan({
+  element,
+  boardLayerStack,
+}: {
+  element: AnyCircuitElement
+  boardLayerStack: PcbLayerName[]
+}): AnyCircuitElement {
+  if (!isPcbElementWithLayerEndpoints(element)) return element
+  const fromLayer = element.layers[0]
+  const toLayer = element.layers[element.layers.length - 1]
+  if (!fromLayer || !toLayer) return element
+
+  const layers = getLayerSpan({ boardLayerStack, fromLayer, toLayer })
+  return element.type === "pcb_via"
+    ? { ...element, layers, from_layer: fromLayer, to_layer: toLayer }
+    : { ...element, layers }
 }
 
 function getSourceNetIdBySourcePortId(
@@ -173,13 +184,6 @@ function isPointInPolygon(params: {
   return isInside
 }
 
-export function getBoardLayerStack(circuitJson: AnyCircuitElement[]): PcbLayerName[] {
-  const board = circuitJson.find((element) => element.type === "pcb_board")
-  const layerCount = board && typeof board.num_layers === "number" ? board.num_layers : 2
-  const innerLayers = INNER_LAYER_NAMES.slice(0, Math.max(0, layerCount - 2))
-  return layerCount === 1 ? ["top"] : ["top", ...innerLayers, "bottom"]
-}
-
 function getLayerSpan(params: {
   boardLayerStack: PcbLayerName[]
   fromLayer: PcbLayerName
@@ -247,13 +251,5 @@ function isSourceTrace(element: AnyCircuitElement): element is SourceTrace {
     "connected_source_port_ids" in element &&
     Array.isArray(element.connected_source_port_ids) &&
     element.connected_source_port_ids.every((sourcePortId) => typeof sourcePortId === "string")
-  )
-}
-
-function isPcbLayerName(layerName: unknown): layerName is PcbLayerName {
-  return (
-    layerName === "bottom" ||
-    layerName === "top" ||
-    INNER_LAYER_NAMES.some((innerLayerName) => innerLayerName === layerName)
   )
 }

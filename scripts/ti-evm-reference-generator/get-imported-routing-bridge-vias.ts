@@ -9,6 +9,7 @@ type PcbComponentId = string
 type PcbPortId = string
 type SourceNetId = string
 type SourceTraceId = string
+type PcbLayerName = string
 
 type Point = {
   x: number
@@ -48,7 +49,7 @@ export function getImportedRoutingBridgeVias(params: {
       pcbTrace.route.some((routePoint) => pointsAreEqual(routePoint, pcbPort)),
     )
     const sourceNetId = getSingleSourceNetId({ incidentTraces, sourceNetIdBySourceTraceId })
-    if (!sourceNetId || getIncidentLayerCount({ incidentTraces, point: pcbPort }) < 2) return []
+    if (!sourceNetId) return []
     const referenceVia = referenceViaBySourceNetId.get(sourceNetId)
     if (
       typeof referenceVia?.hole_diameter !== "number" ||
@@ -73,11 +74,16 @@ export function isBridgeViaRequired(params: {
   bridgeVia: ImportedRoutingBridgeVia
   includedPcbTraceIds: ReadonlySet<PcbTraceId>
   pcbTraces: ImportedPcbTrace[]
+  pourContactLayers?: ReadonlySet<PcbLayerName>
 }): boolean {
   const includedTraces = params.pcbTraces.filter((pcbTrace) =>
     params.includedPcbTraceIds.has(pcbTrace.pcb_trace_id),
   )
-  return getIncidentLayerCount({ incidentTraces: includedTraces, point: params.bridgeVia }) >= 2
+  const incidentLayers = getIncidentLayers({
+    incidentTraces: includedTraces,
+    point: params.bridgeVia,
+  })
+  return new Set([...incidentLayers, ...(params.pourContactLayers ?? [])]).size >= 2
 }
 
 function getSourceNetIdBySourceTraceId(
@@ -132,17 +138,15 @@ function getSingleSourceNetId(params: {
   return sourceNetIds.size === 1 ? [...sourceNetIds][0] : undefined
 }
 
-function getIncidentLayerCount(params: {
+function getIncidentLayers(params: {
   incidentTraces: ImportedPcbTrace[]
   point: Point
-}): number {
-  return new Set(
-    params.incidentTraces.flatMap((pcbTrace) =>
-      pcbTrace.route.flatMap((routePoint) =>
-        pointsAreEqual(routePoint, params.point) && routePoint.layer ? [routePoint.layer] : [],
-      ),
+}): PcbLayerName[] {
+  return params.incidentTraces.flatMap((pcbTrace) =>
+    pcbTrace.route.flatMap((routePoint) =>
+      pointsAreEqual(routePoint, params.point) && routePoint.layer ? [routePoint.layer] : [],
     ),
-  ).size
+  )
 }
 
 function getPcbViaSourceNetId(params: {
