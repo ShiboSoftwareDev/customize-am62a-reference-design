@@ -5,9 +5,10 @@ import {
   loadPrebuiltCircuitJson,
   type PrebuiltCircuitJsonUrl,
 } from "app/load-prebuilt-circuit-json"
-import type { TiEvm, TiEvmVariant } from "lib/ti-evm-catalog"
+import type { TiEvm, TiEvmId, TiEvmVariant } from "lib/ti-evm-catalog"
 
 type LoadedPcb = {
+  evmId: TiEvmId
   circuitJsonUrl: PrebuiltCircuitJsonUrl
   circuitJson: AnyCircuitElement[]
 }
@@ -21,11 +22,14 @@ export function usePrebuiltPcb(request: {
   circuitJson: AnyCircuitElement[] | null
   error: string
   isLoading: boolean
+  hasCurrentPcb: boolean
   elapsedMs: number
 } {
   const [loadedPcb, setLoadedPcb] = useState<LoadedPcb | null>(null)
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
+  const [failedPcb, setFailedPcb] = useState<{
+    circuitJsonUrl: PrebuiltCircuitJsonUrl
+    message: string
+  } | null>(null)
   const [elapsedMs, setElapsedMs] = useState(0)
   const requestIndexRef = useRef(0)
   const retryIndexRef = useRef(request.retryIndex)
@@ -34,8 +38,7 @@ export function usePrebuiltPcb(request: {
     if (!request.loadPcb) {
       retryIndexRef.current = request.retryIndex
       setLoadedPcb(null)
-      setError("")
-      setIsLoading(true)
+      setFailedPcb(null)
       return
     }
 
@@ -49,25 +52,28 @@ export function usePrebuiltPcb(request: {
     const startedAt = performance.now()
     const interval = window.setInterval(() => setElapsedMs(performance.now() - startedAt), 100)
 
-    setLoadedPcb(cachedCircuitJson ? { circuitJsonUrl, circuitJson: cachedCircuitJson } : null)
-    setError("")
-    setIsLoading(!cachedCircuitJson)
+    if (cachedCircuitJson) {
+      setLoadedPcb({ evmId: request.evm.id, circuitJsonUrl, circuitJson: cachedCircuitJson })
+    }
+    setFailedPcb(null)
     setElapsedMs(0)
 
     void loadPrebuiltCircuitJson({ url: circuitJsonUrl, forceReload })
       .then((circuitJson) => {
         if (requestIndex !== requestIndexRef.current) return
-        setLoadedPcb({ circuitJsonUrl, circuitJson })
+        setLoadedPcb({ evmId: request.evm.id, circuitJsonUrl, circuitJson })
       })
       .catch((loadError: unknown) => {
         if (requestIndex !== requestIndexRef.current) return
-        setError(loadError instanceof Error ? loadError.message : String(loadError))
+        setFailedPcb({
+          circuitJsonUrl,
+          message: loadError instanceof Error ? loadError.message : String(loadError),
+        })
       })
       .finally(() => {
         if (requestIndex !== requestIndexRef.current) return
         window.clearInterval(interval)
         setElapsedMs(performance.now() - startedAt)
-        setIsLoading(false)
       })
 
     return () => {
@@ -79,15 +85,19 @@ export function usePrebuiltPcb(request: {
   const cachedCircuitJson = getCachedPrebuiltCircuitJson({
     url: request.variant.circuitJsonUrl,
   })
-  const circuitJson =
+  const currentCircuitJson =
     loadedPcb?.circuitJsonUrl === request.variant.circuitJsonUrl
       ? loadedPcb.circuitJson
-      : (cachedCircuitJson ?? null)
+      : cachedCircuitJson
+  const previousCircuitJson = loadedPcb?.evmId === request.evm.id ? loadedPcb.circuitJson : null
+  const error =
+    failedPcb?.circuitJsonUrl === request.variant.circuitJsonUrl ? failedPcb.message : ""
 
   return {
-    circuitJson: request.loadPcb ? circuitJson : null,
+    circuitJson: request.loadPcb ? (currentCircuitJson ?? previousCircuitJson) : null,
     error: request.loadPcb ? error : "",
-    isLoading: request.loadPcb && isLoading && !circuitJson,
+    isLoading: request.loadPcb && !currentCircuitJson && !error,
+    hasCurrentPcb: request.loadPcb && Boolean(currentCircuitJson),
     elapsedMs,
   }
 }
