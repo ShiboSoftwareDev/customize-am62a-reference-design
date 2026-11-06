@@ -90,9 +90,11 @@ export function DesignViewer({
   }, [])
 
   useEffect(() => {
-    if (pcbRenderRequest.activeView !== "pcb" || completedPcbRenderRequest !== pcbRenderRequest) {
+    if (pcbRenderRequest.activeView !== "pcb") {
+      setCompletedPcbRenderRequest(null)
       return
     }
+    if (completedPcbRenderRequest !== pcbRenderRequest) return
     const controller = new AbortController()
     void preloadTiEvmPcbVariants({
       evm: getTiEvm(pcbRenderRequest.boardKey),

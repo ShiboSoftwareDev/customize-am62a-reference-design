@@ -17,6 +17,7 @@ type EvmRenderState = {
 export function useEvmRender(request: {
   evm: TiEvm
   variant: TiEvmVariant
+  loadPcb: boolean
   loadSchematics: boolean
   retryIndex: number
 }): EvmRenderState {
