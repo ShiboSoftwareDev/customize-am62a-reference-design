@@ -1,7 +1,12 @@
 import type { ParameterizedTiEvmId, ParameterizedTiEvmOptions } from "./evms/parameterized-ti-evms"
+import schematicAssetAliasesJson from "./generated/ti-evms/schematic-asset-aliases.json"
 import { tiEvmVariantDefinitions, type TiEvmVariantDefinition } from "./ti-evm-variant-definitions"
 
 export type TiEvmId = ParameterizedTiEvmId
+export type SchematicCircuitJsonUrl = string
+
+const schematicAssetAliases: Partial<Record<SchematicCircuitJsonUrl, SchematicCircuitJsonUrl>> =
+  schematicAssetAliasesJson
 
 export type TiEvmRemovableFeature = {
   id: string
@@ -15,7 +20,7 @@ export type TiEvmVariant = {
   label: string
   circuitJsonUrl: string
   prebuiltCadSceneUrl: string
-  schematicCircuitJsonUrls: string[]
+  schematicCircuitJsonUrls: SchematicCircuitJsonUrl[]
   visibleSchematicSheetIndexes: number[]
   removedFeatureIds: string[]
   evmOptions: ParameterizedTiEvmOptions
@@ -306,10 +311,13 @@ export function getTiEvmVariant(evm: TiEvm, variantId: string): TiEvmVariant {
   return variant
 }
 
-export function getTiEvmVariantSchematicCircuitJsonUrls(variant: TiEvmVariant): string[] {
-  return variant.visibleSchematicSheetIndexes.map(
-    (schematicSheetIndex) => variant.schematicCircuitJsonUrls[schematicSheetIndex],
-  )
+export function getTiEvmVariantSchematicCircuitJsonUrls(
+  variant: TiEvmVariant,
+): SchematicCircuitJsonUrl[] {
+  return variant.visibleSchematicSheetIndexes.map((schematicSheetIndex) => {
+    const schematicUrl = variant.schematicCircuitJsonUrls[schematicSheetIndex]
+    return schematicAssetAliases[schematicUrl] ?? schematicUrl
+  })
 }
 
 export function getTiEvmVariantSchematicSheetLabels(evm: TiEvm, variant: TiEvmVariant): string[] {

@@ -6,6 +6,7 @@ import { filterReferenceSchematic } from "../lib/evms/filter-reference-schematic
 import { getReferenceSchematicComponentName } from "../lib/evms/get-reference-schematic-component-name"
 import { getParameterizedTiEvmDefinition } from "../lib/evms/parameterized-ti-evms"
 import { tiEvms } from "../lib/ti-evm-catalog"
+import { writeSchematicAssetAliases } from "./write-schematic-asset-aliases"
 
 export async function prebuildTiEvmSchematicAssets(): Promise<void> {
   let artifactCount = 0
@@ -55,6 +56,7 @@ export async function prebuildTiEvmSchematicAssets(): Promise<void> {
       )
     }
   }
+  await writeSchematicAssetAliases()
   console.log(`Prebuilt ${artifactCount} reference schematic variants`)
 }
 

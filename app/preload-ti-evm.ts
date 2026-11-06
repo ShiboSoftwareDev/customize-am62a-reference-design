@@ -37,7 +37,9 @@ export function preloadTiEvmSchematicVariants({ evm }: { evm: TiEvm }): Promise<
   const existingPreload = schematicPreloadPromises.get(evm.id)
   if (existingPreload) return existingPreload
 
-  const schematicCircuitJsonUrls = evm.variants.flatMap(getTiEvmVariantSchematicCircuitJsonUrls)
+  const schematicCircuitJsonUrls = [
+    ...new Set(evm.variants.flatMap(getTiEvmVariantSchematicCircuitJsonUrls)),
+  ]
   const preloadPromise = preloadCircuitJsonUrlsInBatches({
     circuitJsonUrls: schematicCircuitJsonUrls,
     batchSize: schematicPreloadBatchSize,
