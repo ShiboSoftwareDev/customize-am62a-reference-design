@@ -19,10 +19,12 @@ test("opening a board schematic preloads every schematic variant", async () => {
     writable: true,
   })
   const evm = tiEvms[3]
-  const schematicCircuitJsonUrls = evm.variants.flatMap(getTiEvmVariantSchematicCircuitJsonUrls)
+  const variantSchematicUrls = evm.variants.flatMap(getTiEvmVariantSchematicCircuitJsonUrls)
+  const schematicCircuitJsonUrls = [...new Set(variantSchematicUrls)]
 
   await preloadTiEvmSchematicVariants({ evm })
 
+  expect(schematicCircuitJsonUrls.length).toBeLessThan(variantSchematicUrls.length)
   expect(fetchMock).toHaveBeenCalledTimes(schematicCircuitJsonUrls.length)
   expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(schematicCircuitJsonUrls)
 })
