@@ -21,6 +21,7 @@ import {
 } from "./ti-evm-reference-generator/get-imported-routing-inclusion-masks"
 import type {
   ImportedPcbTraceMetadata,
+  ImportedPcbViaMetadata,
   ImportedRoutingMetadata,
 } from "./ti-evm-reference-generator/get-imported-routing-metadata"
 import type { SupportedCopperPour } from "./ti-evm-reference-generator/get-supported-copper-pours"
@@ -373,16 +374,18 @@ function addImportedPcbTraceReplacement(params: {
   inclusionMask: ImportedRoutingInclusionMask
   replacements: SourceReplacement[]
   sourceFile: ts.SourceFile
-  sourceNetId: string
+  sourceNetId?: string
 }): void {
   const originalElement = params.generatedSource.slice(
     params.element.getStart(params.sourceFile),
     params.element.getEnd(),
   )
-  const attributedElement = originalElement.replace(
-    /^<pcbtrace/u,
-    `<pcbtrace {...{ source_trace_id: ${JSON.stringify(params.sourceNetId)} }} `,
-  )
+  const attributedElement = params.sourceNetId
+    ? originalElement.replace(
+        /^<pcbtrace/u,
+        `<pcbtrace {...{ source_trace_id: ${JSON.stringify(params.sourceNetId)} }} `,
+      )
+    : originalElement
   params.replacements.push({
     start: params.element.getStart(params.sourceFile),
     end: params.element.getEnd(),
@@ -396,10 +399,7 @@ function addImportedPcbTraceReplacement(params: {
 function addImportedViaReplacement(params: {
   element: ts.JsxSelfClosingElement
   generatedSource: string
-  metadataByKey: ReadonlyMap<
-    PcbViaKey,
-    { inclusionMask: ImportedRoutingInclusionMask; sourceNetId: string }
-  >
+  metadataByKey: ReadonlyMap<PcbViaKey, ImportedPcbViaMetadata>
   renamedNets: ReadonlyMap<NetName, NetName>
   replacements: SourceReplacement[]
   sourceNetIdByName: ReadonlyMap<NetName, string>
@@ -431,7 +431,7 @@ function addImportedViaReplacement(params: {
     sourceFile: params.sourceFile,
   })
   const metadata =
-    sourceNetId !== undefined && pcbX !== undefined && pcbY !== undefined
+    pcbX !== undefined && pcbY !== undefined
       ? params.metadataByKey.get(getPcbViaKey({ sourceNetId, x: pcbX, y: pcbY }))
       : undefined
   const inclusionMask = metadata?.inclusionMask

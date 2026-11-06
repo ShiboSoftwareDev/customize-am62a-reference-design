@@ -1,10 +1,14 @@
-import type { ReferenceInput } from "./types"
+import type { ComponentName, FeatureId, ReferenceInput } from "./types"
 
 function createNumberedSchematicPaths(params: { count: number; directory: string }): string[] {
   return Array.from(
     { length: params.count },
     (_, sheetIndex) => `${params.directory}/${String(sheetIndex + 1).padStart(2, "0")}.SchDoc`,
   )
+}
+
+function assignFeatureToComponents(featureId: FeatureId, componentNames: ComponentName[]) {
+  return Object.fromEntries(componentNames.map((componentName) => [componentName, featureId]))
 }
 
 const tmds62lSchematicDirectory = "tmp/references/tmds62levm"
@@ -32,10 +36,24 @@ export const referenceInputs: ReferenceInput[] = [
       ["connectivity"],
       ["multimedia"],
       ["expansion"],
-      ["debug-instrumentation"],
-      ["connectivity", "multimedia", "expansion", "debug-instrumentation"],
+      ["debug-instrumentation", "uart-console"],
+      [
+        "connectivity",
+        "multimedia",
+        "expansion",
+        "debug-instrumentation",
+        "secondary-storage-and-usb",
+      ],
+    ],
+    retainedComponentNames: [
+      "R120", // MMC1 clock link on the eMMC sheet
+      "R449", // Default power enable when the XDS110 is unpopulated
     ],
     removableFeatureIdBySchematicSheetIndex: {
+      24: "secondary-storage-and-usb",
+      25: "secondary-storage-and-usb",
+      34: "secondary-storage-and-usb",
+      35: "secondary-storage-and-usb",
       27: "connectivity",
       31: "connectivity",
       32: "connectivity",
@@ -48,8 +66,8 @@ export const referenceInputs: ReferenceInput[] = [
       47: "debug-instrumentation",
       48: "debug-instrumentation",
       49: "debug-instrumentation",
-      50: "debug-instrumentation",
-      51: "debug-instrumentation",
+      50: "uart-console",
+      51: "uart-console",
       52: "debug-instrumentation",
       53: "debug-instrumentation",
       54: "debug-instrumentation",
@@ -77,12 +95,63 @@ export const referenceInputs: ReferenceInput[] = [
     removedFeatureIdCombinations: [
       [],
       ["connectivity"],
-      ["test-debug"],
+      ["test-debug", "uart-console"],
       ["expansion"],
       ["multimedia"],
-      ["connectivity", "test-debug", "expansion", "multimedia"],
+      ["connectivity", "test-debug", "expansion", "multimedia", "secondary-storage-and-usb"],
+    ],
+    retainedComponentNames: [
+      // Keep the series power shunts, rail bypass, and inactive INA_ALERT bias.
+      "R123",
+      "R106",
+      "R48",
+      "R134",
+      "R148",
+      "R70",
+      "C114",
+      "C53",
+      "C118",
+      "C97",
+      "C106",
+      "R386",
+      "R66",
+      "R333", // MMC1 clock network on the eMMC sheet
+      "U94",
+      "L14",
+      "C491",
+      "C486",
+      "R610",
+      "R604", // VCC3V3_TA regulator
+      "R585",
+      "R581",
+      "R600", // Power enable and boot-mode I2C bias
+      "R566",
+      "R586", // Default reset signal states
+      "Y1",
+      "C75",
+      "C79", // 32 kHz wake-up crystal
+      "Y4",
+      "C303",
+      "C305",
+      "R355",
+      "R358", // MCU oscillator
+      "R501",
+      "R504",
+      "R506",
+      "R508",
+      "R511",
+      "R513",
+      "R516",
+      "R518",
+      "RA1",
+      "RA2", // Boot strap links
     ],
     removableFeatureIdBySchematicSheetIndex: {
+      12: "test-debug",
+      17: "secondary-storage-and-usb",
+      19: "secondary-storage-and-usb",
+      34: "secondary-storage-and-usb",
+      35: "secondary-storage-and-usb",
       16: "connectivity",
       21: "connectivity",
       22: "connectivity",
@@ -92,7 +161,7 @@ export const referenceInputs: ReferenceInput[] = [
       27: "test-debug",
       28: "test-debug",
       29: "test-debug",
-      30: "test-debug",
+      30: "uart-console",
       31: "expansion",
       32: "expansion",
       33: "expansion",
@@ -143,8 +212,53 @@ export const referenceInputs: ReferenceInput[] = [
       ["display-camera"],
       ["wireless"],
       ["user-io"],
-      ["wired-networking", "display-camera", "wireless", "user-io"],
+      ["wired-networking", "display-camera", "wireless", "user-io", "secondary-storage-and-usb"],
     ],
+    retainedComponentNames: ["SW1", "SW2", "SW3"], // Power, reset, and SD boot selection
+    removableFeatureIdByComponentName: {
+      // The eMMC and USB-A blocks share sheets with microSD and USB-C power.
+      ...assignFeatureToComponents("secondary-storage-and-usb", [
+        "U3",
+        "R5",
+        "R6",
+        "R7",
+        "R8",
+        "R9",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16",
+        "R20",
+        "C65",
+        "C66",
+        "C67",
+        "C68",
+        "C69",
+        "C70",
+        "C71",
+        "C72",
+        "C73",
+        "C74",
+        "C75",
+        "C76",
+        "D47",
+        "D48",
+        "D56",
+        "J13",
+        "U8",
+        "L4",
+        "R94",
+        "R132",
+        "R133",
+        "R136",
+        "R152",
+        "C110",
+        "C131",
+      ]),
+    },
     removableFeatureIdBySchematicSheetIndex: {
       9: "wired-networking",
       10: "wired-networking",
@@ -184,8 +298,22 @@ export const referenceInputs: ReferenceInput[] = [
       ["emmc"],
       ["ethernet"],
       ["hdmi"],
-      ["emmc", "ethernet", "hdmi"],
+      ["emmc", "ethernet", "hdmi", "expansion-and-usb"],
     ],
+    removableFeatureIdByComponentName: assignFeatureToComponents("expansion-and-usb", [
+      "P2",
+      "P8",
+      "P9",
+      // Keep the SYS_5V host supply branch that anchors the reference inner plane.
+      "P3",
+      "U9",
+      "R49",
+      "FB7",
+      "FB8",
+      // Leave the PMIC USB input and VBUS sense in their normal unplugged state.
+      "P4",
+      "U10",
+    ]),
     removableFeatureIdBySchematicSheetIndex: {
       7: "emmc",
       8: "ethernet",

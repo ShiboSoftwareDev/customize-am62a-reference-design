@@ -37,6 +37,8 @@ export type ReferenceInput = {
   schematicPaths: string[]
   outputName: string
   removedFeatureIdCombinations: FeatureId[][]
+  retainedComponentNames?: readonly ComponentName[]
+  removableFeatureIdByComponentName?: Partial<Record<ComponentName, FeatureId>>
   removableFeatureIdBySchematicSheetIndex: Partial<Record<SchematicSheetIndex, FeatureId>>
 }
 

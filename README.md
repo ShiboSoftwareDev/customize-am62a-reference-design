@@ -15,7 +15,7 @@ Each board also has a shareable detail page linked from the configurator. The pa
 | BeaglePlay | AM625 development platform | 6 | [BeaglePlay](https://www.beagleboard.org/boards/beagleplay) |
 | BeagleBone Black | AM3358 development platform | 5 | [BeagleBone Black](https://www.beagleboard.org/boards/beaglebone-black) |
 
-Each board exposes a named variant selector, including **Full board**, **Minimal board**, and curated intermediate populations. Only complete optional subsystems are removable; shared processor, power, memory, configuration, and expansion infrastructure remains populated. All 23 selectable variants are prebuilt.
+Each board exposes a named variant selector, including **Full board**, **Minimal board**, and curated intermediate populations. Minimal variants keep the reference power input, processor, RAM, microSD boot path, and UART console. They remove optional interfaces and storage where those circuits can be separated from the boot path. All 23 selectable variants are prebuilt.
 
 ## Run locally
 
