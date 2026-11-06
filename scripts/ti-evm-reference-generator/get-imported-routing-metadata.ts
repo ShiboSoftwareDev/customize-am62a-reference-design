@@ -26,7 +26,7 @@ type SourceTraceElement = AnyCircuitElement & {
 
 type PcbTraceElement = AnyCircuitElement & {
   route: unknown[]
-  source_trace_id: SourceTraceId | SourceNetId
+  source_trace_id?: SourceTraceId | SourceNetId
   type: "pcb_trace"
 }
 
@@ -40,15 +40,16 @@ type PcbViaElement = AnyCircuitElement & {
 
 export type ImportedPcbTraceMetadata = {
   inclusionMask: ImportedRoutingInclusionMask
-  sourceNetId: GeneratedSourceNetId
+  sourceNetId?: GeneratedSourceNetId
 }
 
 export type ImportedPcbViaMetadata = {
   inclusionMask: ImportedRoutingInclusionMask
-  sourceNetId: GeneratedSourceNetId
+  sourceNetId?: GeneratedSourceNetId
 }
 
 export type ImportedRoutingBridgeViaMetadata = ImportedPcbViaMetadata & {
+  sourceNetId: GeneratedSourceNetId
   holeDiameter: number
   outerDiameter: number
   x: number
@@ -98,14 +99,19 @@ export function getImportedRoutingMetadata(params: {
   })
   const pcbTraceMetadataByRoute = new Map<PcbTraceRouteKey, ImportedPcbTraceMetadata>()
   const viaMetadataByKey = new Map<PcbViaKey, ImportedPcbViaMetadata>()
+  const allVariantsMask = inclusionMasks.supportedRemovalCombinationIndexes.reduce(
+    (mask, index) => mask | (1n << BigInt(index)),
+    0n,
+  )
 
   for (const pcbTrace of params.circuitJson.filter(isPcbTrace)) {
     const sourceNetId = getSourceNetId({ pcbTrace, sourceTracesById })
     const generatedSourceNetId = sourceNetId
       ? generatedSourceNetIdBySourceNetId.get(sourceNetId)
       : undefined
-    if (!generatedSourceNetId) continue
     const routeKey = JSON.stringify(pcbTrace.route)
+    const inclusionMask = inclusionMasks.traceInclusionMaskByRouteKey.get(routeKey) ?? 1n
+    if (!generatedSourceNetId && inclusionMask === allVariantsMask) continue
     const existingMetadata = pcbTraceMetadataByRoute.get(routeKey)
     if (existingMetadata && existingMetadata.sourceNetId !== generatedSourceNetId) {
       throw new Error(
@@ -113,7 +119,7 @@ export function getImportedRoutingMetadata(params: {
       )
     }
     pcbTraceMetadataByRoute.set(routeKey, {
-      inclusionMask: inclusionMasks.traceInclusionMaskByRouteKey.get(routeKey) ?? 1n,
+      inclusionMask,
       sourceNetId: generatedSourceNetId,
     })
   }
@@ -123,16 +129,14 @@ export function getImportedRoutingMetadata(params: {
     const generatedSourceNetId = sourceNetId
       ? generatedSourceNetIdBySourceNetId.get(sourceNetId)
       : undefined
-    if (!generatedSourceNetId) continue
     const viaKey = getPcbViaKey({
       sourceNetId: generatedSourceNetId,
       x: pcbVia.x,
       y: pcbVia.y,
     })
-    viaMetadataByKey.set(viaKey, {
-      inclusionMask: inclusionMasks.viaInclusionMaskByViaKey.get(viaKey) ?? 1n,
-      sourceNetId: generatedSourceNetId,
-    })
+    const inclusionMask = inclusionMasks.viaInclusionMaskByViaKey.get(viaKey) ?? 1n
+    if (!generatedSourceNetId && inclusionMask === allVariantsMask) continue
+    viaMetadataByKey.set(viaKey, { inclusionMask, sourceNetId: generatedSourceNetId })
   }
 
   return {
@@ -155,7 +159,9 @@ export function getImportedRoutingMetadata(params: {
     featureIds: inclusionMasks.featureIds,
     pcbTraceMetadataByRoute,
     sourceNetIdsWithImportedRouting: new Set(
-      [...pcbTraceMetadataByRoute.values()].map(({ sourceNetId }) => sourceNetId),
+      [...pcbTraceMetadataByRoute.values()].flatMap(({ sourceNetId }) =>
+        sourceNetId ? [sourceNetId] : [],
+      ),
     ),
     supportedRemovalCombinationIndexes: inclusionMasks.supportedRemovalCombinationIndexes,
     viaMetadataByKey,
@@ -276,11 +282,11 @@ function getSourceNetId(params: {
   pcbTrace: PcbTraceElement
   sourceTracesById: ReadonlyMap<SourceTraceId, SourceTraceElement>
 }): SourceNetId | undefined {
+  const sourceTraceId = params.pcbTrace.source_trace_id
+  if (!sourceTraceId) return undefined
   return (
-    params.sourceTracesById.get(params.pcbTrace.source_trace_id)?.connected_source_net_ids?.[0] ??
-    (params.pcbTrace.source_trace_id.startsWith("source_net_")
-      ? params.pcbTrace.source_trace_id
-      : undefined)
+    params.sourceTracesById.get(sourceTraceId)?.connected_source_net_ids?.[0] ??
+    (sourceTraceId.startsWith("source_net_") ? sourceTraceId : undefined)
   )
 }
 
@@ -303,11 +309,7 @@ function isSourceTrace(element: AnyCircuitElement): element is SourceTraceElemen
 }
 
 function isPcbTrace(element: AnyCircuitElement): element is PcbTraceElement {
-  return (
-    element.type === "pcb_trace" &&
-    typeof element.source_trace_id === "string" &&
-    Array.isArray(element.route)
-  )
+  return element.type === "pcb_trace" && Array.isArray(element.route)
 }
 
 function isPcbVia(element: AnyCircuitElement): element is PcbViaElement {

@@ -7,6 +7,7 @@ import type { TiEvm, TiEvmVariant } from "lib/ti-evm-catalog"
 
 type EvmRenderState = {
   pcbCircuitJson: AnyCircuitElement[] | null
+  hasCurrentPcb: boolean
   schematicCircuitJsons: AnyCircuitElement[][]
   schematicVariant: TiEvmVariant | null
   error: string
@@ -30,6 +31,7 @@ export function useEvmRender(request: {
 
   return {
     pcbCircuitJson: pcb.circuitJson,
+    hasCurrentPcb: pcb.hasCurrentPcb,
     schematicCircuitJsons: schematics.circuitJsons,
     schematicVariant: schematics.variant,
     error: pcb.error || schematics.error,

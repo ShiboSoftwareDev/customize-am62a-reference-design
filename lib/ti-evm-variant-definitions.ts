@@ -27,12 +27,18 @@ export const tiEvmVariantDefinitions = {
     {
       id: "without-debug-instrumentation",
       label: "Without debug and current instrumentation",
-      removedFeatureIds: ["debug-instrumentation"],
+      removedFeatureIds: ["debug-instrumentation", "uart-console"],
     },
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: ["connectivity", "multimedia", "expansion", "debug-instrumentation"],
+      removedFeatureIds: [
+        "connectivity",
+        "multimedia",
+        "expansion",
+        "debug-instrumentation",
+        "secondary-storage-and-usb",
+      ],
     },
   ],
   "sk-am62": [
@@ -45,7 +51,7 @@ export const tiEvmVariantDefinitions = {
     {
       id: "without-test-debug",
       label: "Without test and debug",
-      removedFeatureIds: ["test-debug"],
+      removedFeatureIds: ["test-debug", "uart-console"],
     },
     {
       id: "without-expansion",
@@ -60,7 +66,13 @@ export const tiEvmVariantDefinitions = {
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: ["connectivity", "test-debug", "expansion", "multimedia"],
+      removedFeatureIds: [
+        "connectivity",
+        "test-debug",
+        "expansion",
+        "multimedia",
+        "secondary-storage-and-usb",
+      ],
     },
   ],
   beagleplay: [
@@ -88,7 +100,13 @@ export const tiEvmVariantDefinitions = {
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: ["wired-networking", "display-camera", "wireless", "user-io"],
+      removedFeatureIds: [
+        "wired-networking",
+        "display-camera",
+        "wireless",
+        "user-io",
+        "secondary-storage-and-usb",
+      ],
     },
   ],
   "beaglebone-black": [
@@ -111,7 +129,7 @@ export const tiEvmVariantDefinitions = {
     {
       id: "minimal-board",
       label: "Minimal board",
-      removedFeatureIds: ["emmc", "ethernet", "hdmi"],
+      removedFeatureIds: ["emmc", "ethernet", "hdmi", "expansion-and-usb"],
     },
   ],
 } satisfies Record<ParameterizedTiEvmId, TiEvmVariantDefinition[]>

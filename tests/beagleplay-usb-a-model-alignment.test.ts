@@ -12,23 +12,28 @@ test("seats the BeaglePlay UART and vertical USB-A connectors without overlap", 
   for (const variant of beaglePlay.variants) {
     const { circuitJson, glb } = await readPrebuiltPackageReview(beaglePlay.id, variant.id)
     const uart = readGlbComponentMesh({ glb, componentName: "J6" })
+    const uartHoles = getConnectorHoles({ circuitJson, componentName: "J6" })
+    expect(uartHoles).toHaveLength(3)
+    for (const { x, y } of uartHoles) {
+      expect(isPointInsideMeshSection({ mesh: uart, point: [x, y, 0] })).toBe(true)
+    }
+
+    if (variant.removedFeatureIds.includes("secondary-storage-and-usb")) {
+      expect(() => readGlbComponentMesh({ glb, componentName: "J13" })).toThrow("Missing J13 mesh")
+      continue
+    }
+
     const usb = readGlbComponentMesh({ glb, componentName: "J13" })
     const [, uartMax] = jscad.measurements.measureBoundingBox(uart)
     const [usbMin, usbMax] = jscad.measurements.measureBoundingBox(usb)
-
     expect(usbMin[0] - uartMax[0]).toBeGreaterThan(1.5)
     // The reference USB receptacle is 14.47 mm high above the PCB surface.
     const board = circuitJson.find((element) => element.type === "pcb_board")
     if (typeof board?.thickness !== "number") throw new Error("Missing PCB thickness")
     expect(usbMax[2] - board.thickness / 2).toBeCloseTo(14.47, 2)
 
-    const uartHoles = getConnectorHoles({ circuitJson, componentName: "J6" })
     const usbHoles = getConnectorHoles({ circuitJson, componentName: "J13" })
-    expect(uartHoles).toHaveLength(3)
     expect(usbHoles).toHaveLength(7)
-    for (const { x, y } of uartHoles) {
-      expect(isPointInsideMeshSection({ mesh: uart, point: [x, y, 0] })).toBe(true)
-    }
     for (const { x, y } of usbHoles) {
       expect(isPointInsideMeshSection({ mesh: usb, point: [x, y, 0] })).toBe(true)
     }

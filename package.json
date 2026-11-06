@@ -19,7 +19,7 @@
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@tscircuit/3d-viewer": "0.0.641",
+    "@tscircuit/3d-viewer": "0.0.642",
     "@tscircuit/pcb-viewer": "1.11.449",
     "@tscircuit/schematic-viewer": "2.0.100",
     "fflate": "0.8.3",

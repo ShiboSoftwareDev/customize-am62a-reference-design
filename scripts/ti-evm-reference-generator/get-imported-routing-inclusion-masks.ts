@@ -113,7 +113,6 @@ export function getImportedRoutingInclusionMasks(params: {
         pcbVia,
         sourceNetIdBySourceTraceId: params.sourceNetIdBySourceTraceId,
       })
-      if (!viaKey) continue
       viaInclusionMaskByViaKey.set(
         viaKey,
         (viaInclusionMaskByViaKey.get(viaKey) ?? 0n) | inclusionBit,
@@ -162,7 +161,7 @@ function getRemovalCombinationIndex(params: {
 }
 
 export function getPcbViaKey(params: {
-  sourceNetId: GeneratedSourceNetId
+  sourceNetId?: GeneratedSourceNetId
   x: number
   y: number
 }): PcbViaKey {
@@ -173,7 +172,7 @@ function getPcbViaKeyForElement(params: {
   generatedSourceNetIdBySourceNetId: ReadonlyMap<SourceNetId, GeneratedSourceNetId>
   pcbVia: ImportedPcbVia
   sourceNetIdBySourceTraceId: ReadonlyMap<SourceTraceId, SourceNetId>
-}): PcbViaKey | undefined {
+}): PcbViaKey {
   const sourceNetId =
     params.pcbVia.source_net_id ??
     (params.pcbVia.source_trace_id
@@ -182,13 +181,11 @@ function getPcbViaKeyForElement(params: {
   const generatedSourceNetId = sourceNetId
     ? params.generatedSourceNetIdBySourceNetId.get(sourceNetId)
     : undefined
-  return generatedSourceNetId
-    ? getPcbViaKey({
-        sourceNetId: generatedSourceNetId,
-        x: params.pcbVia.x,
-        y: params.pcbVia.y,
-      })
-    : undefined
+  return getPcbViaKey({
+    sourceNetId: generatedSourceNetId,
+    x: params.pcbVia.x,
+    y: params.pcbVia.y,
+  })
 }
 
 function getRemovedFeatureIds(params: {

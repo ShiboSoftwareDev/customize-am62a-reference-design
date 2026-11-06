@@ -1,12 +1,16 @@
 import { checkDanglingTraces } from "@tscircuit/checks"
 import { getPrimaryId } from "@tscircuit/circuit-json-util"
 import type { AnyCircuitElement } from "circuit-json"
-import type { ConnectivityMap } from "circuit-json-to-connectivity-map"
+import {
+  type ConnectivityMap,
+  getFullConnectivityMapFromCircuitJson,
+} from "circuit-json-to-connectivity-map"
 import {
   getImportedRoutingBridgeVias,
   type ImportedRoutingBridgeVia,
   isBridgeViaRequired,
 } from "./get-imported-routing-bridge-vias"
+import { getBoardLayerStack } from "./get-routing-connectivity-check-circuit-json"
 import type { SourceComponentId } from "./types"
 
 export type DanglingEndpointKey = string
@@ -32,7 +36,7 @@ type PcbComponentElement = AnyCircuitElement & {
 export type ImportedPcbTrace = AnyCircuitElement & {
   pcb_trace_id: PcbTraceId
   route: Array<Point & { layer?: string }>
-  source_trace_id: SourceTraceId
+  source_trace_id?: SourceTraceId
   type: "pcb_trace"
 }
 
@@ -120,12 +124,20 @@ export function getIncludedImportedRoutingElementIds(params: {
   const includedPcbTraceIds = new Set<PcbTraceId>(
     params.pcbTraces.map(({ pcb_trace_id }) => pcb_trace_id),
   )
-  const bridgeVias = getImportedRoutingBridgeVias({
+  let includedBridgeVias = getImportedRoutingBridgeVias({
     circuitJson: params.circuitJson,
     pcbTraces: params.pcbTraces,
     pcbVias: params.pcbVias,
     removedPcbComponentIds,
   })
+  const boardLayerStack = getBoardLayerStack(params.circuitJson)
+  let bridgeViaElements = includedBridgeVias.map((bridgeVia) =>
+    createBridgeViaCircuitElement({ bridgeVia, boardLayerStack }),
+  )
+  const connectivityMap =
+    bridgeViaElements.length > 0
+      ? getFullConnectivityMapFromCircuitJson([...params.circuitJson, ...bridgeViaElements])
+      : params.connectivityMap
   let pruningPassCount = 0
   let affectedNetIds: ReadonlySet<ConnectivityNetId> | undefined
 
@@ -138,20 +150,20 @@ export function getIncludedImportedRoutingElementIds(params: {
     })
     const circuitJsonWithIncludedRouting = getCircuitJsonWithIncludedRouting({
       circuitJson: circuitJsonWithoutRemovedComponents,
-      bridgeVias,
+      bridgeViaElements,
       includedPcbTraceIds,
       includedPcbViaIds,
     })
     const circuitJsonToCheck = affectedNetIds
       ? getCircuitJsonForConnectivityNets({
           circuitJson: circuitJsonWithIncludedRouting,
-          connectivityMap: params.connectivityMap,
+          connectivityMap,
           netIds: affectedNetIds,
         })
       : circuitJsonWithIncludedRouting
     const newlyDanglingPcbTraceIds = new Set<PcbTraceId>(
       checkDanglingTraces(circuitJsonToCheck, {
-        connMap: params.connectivityMap,
+        connMap: connectivityMap,
       }).flatMap((error) => {
         return params.baselineDanglingEndpointKeys.has(error.pcb_trace_error_id)
           ? []
@@ -159,24 +171,30 @@ export function getIncludedImportedRoutingElementIds(params: {
       }),
     )
     if (newlyDanglingPcbTraceIds.size === 0) {
-      console.log(`Imported routing: completed after ${pruningPassCount} pruning passes`)
-      return {
-        includedBridgeVias: bridgeVias.filter((bridgeVia) =>
-          isBridgeViaRequired({
-            bridgeVia,
-            includedPcbTraceIds,
-            pcbTraces: params.pcbTraces,
-          }),
-        ),
-        includedPcbTraceIds,
-        includedPcbViaIds,
+      const requiredBridgeVias = includedBridgeVias.filter((bridgeVia) =>
+        isBridgeViaRequired({
+          bridgeVia,
+          includedPcbTraceIds,
+          pcbTraces: params.pcbTraces,
+        }),
+      )
+      if (requiredBridgeVias.length < includedBridgeVias.length) {
+        // Recheck traces against the bridge vias that will be emitted.
+        includedBridgeVias = requiredBridgeVias
+        bridgeViaElements = includedBridgeVias.map((bridgeVia) =>
+          createBridgeViaCircuitElement({ bridgeVia, boardLayerStack }),
+        )
+        affectedNetIds = undefined
+        continue
       }
+      console.log(`Imported routing: completed after ${pruningPassCount} pruning passes`)
+      return { includedBridgeVias, includedPcbTraceIds, includedPcbViaIds }
     }
     for (const pcbTraceId of newlyDanglingPcbTraceIds) {
       includedPcbTraceIds.delete(pcbTraceId)
     }
     affectedNetIds = getConnectivityNetIdsForTraces({
-      connectivityMap: params.connectivityMap,
+      connectivityMap,
       pcbTraceIds: newlyDanglingPcbTraceIds,
     })
   }
@@ -246,7 +264,7 @@ function isPcbViaIncluded(params: {
 }
 
 function getCircuitJsonWithIncludedRouting(params: {
-  bridgeVias: ImportedRoutingBridgeVia[]
+  bridgeViaElements: AnyCircuitElement[]
   circuitJson: AnyCircuitElement[]
   includedPcbTraceIds: ReadonlySet<PcbTraceId>
   includedPcbViaIds: ReadonlySet<PcbViaId>
@@ -257,11 +275,17 @@ function getCircuitJsonWithIncludedRouting(params: {
         (!isImportedPcbTrace(element) || params.includedPcbTraceIds.has(element.pcb_trace_id)) &&
         (!isImportedPcbVia(element) || params.includedPcbViaIds.has(element.pcb_via_id)),
     ),
-    ...params.bridgeVias.map(createBridgeViaCircuitElement),
+    ...params.bridgeViaElements,
   ]
 }
 
-function createBridgeViaCircuitElement(bridgeVia: ImportedRoutingBridgeVia): AnyCircuitElement {
+function createBridgeViaCircuitElement({
+  bridgeVia,
+  boardLayerStack,
+}: {
+  bridgeVia: ImportedRoutingBridgeVia
+  boardLayerStack: ReturnType<typeof getBoardLayerStack>
+}): AnyCircuitElement {
   return {
     type: "pcb_via",
     pcb_via_id: bridgeVia.bridgeViaId,
@@ -271,7 +295,7 @@ function createBridgeViaCircuitElement(bridgeVia: ImportedRoutingBridgeVia): Any
     outer_diameter: bridgeVia.outerDiameter,
     from_layer: "top",
     to_layer: "bottom",
-    layers: ["top", "bottom"],
+    layers: boardLayerStack,
     source_net_id: bridgeVia.sourceNetId,
   }
 }
@@ -312,7 +336,6 @@ function isImportedPcbTrace(element: AnyCircuitElement): element is ImportedPcbT
   return (
     element.type === "pcb_trace" &&
     typeof element.pcb_trace_id === "string" &&
-    typeof element.source_trace_id === "string" &&
     Array.isArray(element.route)
   )
 }

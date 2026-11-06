@@ -416,6 +416,12 @@ function getRemovableFeatureId(params: {
   reference: ReferenceInput
   schematicSheetIndexesByComponentName: ReadonlyMap<ComponentName, number[]>
 }): string | undefined {
+  if (params.reference.retainedComponentNames?.includes(params.componentName)) return undefined
+
+  const componentFeatureId =
+    params.reference.removableFeatureIdByComponentName?.[params.componentName]
+  if (componentFeatureId !== undefined) return componentFeatureId
+
   const schematicSheetIndexes =
     params.schematicSheetIndexesByComponentName.get(params.componentName) ?? []
   if (schematicSheetIndexes.length === 0) return undefined

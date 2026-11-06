@@ -107,12 +107,6 @@ export function DesignViewer({
     setRequestedSchematicSheetLabel(undefined)
   }, [boardKey])
 
-  useEffect(() => {
-    if (requestedSchematicSheetLabel !== schematicSheetSelection.label) {
-      setRequestedSchematicSheetLabel(schematicSheetSelection.label)
-    }
-  }, [requestedSchematicSheetLabel, schematicSheetSelection.label])
-
   return (
     <section className="design-viewer" aria-label="Design viewer" aria-busy={isViewerLoading}>
       <header className="viewer-toolbar">
@@ -201,7 +195,7 @@ export function DesignViewer({
           </Suspense>
         ) : activeView === "cad" ? (
           <Suspense fallback={<ViewerLoading label="Loading 3D viewer…" />}>
-            <CadViewer glbUrl={prebuiltCadSceneUrl} />
+            <CadViewer key={boardKey} glbUrl={prebuiltCadSceneUrl} />
           </Suspense>
         ) : (
           <ViewerLoading label="Loading the reference design…" />

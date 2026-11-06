@@ -173,7 +173,7 @@ function isPointInPolygon(params: {
   return isInside
 }
 
-function getBoardLayerStack(circuitJson: AnyCircuitElement[]): PcbLayerName[] {
+export function getBoardLayerStack(circuitJson: AnyCircuitElement[]): PcbLayerName[] {
   const board = circuitJson.find((element) => element.type === "pcb_board")
   const layerCount = board && typeof board.num_layers === "number" ? board.num_layers : 2
   const innerLayers = INNER_LAYER_NAMES.slice(0, Math.max(0, layerCount - 2))

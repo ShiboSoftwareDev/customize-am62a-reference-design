@@ -121,9 +121,11 @@ function getSingleSourceNetId(params: {
 }): SourceNetId | undefined {
   const sourceNetIds = new Set(
     params.incidentTraces.flatMap((pcbTrace) => {
-      const sourceNetId = pcbTrace.source_trace_id.startsWith("source_net_")
-        ? pcbTrace.source_trace_id
-        : params.sourceNetIdBySourceTraceId.get(pcbTrace.source_trace_id)
+      const sourceTraceId = pcbTrace.source_trace_id
+      if (!sourceTraceId) return []
+      const sourceNetId = sourceTraceId.startsWith("source_net_")
+        ? sourceTraceId
+        : params.sourceNetIdBySourceTraceId.get(sourceTraceId)
       return sourceNetId ? [sourceNetId] : []
     }),
   )
