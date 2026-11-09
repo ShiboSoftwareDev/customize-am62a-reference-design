@@ -61,6 +61,31 @@ bun run build
 
 Tests use one focused case per file. They verify catalog provenance, unique option populations, compressed artifact loading, converter cleanup, and routed output for every prebuilt board. Four visual snapshot tests preserve the full-board PCB and schematic SVG, while per-board fidelity tests compare generated TSX against its source Circuit JSON.
 
+## Publish reference packages
+
+Export the checked-in configurations as ordinary registry packages:
+
+```sh
+bun run export:registry-packages /tmp/sitara-packages
+cd /tmp/sitara-packages/beagleplay-reference-design
+bun install
+bun run build
+tsci push
+```
+
+Pass board IDs after the output directory to export a subset. The exporter creates
+one package per board, covering all 23 supported configurations. Each package
+exports the parameterized TSX, its props schema, and named presets. Its existing
+`buildCommand` hook downloads artifacts from the pinned source commit, verifies
+their Git blob hashes, and writes the normal package files under `dist/`.
+PCB populations retain their routed copper, each configuration has its assembly
+GLB, and authored schematic sheets remain separate compressed JSON files.
+
+Publication reuses these verified prebuilds. When changing geometry or supported
+populations, rebuild and commit the upstream artifacts before exporting packages.
+The website package viewer supports the compressed circuits and sheet selection;
+datasheets use that same viewer for the embedded configurator.
+
 ## Implementation notes
 
 - `lib/generated/ti-evms/*.source.circuit.json.gz` is the reconciled project-level Circuit JSON produced from each official PCB and all of its electrical schematic sheets.
